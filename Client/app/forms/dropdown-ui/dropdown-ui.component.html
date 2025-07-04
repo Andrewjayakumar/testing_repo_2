@@ -1,0 +1,70 @@
+<div [ngBusy]="{busy: busy, message: '', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<div class="form-group" [formGroup]="formGroup" *ngIf="access == 'write'">
+  <label class="" [for]="control.key">
+    {{control.label}}<sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+    <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+  </label>
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <div class="dropdown-outer">
+    <div class="input-group">
+      <input autocomplete="off"
+             [id]="control.key"
+             [placeholder]="control.placeholder"
+             type="text"
+             class="form-control"
+             [(ngModel)]="selectedvalue"
+             (ngModelChange)="isFilterApply=false;_controlService.getCssforMandatory(control,selectedvalue);"
+             (click)="getdata();isFilterApply=false"
+             (focusout)="Resetdata();isFilterApply=true"
+             [required]="control.require"
+             [formControl]="formGroup.controls[control_id] ? formGroup.controls[control_id] : null"
+             [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}">
+      <label [for]="control.key" class="input-group-append mb-0">
+        <span class="input-group-text"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+      </label>
+    </div>
+    <div class="dropdown-option" *ngIf="dataoptions.length > 0 && !isFilterApply">
+      <ul class="list-group">
+        <li *ngFor="let opt of filterStates(selectedvalue)" (click)="select(opt,true)" (mouseup)="mouseover=true" (mousedown)="mouseover=false" class="list-group-item list-group-item-action" [ngClass]="{'disabled': opt[control.textfield] != selectedvalue }">
+          <span>
+            {{ opt[control.textfield] }}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <small *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false" class="mat-text-warn">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write' && access != 'filter'" class="form-group">
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0">{{getValue(data[control.key])}}</div>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0">{{getValue(data[control.key])}}</div>
+  </ng-container>
+</div>
+<div class="form-group" *ngIf="access == 'filter'">
+  <label class="" [for]="control.key">{{control.label}}</label>
+  <i class="fa fa-caret-down dd-arrow" aria-hidden="true"></i>
+  <input autocomplete="off" [placeholder]="control.placeholder" id="country" type="text" class="form-control validate filter-input" [(ngModel)]="selectedvalue" (ngModelChange)="isFilterApply=false;" (click)="getdata();isFilterApply=false;" (focusout)="Resetdata();isFilterApply=true;" [required]="control.require" />
+  <div class="suggestions" *ngIf="dataoptions.length > 0 && !isFilterApply">
+    <ul class="list-group results dropdown-ui">
+      <li *ngFor="let opt of dataoptions" (click)="select(opt);_controlService.setFilterValue(control.key,data[control.key],filterdata)" (mouseup)="mouseover=true" (mousedown)="mouseover=false" class="list-group-item" style="padding:5px 14px" type="button">
+        <span>
+          {{ opt[control.textfield] }}
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
+
+
+

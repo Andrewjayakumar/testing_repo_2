@@ -1,0 +1,73 @@
+<div class="bookmarkSlider" *ngIf="AuthService.bookmark">
+  <!--<pre>{{AuthService.bookmark | json}}</pre>-->
+  <button *ngIf="AuthService.bookmark.length>1" class="btn btn-sm btn-outline-dark closeAllBookmark"
+    (click)="removeAllbookmark()" title="Close all bookmarks"><i class="fa fa-times"></i></button>
+  <swiper #bookmarkslider [config]="{ 
+      slidesPerView:8,
+      pagination: '.swiper-pagination',
+      paginationClickable: true,
+      nextButton: '.swiper-button-next',
+      prevButton: '.swiper-button-prev',
+      spaceBetween: 10,
+      mousewheelSensitivity:5,
+      keyboardControl:true,
+      mousewheelControl:true,
+      slidesPerGroup:8
+    }" class="w-100">
+    <div class="swiper-wrapper d-flex">
+      <div class="swiper-slide p-0 text-gray"
+        *ngFor="let item of AuthService.bookmark | reverse; trackBy: trackByFn; let i=index">
+        <div class="bookmarkbtn">
+          <button class="btn btn-sm w-100" (click)="Action(item, content)"
+                  [ngStyle]="isItemOpend(item) ? {'background-color': '#fdfdfdfc','border-color': '#b6bdc5 !important'} : null">
+            <span class="d-flex align-items-center mr-2">
+              <i *ngIf="item.icon" class="{{item.icon}} fa-lg mr-1"></i><span class="d-block font-weight-bold text-truncate">{{item.title}}</span>
+            </span>
+            <span *ngIf="item.subtitle" class="d-block subtitle text-left text-truncate mr-2">
+              {{item.subtitle}}
+            </span>
+          </button>
+          <i class="fa fa-times pointer ml-auto deletebtn" (click)="removebookmark(item)"></i>
+        </div>
+      </div>
+    </div>
+
+    <!--<ng-container *ngIf="AuthService.bookmark.length > 6">-->
+    <!--<div class="swiper-pagination"></div>-->
+    <div class="swiper-btn swiper-button-prev "></div>
+    <div class="swiper-btn swiper-button-next"></div>
+    <!--</ng-container>-->
+  </swiper>
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <div class="modal-header" style="background-color:#ededed; position: absolute; top: 0px; right: 16px; z-index: 100; padding-bottom: 3px">
+    <b *ngIf="modalpopupformJson" class="modal-title" style="text-transform:capitalize">
+    </b>
+    <button type="button" class="close p-0" style="margin:-0.75rem -0.95rem" aria-label="Close" (click)="d('Cross click');closePopup();">
+      <i class="fa fa-times"></i>
+    </button>
+    <div class="small" style="margin-top:0.2rem">Esc</div>
+  </div> 
+  <div class="modal-body" style="overflow:auto !important; padding: 1rem 0.5rem 1rem 0.7rem !important;">
+    <div class="row">
+      <div class="col-md-12" *ngIf="modalpopupformJson && modalpopupModelJson">
+        <!--<app-dynamicform [FormUI]="modalpopupformJson" [controls]="modalpopupformJson.controls"
+                   [datamodel]="modalpopupModelJson" [AuthService]="AuthService"
+                   [filterdata]="modalpopupformJson.FilterModelJson" [access]="'write'">
+  </app-dynamicform>-->
+        <app-newcandidateprofile [candId]="candidateId"></app-newcandidateprofile>
+        <!-- <ng-container *ngFor="let ctrl of modalpopupformJson.controls">
+    <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="modalpopupModelJson" [access]="'write'"
+      [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+    </app-dynamicformcontrolls>
+  </ng-container> -->
+        
+
+        >
+      </div>
+    </div>
+    <div *ngIf="!modalpopupformJson || !modalpopupModelJson">
+      <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+    </div>
+  </div>
+</ng-template>

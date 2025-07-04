@@ -1,0 +1,50 @@
+<div class="form-group" [formGroup]="formGroup" *ngIf="access == 'write'">
+  <label class="" [for]="control_id">
+    {{control.label}}<sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+    <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}"
+      ngbTooltip="{{control.help}}"></i>
+  </label>
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <div *ngIf="emailmodel">
+    <span *ngFor="let item of emailmodel"
+      class="badge badge-lg {{checkEmail(item) ? 'badge-success' : 'badge-danger'}} mb-1 mr-1">{{item}} <i
+        (click)="remove(item)" class="fa fa-times-circle ml-1" aria-hidden="true"></i></span>
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="fa fa-envelope-o"></i></span>
+    </div>
+    <input autocomplete="off" [placeholder]="control.placeholder" type="email" [id]="formGroup.controls[control_id]"
+      [(ngModel)]="model" (keypress)="keypress($event)" [formControl]="formGroup.controls[control_id]"
+      class="form-control"
+      [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched && checkEmails()  && emailmodel.length==0 : false}"
+      (focusout)="focusout()" [required]="control.require"
+      pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*">
+  </div>
+  <small class="form-text text-danger"
+    *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched && checkEmails()  && emailmodel.length==0 : false">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+  <small class="form-text text-danger"
+    *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].errors?.email && formGroup.controls[control_id].touched || (checkEmails() && emailmodel.length>0) : false">
+    You must include a valid email address.
+  </small>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write'" class="form-group">
+  <ng-container
+    *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input"
+      [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+        class="fa fa-pencil pointer" (click)="_controlService._toggleSidebar('id',control.id)"
+        aria-hidden="true"></i></label>
+    <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input"
+      [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+        class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'"
+        (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+  </ng-container>
+</div>

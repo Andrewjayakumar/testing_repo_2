@@ -1,0 +1,137 @@
+<div class="container-fluid backdrop m-3 ml-4">
+
+  <div class="Title ">
+    <label class=" text-primary"> Tag Dashboard</label>
+  </div>
+  
+  <ngb-alert #selfClosingAlert
+             *ngIf="exportMessage"
+             type="success"
+             (close)="exportMessage = ''">
+    {{ exportMessage }}
+  </ngb-alert>
+      
+
+<form #tagDBForm="ngForm" (ngSubmit)="searchTag(tagDBForm)">
+  <div class="row col-12">
+    <div class="col-10 m-0 p-0"></div>
+    <div *ngIf="dataset && dataset.length >0" class="col-2 pr-3 pull-right">
+      <button role="button" class="btn btn-success" (click)="exportTagDB()">
+        <i class="fa fa-send-o pr-2"></i>Export to Excel
+      </button>
+    </div>
+  </div>
+  <div class="row m-2">
+    <div class="col-md-4">
+      <div>
+        <label class="start-date">
+          Closure Start Date
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+      </div>
+      <div class="input-group ">
+        <input class="form-control" [(ngModel)]="startDate" (ngModelChange)="StartDateChanged()"
+               placeholder="yyyy-mm-dd" [required]="true" (focus)="sd.toggle()"
+               name="startdate" ngbDatepicker #sd="ngbDatepicker">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary fa fa-calendar" (click)="sd.toggle()" type="button"></button>
+        </div>
+        <small *ngIf="(startDate && !startDate.day) && (sd.dirty || sd.touched) || (startDate && !startDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1">This field is required</small>
+
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div>
+        <label class="end-date">
+          Closure End Date
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+      </div>
+
+      <div class="input-group">
+
+        <input [disabled]="!startDate" class="form-control" [(ngModel)]="endDate" (ngModelChange)="EndDateChanged()"
+               [minDate]="startDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="ed.toggle()"
+               name="endDate" ngbDatepicker #ed="ngbDatepicker" readonly>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary fa fa-calendar" (click)="ed.toggle()" type="button"></button>
+        </div>
+        <small *ngIf="(endDate && !endDate.day) && (ed.dirty || ed.touched) || (endDate && !endDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1" [hidden]="ed.valid">This field is required</small>
+
+      </div>
+    </div>
+  </div>
+  <div class="row m-2" >
+    <div class="col-md-8" *ngIf="istagadmin">
+    
+      <label>
+        Tag Members
+      </label>
+    
+    <div>
+      <ng-select [items]="tagmembersList" class="form-control" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                 bindLabel="userid" bindValue="userid" placeholder="Type to search"
+                 [(ngModel)]="selectedTagList" name="tagmember"
+                 #tagmember="ngModel">
+      </ng-select>
+
+    </div>
+  </div>
+  </div>
+
+  <div class="row m-2 pull-right">
+    <button type="submit" class="btn btn-primary float-right m-2" id="btntagsubmit">Search</button>
+
+    <button (click)="resetForm()" type="reset" class="btn btn-outline-primary m-2 float-right ">Reset</button>
+
+  </div>
+
+</form>
+
+  <div *ngIf="loading" class="text-center p-2">
+    <i class="fa fa-2x fa-spinner fa-spin"></i>
+  </div>
+
+  <div *ngIf="(!dataset || dataset.length ==0) && searchClicked && !loading" class="text-center p-2">
+    <i><p>No Records found !!</p></i>
+  </div>
+
+  <div class="m-2 mt-4" *ngIf="dataset && dataset.length >0">
+    <table class="table datatable-body tagdbtable">
+      <thead>
+        <tr>
+          <th>Tag Member</th>
+          <th>Sector</th>
+          <th>C2C</th>
+          <th>Active Closure</th>
+          <th>Passive Closure</th>
+          <th>Submissions</th>
+          <th>Hits</th>
+          <th>Hires </th>
+        </tr>
+      </thead>
+      <tbody class="table-striped">
+        <tr *ngFor="let record of dataset">
+          <td>{{record.tagmember}}</td>
+          <td>{{record.sector}}</td>
+          <td>{{record.c2c}}</td>
+          <td>{{record.activeclosure}}</td>
+          <td>{{record.passiveclosure}}</td>
+          <td>{{record.submissions}}</td>
+          <td>{{record.hits}}</td>
+          <td>{{record.hires}}</td>
+        </tr>
+      </tbody>
+
+
+    </table>
+    <!--
+    <div *ngIf="dataset?.length > 20" class="d-flex justify-content-center mt-3">
+      <ngb-pagination [collectionSize]="dataset" [pageSize]="pagesize" [maxSize]="5"
+                      [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+
+    </div> -->
+  </div>
+
+</div>

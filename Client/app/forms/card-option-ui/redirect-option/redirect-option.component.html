@@ -1,0 +1,43 @@
+﻿<div class="form-group">
+  <label>Redirect Type</label>
+  <div class="radio">
+    <label>
+      <input class="form-control" type="radio" [(ngModel)]="redirectOptions.redirecttype" value="sidebar">
+      <span>Side Bar</span>
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input class="form-control" type="radio" [(ngModel)]="redirectOptions.redirecttype" value="form"> <span>Form</span>
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input class="form-control" type="radio" [(ngModel)]="redirectOptions.redirecttype" value="conditional">
+      <span>Conditional(Open Form else SideBar)</span>
+    </label>
+  </div>
+  <div class="row">
+    <div class="md-form col-md-3" *ngIf="redirectOptions.redirecttype=='form' || redirectOptions.redirecttype=='conditional'">
+      <input class="form-control" type="text" [(ngModel)]="redirectOptions.formid">
+      <label>Form Id:</label>
+    </div>
+    <div class="col-md-9" *ngIf="redirectOptions.redirecttype=='conditional'">
+      <div class="md-form">
+        <input class="form-control" type="text" [(ngModel)]="redirectOptions.field">
+        <label>Field:</label>
+      </div>
+      <div class="md-form">
+        <select [ngModel]="redirectOptions.condition" (ngModelChange)="redirectOptions.condition = $event">
+          <option [value]="0"> Equal </option>
+          <option [value]="1"> Greater Then </option>
+          <option [value]="2"> Less Then </option>
+        </select>
+      </div>
+      <div class="md-form">
+        <input class="form-control" type="text" [(ngModel)]="redirectOptions.fieldvalue">
+        <label>Field Value:</label>
+      </div>
+    </div>
+  </div>
+</div>

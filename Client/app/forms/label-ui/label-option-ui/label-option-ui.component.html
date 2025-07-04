@@ -1,0 +1,22 @@
+﻿<div style="margin:20px">
+  <h3>
+    <strong>Value Mapping</strong>
+  </h3>
+  <div class="checkbox">
+    <label>
+      <input class="form-control" type="checkbox" [(ngModel)]="LabelOptions.apibinding">
+      Api Binding Field
+    </label>
+  </div>
+  <br />
+  <button *ngIf="LabelOptions.apibinding" (click)="RefreshData()">Refresh Binding</button>
+  <input *ngIf="!LabelOptions.apibinding" type="text" [(ngModel)]="LabelOptions.bindingfield">
+  <div *ngIf="LabelOptions.apibinding">
+    <label>Binding Field</label>
+    <select [(ngModel)]="LabelOptions.bindingfield">
+      <option *ngFor="let field of bindingfields" [value]="field">
+        {{field}}
+      </option>
+    </select>
+  </div>
+</div>

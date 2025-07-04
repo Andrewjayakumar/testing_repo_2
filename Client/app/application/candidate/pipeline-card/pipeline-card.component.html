@@ -1,0 +1,105 @@
+<div class="position-relative d-flex flex-column">
+  <div class="row">
+    <div class="col-md-12">
+      <div #candidatecard class="card card-border bg-transparent mt-2" (click)="pipelineActions($event)" [class.selected-card]="isCardSelected">
+        <div class="card-body p-2i pb-1i mt-0i overflow-hidden px-0 pb-0 collapse show" style="overflow: auto;">
+          <div class="row" id="Panel">
+            <div class="col-md-12 ">
+              <div class="">
+                <div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="card mb-3 mb-0i bg-transparent border-0">
+                        <div class="card-body p-0 pt-0i px-0 pb-0 collapse show" style="height:auto;">
+                          <div class="row" id="Panel">
+                            <div class="col-md-9 pr-0 ">
+
+                              <div title="">
+
+                                <div class="pb-2 fw-600 mb-0i pt-0i pb-0i pl-0i pr-0i fs-s">
+                                  <!-- <span class="fa fa-caret-down float-right fa-2x" (click)="show=!show;CollapsedIcon();$event.stopPropagation()"></span> -->
+                                  <span class="d-flex">
+                                    <span id="fullname" class="">{{candidate.fullname}}</span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-3 pl-rcb small">
+                                <div *ngIf="((candidateStatus == 'Interview' || candidateStatus == 'Rejected' || candidateStatus == 'Hired') && candidate.interviewlevel != null)"
+                                  class="colored-box-blue">
+                                    <p>{{candidate.interviewlevel}}</p>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="(statusValue != null) && (candidateStatus == 'In Process' || candidateStatus == 'Interview' || candidateStatus == 'Hired')">
+            <div class="row">
+              <div class="col-md-12 status-container small fw-600">
+                <div class="">
+                  {{ statusLabel }}
+                </div>
+                <div [ngClass]="{'text-orange': isPending, 'text-green': !isPending}" class="text-right">
+                  {{ statusValue }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="candidateStatus == 'Rejected'">
+            <div class="row">
+              <div class="col-md-1">
+                <i *ngIf="candidate.rejecttype == 'Submission'" title="Rejected from Submission" class="fa fa-user-times text-purple"></i>
+                <i *ngIf="candidate.rejecttype == 'Interview'" title="Rejected After Interview" class="fa fa-black-tie" style="color:darkred"></i>
+                <i *ngIf="candidate.rejecttype == 'Hire'" title="Bad Delivery" class="fa fa-ban text-danger pt-1i" ></i>
+              </div>
+              <div class="col-md-10 p-0i d-flex align-items-center">
+                <div class="small p-0 pt-rr fw-600 lh-1i pr-2i" [class.pl-pu]="candidate.rejecttype == 'Submission'">
+                  {{ candidate.rejectreason }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+            <hr class="hr m-0i">
+        </div>
+        <div *ngIf="displayDateAndTime != null" class="card-body p-1i pl-2i mt-0i overflow-hidden px-0 pb-0 collapse show" style="overflow: auto;">
+          <div class="row" id="Panel">
+            <div class="col-md-12 ">
+              <div class="">
+                <div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="card mb-3 mb-0i bg-transparent border-0">
+                        <div class="card-body p-0 pt-0i px-0 pb-0 collapse show" style="height:auto;">
+                          <div class="row" id="Panel">
+                            <div class="col-md-12 pr-0 ">
+                              <div title="">
+                                <div class="pb-2 rel mb-0i text-uppercase pt-0i pb-0i pl-0i pr-0i color-gray small fw-600">
+                                      <i class="fa fa-solid fa-calendar">&nbsp;&nbsp;</i>
+                                      <span>{{displayDateAndTime | date: 'MM/dd/yyyy'}} &nbsp;</span>
+                                      <i class="fa fa-solid fa-circle dot-icon"></i>
+                                      <span>&nbsp; {{displayDateAndTime | date: 'h:mm a'}}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

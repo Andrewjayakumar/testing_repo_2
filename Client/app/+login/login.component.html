@@ -1,0 +1,37 @@
+<div class="login-outer d-flex align-items-center py-3">
+  <div class="container">
+    <div class="card">
+      <!--<div class="card-header">
+        <h4 class="m-0">Login</h4>
+      </div>-->
+      <form>
+        <div [ngBusy]="{busy: busy, message: 'Login Using Microsoft Account', backdrop: true, delay: 200, minDuration: 1000}"></div>
+        <!--<div class="card-body">
+          <ngb-alert *ngIf="invalidlogin!=''" type="danger" (close)="invalidlogin = ''">{{ invalidlogin }}</ngb-alert>
+          <ngb-alert *ngIf="SignUpMsg!=''" type="success" (close)="SignUpMsg = ''">{{ SignUpMsg }}</ngb-alert>
+          <ngb-alert *ngIf="ResetMsg!=''" type="success" (close)="ResetMsg = ''">{{ ResetMsg }}</ngb-alert>
+          <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+          <div class="form-group">
+            <label for="defaultForm-email">My email is</label>
+            <input type="text" name="defaultForm-email" placeholder="Email Address" class="form-control m-0" id="defaultForm-email" [(ngModel)]="loginModel.Email">
+          </div>
+          <div class="form-group">
+            <label for="defaultForm-password">My password is</label>
+            <input autocomplete="off" type="password" name="Password" placeholder="Password" id="defaultForm-password" class="form-control m-0" [(ngModel)]="loginModel.Password">
+          </div>
+          <div class="d-flex align-items-center">
+            <button class="btn btn-outline-primary" (click)="login(loginModel)">Log In</button>
+          </div>
+          <div class="or"></div>
+          <h5 class="text-center mb-3">Login Using Microsoft Account</h5>
+          <div class="d-flex justify-content-center mb-3">
+          
+            <button class="btn-circle btn-outline-twitter" (click)="openid()">
+              <span class="btn-circle-inner"><i class="fa fa-windows fa-2x"></i></span>
+            </button>
+          </div>
+        </div>-->
+      </form>
+    </div>
+  </div>
+</div>

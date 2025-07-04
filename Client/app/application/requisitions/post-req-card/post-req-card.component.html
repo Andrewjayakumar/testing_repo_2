@@ -1,0 +1,110 @@
+<ng-container>
+
+  <div class="modal-header">
+    <h6 class="modal-title summary-heading">Rate Card Details</h6>
+    <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+  </div>
+  <div class="modal-body">
+    <ngb-alert *ngIf="rateCardDetails == null"
+               type="danger">
+      Rate Card Details not found.
+    </ngb-alert>
+   
+
+    <div class="list-parent col-md-12" *ngIf="rateCardDetails">
+      <div class="">
+        <div class="m-top-sm">
+
+          <div class="req-info-details req-info">
+            Candidate Name
+          </div>
+          <div class="billrate req-info">
+            Bill Rate
+          </div>
+          <div class="billrate-type req-info">
+            Bill Rate Type
+          </div>
+
+
+          <div class="pay-rate-offered req-info">
+            Pay Rate Offered
+          </div>
+          <div class="payrate-unittype req-info">
+            Pay Rate Unit Type
+          </div>
+          <div class="gp req-info">
+            GP
+          </div>
+          <div class="gpm req-info">
+            GPM
+          </div>
+          <div class="markup req-info">
+            Mark Up
+          </div>
+        </div>
+
+        <div class="b-all-light-border">
+
+          <div class="requisition-row">
+
+
+            <div class="firstDiv">
+              <div class="secDiv">
+
+                <div class="req-info-details text-primary">
+                  <a (click)="gotoReqPage(reqObj?.requisitionid)">{{rateCardDetails?.candidatename ? rateCardDetails?.candidatename:'-'}}</a>
+
+                </div>
+
+
+                <div class="billrate  orangeText">
+                  {{rateCardDetails?.billrate ? rateCardDetails?.billrate : '-'}}
+                </div>
+                <div class="billrate-type  orangeText">
+                  {{rateCardDetails?.billratetype ? rateCardDetails?.billratetype:'-'}}
+                </div>
+                <div class="pay-rate-offered  orangeText">
+                  {{rateCardDetails?.payrateoffered ? rateCardDetails?.payrateoffered:'-'}}
+
+
+                </div>
+
+                <div class="payrate-unittype goldenrod">
+                  {{rateCardDetails?.payrateunittype ? rateCardDetails?.payrateunittype:'-'}}
+
+                </div>
+                <div class="gp blueText">
+                  {{rateCardDetails?.gp ? rateCardDetails?.gp:'-'}}
+
+                </div>
+                <div class="gpm  lightOrangetext">
+                  {{rateCardDetails?.gpm ? rateCardDetails?.gpm:'-'}}
+
+                </div>
+                <div class="markup greenColorText">
+                  {{rateCardDetails?.markup ? rateCardDetails?.markup:'-'}}
+
+                </div>
+
+
+              </div>
+
+            </div>
+          </div>
+
+
+
+        </div>
+
+
+
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+</ng-container>

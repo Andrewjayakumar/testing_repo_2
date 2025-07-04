@@ -1,0 +1,311 @@
+$primary: #1976d2;
+$gray-default: #7c7c7c;
+$dark-gray: #4c4c4c;
+$bg-gray: #ebebeb;
+$purple: purple;
+$green: green;
+$orange: #f5a623 !default;
+$yellow: #f0c40f !default;
+$font-size: 12px;
+
+.main-hotbookparent {
+  width: 96%;
+  margin-right: 0rem;
+  margin-left: 2rem;
+
+  .active-tab {
+    a {
+      color: $primary !important;
+      text-decoration: none;
+    }
+
+    li {
+      border-bottom: 2px solid $primary !important;
+    }
+
+    border-bottom: 2px solid $primary !important;
+    background-color: white;
+  }
+}
+
+.parent-tab {
+  //padding-left: 0.5rem !important;
+  //margin-left: 2rem;
+  overflow: hidden;
+  height: 89vh;
+  scroll-behavior: smooth;
+  background-color: white;
+}
+
+.sticky-switch {
+  position: sticky;
+  top: 4px;
+  z-index: 3;
+}
+
+.hotbookcard {
+  cursor: pointer;
+  border: 1px solid #a3a4a5;
+  margin: 2px;
+  position: relative;
+  background-color: #faf5f5;
+  margin-top: 8px;
+
+  a {
+    color: $primary;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  &:hover {
+    @extend .current-selection;
+  }
+}
+
+.current-selection {
+  background-color: $primary;
+
+  a {
+    color: white;
+  }
+
+  label {
+    color: white;
+  }
+
+  h3 {
+    color: white;
+  }
+}
+
+.border-shared {
+  border-left: 3px solid $green !important;
+  font-size: $font-size;
+}
+
+.border-personal {
+  border-left: 3px solid $purple !important;
+  font-size: $font-size;
+}
+
+.pageheading {
+  color: $orange;
+  font-size: medium; //14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding-left: 0;
+  padding-top: 5px;
+  font-variant-caps: small-caps;
+}
+
+.selectedfoldername {
+  overflow: hidden;
+  font-size: medium;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* display: -webkit-box; */
+  width: 100%;
+  color: #1976d2;
+}
+
+.right-separator {
+  border-right: 2px solid #bbb;
+  // height: 80vh;
+}
+
+/** CARd specific Styls*/
+
+.metal-card-row {
+  margin: 0 -10px;
+}
+
+.metal-card-row {
+  padding: 1px;
+}
+
+.metal-card-col {
+  padding: 3px;
+}
+
+#bottom button {
+  width: 99%;
+  padding: 10px 0;
+  margin-left: 2px;
+  margin-top: 8px;
+  font-size: $font-size;
+}
+
+.ellipsisHotbook {
+  text-overflow: ellipsis;
+}
+
+.scrollContent {
+  overflow-y: auto;
+  height: 73vh;
+  overflow-x: hidden;
+}
+
+.paginator {
+  position: fixed;
+  left: 50%;
+  float: right !important;
+  margin-top: 7px;
+}
+
+.searchBox {
+  border-radius: 5px;
+}
+
+.searchIcon {
+  background-color: #fff;
+  border-radius: 0px 10px 10px 0px;
+}
+
+.hotbookName {
+  width: 85%;
+}
+
+.hotbookLabel,
+.hotbookName {
+  vertical-align: text-top;
+  display: inline-block;
+}
+
+.noHotbook {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.searchIcon {
+  color: #1ca9f7;
+}
+
+.searchInput {
+  border-radius: 10px 0px 0px 10px;
+  font-size: $font-size;
+}
+
+.searchBorder {
+  border-radius: 0px 10px 10px 0px;
+}
+
+.checkboxes {
+  font-size: $font-size;
+}
+.searchinputBox {
+  border-radius: 10px;
+}
+
+.actionbutton {
+  border: none !important;
+}
+
+.actionsmenu {
+  display: inline-block;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.hotbookcard:hover #dropdownBasic1 {
+  color: white;
+}
+
+#dropdownBasic1:active:focus {
+  background: none;
+  color: #fff;
+}
+
+#dropdownBasic1 {
+  border: none;
+  padding: 0 5px;
+  background: none;
+  color: #1976d2;
+}
+
+.menuItems {
+  position: relative;
+  z-index: 1;
+  transform: translate3d(-139px, 21px, 0px);
+}
+
+/* for scrolling the candidate card only */
+#candidatecard {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 80vh;
+}
+
+#candidatecard::-webkit-scrollbar {
+  width: 5px;
+}
+
+#candidatecard::-webkit-scrollbar-thumb {
+  background: rgba(136, 135, 135, 0.69);
+  border-radius: 10px;
+}
+/* for scrolling the candiadte card ends*/
+
+.ownerInfo {
+  font-size: 10px;
+  font-weight: normal !important;
+  color: grey;
+  margin-bottom: 0;
+  margin-top: -6px;
+}
+
+.addHotbookButton {
+  background: none;
+}
+
+.plusIcon {
+  vertical-align: super;
+  font-size: 18px;
+  color: #1ca9f7;
+}
+
+.dropdown-menu.show {
+  display: grid !important;
+  padding: 0 !important;
+}
+
+.menuItem {
+  background: none !important;
+  border: none !important;
+  text-align: left;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  margin: 5px 0;
+  margin-left: 10px;
+}
+
+.demandMenu {
+  margin-left: -7rem;
+  left: 0 !important;
+}
+
+.dotsButton {
+  border: none;
+  font-size: 10px;
+}
+
+ngb-alert {
+  width: 100%;
+}
+
+.cursor-pointer{
+    cursor:pointer;
+}

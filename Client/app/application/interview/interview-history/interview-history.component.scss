@@ -1,0 +1,63 @@
+$primary: #1976d2;
+
+* {
+  box-sizing: border-box;
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+.interview-histry {
+  width: 95%;
+  margin-left: 3%;
+}
+
+.req-name {
+  text-align: left;
+  padding: 10px 0px 10px 0px;
+  color:$primary;
+}
+
+.candidate-detail {
+  float: left;
+  width: 50%;
+  padding: 0px 10px 0px 10px;
+  height: 100px;
+  border-left-style: solid;
+  border-color: #D3D3D3;
+}
+
+.client-detail {
+  float: left;
+  width: 50%;
+  padding: 0px 10px 0px 0px;
+  height: 80px;
+}
+
+.client-head, .candidate-head {
+  background-color: #D3D3D3;
+}
+
+div.client-head, div.candidate-head, div.column2, div.column3, div.client-details-values, div.candidate-details-values {
+  text-align: center;
+}
+label.lbl-client, label.lbl-candidate {
+  color: black;
+}
+
+div.client-details-values, div.candidate-details-values {
+  padding: 20px 0px 0px 0px;
+}
+
+p.client-name-value {
+  margin-bottom: 0px;
+}
+
+p.candidate-name-value {
+  margin-bottom: 0px;
+}
+
+.no-record {
+  color: #D3D3D3;
+  margin-top: 10%;
+  margin-left: 45%;
+}

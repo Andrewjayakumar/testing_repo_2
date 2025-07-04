@@ -1,0 +1,70 @@
+::ng-deep .education {
+    .slider {
+      .line {
+        height: 12px !important;
+        background: purple !important;
+      }
+    }
+  }
+
+
+.skills > .slider > .line {
+      height: 12px !important;
+      background: blue !important;
+ }
+ 
+
+.certification,  
+  .slider ,
+    .line {
+      height: 12px !important;
+      background: aqua !important;
+   }
+
+.languages {
+  .slider {
+    .line {
+      height: 12px !important;
+      background: green !important;
+    }
+  }
+}
+
+
+.industries {
+  .slider {
+    .line {
+      height: 12px !important;
+      background: yellow !important;
+    }
+  }
+}
+
+
+.executive {
+  .slider {
+    .line {
+      height: 12px !important;
+      background: orange !important;
+    }
+  }
+}
+
+
+.management {
+  .slider {
+    .line {
+      height: 12px !important;
+      background: magenta !important;
+    }
+  }
+}
+
+
+.management {
+  & .slider {
+    &.line {
+      margin-right: 0;
+    }
+  }
+}

@@ -1,0 +1,150 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Update Client Name</h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="container mb-5">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label class="label mandatory title" for="skills">Client Name
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <ng-select
+            [items]="clientList | async"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="clientname"
+            bindValue="clientcode"
+            [virtualScroll]="true"
+            id="client"
+            [(ngModel)]="selectedClient"
+            placeholder="Type atleast 2 characters"
+            class="form-control"
+            [ngModelOptions]="{ standalone: true }"
+            [typeahead]="clientinput$"
+            [loading]="isClientLoading"
+            (change)="setCES($event)"
+          >
+          </ng-select>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label class="label title">Client Code</label>
+          {{ selectedClient }}
+        </div>
+
+        <!--<div
+          class="col-md-3 mb-3 alignSwitchButton"
+          [ngClass]="{
+            'justify-content-between': position == 'justify',
+            'mr-5': position == 'justify'
+          }"
+        >
+          <label
+            [attr.for]="'ES'"
+            class="checkbox-label mt-1 mr-1 mb-1"
+            >ES</label
+          >
+          <div class="custom-switch">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              [attr.id]="'ES'"
+              [(ngModel)]="isCes"
+              (click)="onStateChanged($event)"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="disableITSSFlag"
+            />
+            <label [attr.for]="'ES'" class="custom-control-label"></label>
+          </div>
+        </div>-->
+
+        <!-- <div *ngIf="isCes" class="col-md-6 mb-3">
+          <label class="label title" for="projectName">SOW/Project Name</label>
+          <ng-select
+            [items]="projectList | async"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="msprojectname"
+            bindValue="msprojectname"
+            [virtualScroll]="true"
+            id="projectName"
+            [(ngModel)]="selectedProject"
+            placeholder="Type to Search"
+            class="form-control"
+            [ngModelOptions]="{ standalone: true }"
+            [typeahead]="projectinput$"
+            [loading]="isProjectLoading"
+          >
+          </ng-select>
+        </div> -->
+
+        <!-- <div *ngIf="isCes" class="col-md-6 mb-3">
+          <label class="label title" for="practiceTower">Practice Tower</label>
+          <ng-select
+            [items]="towers"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="value"
+            bindValue="value"
+            [virtualScroll]="true"
+            id="practiceTower"
+            [(ngModel)]="selectedTower"
+            placeholder="Select"
+            class="form-control"
+            [ngModelOptions]="{ standalone: true }"
+          >
+          </ng-select>
+        </div> -->
+
+        <div class="col-md-12 mb-3">
+          <label class="label mandatory title" for="reason">Reason
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <textarea
+            class="form-control"
+            id="reason"
+            name="reason"
+            rows="5"
+            cols="60"
+            [(ngModel)]="reason"
+            autocomplete="off"
+          >
+          </textarea>
+        </div>
+      </div>
+
+      <div *ngIf="(displayMessage || errorMessage)"  class="col-md-12 mb-3">
+        <div *ngIf="displayMessage"  class="alert alert-success">
+          <strong>{{displayMessage}}</strong>
+        </div>
+
+        <div *ngIf="errorMessage"  class="alert alert-danger">
+          <strong>{{errorMessage}}</strong>
+        </div>
+      </div>
+
+      <div *ngIf="!(isUploading || displayMessage || errorMessage)">
+        <button class="btn btn-primary pull-right" type="submit" [disabled]="!(selectedClient && reason)">Update</button>
+      </div>
+
+      <div *ngIf="isUploading">
+        <button class="btn btn-primary loader pull-right" type="button" disabled="">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

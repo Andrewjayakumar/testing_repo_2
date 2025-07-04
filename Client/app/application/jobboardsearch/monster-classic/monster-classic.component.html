@@ -1,0 +1,431 @@
+
+  <div class="container">
+    <form #monsterClassicSearch="ngForm" novalidate (ngSubmit)="onSubmit('submit')">
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label class="keyword" for="keyword">
+            Keywords
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <input name="keyword" id="keyword" [(ngModel)]="model.keywords"
+                 #keyword="ngModel"
+                 class="form-control" required/>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="keyword" for="searchtype">Search Type</label>
+
+          <select class="form-control" name="searchtype" [(ngModel)]="model.searchpattern" #searchtype="ngModel">
+            <option *ngFor="let data of searchType" [value]="data.value">{{data.name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label class="daysback" for="daysback">Days Back</label>
+
+          <select class="form-control" name="daysback" [(ngModel)]="model.freshnessindays" #daysback="ngModel">
+            <option *ngFor="let data of daysBack" [value]="data.value">{{data.name}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="within" for="within">Within</label>
+
+          <select class="form-control" name="within" [(ngModel)]="model.searchradiusinmiles" #within="ngModel">
+            <option *ngFor="let data of milesAway" [value]="data.value">{{data.name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label class="sortby" for="sortby">Sort By</label>
+
+          <select class="form-control" name="sortby" [(ngModel)]="model.sortby" #sortby="ngModel">
+            <option *ngFor="let data of sortBy" [ngValue]="data.value">{{data.name}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="country" for="country">Country</label>
+
+          <select class="form-control" name="country" [(ngModel)]="model.country" #country="ngModel" (change)="countryChanged($event)">
+            <option *ngFor="let data of CountryCode" [ngValue]="data.value">{{data.name}}</option>
+          </select>
+        </div>
+        <div class="col-md-4 mt-3">
+
+          <app-metal-switch [(state)]="advancedsearch" (stateChange)="onAdvancesearhToggled($event)" [uniqueid]="'classic_advanced'" name="advance" [labelname]="'Advanced Search'"></app-metal-switch>
+
+
+        </div>
+      </div>
+
+      <div class="row" *ngIf="advancedsearch">
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+
+                  <app-metal-switch [(state)]="model.candidateswillingtowork" [uniqueid]="'willing'" name="willing" [labelname]="'Include Candidates willing to work'"></app-metal-switch>
+
+
+                </div>
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <label for="state">
+                        State
+
+                      </label>
+                      <ng-select class="form-control"
+                                 [items]="stateDetails"
+                                 [multiple]="true"
+                                 [closeOnSelect]="true"
+                                 bindLabel="name" bindValue="id"
+                                 placeholder="--select--"
+                                 [(ngModel)]="model.state"
+                                 #state="ngModel"
+                                 name="state">
+                      </ng-select>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="zip">Zipcode</label>
+                      <input id="zip" name="zip" class="form-control" [(ngModel)]="model.zipcode" #zipcode="ngModel" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label for="educationlevel">
+                    Education Level
+
+                  </label>
+                  <ng-select class="form-control"
+                             [items]="educationlevel"
+                             [multiple]="false"
+                             [closeOnSelect]="true"
+                             bindLabel="key" bindValue="value"
+                             placeholder="--select--"
+                             [(ngModel)]="model.educationlevel" #education="ngModel"
+                             name="education">
+                  </ng-select>
+                </div>
+                <div class="col-md-12">
+                  <label for="schoolattended">
+                    School Attended
+
+                  </label>
+                  <input id="schoolattended" name="schoolattended" [(ngModel)]="model.schoolsattended" #schoolattended="ngModel" class="form-control" />
+                </div>
+                <div class="col-md-12">
+
+                  <app-metal-switch [(state)]="model.salarynotincluded" [uniqueid]="'salarynotice'" name="salarynotice" [labelname]="'Include job seekers that do not specify a target salary'"></app-metal-switch>
+
+
+                </div>
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label for="minsalary">
+                        Min. Salary
+
+                      </label>
+                      <input type="number" id="minsalary" [(ngModel)]="model.minsalary" #minsalary="ngModel"
+                             name="minsalary" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="maxsalary">
+                        Max. Salary
+
+                      </label>
+                      <input type="number" id="maxsalary" name="maxsalary" class="form-control " [(ngModel)]="model.maxsalary" #maxsalary="ngModel" />
+                    </div>
+                    <div class="col-md-4">
+                      <label for="units">
+                        Units
+
+                      </label>
+                      <ng-select class="form-control"
+                                 [items]="units"
+                                 [multiple]="false"
+                                 [closeOnSelect]="true"
+                                 bindLabel="key" bindValue="value"
+                                 placeholder="--select--"
+                                 [(ngModel)]="model.units" #unit="ngModel"
+                                 name="unit">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div *ngIf="model.maxsalary < model.minsalary">
+                    <small class="text-danger">Max Salary should be more than Min Salary</small>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label for="militarystatus">
+                    Military Status
+
+                  </label>
+                  <ng-select class="form-control"
+                             [items]="militaryStatus"
+                             [multiple]="false"
+                             [closeOnSelect]="true"
+                             bindLabel="key" bindValue="value"
+                             placeholder="--select--"
+                             [(ngModel)]="model.militarystatus" #military="ngModel"
+                             name="military">
+                  </ng-select>
+                </div>
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="language">
+
+                        Language
+
+                      </label>
+                      <ng-select class="form-control"
+                                 [items]="languageDetails"
+                                 [multiple]="false"
+                                 [closeOnSelect]="true"
+                                 bindLabel="name" bindValue="id"
+                                 placeholder="--select--"
+                                 [(ngModel)]="model.language" #langage="ngModel"
+                                 name="langage">
+                      </ng-select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="languageprof">
+                        Language Proficiency
+
+                      </label>
+                      <ng-select class="form-control"
+                                 [items]="langProficiency"
+                                 [multiple]="false"
+                                 [closeOnSelect]="true"
+                                 bindLabel="key" bindValue="value"
+                                 placeholder="--select--"
+                                 [(ngModel)]="model.languageproficiency" #lang="ngModel"
+                                 name="lang">
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label for="workauth">
+                    Work Authorization
+
+                  </label>
+                  <ng-select class="form-control"
+                             [items]="Workauth"
+                             [multiple]="true"
+                             [closeOnSelect]="true"
+                             bindLabel="key" bindValue="value"
+                             placeholder="--select--"
+                             [(ngModel)]="model.workauthorization" #workauth="ngModel"
+                             name="workauth">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="jbtype">
+                      Job Types
+
+                    </label>
+                    <ng-select class="form-control"
+                               [items]="jobTypes"
+                               [multiple]="true"
+                               [closeOnSelect]="true"
+                               bindLabel="key" bindValue="value"
+                               placeholder="--select--"
+                               [(ngModel)]="model.jobtypes" #jbtype="ngModel"
+                               name="jbtype">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="jobstatus">
+                      Job Status
+
+                    </label>
+                    <ng-select class="form-control"
+                               [items]="jobStatus"
+                               [multiple]="true"
+                               [closeOnSelect]="true"
+                               bindLabel="key" bindValue="value"
+                               placeholder="--select--"
+                               [(ngModel)]="model.jobstatus" #jbstatus="ngModel"
+                               name="jbstatus">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="carrerlavel">
+                      Career Level
+
+                    </label>
+                    <ng-select class="form-control"
+                               [items]="careerLevel"
+                               [multiple]="true"
+                               [closeOnSelect]="true"
+                               bindLabel="key" bindValue="value"
+                               placeholder="--select--"
+                               [(ngModel)]="model.careerlevel" #career="ngModel"
+                               name="career">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="mostrecentemp">
+                      Most Recent Employer
+
+                    </label>
+                    <input id="mostrecentemp" [(ngModel)]="model.mostrecentemployer" #mostrecentemp="ngModel"
+                           name="mostrecentemp" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="experience">
+                      Experience
+
+                    </label>
+                    <ng-select class="form-control"
+                               [items]="Experience"
+                               [multiple]="true"
+                               [closeOnSelect]="true"
+                               bindLabel="key" bindValue="value"
+                               placeholder="--select--"
+                               [(ngModel)]="model.experience" #exp="ngModel"
+                               name="exp">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="mostrecentjobtitle">
+                      Most Recent Jobtitle
+
+                    </label>
+                    <input id="mostrecentemp" [(ngModel)]="model.mostrecentjobtitle" #mostrecentemp="ngModel" name="mostrecentemp" class="form-control" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="industry">
+                      Industry
+
+                    </label>
+                    <ng-select class="form-control"
+                               [items]="industryList"
+                               [loading]="categoryList==null"
+                               [multiple]="true"
+                               [closeOnSelect]="true"
+                               bindLabel="name" bindValue="id"
+                               placeholder="Type to filter"
+                               [(ngModel)]="model.industry" #industry="ngModel"
+                               name="industry">
+                                <ng-template ng-option-tmp let-item="item">
+                              <div class="text-truncate" [title]="item.name">{{item.name}}</div>
+                              </ng-template>
+                             
+                    </ng-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="mostrecentjobtitle">
+                     Category
+
+                    </label>
+                    <ng-select class="form-control"
+                               [items]="categoryList"
+                               [multiple]="true"
+                               [closeOnSelect]="true"
+                               bindLabel="name" bindValue="id"
+                               placeholder="Type to filter"
+                               [loading]="categoryList==null"
+                               [(ngModel)]="model.category" #category="ngModel"
+                               name="category">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-truncate" [title]="item.name">{{item.name}}</div>
+                        </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+
+                <app-metal-switch [(state)]="model.securityclearance" [uniqueid]="'security'" name="security" [labelname]="'Resume must have clearance'"></app-metal-switch>
+
+
+              </div>
+              <div class="col-md-12">
+                <label for="mostrecentjobtitle">
+                  Most Recent Job Description
+                </label>
+                <div contenteditable="true" class="editable" (blur)="editorFocusOut($event, this); touched=true" #editor name="desc" [innerHtml]="description">
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row float-right">
+        <div class="mr-3">
+          <button type="submit" id="sub" name="sub" [disabled]="!model.keywords" class="btn btn-primary">Search</button>
+
+        </div>
+        <div>
+          <button id="clear" name="clear" type="reset" (click)="resetModel()" class="btn btn-outline-primary">Clear</button>
+
+        </div>
+
+      </div>
+    </form>
+    <div *ngIf="showloader" class="text-center p-2">
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    </div>
+    <div *ngIf="!showloader" class="col-md-12 p-0 mt-5">
+
+      <div *ngIf="monstersearchResults && monstersearchResults.length >0">
+        <label>No. of Resumes : {{totalprofilesfound}}</label>
+      </div>
+
+      <div class="row metal-card-row mt-2">
+        <div class="col-3 metal-card-col mb-1 pr-1 pl-1" *ngFor="let candidateObj of monstersearchResults">
+          <div class="d-block h-100">
+            <div class="card mb-0 h-100 custom-action-hover">
+              <app-candidate-card [candidate]="candidateObj" (actionClicked)="onActionClicked($event)"
+                                  [pagename]="'monster_classic'" [priorPinAction]="classicDownloadDetails"
+                                  [requisitionid]="requisitionid" [highlightskillsarray]="highlightskillsarray"
+                                  >
+              </app-candidate-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="noresultsFound" class="text-center font-italic mt-5"> <h4>No results found!</h4></div>
+    <div *ngIf="errorMessage" class="text-center font-italic mt-5"><h4>{{errorMessage}} </h4></div>
+
+    <div class="d-flex justify-content-center mt-3" *ngIf="monstersearchResults?.length > 19">
+      <ngb-pagination [collectionSize]="totalprofilesfound" [pageSize]="pagesize" [(page)]="pageindex"
+                      [maxSize]="4" (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+    </div>
+  </div>

@@ -1,0 +1,670 @@
+<div *ngIf="interviewHistoryRoundDetails">
+  <div class="interview-card" *ngFor="let interviewRound of interviewHistoryRoundDetails[0]?.results; let i=index;">
+    <div *ngIf="!interviewRound.isinterviewcanceled">
+      <div class="interview-round-name">
+        <h4 class="round-name">
+          <b>Round {{interviewRound.interviewround}}</b>
+          <p *ngIf="interviewRound.finalround==true" class="finalRound"><span class="badge badge-pill badge-primary">Final Round</span></p>
+        </h4>
+      </div>
+      <div class="row">
+        <div class="interview-details">
+          <label class="lbl-interview-type">INTERVIEW TYPE</label>
+          <p class="interview-type-value"><b>{{interviewRound.interviewtype}}</b></p>
+          <div *ngIf="interviewRound.interviewtype === 'Internal Screenings'">
+            <label class="lbl-interview-mode">LEVEL</label>
+            <p class="interview-mode-value"><b>{{interviewRound.interviewlevel}}</b></p>
+            <label class="lbl-interview-mode">EXECUTED BY</label>
+            <p class="interview-mode-value"><b>{{interviewRound.executedby}}</b></p>
+          </div>
+
+          <label class="lbl-interview-mode">MODE OF INTERVIEW</label>
+          <p class="interview-mode-value"><b>{{interviewRound.interviewmode}}</b></p>
+        </div>
+        <div class="interview-time-details">
+          <label class="lbl-interview-date">INTERVIEW DATE & TIME</label>
+          <p class="interview-date-value"><b>{{interviewRound.interviewtime|date:'medium'}}</b></p>
+          <label class="lbl-interview-time">TIME ZONE</label>
+          <p class="interview-time-value"><b>{{interviewRound.timezonecode}}</b></p>
+          <label class="lbl-interview-duration">DURATION</label>
+          <p class="interview-duration-value"><b>{{interviewRound.duration}}</b></p>
+        </div>
+        <div class="interviewer-details">
+          <label class="lbl-interviewer-name">INTERVIEWER NAME</label>
+          <p class="interviewer-name-value"><b>{{interviewRound.interviewername}}</b></p>
+          <p class="emptyLine" *ngIf="!interviewRound.interviewername"><b>--</b></p>
+          <label class="lbl-interviewer-mail">SEND REMINDER TO</label>
+          <p class="interviewer-mail-value"><b>{{interviewRound.intervieweremail}}</b></p>
+          <p class="emptyLine" *ngIf="!interviewRound.intervieweremail"><b>--</b></p>
+          <label class="lbl-interview-ccmail">CC REMINDER TO </label>
+          <ng-container *ngIf="interviewRound.ccemail">
+            <!-- To show every ccmails in seperate lines -->
+            <ng-container *ngFor="let email of interviewRound.ccemail.split(',')">
+              <p class="interview-ccmail-value"><b>{{ email.trim() }}</b></p>
+            </ng-container>
+          </ng-container>
+          <p class="emptyLine" *ngIf="!interviewRound.ccemail"><b>--</b></p>
+        </div>
+      </div>
+      <hr>
+      <div *ngIf="interviewRound.interviewmodeid==3">
+        <label class="lbl-interviewlinklocation">INTERVIEW LINK</label>
+        <div>
+          <a class="interviewlinklocation-value" href="{{interviewRound.interviewlinklocation}}">{{interviewRound.interviewlinklocation}}</a>
+        </div>
+        <p class="emptyLine" *ngIf="!interviewRound.interviewlinklocation"><b>--</b></p>
+      </div>
+      <div *ngIf="interviewRound.interviewmodeid==4||interviewRound.interviewmodeid==7">
+        <label class="lbl-interviewlinklocation">INTERVIEW LOCATION</label>
+        <p class="interviewlinklocation-value">{{interviewRound.interviewlinklocation}}</p>
+        <p class="emptyLine" *ngIf="!interviewRound.interviewlinklocation"><b>--</b></p>
+      </div>
+      <div class="interview-notes">
+        <label class="lbl-inteview-notes">INTERVIEWER NOTES</label>
+        <p class="interview-notes-value">
+          {{interviewRound.notes}}
+        </p>
+        <p class="emptyLine" *ngIf="!interviewRound.notes"><b>--</b></p>
+      </div>
+
+      <div class="feedback" *ngIf="interviewRound.interviewtype == 'Internal Screenings' || interviewRound.interviewtype == 'Client Screenings'">
+        <label class="lbl-feedback">FEEDBACK <span class="req_color">*</span></label>
+        <a (click)="editFeedback(interviewRound)">
+          <img class="edit-img" *ngIf="interviewRound.iscompleted==true" src="../../../../../../wwwroot/assets/img/svg/edit.svg" />
+        </a>
+
+        <div class="feedback-textarea" *ngIf="interviewRound.iscompleted==false||(isEditFeedback&&editFeedbackItemId==interviewRound.candidateinterviewid)">
+          <textarea placeholder="Enter your feedback..." maxlength="3000" [(ngModel)]="interviewRound.feedback" (keyup)="feedbackValidation(interviewRound)"></textarea>
+          <p *ngIf="showFeedbackValidation" class="feedback-validation-message">Please Provide the Feedback!....</p>
+          <p class="p-feedback-count"><b>3000 CHARACTERS</b></p>
+        </div>
+        <button class="btn btn-feedback-update" *ngIf="isEditFeedback&&editFeedbackItemId==interviewRound.candidateinterviewid" (click)="updateFeedback(interviewRound)"> Update feedback</button>
+        <div class="feedback-text" *ngIf="interviewRound.iscompleted==true&&editFeedbackItemId!=interviewRound.candidateinterviewid">
+          <p class="p-feedback-value"> {{interviewRound.feedback}}</p>
+        </div>
+      </div>
+
+      <div class="interview-result">
+        <label for="" class="lbl-inteview-result ">INTERVIEW RESULT <span class="mandatory_color">*</span></label>
+        <br>
+        <div class="form-check form-check-inline">
+
+          <input class="form-check-input"
+                 type="radio"
+                 [value]="true"
+                 [(ngModel)]="interviewRound.isinterviewcleared"
+                 [checked]="interviewRound.isinterviewcleared ===true"
+                 [disabled]="interviewRound.iscompleted==true">
+          <label class="form-check-label" for="inlineRadio1">Cleared</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input"
+                 type="radio"
+                 [value]="false"
+                 [(ngModel)]="interviewRound.isinterviewcleared"
+                 [checked]="interviewRound.isinterviewcleared ===false"
+                 [disabled]="interviewRound.iscompleted==true">
+          <label class="form-check-label">Not Cleared</label>
+        </div>
+        <hr>
+        <form [formGroup]="FeedbackFileupload" >
+
+          <div class="fileAttach selectbox cust attachement_jump t-1" *ngIf="!interviewRound?.feedbackfile">
+            <div class="attachmentsWrap">
+              <div class="form-control fileBox">
+                <input type="file" class="file-upload-input w-16 attachedFile" id="jrnFile" name="resumeFile" #candidate_resume
+                       placeholder="Select file" (change)="onFileChange(candidate_resume.files)" accept=".doc,.docx,.pdf" />
+                <label for="jrnFile" class="my-drop-zone uploadfdback">Upload feedback document by clicking here</label>
+                <span class="crm-file-plus crm-icon right-icon"></span>
+                <span class="d-flex justify-content-center">OR</span>
+                <div ng2FileDrop
+                     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                     (fileOver)="fileOverBase($event)"
+                     [uploader]="uploader"
+                     (onFileDrop)="onFileDrop($event)"
+                     class="well my-drop-zone">
+                  Drop your feedback document here 
+                </div>
+
+              </div>
+
+              <div *ngIf="attachments?.length != 0" class="form-group attachmentsBox">
+                <div *ngFor="let file of attachments" class="file-name">
+                  <div class="attachment-label" *ngIf="file.useradd">
+                    {{file.file.name}}
+                    <span type="button" class="close" (click)="clearResume()">
+                      <span aria-hidden="true">&times;</span>
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="interviewRound?.feedbackfile">
+            <label class="lbl-feedback">Feedback Document</label>
+            <span class="feedback-document">
+              <!--<a href="" target="_self">{{interviewRound?.feedbackfile}} </a>-->
+              <a href="{{interviewRound?.feedbackfile}}" download="{{interviewRound?.feedbackfile}}">{{interviewRound?.feedbackfile}}</a>
+
+              <i class="fa fa-cloud-download" aria-hidden="true"></i>
+            </span>
+
+          </div>
+          </form>
+
+
+          <span class="chip filename" *ngIf="fileName">
+
+            <span>{{fileName}}</span>
+            <span class="px-1">|</span>
+            <a class="p-1 icon-link" (click)="removeFile()">
+              <i aria-hidden="true" class="fa fa-trash-o"></i>
+            </a>
+
+          </span>
+          <span class="chip filename" *ngIf="datafromDragndrop">
+
+            <span>{{uploader?.queue[0]?.file?.name}}</span>
+            <span class="px-1">|</span>
+            <a class="p-1 icon-link" (click)="removeFile()">
+              <i aria-hidden="true" class="fa fa-trash-o"></i>
+            </a>
+
+          </span>
+          <div>
+            <small *ngIf="(fileslist.length == 0 && resumeWrongFormat)" class="error_msg">Please upload a resume file of PDF or MS Word document format</small>
+          </div>
+      </div>
+
+      <div *ngIf="interviewRound.iscompleted==true && interviewRound.interviewtype === 'Client Screenings'" class="debrief-dropdown mt-3">
+
+        <div class="row">
+          <div class="col-md-12 p-0">
+            <!-- Accordion -->
+            <div id="debrieddetails" class="">
+
+              <!-- Accordion item 1 -->
+              <div class="card card-sub">
+                <div id="headingOne" class="card-header bg-white  border-0">
+                  <h2 class="mb-0 accordion-background">
+                    <button type="button" data-toggle="collapse" [attr.data-target]="'#' + interviewRound.candidateinterviewid" aria-expanded="false" aria-controls="'#collapse'+ interviewRound.candidateinterviewid" class="btn btn-link accordion-header font-weight-bold collapsed collapsible-link">Debrief Details</button>
+                  </h2>
+
+                </div>
+                <div id="{{interviewRound.candidateinterviewid}}" aria-labelledby="headingOne" data-parent="debrieddetails" class="collapse">
+                  <div class="card-body">
+                    <div class="container" *ngIf="interviewRound?.debrief">
+
+                      <div class="question  pt-2">
+                        <div class="py-2 h6">
+                          <b>
+                            How would you rate the interview on a scale of 1-5,
+                            with 5 being the best?
+                          </b>
+                        </div>
+                        <div class="pt-sm-0 pt-3" id="options">
+                          <label class="options">
+                            1
+                            <input type="radio" name="rateInterviewScale" [value]="1" [checked]="interviewRound?.debrief.rateinterviewscale == '1'" [ngClass]="{'radion-button-check': interviewRound?.debrief.rateinterviewscale === '1'}">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            2
+                            <input type="radio" [value]="2" name="rateInterviewScaletwo" [checked]="interviewRound?.debrief.rateinterviewscale == '2'"
+                                   [ngClass]="{'radion-button-check': interviewRound?.debrief.rateinterviewscale === '2'}">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            3
+                            <input type="radio" [value]="3" name="rateInterviewScalethree" [checked]="interviewRound?.debrief.rateinterviewscale == '3'" [ngClass]="{'radion-button-check': interviewRound?.debrief.rateinterviewscale === '3'}">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            4
+                            <input type="radio" [value]="4" name="rateInterviewScalefour" [checked]="interviewRound?.debrief.rateinterviewscale == '4'" [ngClass]="{'radion-button-check': interviewRound?.debrief.rateinterviewscale === '4'}">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            5
+                            <input type="radio" [value]="5" name="rateInterviewScalefive" [checked]="interviewRound?.debrief.rateinterviewscale == '5'" [ngClass]="{'radion-button-check': interviewRound?.debrief.rateinterviewscale === '5'}">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+
+                        <div class="py-2 h6">
+                          <b>
+                            Who all were there on the call/video/in-person panel?
+                          </b>
+
+                        </div>
+                        <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false" [(ngModel)]="interviewRound?.debrief.panelpersons" name="panelPersons"></textarea> </div>
+
+                        <div class="py-2 h6">
+                          <b>
+                            was it a combination of situational/hypothetical
+                            questions or purely technical?
+                          </b>
+
+                        </div>
+                        <div class="pt-sm-0 pt-3" id="options">
+                          <label class="options">
+                            Situational & Hypothetical
+                            <input type="radio" [value]="situationalandHypothetical" name="rTechnical" [checked]="interviewRound?.debrief.situationalortechnical === 'situationalandHypothetical'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            Purely Technical
+                            <input type="radio" [value]="PurelyorTechnical" name="situational" [checked]="interviewRound?.debrief.situationalortechnical === 'PurelyorTechnical'">
+                            <span class="checkmark"></span>
+                          </label>
+
+                        </div>
+                        <div class="py-2 h6">
+                          <b>
+                            How many questions were asked approximately? Were you able to
+                            answer all the questions to the best of your knowledge?
+                          </b>
+
+                        </div>
+                        <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" [(ngModel)]="interviewRound?.debrief.howmanyquestions" name="howmanyQuestions" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false"></textarea> </div>
+
+                        <div class="py-2 h6">
+                          <b>
+                            What were the technical questions manager focused on?
+                          </b>
+
+                        </div>
+                        <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" [(ngModel)]="interviewRound.debrief.managerfocusedon" name="managerFocusedOn" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false"></textarea> </div>
+                        <div class="py-2 h6">
+                          <b>
+                            How long did the interview last?
+                          </b>
+
+                        </div>
+                        <div class="pt-sm-0 pt-3" id="options">
+                          <label class="options">
+                            < 15 minutes
+                            <input type="radio" value="< 15 minutes" [(ngModel)]="interviewRound?.debrief.howlongtheinterview" name="fifminutes" [checked]="interviewRound?.debrief.howlongtheinterview == '< 15 minutes'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            15 - 30 Minutes
+                            <input type="radio" value="15-30 minutes" [(ngModel)]="interviewRound?.debrief.howlongtheinterview" name="thirtymin" [checked]="interviewRound?.debrief.howlongtheinterview == '< 15 minutes'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            30 - 45 Minutes
+                            <input type="radio" value="30-45 minutes" [(ngModel)]="interviewRound?.debrief.howlongtheinterview" name="fortyfivemin" [checked]="interviewRound?.debrief.howlongtheinterview == '< 15 minutes'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            45 minutes - 1hr
+                            <input type="radio" value="40 minutes - 1hr" [(ngModel)]="interviewRound?.debrief.howlongtheinterview" name="onehr" [checked]="interviewRound?.debrief.howlongtheinterview == '< 15 minutes'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            1hr+
+                            <input type="radio" value="1hr+" [(ngModel)]="interviewRound?.debrief.howlongtheinterview" name="onehrmore" [checked]="interviewRound?.debrief.howlongtheinterview == '< 15 minutes'">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                        <div class="py-2 h6">
+                          <b>
+                            Does this interview give you a detailed idea about this project
+                            and your responsibilities?
+                          </b>
+
+                        </div>
+                        <div class="pt-sm-0 pt-3" id="options">
+                          <label class="options">
+                            Yes
+                            <input type="radio" value="true" [(ngModel)]="interviewRound?.debrief.isdetailedaboutproject" name="yespossb" [checked]="interviewRound?.debrief.isdetailedaboutproject == 'true'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            No
+                            <input type="radio" value="false" [(ngModel)]="interviewRound?.debrief.isdetailedaboutproject" name="nopossb" [checked]="interviewRound?.debrief.isdetailedaboutproject == 'false'">
+                            <span class="checkmark"></span>
+                          </label>
+
+                        </div>
+                        <div class="py-2 h6">
+                          <b>
+                            If offered the role,are willing to accept?
+                          </b>
+
+                        </div>
+                        <div class="pt-sm-0 pt-3" id="options">
+                          <label class="options">
+                            Yes
+                            <input type="radio" value="true" [(ngModel)]="interviewRound?.debrief.iswillingtoacceptoffer" name="isoffered" [checked]="interviewRound?.debrief.iswillingtoacceptoffer == 'true'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            No
+                            <input type="radio" value="false" [(ngModel)]="interviewRound?.debrief.iswillingtoacceptoffer" name="nooffered" [checked]="interviewRound?.debrief.iswillingtoacceptoffer == 'false'">
+                            <span class="checkmark"></span>
+                          </label>
+
+                        </div>
+                        <div class="py-2 h6">
+                          <b>
+                            How do you feel about the role & the people you talk to,do you think
+                            it`s for what you`re looking for?
+                          </b>
+
+                        </div>
+                        <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" [(ngModel)]="interviewRound?.debrief.aboutlookingfor" name="aboutLookingFor" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false"></textarea> </div>
+
+                        <div class="py-2 h6">
+                          <b>
+                            After interviewing with the manager do you feel the prep by Ascendion
+                            was adequate and the role is in line with what was explained to you?
+                          </b>
+
+                        </div>
+                        <div class="pt-sm-0 pt-3" id="options">
+                          <label class="options">
+                            Yes
+                            <input type="radio" value="true" [(ngModel)]="interviewRound?.debrief.isadequate" name="isadquteone" [checked]="interviewRound?.debrief.isadequate == 'true'">
+                            <span class="checkmark"></span>
+                          </label>
+                          <label class="options">
+                            No
+                            <input type="radio" value="false" [(ngModel)]="interviewRound?.debrief.isadequate" name="isadequtaeno" [checked]="interviewRound?.debrief.isadequate == 'false'">
+                            <span class="checkmark"></span>
+                          </label>
+
+                        </div>
+                      </div>
+
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div><!-- End -->
+
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-all" *ngIf="interviewRound.iscompleted==false">
+        <div class="btn-debrief-div" *ngIf="interviewRound.interviewtype === 'Client Screenings'">
+          <button class="btn btn-debrief" (click)="openDebrief(interviewRound)"> Debrief Questionnaire</button>
+        </div>
+        <div class="btns-interview-status">
+          <div class="btns-all-interview-status">
+            <button class="btn btn-cancel-interview" (click)="openCancelpopup(interviewRound)">CANCEL INTERVIEW</button>
+            <button class="btn btn-reschedule-interview" (click)="rescheduleInterview(interviewRound)">RESCHEDULE / EDIT INTERVIEW</button>
+            <button class="btn btn-mark-completed" (click)="markCompleteInterview(interviewRound)">MARK COMPLETED</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cancelPopup" *ngIf="cancelPopupOpen">
+        <div class="popup">
+          <a class="close" (click)="cancelPopupOpen = false">&times;</a>
+          <h2>Cancel Interview</h2>
+          <div class="content">
+            Please Provide the Cancellation reason!
+            <textarea (keyup)="cancelReasonValidation()" placeholder="Enter reason here..." [(ngModel)]="cancelInterviewData.cancelreason"></textarea>
+            <p *ngIf="showCancelReasonValidation" class="feedback-validation-message">Please Provide the Cancellation reason!....</p>
+          </div>
+          <button class="btn btn-cancel-popup" (click)="cancelInterview(interviewRound)"> Cancel Interviews</button>
+        </div>
+      </div>
+
+
+      <div class="divsuccesspopup" *ngIf="showsuccesspopup">
+        <div class="successpopup">
+          <a class="close" (click)="showsuccesspopup = false">&times;</a>
+          <h2>Success!</h2>
+          <p> {{successMessage}}</p>
+          <button class="btn btn-cancel-popup" (click)="showsuccesspopup = false"> Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body p-0 pb-1 p-4 stsmodal">
+  <div *ngIf="showLoader" class="text-center p-2">
+    <i class="fa fa-spinner fa-spin fa-2x fa-fw">  </i>
+    Please Wait
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header">
+    <h6 class="modal-title defrief-heading">Debrief Form</h6>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="container">
+      <form (ngSubmit)="DebriefSubmit(d)">
+
+        <div class="question  pt-2">
+          <div class="py-2 h6">
+            <b>
+              How would you rate the interview on a scale of 1-5,
+              with 5 being the best?
+            </b>
+          </div>
+          <div class="pt-sm-0 pt-3" id="options">
+            <label class="options">
+              1
+              <input type="radio" [(ngModel)]="model.rateInterviewScale" name="rateInterviewScale" value="1">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              2
+              <input type="radio" value="2" [(ngModel)]="model.rateInterviewScale" name="rateInterviewScaletwo">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              3
+              <input type="radio" value="3" [(ngModel)]="model.rateInterviewScale" name="rateInterviewScalethree">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              4
+              <input type="radio" value="4" [(ngModel)]="model.rateInterviewScale" name="rateInterviewScalefour">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              5
+              <input type="radio" value="5" [(ngModel)]="model.rateInterviewScale" name="rateInterviewScalefive">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+
+          <div class="py-2 h6">
+            <b>
+              Who all were there on the call/video/in-person panel?
+            </b>
+
+          </div>
+          <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false" [(ngModel)]="model.panelPersons" name="panelPersons"></textarea> </div>
+
+          <div class="py-2 h6">
+            <b>
+              was it a combination of situational/hypothetical
+              questions or purely technical?
+            </b>
+
+          </div>
+          <div class="pt-sm-0 pt-3" id="options">
+            <label class="options">
+              Situational & Hypothetical
+              <input type="radio" value="situational & Hypothetical" [(ngModel)]="model.situationalOrTechnical" name="rTechnical">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              Purely Technical
+              <input type="radio" value="Purely Technical" [(ngModel)]="model.situationalOrTechnical" name="situational">
+              <span class="checkmark"></span>
+            </label>
+
+          </div>
+          <div class="py-2 h6">
+            <b>
+              How many questions were asked approximately? Were you able to
+              answer all the questions to the best of your knowledge?
+            </b>
+
+          </div>
+          <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" [(ngModel)]="model.howmanyQuestions" name="howmanyQuestions" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false"></textarea> </div>
+
+          <div class="py-2 h6">
+            <b>
+              What were the technical questions manager focused on?
+            </b>
+
+          </div>
+          <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" [(ngModel)]="model.managerFocusedOn" name="managerFocusedOn" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false"></textarea> </div>
+          <div class="py-2 h6">
+            <b>
+              How long did the interview last?
+            </b>
+
+          </div>
+          <div class="pt-sm-0 pt-3" id="options">
+            <label class="options">
+              < 15 minutes
+              <input type="radio" value="< 15 minutes" [(ngModel)]="model.howLongTheInterview" name="fifminutes">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              15 - 30 Minutes
+              <input type="radio" value="15-30 minutes" [(ngModel)]="model.howLongTheInterview" name="thirtymin">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              30 - 45 Minutes
+              <input type="radio" value="30-45 minutes" [(ngModel)]="model.howLongTheInterview" name="fortyfivemin">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              45 minutes - 1hr
+              <input type="radio" value="40 minutes - 1hr" [(ngModel)]="model.howLongTheInterview" name="onehr">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              1hr+
+              <input type="radio" value="1hr+" [(ngModel)]="model.howLongTheInterview" name="onehrmore">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div class="py-2 h6">
+            <b>
+              Does this interview give you a detailed idea about this project
+              and your responsibilities?
+            </b>
+
+          </div>
+          <div class="pt-sm-0 pt-3" id="options">
+            <label class="options">
+              Yes
+              <input type="radio" value="true" [(ngModel)]="model.isDetailedAboutProject" name="yespossb">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              No
+              <input type="radio" value="false" [(ngModel)]="model.isDetailedAboutProject" name="nopossb">
+              <span class="checkmark"></span>
+            </label>
+
+          </div>
+          <div class="py-2 h6">
+            <b>
+              If offered the role,are willing to accept?
+            </b>
+
+          </div>
+          <div class="pt-sm-0 pt-3" id="options">
+            <label class="options">
+              Yes
+              <input type="radio" value="true" [(ngModel)]="model.isWillingToAcceptOffer" name="isoffered">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              No
+              <input type="radio" value="false" [(ngModel)]="model.isWillingToAcceptOffer" name="nooffered">
+              <span class="checkmark"></span>
+            </label>
+
+          </div>
+          <div class="py-2 h6">
+            <b>
+              How do you feel about the role & the people you talk to,do you think
+              it`s for what you`re looking for?
+            </b>
+
+          </div>
+          <div id="cid_6" class="form-input-wide"> <textarea id="input_6" class="form-textarea custom-hint-group form-custom-hint" [(ngModel)]="model.aboutLookingFor" name="aboutLookingFor" cols="68" rows="3" data-component="textarea" aria-labelledby="label_6" data-customhint="Answer will be written here." customhinted="true" placeholder="Answer will be written here." spellcheck="false"></textarea> </div>
+
+          <div class="py-2 h6">
+            <b>
+              After interviewing with the manager do you feel the prep by Ascendion
+              was adequate and the role is in line with what was explained to you?
+            </b>
+
+          </div>
+          <div class="pt-sm-0 pt-3" id="options">
+            <label class="options">
+              Yes
+              <input type="radio" value="true" [(ngModel)]="model.isAdequate" name="isadquteone">
+              <span class="checkmark"></span>
+            </label>
+            <label class="options">
+              No
+              <input type="radio" value="false" [(ngModel)]="model.isAdequate" name="isadequtaeno">
+              <span class="checkmark"></span>
+            </label>
+
+          </div>
+        </div>
+
+        <div>
+          <div class="actionBtn">
+            <button class="btn btn-outline-primary" (click)="ResetDebriefDetails()">Reset</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+</ng-template>
+<ng-template #newcontent let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok');clearResume()">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>

@@ -1,0 +1,98 @@
+<div class="rec-wizard">
+  <ng-container>
+    <label *ngIf="mode =='add' || mode == 'clone'" class="heading-text">New Requisition</label>
+    <label *ngIf="mode =='update'" class="heading-text">Edit Requisition</label>
+    <div *ngIf="(deliverymodelid==1 || deliverymodelid==5)" class="col-md-auto mb-0 mt-2 p-0" style="position: absolute; top: 40px; right: 20px;"   >
+      <app-metal-switch  [(state)]='enableAutomation' [labelname]="'Automations'" [uniqueid]="'enableAutomation'">
+      </app-metal-switch>
+    </div>
+    <div>
+      <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+      <!--
+              <div *ngIf="isPageLoading" class="text-center">
+                 <i class="fa fa-2x fa-spinner fa-pulse"></i>
+               </div>-->
+      <aw-wizard class="custom-css wizard-body" #recform [navigationMode]="strict">
+        <aw-wizard-step [stepTitle]="'Requisition Details'" [stepId]="recdetail" (stepEnter)="BackButtonPressed()"
+          [canExit]="isDetailPageValid" (stepExit)="isNextClicked=true">
+          <!--   -->
+          <div class="d-flex">
+
+            <div class="form-content col-md-8 pt-0">
+
+              <div>
+                <button type="button" awNextStep class="btn btn-outline-primary pull-right mt-4"
+                  (click)="onNextClicked()">Next</button>
+              </div>
+
+              <app-recdetails [resetClicked]="isRecDetailFormReset" (onValidCheck)="onFormValid($event, 'recdetails')" [(empType)]="empType"
+                              [requisitionid]="requisitionid" [currentmode]="mode" (deliveryModelUpdated)="onDeliveryModelUpdated($event)"  [enableAutomation]="enableAutomation" [msprojectidparam]="msprojecturlparam"></app-recdetails>
+
+              <div>
+                <button type="button" class="btn btn-outline-primary pull-right mt-4" awNextStep
+                  (click)="onNextClicked()">Next</button>
+                <!--[disabled]="isRecDetailFormValid"-->
+              </div>
+            </div>
+            <div class="form-content col-md-4 pt-0 fixed-width">
+              <app-recdetail-date (onReset)="resetClicked($event)" (onCancel)="cancelButtonClicked($event)"
+                [resetCreateNew]="isRecDetailFormReset" (empTypeChanged)="empTypeChange($event)" (onValidCheck)="onFormValid($event, 'recdetailsright')"
+                [currentmode]="mode" [(showSkipBillrate)]="showSkipBillrate" [requisitionid]="requisitionid" [deliverymodelid]="deliverymodelid"></app-recdetail-date>
+            </div>
+          </div>
+        </aw-wizard-step>
+
+        <aw-wizard-step [stepTitle]="'Client Details'">
+          <div class="d-flex">
+            <div class="col-md-12 pt-0 pr-0">
+              <app-client-details (onCancel)="cancelButtonClicked($event)" [resetCreateNew]="isClientDetailFormReset"
+                (onValidCheck)="onFormValid($event, 'clientdetails')" (onReset)="resetClicked($event)"
+                [backClick]="isBackBtnClicked" [currentmode]="mode" [msprojectidparam]="msprojecturlparam">
+              </app-client-details>
+              <div>
+                <button type="button" class="btn btn-outline-primary ml-4 mb-4 mt-2" awPreviousStep>Back</button>
+              </div>
+            </div>
+
+          </div>
+
+        </aw-wizard-step>
+      </aw-wizard>
+
+
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title"
+      [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">Ok</button>
+  </div>
+</ng-template>
+
+<ngb-alert *ngIf="popupConfig.title == 'Success!'" type="custom" (close)="popupConfig.message = null">
+  <div class="d-flex align-items-center justify-content-center">
+    <!-- <i class="fa-3x {{successMessage.icon}} pr-3 text-success"></i> -->
+    <div class="h5 d-block text-success" style="background-color:#ebebeb">{{popupConfig.title}}</div>
+
+    <span>{{successMessage.message}}</span>
+  </div>
+
+
+</ngb-alert>

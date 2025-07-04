@@ -1,0 +1,44 @@
+<ng-container>
+  <div>
+    <div class="modal-header">
+      <h6 class="modal-title summary-heading">Update Qualification - <span>{{requisitionname}}</span></h6>
+      <i class="fa fa-times fa-lg pointer" (click)="modal.close(true)" aria-hidden="true"></i>
+
+    </div>
+    <div class="modal-body">
+    <!--  <div class="form-row">
+
+        <div class="form-group col-md-6">
+          <label class="rec-label" for="interviewtype">Requisition Name</label>
+          <p>{{requisitionname}}</p>
+        </div> 
+
+      </div> -->
+      <div class="form-row">
+
+        <div class="form-group col-md-6">
+          <label class="rec-label" for="interviewtype">Select Qualification</label>
+      <ng-select [items]="qualificationDetails?.qualifications"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     bindLabel="qualification"
+                     bindValue="id"
+                     name="qualification"
+                     placeholder="Select Qualification"
+                     class="form-control"
+                      (change)="selectedItem($event)"
+                     id="qualification" [(ngModel)] ="qualificationid">
+          </ng-select>
+        </div>
+
+      </div>
+      <div class="form-row">
+        <span class="col-md">
+          <button (click)="updateQualification()" [disabled]="!clickedItem" class="btn btn-primary export-excel" type="submit">Update</button>
+        </span>
+
+      </div>
+    </div>
+   
+  </div>`
+</ng-container>

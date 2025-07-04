@@ -1,0 +1,8 @@
+<ng-container *ngIf="!control.isbackgroundimage">
+  <img *ngIf="data[control.key]" src="{{data[control.key]}}" class="{{control.class}}" width="{{control.imgwidth}}" height="{{control.height}}" />
+  <img *ngIf="!data[control.key]" src="{{control.imageurl}}" class="{{control.class}}" width="{{control.imgwidth}}" height="{{control.height}}" />
+</ng-container>
+<ng-container *ngIf="control.isbackgroundimage">
+  <div *ngIf="data[control.key]" class="img-bg {{control.class}}" [ngStyle]="{'width': control.imgwidth, 'padding-top': control.height, 'background-image': 'url(' + data[control.key] + ')'}"></div>
+  <div *ngIf="!data[control.key]" class="img-bg {{control.class}}" [ngStyle]="{'width': control.imgwidth, 'padding-top': control.height, 'background-image': 'url(' + control.imageurl + ')'}"></div>
+</ng-container>

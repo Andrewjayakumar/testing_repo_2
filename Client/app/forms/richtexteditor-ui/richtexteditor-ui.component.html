@@ -1,0 +1,36 @@
+<div *ngIf="access == 'write'" class="form-group">
+  <label>
+    {{control.label}}
+    <sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+    <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}"
+      ngbTooltip="{{control.help}}"></i>
+  </label>
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <div [ngClass]="{'form-control p-0 border-danger' : formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched}">
+    <!-- disable core editor -->
+    <quill-editor *ngIf="!control.enablecoreeditor" [(ngModel)]="data[control.key]" #editorRef [theme]="control.showToolbar === undefined ? 'snow' : control.showToolbar ? 'snow' : 'bubble'"
+      [readOnly]="control.editable === undefined ? false : !control.editable" [placeholder]="control.placeholder"
+      [style]="style" [required]="control.require" (onContentChanged)="onContentChanged($event)"></quill-editor>
+
+    <!-- enable core editor -->
+    <appc-tiny-editor *ngIf="control.enablecoreeditor" [elementId]="control_id" [height]="control.height" [model]="data[control.key]"
+                      (onBlurred)="onEditorBlured($event)">
+    </appc-tiny-editor>
+  </div>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+  <small class="form-text text-danger" *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+</div>
+<div *ngIf="access != 'write'" class="form-group">
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+        class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+        class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+  </ng-container>
+</div>

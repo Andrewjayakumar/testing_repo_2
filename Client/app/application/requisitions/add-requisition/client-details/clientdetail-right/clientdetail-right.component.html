@@ -1,0 +1,21 @@
+<form #clientRightForm="ngForm" class="container form-group" >
+
+  <div class="row m-2">
+
+    <button class="ml-2 mr-2 col-md-6 btn btn-outline-primary"
+            (click)="createRequisition()">
+      Create Requisition
+    </button>
+    <!-- [ngClass]="{'btn-outline-primary' : isFormValid, 'btn-outline-primary': !isFormValid }"-->
+    <button class="ml-2 col-md-5 btn btn-outline-primary" (click)="clearRecFormDetails(clientRightForm, 'clientdetail')">Reset</button>
+
+
+
+  </div>
+<div class="row m-2 p-2">
+  <button class="col-md-12 btn btn-outline-primary text-center" (click)="onCancelClicked($event)">Cancel</button>
+</div>
+<div class="row mb-2 bottom-separator"></div>
+
+<app-timeslots [reset]="eventsSubject.asObservable()" [(interviewtimeslots)]="model.interviewtimeslots" [(managertimeslots)]="model.managerinterviewslots"> </app-timeslots>
+</form>

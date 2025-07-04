@@ -1,0 +1,14 @@
+<div class="thanks-page">
+  <div class="container-fluid">
+    <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+    <div class="d-flex flex-column justify-content-center thanks-page-body pb-5">
+      <h1>That's It</h1>
+       <!--<p>Thank you for your time and attention</p>--> 
+      <p>{{Message}}</p>
+    </div>
+
+    <img class="thanks-page-logo" src="../../../../wwwroot/assets/img/metal-logo.png" alt="Pen" />
+    <img class="thanks-page-pen" src="../../../../wwwroot/assets/img/metal-pen.png" alt="Pen" />
+
+  </div>
+</div>

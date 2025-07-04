@@ -1,0 +1,42 @@
+<ng-container *ngIf="control.type == 'cardgrid'">
+  <ng-container *ngIf="control.cardtype == 'CommonCard' || control.cardtype == 'metalcard'">
+    <app-cal-card-ui class="d-block h-100" [control]="control" [index]="index" [sidebar]="false" [title]="title"
+      [description]="description" [image]="image" [data]="data" [highlight]="highlight" [highlighter]="highlighter"
+      [skill]="skill" [mappingFields]="mappingFields" [AuthService]="AuthService"
+      [ResultDisplayField]="control.ResultDisplayField">
+    </app-cal-card-ui>
+  </ng-container>
+  <ng-container *ngIf="control.enablecardfromfromui && FormCardUI">
+    <div class="h-100 position-relative d-flex flex-column"
+      [ngClass]="{'custom-action-hover' : control.showactiononhover}" (mouseover)="hover=true"
+      (mouseleave)="hover=false">
+      <div class="row {{control.horizontalalignment}}">
+        <ng-container *ngFor="let ctrl of FormCardUI.controls; trackBy: trackByFnC;">
+          <app-dynamicformcontrolls *ngIf="!ctrl.filterresult && !ctrl.isnestedcollection" [control]="ctrl"
+            [formGroup]="CardformGroup" [data]="getCardData()" [AuthService]="AuthService"
+            class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+          </app-dynamicformcontrolls>
+          <ng-container *ngIf="ctrl.isnestedcollection">
+            <div *ngIf="ctrl.isnestedcollection" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+              <ng-container *ngFor="let _data of getNestedCardData(ctrl.nestedcollectionfield); trackBy: trackByFn;">
+                <app-dynamicformcontrolls [control]="ctrl" [formGroup]="CardformGroup" [data]="_data"
+                  [AuthService]="AuthService">
+                </app-dynamicformcontrolls>
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="custom-hover-btn"
+        *ngIf="control.showactiononhover && control.CustomAction && control.CustomAction.length > 0">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="control.CustomAction" [data]="data" [AuthService]="AuthService"></custom-action>
+      </div>
+      <div [ngClass]="{'mt-auto' : control.actionview != 'popover' && control.actionview != ''}"
+        *ngIf="!control.showactiononhover && control.CustomAction && control.CustomAction.length > 0">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="control.CustomAction" [data]="data" [AuthService]="AuthService"></custom-action>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

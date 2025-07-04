@@ -1,0 +1,156 @@
+<div class="rec-wizard">
+  <ng-container>
+    <label *ngIf="mode =='add'" class="heading-text">Add Project</label>
+    <label *ngIf="mode =='update'" class="heading-text">Update Project</label>
+
+    <div>
+      <aw-wizard class="custom-css wizard-body">
+        <aw-wizard-step [stepTitle]="'Project Details'"
+                        [stepId]="projdetails"
+                       [canExit]="isProjDetailFormValid && projectDetailRightFormValid "
+                        (stepExit)="isNextClicked=true">
+
+          <div class="d-flex"  >
+
+            <div class="form-content col-md-8 pt-0">
+
+              <project-details (onValidCheck)="onFormValid($event, 'projdetails')" [isResetClicked]="isResetClicked"[activeRole] ="activeRole" [currentmode]="mode" (deliveryModelUpdated)="onDeliveryModelUpdated($event)"></project-details>
+
+
+             
+            </div>
+            <div class="form-content col-md-4 pt-0 fixed-width">
+              <div class="col-12 d-inline-block p-0">
+                <button class="btn btn-primary pull-right" [routerLink]="['/projects/search']">
+                  <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button *ngIf="mode =='update'" class="btn btn-primary pull-right mr-2" [routerLink]="['/apps/requisitionspage/addupdate']" [queryParams]="{projectid:projectid}">
+                  <i class="fa fa-plus"></i> New Requisition
+                </button>
+
+              </div>
+
+
+              <form #projRightForm="ngForm" novalidate>
+                <div class="col-12 d-block">
+                  <div class="row">
+                    <div class="form-group col-md-9">
+                      <label class="dates_label">Received Date</label>
+                      <sup class="text-danger font-weight-bold">*</sup>
+
+                      <div class="input-group">
+                        <input class="form-control" [(ngModel)]="receiveDate" (ngModelChange)="receivedDate($event)"
+                               [minDate]="currentDate" placeholder="yyyy-mm-dd" (focus)="rd.toggle()"
+                               name="rd" ngbDatepicker #rd="ngbDatepicker"  required>
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary fa fa-calendar" (click)="rd.toggle()" type="button"></button>
+                        </div>
+                      </div>
+                     
+                      <small *ngIf="!datamodel.receiveddate && (rd.dirty || rd.touched) || (!datamodel.receiveddate && isNextClicked)"
+                           class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+
+                
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-9">
+                      <label class="dates_label">Start Date</label>
+                      <sup class="text-danger font-weight-bold">*</sup>
+
+                      <div class="input-group">
+                        <input class="form-control" [(ngModel)]="startdDate" (ngModelChange)="startDate($event)"
+                               placeholder="yyyy-mm-dd" (focus)="sd.toggle()"
+                               name="sd" ngbDatepicker #sd="ngbDatepicker" required>
+                        <div class="input-group-prepend">
+                          <button class="btn btn-outline-secondary fa fa-calendar" (click)="sd.toggle()" type="button"></button>
+                        </div>
+                      </div>
+                      <small *ngIf="!datamodel.startdate && (sd.dirty || sd.touched) || (!datamodel.startdate && isNextClicked)"
+                      class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-9">
+                      <label class="dates_label">End Date</label>
+                      <sup class="text-danger font-weight-bold">*</sup>
+
+                      <div class="input-group">
+                        <input class="form-control" [(ngModel)]="enddDate" (ngModelChange)="endDate($event)"
+                               placeholder="yyyy-mm-dd" (focus)="dp2.toggle()" [disabled]="!startdDate" [minDate]="startdDate"
+                               name="dp2" ngbDatepicker #dp2="ngbDatepicker" required>
+                        <div class="input-group-prepend">
+                          <button class="btn btn-outline-secondary fa fa-calendar" (click)="dp2.toggle()" type="button"></button>
+                        </div>
+                      </div>
+                      <small *ngIf="!datamodel.enddate && (dp2.dirty || dp2.touched) || (!datamodel.enddate && isNextClicked)"
+                      class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <label class="col-5 dates_label"> Project Duration (in Weeks)</label>
+
+                    <label class="col-5 dates_label"> Project Duration (in Months)</label>
+                    <div class="col-5 text-dark">{{datamodel.projectdurationweeks}}</div>
+                    <div class="col-5 text-dark" *ngIf="datamodel.projectdurationmonths">{{datamodel.projectdurationmonths}}</div>
+                  </div>
+
+                  <div>
+                    
+                    <button type="button" [routerLink]="['/projects/search']" class="btn btn-outline-primary mr-3">Cancel</button>
+                    <button type="button" class="btn btn-outline-primary mr-3" (click)="onReset()">Reset</button>
+                    <button type="button" awNextStep class="btn btn-primary mr-3 "  (click)="onNextClicked()">Next</button>                   
+                   
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </aw-wizard-step>
+        <aw-wizard-step [stepTitle]="'Client Details'">
+          <div class="d-flex">
+            <div class="col-md-12 pt-0 pr-0">
+              <client-details (onValidCheck)="onFormValid($event, 'clientdetails')" [currentmode]="mode"  [deliverymodel]="deliverymodel" ></client-details>
+              <div>
+                <button type="button" class="btn btn-outline-primary ml-4 mb-4 mt-2" awPreviousStep (click)="backClick()">Back</button>
+
+              </div>
+            </div>
+
+          </div>
+        </aw-wizard-step>
+
+      </aw-wizard>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" >
+    <b class="modal-title"
+      [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">Ok</button>
+  </div>
+</ng-template>
+
+
+
+

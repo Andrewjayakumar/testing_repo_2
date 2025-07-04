@@ -1,0 +1,131 @@
+$skill :rgb(255, 92, 132);
+$jobtitle:rgb(75, 192, 192) ;
+$education:rgb(54, 162, 235);
+$management:rgb(93, 192, 75);
+$languages:rgb(255,76,8); //rgb(139, 72, 250);
+$industries:rgb(255, 205, 86);
+
+
+.skill {
+  background-color: $skill;
+  color: black;
+
+  button {
+    color: black;
+  }
+}
+
+.jobtitle {
+  background-color: $jobtitle;
+  color: black;
+
+  button {
+    color: black;
+  }
+}
+
+
+.education {
+  background-color: $education;
+  color: black;
+
+  button {
+    color: black;
+  }
+}
+
+.industry {
+  background-color: $industries;
+  color: black;
+
+  button {
+    color: black;
+  }
+}
+
+.management {
+  background-color: $management;
+  color: black;
+
+  button {
+    color: black;
+  }
+}
+
+.languages {
+  background-color: $languages;
+  color: black;
+
+  button {
+    color: black;
+  }
+}
+
+.no-scroll {
+  // overflow-wrap :break-word;
+  // overflow-x: hidden;
+}
+
+div {
+  pre {
+    white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
+    white-space: -pre-wrap; /* Opera */
+    white-space: pre-wrap; /* CSS3 - Text module (Candidate Recommendation) http://www.w3.org/TR/css3-text/#white-space */
+    word-wrap: normal; /* IE 5.5+ */
+    border-radius: 0 !important;
+  }
+}
+
+
+
+.modal-body {
+  
+  overflow-x: hidden !important;
+  height: calc(95vh - 75px);
+  // max-height: calc(100% - 3.5rem);
+  overflow-y: auto;
+  overscroll-behavior: none;
+  padding-top: 0px;
+  padding-bottom: 15px;
+}
+
+
+.chart-hw {
+  display: block;
+  width: 650px !important;
+  height: 310px !important;
+}
+
+
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+ // background-color: #F5F5F5;
+}
+
+/**
+.modal-body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+
+.modal-body::-webkit-scrollbar-track-piece {
+  width: 8px;
+}
+*/
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: gray;
+  //outline: 1px solid slategrey;
+  border-radius: 10px;
+}
+
+.modal-dialog.modal-lg {
+  max-width: 90% !important;
+}
+
+.modal-height {
+  height:80vh;
+}
+
+.resume-load-mesg{
+  font-weight:bold;
+}

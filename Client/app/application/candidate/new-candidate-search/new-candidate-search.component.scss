@@ -1,0 +1,45 @@
+$primary: #1976d2;
+$gray-default: #7c7c7c;
+$dark-gray: #4c4c4c;
+$bg-gray: #ebebeb;
+$purple: purple;
+$green: green;
+$orange: #f5a623 !default;
+$yellow: #f0c40f !default;
+$font-size: 12px;
+
+
+.pageheading {
+  color: $primary;
+  font-size: larger; //14px;
+  font-weight: bold;
+  font-weight: bold;
+  padding-left: 0;
+  padding-top: 5px;
+  font-variant-caps: small-caps;
+}
+
+.parent-tab {
+  padding: 0.5rem !important;
+  margin-left: 0.5rem;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  background-color: white;
+}
+
+.newJobBoard{
+  background-color: #fff !important;
+  //margin-left: 2rem !important;
+}
+
+:host ::ng-deep .newJobBoard {
+  background-color: #fff !important;
+}
+
+:host-context(.newJobBoard) {
+  background-color: #fff !important;
+}
+
+:host(.newJobBoard) {
+  background-color: #fff !important;
+}

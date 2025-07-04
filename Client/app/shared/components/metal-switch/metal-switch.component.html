@@ -1,0 +1,17 @@
+<!-- <div class="switch round blue-white-switch">
+  <label> off
+  <input #custombox type="checkbox" [(ngModel)]="state"
+      (ngModelChange)="onStateChanged($event)" [ngModelOptions]="{standalone: true}">
+  <span for="custombox" class="lever"></span>
+  on</label>
+</div> -->
+<div class="row m-2" [ngClass]="{'justify-content-between': position == 'justify', 'mr-5': position =='justify'}">
+  <label [attr.for]="uniqueid" class="checkbox-label m-2" innerHTML="{{labelname}}"></label>
+  <div class="custom-control custom-switch ml-2">
+    <input type="checkbox" class="custom-control-input" [attr.id]="uniqueid" [(ngModel)]="state" [disabled]="isdisable"
+      (ngModelChange)="onStateChanged($event)" [ngModelOptions]="{standalone: true}">
+   <!-- <span style="font-size: xx-small;">on</span> -->
+    <label [attr.for]="uniqueid" class="custom-control-label" ></label>
+  </div>
+  
+</div>

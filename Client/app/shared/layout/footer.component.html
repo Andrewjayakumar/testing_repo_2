@@ -1,0 +1,44 @@
+<ul class="list_style ml-2 mt-1 p-0" *ngIf="auth.isLoggedIn && auth.currentUser.activerolename">
+
+  <li class="nav-item">
+    <a class="btn btn-floating btn-lg mr-3 mb-3 btn-dark rounded-circle fixed-button" (click)="openMenu();actionDashboardMenu = !actionDashboardMenu">
+      <i aria-hidden="true" class="fa fa-plus"></i>
+
+
+    </a>
+    <div class="dropdown_list pop-up-details scrollbar" id="style-1" *ngIf="actionDashboardMenu">
+      <ul>
+        <li>
+          <a (click)="addCandidate();actionDashboardMenu=false">
+            <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+            &nbsp; Add Candidate
+          </a>
+        </li>
+        <li *ngIf="current_user_obj">
+          <a tabindex="0" title="Add New Requisition" (click)="goToAddRec(); actionDashboardMenu=false">
+            <i class="fa fa-list-ul fa-lg" aria-hidden="true"></i>
+            &nbsp; Add Requisition
+          </a>
+
+        </li>
+        <li *ngIf="current_user_obj">
+          <a tabindex="0" title="Add New Requisition" (click)="goNewToAddRec(); actionDashboardMenu=false">
+            <i class="fa fa-list-ul fa-lg" aria-hidden="true"></i>
+            &nbsp;New Add Requisition
+          </a>
+
+        </li>
+        <li *ngIf="showChatGPTButton">
+          <a tabindex="0" title="Add Requisitiont AI/ChatGPT" (click)="goToAIChatGPT(); actionDashboardMenu=false">
+            <i class="fa fa-list-ul fa-lg" aria-hidden="true"></i>
+            &nbsp; Add Requisition - AI/ ChatGPT
+          </a>
+
+        </li>
+      </ul>
+
+    </div>
+
+  </li>
+
+</ul>

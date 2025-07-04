@@ -1,0 +1,53 @@
+/*.form-check {
+  position: relative;
+}
+.form-check-input:only-child {
+  position: absolute;
+}
+.form-check-input {
+  left: 0;
+  top: 50%;
+  margin: 0;
+  padding: 0;
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}*/
+/*.custom-control {
+  font-size: 1em;
+  padding-left: 1.7rem;
+
+  .custom-control-indicator {
+    width: auto;
+    height: auto;
+    top: 0;
+    left: 0;
+    margin: 0.7rem 0 0 0;
+    background: transparent none !important;
+    font-size: 1.5rem;
+  }
+
+  &.custom-checkbox .custom-control-input:checked ~ .custom-control-indicator:before {
+    content: "\f046";
+  }
+
+  &.custom-radio .custom-control-input:checked ~ .custom-control-indicator:before {
+    content: "\f05d";
+  }
+
+  .custom-control-input:focus ~ .custom-control-indicator {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .custom-control-input:active ~ .custom-control-indicator {
+    color: #E14E38 - 50;
+  }
+
+  .custom-control-input:checked ~ .custom-control-indicator {
+    color: #E14E38;
+  }
+}*/

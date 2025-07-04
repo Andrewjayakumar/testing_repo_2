@@ -1,0 +1,85 @@
+.footer {
+  bottom: 0;
+}
+
+// for navigation to  add candidate and ADD Rec
+
+.dropdown_list {
+  border: none;
+  box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.13);
+  background-color: #ffffff;
+  position: fixed; /* stays in place on scroll */
+  z-index: 99;
+  right: 19px;
+  bottom: 74px;
+  max-height: 300px; /* or whatever fits your layout */
+  overflow-y: auto; /* adds scroll inside menu if items exceed height */
+  border-radius: 10px;
+}
+
+
+.dropdown_list::before {
+  content: '';
+  position: absolute;
+  left: 130px; /* adjust this if needed */
+  top: 100%;
+  width: 0;
+  height: 0;
+  border-top: 10px solid #fff;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  display: none; /* or position appropriately */
+}
+
+
+.dropdown_list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dropdown_list ul li {
+  margin: 0 !important;
+  padding: 10px 20px;
+  font-size: 14px !important;
+  color: #4c5459 !important;
+}
+
+.dropdown_list ul li a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #605e5c;
+  font-size: 14px;
+}
+
+.dropdown_list ul li.list_head {
+  border-bottom: 1px solid #c9c9c9;
+}
+
+.dropdown_list ul li.selected {
+  background-color: #f2f2f2;
+}
+
+.list_style {
+  list-style: none;
+}
+
+.pop-up-details {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#style-1 {
+  height: 100px;
+}
+
+.fixed-button {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+}
+
+.plus-btn-color {
+  color: white !important;
+}
+// for navigation css ends

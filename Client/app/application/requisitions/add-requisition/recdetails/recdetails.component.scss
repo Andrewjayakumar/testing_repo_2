@@ -1,0 +1,399 @@
+$primary: #1976d2;
+$ai : #6666cc;
+
+.align-items-center {
+  text-align: center;
+  align-items: center;
+}
+
+label {
+  color: #4c4c4c;
+}
+
+.width25 {
+  width: 25%;
+}
+
+.ui-control-block {
+  display: inline-block;
+  // margin-left:5px;
+  margin: 7px;
+
+  input {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background: none;
+    border: 1px solid #999;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: 0;
+    cursor: default;
+    border-radius: 4px;
+    padding: 5px;
+    padding-top: 7px;
+    // padding-bottom:10px;
+    display: block;
+    width: 100%;
+
+    &:focus {
+      border: 1px solid #007eff;
+      // outline-color: $primary;
+      box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+    }
+  }
+
+  >label {
+    color: $primary;
+    font-size: smaller;
+    margin-bottom: 0px !important;
+    float: left;
+  }
+}
+
+
+.ui-control-label {
+  color: $primary;
+  font-size: smaller;
+  margin-bottom: 0px !important;
+  float: left;
+}
+
+.id-input {
+  color: black;
+  font-size: 12px;
+}
+
+.custom-ngselect {
+  margin-top: 0;
+}
+
+.label-content {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0;
+}
+
+.font-size-small {
+  font-size: smaller;
+}
+
+
+.centered-content {
+  margin: auto;
+  text-align: center;
+}
+
+.checkbox-control {
+  box-sizing: content-box;
+  padding: 10px;
+
+  input[type="checkbox"] {
+    margin: 15px 15px;
+  }
+}
+
+.bottom-separator {
+  border-bottom: solid 2px lightgrey;
+}
+
+.right-separator {
+  border-right: solid 2px lightgrey;
+}
+
+.left-separator {
+  border-left: solid 2px lightgrey;
+}
+
+.border-allsides {
+  border: solid 1px #ccc;
+}
+
+.rec-label {
+  color: $primary ;
+  font-size: smaller;
+  margin-bottom: 0px !important;
+  float: left;
+}
+
+.editable {
+  width: 100%;
+  height: 160px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  white-space: pre-line;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  &:focus {
+    outline: $primary auto 1px;
+    outline-color: $primary;
+    box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+  }
+}
+
+.multidesc {
+  width: 100%;
+  height: 90px;
+  border: 0.7px solid #ccc;
+  padding: 5px;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  &:focus {
+    outline: $primary auto 0.7px;
+    outline-color: $primary;
+    box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+  }
+}
+
+.additionalinfoeditable {
+  width: 100%;
+  height: 50px;
+  border: 0.7px solid #ccc;
+  padding: 5px;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  &:focus {
+    outline: $primary auto 1px;
+    outline-color: $primary;
+    box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+  }
+}
+
+.label-chips {
+  background-color: rgba(144, 147, 155, 0.3);
+  padding: 0px 5px;
+  border-radius: 25px;
+  margin-right: 1rem;
+  display: inline-flex;
+  margin-top: 1rem;
+
+  >label {
+    max-width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 5px;
+  }
+
+  >a {
+    margin-top: -5px;
+    color: #4c4c4c;
+  }
+}
+
+.mt--2 {
+  margin-top: -0.1rem;
+}
+
+.mt--1 {
+  margin-top: -0.5rem;
+}
+
+.ng-select {
+  border: 1px solid #999 !important;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 19px;
+
+  .ng-select-single .ng-select-container {
+    border: 1px solid #999 !important;
+    padding: 5px;
+    margin-top: 19px;
+  }
+
+  .ng-select-focused {
+    margin-top: 15px !important;
+  }
+}
+
+.custom-ngselect.ng-select {
+  border: 1px solid #999 !important;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 3px;
+
+}
+
+.custom-ngselect.ng-select .ng-select-single .ng-select-container {
+  border: 1px solid #999 !important;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 3px;
+
+
+}
+
+.cursor-blocked {
+  cursor: not-allowed !important;
+}
+
+
+
+.end-date {
+  padding-left: 109px;
+  color: #1976d2;
+  font-size: smaller;
+}
+
+.start-date {
+  color: #1976d2;
+  font-size: smaller;
+}
+
+.minYearCSS {
+  border: 1px solid gray !important;
+  border-radius: 5px !important;
+  display: inline-block !important;
+  width: 35% !important;
+}
+
+.maxYearCSS {
+  border: 1px solid gray !important;
+  border-radius: 5px !important;
+  display: inline-block !important;
+  width: 35% !important;
+}
+
+.inputSkill {
+  border: 1px solid gray !important;
+  border-radius: 5px !important;
+  display: inline-block !important;
+  width: 49% !important;
+}
+
+.inputExp {
+  border: 1px solid gray !important;
+  border-radius: 5px !important;
+  display: inline-block !important;
+  width: 50% !important;
+}
+
+.delButton {
+  cursor: pointer !important;
+}
+
+.title {
+  color: $primary;
+  width: 100%;
+}
+
+.secondaryLocations {
+  display: flex;
+}
+
+.secLocationTitle {
+  color: #1976d2;
+  margin-right: 5%;
+}
+
+.secLocationDiv {
+  display: inline-flex;
+}
+
+
+.ai-btn {
+  outline: groove 1px #ddd;
+  border-radius: 20px;
+}
+
+.salesforce-section {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  width: 75%;
+  position: relative;
+  padding-top: 2rem;
+
+}
+.candidate-information-section {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  padding-top: 2rem;
+  margin: 0 auto; 
+
+}
+
+.switchTabs {
+  display: inline-block;
+  margin-top: 2rem;
+  position: absolute;
+  width: 25%;
+
+}
+
+.sf-info-tag {
+  margin-top: 0px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #f0f0f0;
+  color: #555555;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 0px;
+  text-align: end;
+  width: fit-content;
+
+}
+
+.other-section {
+  padding: 10px;
+}
+
+.vas-switch {
+  color: #007eff;
+}
+
+
+.custom-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-span {
+  text-align: left;
+}
+
+.right-span {
+  text-align: right;
+}
+
+.client-id {
+  color: black;
+}
+
+input[disabled] {
+  border: 1px solid lightgray !important;
+  color: gray !important;
+}
+
+.disabled-select {
+  background-color: #f0f0f0; /* Light gray background */
+  color: #a0a0a0; /* Gray text */
+  cursor: not-allowed; /* Change cursor style */
+}
+
+.revend-date {
+  color: #1976d2;
+  font-size: smaller;
+}
+
+.form-disable {
+  background-color: #f8f9fa;
+}
+
+.row {
+  margin-left: 0%;
+}

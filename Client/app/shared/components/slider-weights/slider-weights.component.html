@@ -1,0 +1,47 @@
+<!--
+<p>Min value: <input type="number" [(ngModel)]="minValue"></p>
+<p>Max value: <input type="number" [(ngModel)]="maxValue"></p>
+<ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+-->
+
+  <ng-container>
+
+    <div class="d-flex">
+      <div class="col-md-4 ">
+
+        Skills <span>{{weightlevel.skills[0]}} %</span>
+        <ngx-rslide class="skills" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.skills" (valuesChange)="SliderValueChanged($event, 'skills')"
+                    #skills></ngx-rslide>
+
+        Jobtitles  <span>{{weightlevel.jobtitles[0]}} %</span>
+        <ngx-rslide class="jobtitles" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.jobtitles" (valuesChange)="SliderValueChanged($event, 'jobtitles')"
+                    #jobtitles></ngx-rslide>
+      </div>
+
+      <div class="col-md-4 ">
+        Education <span><label>{{weightlevel.education[0]}}</label> %</span>
+        <ngx-rslide class="education" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.education" (valuesChange)="SliderValueChanged($event, 'education')"
+                    #education></ngx-rslide>
+        Certifications  <span>{{weightlevel.certifications[0]}} %</span>
+        <ngx-rslide class="certification" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.certifications" (valuesChange)="SliderValueChanged($event, 'certifications')"
+                    #certifications></ngx-rslide>
+
+      </div>
+      <!--
+  <div class="col-md-4 ">
+    Languages <span>{{weightlevel.languages[0]}} %</span>
+    <ngx-rslide class="languages" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.languages" (valuesChange)="SliderValueChanged($event,  'languages', this)"
+                #languages></ngx-rslide>
+    Industries  <span>{{weightlevel.industries[0]}} %</span>
+    <ngx-rslide class="industries" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.industries" (valuesChange)="SliderValueChanged($event, 'industries')"
+                #industries></ngx-rslide>
+    Executive <span>{{weightlevel.executive[0]}} %</span>
+    <ngx-rslide class="executive" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.executive" (valuesChange)="SliderValueChanged($event, 'executive')"
+                #executive></ngx-rslide>
+    Management <span>{{weightlevel.management[0]}} %</span>
+    <ngx-rslide class="management" [step]="1" [min]="0" [max]="100" [(values)]="weightlevel.management" (valuesChange)="SliderValueChanged($event, 'management')"
+                #management></ngx-rslide>
+  </div>-->
+    </div>
+</ng-container>
+

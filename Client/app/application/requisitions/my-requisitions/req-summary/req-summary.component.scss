@@ -1,0 +1,86 @@
+.first-deparator {
+  border-right: 1.5px solid #ebebeb;
+  text-align: center;
+  margin-left: 0.8rem;
+}
+
+.second-separator {
+  border-bottom: 1px solid #ebebeb;
+  width: 100%;
+  
+}
+
+.summary-heading {
+  color: #1976d2;
+  font-weight:600;
+}
+
+.rec-label {
+  color: #1976d2;
+  font-size:11px;
+}
+
+.close-summary {
+  cursor: pointer;
+}
+
+.modal-header{
+    padding:0.5rem !important;
+}
+
+.rec-label-heading {
+    font-weight:700;
+    
+}
+
+.summary-not-found {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  //height: 100px;
+  margin: 0 auto;
+  padding: 31px;
+}
+
+.recruiter-name-truncation {
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+  width: 75%;
+  display: inline-block;
+  white-space: nowrap;
+  height: 18px;
+}
+
+
+.summary-body {
+  p {
+    margin-bottom: 0.5rem !important;
+  }
+}
+.label-chips {
+  background-color: rgba(144, 147, 155, 0.3);
+  padding: 0px 5px;
+  border-radius: 25px;
+  margin-right: 1rem;
+  display: inline-flex;
+  margin-top: 1rem;
+
+  > label {
+    max-width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 5px;
+  }
+
+  > a {
+    margin-top: -5px;
+    color: #4c4c4c;
+  }
+}
+
+.email-truncate{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}

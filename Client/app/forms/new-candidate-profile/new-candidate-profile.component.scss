@@ -1,0 +1,141 @@
+body {
+}
+
+.container {
+  display: flex;
+  height: 90vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.left-panel, .right-panel {
+  /*padding: 1rem;*/
+  overflow-y: auto;
+}
+
+.left-panel {
+  width: 35%;
+  border-right: 1px solid #ddd;
+  /*background-color: #f9f9f9;*/
+
+  .title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .no-call {
+    margin: 0.5rem 0;
+  }
+
+  .email {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .tags {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .stats {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    .stat-box {
+      flex: 1;
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: center;
+      background: white;
+
+      .count {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      .label {
+        color: #666;
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .labels-title {
+    font-weight: bold;
+    color: #000;
+  }
+
+  .tag-recruiter {
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .meta, .submission {
+    margin-top: 1rem;
+
+    p {
+      margin: 0.2rem 0;
+    }
+  }
+}
+
+.right-panel {
+  width: 65%;
+  padding-left: 2rem;
+
+  .meta-title {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #000;
+    padding-bottom: 0.5rem;
+  }
+
+  .resume-summary {
+    max-height: 100%;
+    overflow-y: auto;
+
+    mark {
+      background-color: yellow;
+      font-weight: bold;
+    }
+  }
+}
+
+
+$card-border-color: #ccc;
+$card-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+$card-radius: 8px;
+$card-padding: 1rem 2rem;
+$gap-size: 1rem;
+$text-color: #555;
+
+.dashboard-cards {
+  display: flex;
+  justify-content: space-around;
+
+
+  .card {
+    text-align: center;
+    min-width: 24%;
+    min-height: 60px;
+
+    .count {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .label {
+      margin-top: 0.5rem;
+      color: $text-color;
+    }
+  }
+}
+
+div.rendered-html {
+  margin: 0;
+  padding: 4px 0;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+}

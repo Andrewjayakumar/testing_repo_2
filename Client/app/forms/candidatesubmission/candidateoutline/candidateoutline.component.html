@@ -1,0 +1,562 @@
+<div class="candidateCO" id="coCandidate">
+  <!-- <p *ngIf="!(isShadow || isOfficeEmployee)">
+     <ngb-progressbar [showValue]="true" type="success" [value]="points"></ngb-progressbar> 
+  </p> -->
+
+  <form [formGroup]="coChildForm">
+
+    <div class="accordion" id="candidateCo">
+
+      <div class="card mb-0">
+        <!-- <div class="card-header p-0" id="headingOne">
+          <h2 class="mb-0 text-left" border-bot data-toggle="collapse" data-target="#collapseOne">
+            <button type="button" class="btn btn-link">Personal</button>
+            <button type="button" class="btn btn-link float-right">
+              <i class="fa fa-plus"></i>
+            </button>
+          </h2>
+        </div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#candidateCo"> -->
+          <div class="card-body">
+            <div class="form-group ui-control-block">
+              <label for="firstName">
+                First Name
+                <sup class="text-danger font-weight-bold">*</sup>
+
+              </label>
+
+              <input class="form-control" formControlName="firstname"
+                     style="min-width:115px" type="text"
+                     autocomplete="off" id="firstname" name="firstname" placeholder="First Name" required>
+              <small *ngIf="coChildForm.controls['firstname'].touched && coChildForm.controls['firstname'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div>
+
+            <div class="form-group ui-control-block">
+              <label class="" for="">
+                Last Name
+                <sup class="text-danger font-weight-bold">*</sup>
+
+              </label>
+
+              <input class="form-control" 
+                     formControlName="lastname" type="text" autocomplete="off" id="lastName" placeholder="Last Name"
+                     required>
+              <small *ngIf="coChildForm.controls['lastname'].touched && coChildForm.controls['lastname'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div>
+
+
+            <div class="ui-control-block col-md-11 pl-0">
+              <label class="" for="">
+                Email
+                <sup class="text-danger font-weight-bold">*</sup>
+
+              </label>
+
+              <input class="form-control"
+                     formControlName="emailid" type="email" autocomplete="off" id="emailID" placeholder="E-mail" required>
+              <small *ngIf="coChildForm.controls['emailid'].touched && coChildForm.controls['emailid'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+
+            </div>
+            <!-- <div class="col-md-11 p-0 mt-2 ui-control-block">
+              <label>
+                Military Status
+
+
+              </label>
+              <ng-select formControlName="militarystatus" [items]="militaryStatus" [multiple]="false"
+                         [closeOnSelect]="true" [searchable]="false" bindLabel="key" bindValue="value" placeholder="--Select--"
+                         name="military">
+              </ng-select>
+            </div> -->
+            <div class="row">
+
+              <div class="form-group col-md-11 ui-control-block">
+                <label class="" for="mobilephone">
+                  Primary Contact
+                </label>
+
+
+                <input autocomplete="off" [textMask]="{mask: mask}"
+                        formControlName="mobilephone"
+                       class="form-control" type="text" placeholder="" id="mobilephone">
+
+
+              </div>
+
+
+
+
+              <div class="form-group col-md-11 ui-control-block">
+                <label>
+                  Secondary Contact
+                </label>
+
+                <input autocomplete="off" formControlName="workphone" [textMask]="{mask: mask}" class="form-control"
+                       type="text" placeholder="" id="workphone">
+
+              </div>
+
+            </div>
+
+
+
+            <div class="row">
+              <div class="col-md-11  mt-2 ui-control-block">
+                <label>
+                  Zip Code
+                  <sup class="text-danger font-weight-bold">*</sup>
+
+                </label>
+
+                <ng-select [items]="zipcodeDataItems$ | async"
+                           formControlName="zipcode" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                           bindLabel="zipcode" bindValue="zipcode" placeholder="Type at least 2 digits to search"
+                           [loading]="zipcodeDataLoading" [typeahead]="zipcodeinput$" name="zip"
+                           (change)="onZipcodeChange($event)" required>
+                </ng-select>
+                <small *ngIf="coChildForm.controls['zipcode'].touched && coChildForm.controls['zipcode'].invalid"
+                       class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+              </div>
+
+
+
+              <div class="col-md-11 mt-1 ui-control-block">
+                <label for="city">
+                  City
+                </label>
+
+                <input autocomplete="off" formControlName="city" class="form-control" type="text" placeholder="city"
+                       id="city">
+
+
+              </div>
+
+            </div>
+            <!--<div class="form-group">
+
+              <app-metal-switch [(state)]='datamodel.lookingopportunity' [uniqueid]="'looking_for_opportunity'"
+                                [labelname]="'Looking For Opportunity'" (stateChange)="onAvailDateToggled($event)"
+                                [position]="'justify'">
+              </app-metal-switch>
+            </div>--> 
+            <div class=" col-md-12 pl-0 mt-2 ui-control-block">
+              <label class="label_text_candidate" for="availabilitydate">Availability to Join</label>
+              <sup class="text-danger font-weight-bold">*</sup>
+
+              <div class="input-group">
+                <input class="form-control" id="availabilitydate" autocomplete="off" formControlName="availabilitydate"
+                       (ngModelChange)="availabilityDateChanged($event, 'availabilitydate')" placeholder="yyyy-mm-dd"
+                       name="availabilitydate" ngbDatepicker #d="ngbDatepicker" required>
+                <div class="input-group-prepend date-selection">
+                  <button class="btn btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                </div>
+              </div>
+
+
+            </div>
+
+            <!-- <div>
+              <label class="active">
+                <span>Commutable Preference</span>
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="commutablepreferencetype"
+                     (change)="CommutablePreferenceChanged($event,5)" name="commutablepreferencetype" id="inlineRadio1"
+                     value="car">
+              <label class="form-check-label" for="inlineRadio1">Car</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="commutablepreferencetype"
+                     (change)="CommutablePreferenceChanged($event, 5)" name="commutablepreferencetype" id="inlineRadio2"
+                     value="public transport">
+              <label class="form-check-label" for="inlineRadio2">Public Transport</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="commutablepreferencetype"
+                     (change)="CommutablePreferenceChanged($event, 5)" name="commutablepreferencetype" id="inlineRadio3"
+                     value="remote">
+              <label class="form-check-label" for="inlineRadio3">Remote</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" (change)="CommutablePreferenceChanged($event,5)"
+                     name="commutablepreferencetype" id="inlineRadio4" value="others">
+              <label class="form-check-label" for="inlineRadio4">Others</label>
+            </div>
+            <div class="form-group ui-control-block" *ngIf="others">
+              <label for="othhers">
+                Others
+
+              </label>
+
+              <input class="form-control" formControlName="commutablepreferencetypeother" style="min-width:115px"
+                     type="text" autocomplete="off" id="othhers" placeholder="Others">
+            </div> -->
+
+            <!-- <div class="form-group">
+
+              <app-metal-switch [(state)]='datamodel.availableforrelocation' [uniqueid]="'open_for_relocation'"
+                                [labelname]="'Open for Relocation (5%)'" [position]="'justify'" 
+                                (stateChange)="onOpenRelocationToggled($event, 5)">
+              </app-metal-switch>
+
+
+            </div> -->
+
+            <!-- <div  class="col-md-12 ui-control-block m-0 pr-0">
+              <label>
+                Commutable Preference
+              </label>
+
+              <ng-select [items]="commutablePreferenceList$| async" formControlName="commutablePreference" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                         bindLabel="state" bindValue="state" placeholder="Type to Search" required
+                         [loading]="isStateLoading" [typeahead]="stateinput$" name="state">
+              </ng-select>
+              <small *ngIf="coChildForm.controls['commutablePreference'].touched && coChildForm.controls['commutablePreference'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div> -->
+            <!-- <div  class="col-md-12 ui-control-block m-0 pr-0">
+              <label>
+                Commutable Preference
+              </label>
+
+              <ng-select [items]="commutablePreference" formControlName="commutablepreferencetype" [multiple]="true" [closeOnSelect]="true" [searchable]="false"
+                         bindLacommutablePreferencebel="value" bindValue="key" 
+                          name="commutablepreferencetype">
+              </ng-select>
+              <small *ngIf="coChildForm.controls['commutablepreferencetype'].touched && coChildForm.controls['commutablepreferencetype'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div> -->
+
+            <div  class="col-md-12 ui-control-block m-0 pr-0">
+              <label>
+                Commutable Preference
+              </label>
+              </div>
+
+            <div>
+              <input type="checkbox" id="isCommutablepreferencetypeHybrid" name="isCommutablepreferencetypeHybrid" formControlName="isCommutablepreferencetypeHybrid" value="isCommutablepreferencetypeHybrid" />
+              <label for="isCommutablepreferencetypeHybrid" class="label-req-hotbooks">Hybrid</label>
+
+              <input type="checkbox" id="isCommutablepreferencetypeRemote" name="isCommutablepreferencetypeRemote" formControlName="isCommutablepreferencetypeRemote" value="isCommutablepreferencetypeRemote" />
+              <label for="isCommutablepreferencetypeRemote" class="label-req-hotbooks">Remote</label>
+
+              <input type="checkbox" id="isCommutablepreferencetypeOnSite" name="isCommutablepreferencetypeOnSite" formControlName="isCommutablepreferencetypeOnSite" value="isCommutablepreferencetypeOnSite" />
+              <label for="isCommutablepreferencetypeOnSite" class="label-req-hotbooks">On-Site</label>
+            </div>
+
+            <div *ngIf="datamodel.availableforrelocation" class="col-md-12 ui-control-block m-0 pr-0">
+              <label>
+                Preffered states to relocate
+                <sup class="text-danger font-weight-bold">*</sup>
+              </label>
+
+              <ng-select [items]="stateItemsList$| async" formControlName="relocationstates" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                         bindLabel="state" bindValue="state" placeholder="Type to Search" required
+                         [loading]="isStateLoading" [typeahead]="stateinput$" name="state">
+              </ng-select>
+              <small *ngIf="coChildForm.controls['relocationstates'].touched && coChildForm.controls['relocationstates'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div>
+
+            <!-- <h6 class="text-primary text-uppercase mt-2">Linkedin URL </h6>
+
+            <div class="row justify-content-center">
+              <div class="col-md-12 ui-control-block">
+                <button type="button" class="btn btn-primary mb-2" (click)="addSocialNetWork()">Add</button>
+                <section class="container border mb-1 p-3" formArrayName="websitetype"
+                         *ngFor="let address of addressControls; let i = index;">
+                  <div [formGroupName]="i">
+                    <div class="row">
+
+                      <div class="col-12 text-right pointer mb-1">
+                        <i class="fa fa-trash fa-lg" (click)="removeSocialNetWork(i, websitetype)"
+                           aria-hidden="true"></i>
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <input type="text" class="form-control"
+                                 formControlName="weburl"
+                                 placeholder="Web Url" />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="col-md-12 p-0">
+                          <ng-select formControlName="websiteid" [items]="webSiteTypeDetails?.websitetype"
+                                     [multiple]="false" [closeOnSelect]="false" [searchable]="true" bindLabel="websitetype"
+                                     bindValue="websiteid" class="form-control" placeholder="Select Web Type">
+                          </ng-select>
+                          <small *ngIf="coChildForm.get('websitetype')['controls'][i].value.websiteid == null && coChildForm.get('websitetype')['controls'][i].touched"
+                                 class="form-text text-danger fa fa-exclamation ml-2">Website type can not be empty!</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </section>
+
+
+              </div>
+            </div> -->
+
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label for="webUrl">
+                Linkedin URL
+                <sup class="text-danger font-weight-bold">*</sup>
+              </label>
+
+              <input class="form-control"
+                     formControlName="webUrl" type="text" autocomplete="off"  pattern="(https?://)?([a-z]{2}\.)?(www\.)?[lL][iI][nN][kK][eE][dD][iI][nN]\.com(/(in|pub)/[a-zA-Z0-9_-]+/?)?" placeholder="" id="webUrl" required>
+
+
+              <div class="form-text text-danger fa  ml-2">
+                <span *ngIf="(coChildForm.get('webUrl').hasError('required'))">
+                  Please Enter LinkedIn URL
+                </span>
+                <span *ngIf="(coChildForm.get('webUrl').hasError('pattern'))">
+                  Enter a valid LinkedIn URL
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label for="roles">
+                Reason for change
+                <sup class="text-danger font-weight-bold">*</sup>
+              </label>
+              <textarea autocomplete="off" class="form-control" formControlName="relocatereason" name="relocate"
+                        id="relocatereason" #relocatereason placeholder="Reason for change"
+                        maxlength="1000" required></textarea>
+              <span class="form-text secondary-text">
+                {{1000-relocatereason?.value?.length}} character(s)
+                Remaining
+              </span>
+              <small *ngIf="coChildForm.controls['relocatereason'].touched && coChildForm.controls['relocatereason'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div>
+
+          <!-- </div>
+        </div>
+      </div>
+      <div class="card  mb-0">
+        <div class="card-header p-0" id="headingTwo">
+          <h2 class="mb-0 text-left" data-toggle="collapse" data-target="#collapseTwo1">
+            <button type="button" class="btn btn-link collapsed">Professional</button>
+            <button type="button" class="btn btn-link collapsed float-right"><i class="fa fa-plus"></i></button>
+          </h2>
+        </div>
+        <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo" data-parent="#candidateCo">
+          <div class="card-body"> -->
+            <div class="form-group ui-control-block">
+              <label class="" for="">
+                Most Recent or Current End Client and Employer
+              </label>
+
+              <input class="form-control"
+                     formControlName="currentemployername" type="text" autocomplete="off" id="lastName"
+                     placeholder="Most Recent Employer">
+            </div>
+
+            <!-- <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label>
+                Job Category
+              </label>
+
+              <ng-select formControlName="jobcategoryid" (focusout)="setPercentageonFocusOut($event,5,'jobcategoryid')"
+                         [items]="allJobCategory?.jobcategories" [multiple]="false" [closeOnSelect]="false" [searchable]="true"
+                         bindLabel="category" bindValue="id" placeholder="Select Category">
+              </ng-select>
+            </div> -->
+
+            <!-- <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label>
+                Exact Technical Job Title
+                <sup class="text-danger font-weight-bold">*</sup>
+
+
+              </label>
+              <ng-select formControlName="jobtitle"
+                         [items]="jobTitleItems$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                         [loading]="isJobTitleLoading" bindLabel="jobtitle" bindValue="jobtitle"
+                         placeholder="Type at least 2 characters" [typeahead]="jobTitleinput$" [typeToSearchText]="text"
+                         name="jobttl" required>
+              </ng-select>
+              <small *ngIf="coChildForm.controls['jobtitle'].touched && coChildForm.controls['jobtitle'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div> -->
+
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label>
+                Standard Job Title
+                <sup class="text-danger font-weight-bold">*</sup>
+              </label>
+              <ng-select formControlName="standardjobtitleid"
+                         [items]="standardJobTitleList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                         bindLabel="jobtitle" bindValue="jobtitleid"
+                         name="standardjobtitleid" required>
+              </ng-select>
+              <small *ngIf="coChildForm.controls['standardjobtitleid'].touched && coChildForm.controls['standardjobtitleid'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div>
+
+            <!-- <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label for="roles">
+                Project details and their own responsibility
+                <sup class="text-danger font-weight-bold">*</sup>
+              </label>
+              <textarea autocomplete="off" class="form-control" formControlName="projectresponsibilities" name="project"
+                        id="projectresponsibilities" #projectresponsibilities placeholder="Project details and responsibilities"
+                        maxlength="1000" required></textarea>
+              <span class="form-text secondary-text">
+                {{1000-projectresponsibilities?.value?.length}} character(s)
+                Remaining
+              </span>
+              <small *ngIf="coChildForm.controls['projectresponsibilities'].touched && coChildForm.controls['projectresponsibilities'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div> -->
+
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label class="" for="">
+                Primary Skills 
+
+
+              </label>
+              <ng-select formControlName="primaryskill" 
+                         [items]="PrimarySkillItems$ |async" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                         [loading]="primarykillsArray==null" bindLabel="skill" bindValue="skill" placeholder="Type to Search"
+                         [typeahead]="primaryskills$" name="pskills">
+              </ng-select>
+              <small *ngIf="(!(coChildForm.controls['primaryskill'].value && coChildForm.controls['primaryskill'].value.length > 2))"
+                class="font-size-small text-danger fa fa-exclamation ml-2">Minimum 3 Primary Skills is required</small>              
+        
+            </div>
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label for="compensation">
+                Expected Compensation
+
+              </label>
+
+              <input class="form-control"
+                     formControlName="expcompensationrange" type="text" autocomplete="off" id="compensation" placeholder="">
+            </div>
+
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label class="" for="">
+                Currency
+                <sup *ngIf="coChildForm.controls['expcompensationrange'].value >0"
+                     class="text-danger font-weight-bold">*</sup>
+
+
+              </label>
+              <ng-select formControlName="currency" [items]="alltheCurrency?.currency" [multiple]="false"
+                         [closeOnSelect]="true" [searchable]="true" bindLabel="currency" bindValue="currency"
+                         placeholder="Type to Search" name="currency"
+                         [required]="coChildForm.controls['expcompensationrange'].value >0">
+              </ng-select>
+              <small *ngIf="coChildForm.controls['currency'].touched && coChildForm.controls['currency'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div>
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label>
+                Position Type
+              </label>
+              <ng-select  formControlName="position"
+                         [items]="positionType?.positiontypes" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                         bindLabel="positiontype" bindValue="positiontype" placeholder="Type to Search" name="currency">
+              </ng-select>
+            </div>
+            <!-- <div class="col-md-12 pl-0 form-group ui-control-block">
+              <label for="inhouse">In-House (5%)</label>
+              <div class="input-group">
+                <input class="form-control" id="inhouse" autocomplete="off" formControlName="inhouse"
+                       (ngModelChange)="getinHousedate($event, 'inhouse')" placeholder="yyyy-mm-dd" name="inhouse"
+                       ngbDatepicker #e="ngbDatepicker">
+                <div class="input-group-prepend date-selection">
+                  <button class="btn btn-outline-secondary fa fa-calendar" (click)="e.toggle()" type="button"></button>
+                </div>
+              </div>
+            </div> -->
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label for="">
+                Work Authorization
+              </label>
+              <ng-select formControlName="workauthorizationid"
+                         [items]="authorizationType?.workauthorizations" [multiple]="false" [closeOnSelect]="true"
+                         [searchable]="true" bindLabel="workauthorization" bindValue="id" placeholder="Type to Search"
+                         name="workautho" id="workautho">
+              </ng-select>
+            </div>
+
+            <!-- <div class="col-md-11 p-0 mt-2 ui-control-block">
+              <label>
+                Ascendion Deck Presented
+                <sup class="text-danger font-weight-bold">*</sup>
+              </label>
+              <ng-select formControlName="isascendiondeckpresented" [items]="decks" [multiple]="false"
+                         [closeOnSelect]="true" [searchable]="false" bindLabel="value" bindValue="key" placeholder="Select"
+                         name="decks" required>
+              </ng-select>
+
+              <small *ngIf="coChildForm.controls['isascendiondeckpresented'].touched && coChildForm.controls['isascendiondeckpresented'].invalid"
+                     class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+            </div> -->
+
+            <!-- <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label for="roles">
+                Notes
+              </label>
+              <textarea autocomplete="off" class="form-control" formControlName="daytodayresponsibilities" name="notes"
+                        id="daytodayresponsibilities" #daytodayresponsibilities placeholder="Roles and responsibilities etc."
+                        maxlength="3000"></textarea>
+              <span class="form-text secondary-text">
+                {{3000-daytodayresponsibilities?.value?.length}} character(s)
+                Remaining
+              </span>
+            </div> -->
+           <!-- </div> -->
+        </div> 
+      </div>
+      <div class="card  mb-0">
+        <div class="card-header p-0" id="headingTwo">
+          <h2 class="mb-0 text-left" data-toggle="collapse" data-target="#collapseThree">
+            <button type="button" class="btn btn-link collapsed">Add to Hotbook</button>
+            <button type="button" class="btn btn-link collapsed float-right"><i class="fa fa-plus"></i></button>
+          </h2>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#candidateCo">
+          <div class="card-body">
+            <div class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label>
+                HotBook Folder
+              </label>
+              <ng-select formControlName="tagid" [items]="hotBookItems$ |async" [multiple]="false"
+                         [closeOnSelect]="true" [searchable]="true" [loading]="hotBookLoading" bindLabel="tagname"
+                         bindValue="tagid" placeholder="Type to Search" [typeahead]="hotBookinput$" name="hotbooks">
+              </ng-select>
+            </div>
+
+            <div *ngIf="coFormControls.tagid.value" class="col-md-12 pl-0 mt-2 ui-control-block">
+              <label>
+                Demand Plan
+              </label>
+              <ng-select formControlName="demandplanid" [items]="allDemandPlans" [multiple]="false"
+                         [closeOnSelect]="true" [searchable]="true" bindLabel="demandname" bindValue="demandid"
+                         placeholder="Select a Demand Plan" name="DemandPlan">
+              </ng-select>
+
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>

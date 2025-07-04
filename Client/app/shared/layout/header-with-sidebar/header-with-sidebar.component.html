@@ -1,0 +1,110 @@
+<div class="nav-sidebar">
+  <!--<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>-->
+  <nav class="navbar navbar-expand dark-bg">
+    <a class="navbar-brand pointer magnify-logo" (click)="RedirectToDashboard()">
+       <img src="../../../../../wwwroot/assets/img/logo_ascendion_2022.png">
+     </a>
+
+    <ul class="navbar-nav ml-auto user-heading">
+      <!--<li class="nav-item" *ngIf="!auth.isLoggedIn">
+    <a class="nav-link" href="signup"
+      <i class="fa fa-user mr-1"></i>Register
+    </a>
+  </li>-->
+
+      <li class="nav-item" *ngIf="!auth.isLoggedIn">
+        <a class="nav-link" routerLinkActive="active" routerLink="login">
+          <i class="fa fa-sign-in mr-1"></i>Login
+        </a>
+      </li>
+
+      <li class="nav-item align-self-center" *ngIf="auth.isLoggedIn && auth.currentUser.roles && auth.currentUser.roles.length>0">
+        <!--<select class="roleDropdown" id="role" placeholder="Select Role" name="role" [(ngModel)]="activerole || auth.currentUser.activerole" (ngModelChange)="Selectrole($event)">
+      <option *ngFor="let item of auth.currentUser.roles" value="{{item.roleid}}">{{item.rolename}}</option>
+    </select>-->
+        <!-- <ng-select [items]="auth.currentUser.roles" bindLabel="rolename" bindValue="rolename" class="roleDropdown" style="min-width:150px;"
+    [(ngModel)]="auth.currentUser.activerolename"
+    [closeOnSelect]="true" (change)="Selectrole($event)" [clearable]="false" [searchable]="false"></ng-select> -->
+      </li>
+      <li _ngcontent-c1="" class="nav-item small mr-2"  *ngIf="auth.isLoggedIn">
+        <a _ngcontent-c1="" class="nav-link pointer font-weight-bold" href="https://ascendionhub.sharepoint.com/sites/AIDA" target="_blank" title="Ask AIDA">
+          Ask AIDA
+        </a>
+      </li>
+      <li class="nav-item small mr-2" *ngIf="auth.isLoggedIn">
+
+        <a class="nav-link pointer font-weight-bold" [title]="'Onboarding Tracking Tool'" href="https://uccomne.ascendion.com/compliance/salesonboardingtrackingtool" target="_blank">OTT
+        </a>
+      </li>
+      <li class="nav-item small mr-2" *ngIf="auth.isLoggedIn">
+
+        <a class="nav-link pointer font-weight-bold" [title]="'Ascendion Learning Lab'" href="https://ascendion.litmos.com/home/dashboard" target="_blank">
+          ALL
+        </a>
+      </li>
+      <li class="nav-item small mr-2" *ngIf="auth.isLoggedIn">
+        <a class="nav-link pointer " [title]="'Calculator'" href="https://apps.ascendion.com/Metalcal/GP_calc.aspx" target="_blank">
+          <i class="fa fa-calculator fa-lg"></i>
+        </a>
+      </li>
+
+
+
+      <li class="nav-item small history mr-2" *ngIf="auth.isLoggedIn">
+        <a class="nav-link pointer fa fa-history" (click)="showActivityLog($event)" aria-haspopup="true" aria-expanded="false"></a>
+        <div class="history-content" *ngIf="showActivityLogPanel" #activityPane>
+          <div class="navbar-dark container bg-dark p-2 font-weight-bold history-content-header">
+            <span class="col-md-11">Activity Log</span>
+            <span class="col-md-1 float-right pointer" (click)="showActivityLogPanel=false">X</span>
+          </div>
+          <div>
+            <app-activity-log (pinClicked)="pinCandidate($event)" (popupOpened)="showActivityLogPanel=false"></app-activity-log>
+          </div>
+
+        </div>
+
+      </li>
+      <!--<li class="nav-item" *ngIf="auth.isLoggedIn">
+    <a class="nav-link pointer">
+      <i class="fa fa-sliders fa-rotate-90 fa-lg"></i>
+    </a>
+  </li>-->
+      <li class="nav-item dropdown mr-1" *ngIf="auth.isLoggedIn">
+        <a class="nav-link pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i><img src="../../../../../wwwroot/assets/img/svg/profiledefault.png" style="border-radius:50%;border:darkgray 1px solid;" width="25" height="25" /></i>
+          <!--{{ActiveGroup}}-->
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+
+          <a class="dropdown-item pointer" (click)="auth.logout()">Logout</a>
+        </div>
+      </li>
+      <li class="nav-item align-self-center" *ngIf="auth.isLoggedIn && auth.currentUser.activerole">
+        <span class="small text-white">{{auth.currentUser.full_name}}</span>
+        <div>
+          <a class="pointer rolename" title="Change Role - {{auth.currentUser.activerolename}}" [routerLink]="['/selectrole']">{{auth.currentUser.activerolename}}</a>
+          <!-- <select [(ngModel)]="auth.currentUser.activerolename" class="roles-dp">
+        <option *ngFor="let roles of auth.currentUser.roles" [value]="roles.rolename">
+          {{roles?.rolename}}
+        </option>
+      </select> -->
+        </div>
+
+
+      </li>
+    </ul>
+  </nav>
+
+  <div id="mainMenu" class="aside-sidebar box-shadow" *ngIf="auth.isLoggedIn && auth.currentUser.activerolename">
+    <a *ngIf="auth.isLoggedIn" class="pointer toggelMenu sidebar-menu icon-blue" data-id="mainMenu" data-parent=".sidebar-container">
+      <i class="fa fa-bars fa-lg pb-2" aria-hidden="true"></i>
+    </a>
+
+    <nav class="custom-navbar sidebar-bg icon-color">
+    
+      <ng-container *ngIf="auth.isLoggedIn && GetMenu()==true" class="">
+        <app-navigation [headerType]="'sidbar'" [navItems]="Menu.Nav"></app-navigation>
+      </ng-container>
+    </nav>
+  </div>
+</div>

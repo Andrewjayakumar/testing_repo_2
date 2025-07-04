@@ -1,0 +1,147 @@
+<div >
+  <div class="modal-header w-100 p-1 pl-2i">
+    <h5 class=" title"></h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('user closed')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body p-0 pb-1">
+    <div [ngBusy]="{busy: busy, message: 'Loading ...', backdrop: true, delay: 200, minDuration: 1000}"></div>
+    
+    <div class="row m-2">
+      <div class="col-md-6">
+        <div class="d-flex w-100">
+          <label class="col-auto m-0 p-0 text-ai">
+            Original Job Description
+          </label>
+
+          <div class="choice-buttons col-9 d-flex ml-2 mb-2 p-0 pull-right">
+            <button type="button" class="btn btn-outline-ai mr-2" title="Re-write Job Description" [ngClass]="{ 'active-option' : currentMenuId==1 }" (click)="rewriteJD()">Re-write<br /> Job Description</button>
+            <button *ngIf="source=='overview'" type="button" class="btn btn-outline-ai mr-2" title="View Pre-Screening Questions" [ngClass]="{ 'active-option' : currentMenuId==2 }"
+                    [disabled]="!aipreScreeningText" (click)="showInterviewQuestions()">
+              View Pre-screening Questions
+              <small>[BETA]</small>
+            </button>
+            <!--  <sup class="blue-chip">BETA</sup>-->
+            <button *ngIf="source=='overview'" type="button" class="btn btn-outline-ai mr-2" title="Generate Search Query" [ngClass]="{ 'active-option' : currentMenuId ==3 }"
+                    [disabled]="!aiBooleanSearchQuery" (click)="boolSearch()">
+              Generate<br />Search Query
+              <small>[BETA]</small>
+            </button>
+            <!-- <sup class="blue-chip">BETA</sup> -->
+          </div>
+
+        </div>
+
+        <div *ngIf="!ismultidescription" tabindex="-1" class="editable" #desceditor
+             name="desc" [innerHtml]="originalDesc">
+        </div>
+
+        <div *ngIf="ismultidescription" tabindex="-1" class="editable" #multieditor
+             name="multieditor" [innerHtml]="concatenatedMultiDesc">
+        </div>
+        <!--
+          <div *ngIf="ismultidescription" class="mt-0 alignDayToDay">
+        <label class="text-ai mb-0">
+          Day to Day
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+        <div tabindex="1" class="dayToDay" #dayToDayeditor
+        name="dayToDay" [innerHtml]="dayToDay" >
+        </div>
+      </div>
+
+      <div *ngIf="ismultidescription" class="mt-0">
+        <label class="text-ai mb-0 mt-2">
+          Must haves
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+        <div tabindex="2" class="mustHave" #mustHaveeditor
+        name="mustHave" [innerHtml]="mustHave" >
+        </div>
+      </div>
+
+      <div *ngIf="ismultidescription" class="mt-0">
+        <label class="text-ai mb-0 mt-2">
+          Pluses
+        </label>
+        <div tabindex="3" class="pluses" #pluseseditor
+        name="pluses" [innerHtml]="pluses">
+        </div>
+      </div>
+
+        -->
+
+      </div>
+
+
+      <div class="col-md-6 ">
+        <div class="d-flex">
+
+          <label class="text-ai">
+            AI/ChatGPT Recommended -&nbsp;
+          </label>
+          <label class="text-ai" *ngIf="currentMenuId == 1">Job Description</label>
+          <label class="text-ai" *ngIf="currentMenuId == 2">Pre-Screening Questions</label>
+          <label class="text-ai" *ngIf="currentMenuId == 3">Candidate Search Query</label>
+
+        </div>
+
+
+
+
+        <div tabindex="1" class="editable mt-3" #outputeditor
+             name="output" [innerHtml]="aiSuggestedText">
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer d-flex">
+
+    <div class="col-6 p-0 ">
+      <label class="pull-left text-danger font-weight-bold">{{ErrorMessage}}</label>
+      <!--  <label class="text-success font-weight-bold">{{SuccessMessage}}</label>  -->
+      <ngb-alert *ngIf="SuccessMessage" type="success" (close)="SuccessMessage = null">
+        <div class="d-flex align-items-center justify-content-center m-0 pull-left">
+
+          <span class="text-success">{{SuccessMessage}}</span>
+        </div>
+
+      </ngb-alert>
+    </div>
+
+    <div class="col-6 p-0  action-btns" *ngIf="showActionButtons">
+      <div class="pull-right">
+        <button *ngIf="currentMenuId ===3" class="btn btn-ai mr-2" (click)="searchWithBooleanQuery(1)"> <i class="fa fa-search pr-2"></i>Search with Boolean Query 1</button>
+        <button *ngIf="currentMenuId ===3" class="btn btn-ai mr-2" (click)="searchWithBooleanQuery(2)"><i class="fa fa-search pr-2"></i>Search With Boolean Query 2</button>
+      </div>
+      
+      <!--<button type="button" *ngIf="currentMenuId==2" class="btn btn-ai mr-2 ">
+       <i class="fa fa-save pr-2"></i> Save
+     </button>
+    <button type="button" *ngIf="currentMenuId!==1" class="btn btn-ai mr-4 " (click)="copyToClipboard()">
+       <i class="fa fa-copy pr-2"></i>Copy
+     </button> -->
+      <div *ngIf="currentMenuId==2">
+        <small class="text-dark">NOTE: The Interview questions have been generated automatically against the accepted requisition description</small>
+      </div>
+
+      <div *ngIf=" currentMenuId ==1 && ActionTaken==0" class="pull-right">
+        <button class="btn btn-outline-ai mr-4" (click)="ShowCancellationReasonPopup()">Use Original</button>
+        <button class="btn btn-ai mr-4" (click)="OnDescAcceptClicked()">Accept AI Recommendation</button>
+      </div>
+
+    </div>
+    <div *ngIf="currentMenuId==1 && ActionTaken ==1">
+      <small>NOTE: The AI suggested description for this requisition had already been accepted</small>
+    </div>
+    <div *ngIf="currentMenuId==1 && ActionTaken ==2">
+      <small>NOTE: The original description  for this requisition was retained. AI suggestion was ignored</small>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,15 @@
+
+
+.custom-icon-size {
+  font-size: 1.6em !important;
+}
+
+.notification-dot {
+  background-color: #e33f03 ; //@extend($text-danger);
+  margin-left: 1.75rem;
+  margin-top: -3rem;
+  height: 13px;
+  width: 13px;
+  position: absolute;
+  border-radius: 50% !important;
+}

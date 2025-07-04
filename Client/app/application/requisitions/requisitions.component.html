@@ -1,0 +1,24 @@
+
+<!--- alert dialog -->
+  <ng-template #content let-c="close" let-d="dismiss" size="sm">
+    <div class="modal-header" style="background-color:#ededed">
+      <b class="modal-title">
+        {{title}}
+      </b>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross');closePopup();">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        {{message}}
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="d('ok')">Ok</button>
+    </div>
+  </ng-template>
+
+  <router-outlet></router-outlet>

@@ -1,0 +1,31 @@
+<ng-container *ngIf="cardStore.control.enablecardfromformui && FormCardUI && cardData">
+  <div class="position-relative d-flex flex-column">
+    <div class="row {{cardStore.control.horizontalalignment}}">
+      <ng-container *ngFor="let ctrl of FormCardUI.controls">
+        <app-dynamicformcontrolls *ngIf="!ctrl.filterresult" [control]="ctrl" [formGroup]="CardformGroup" [data]="cardData"
+          [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+        </app-dynamicformcontrolls>
+      </ng-container>
+    </div>
+    <div [ngClass]="{'mt-auto' : cardStore.control.actionview != 'popover' && cardStore.control.actionview != ''}"
+      *ngIf="cardStore.control.CustomAction && cardStore.control.CustomAction.length > 0">
+      <custom-action [actionview]="cardStore.control.actionview" [customActionAlign]="cardStore.control.customActionAlign"
+        [customaction]="cardStore.control.CustomAction" [data]="cardData" [AuthService]="AuthService"></custom-action>
+    </div>
+  </div>
+</ng-container>
+<div class="relative" *ngIf="cardData && !cardStore.control.enablecardfromformui"  id="{{cardId}}">
+  <div class="row">
+    <div class="col">
+      <app-cal-card-ui [control]="cardStore.control"
+                       [html]="cardStore.html"
+                       [title]="cardStore.title"
+                       [description]="cardStore.description"
+                       [image]="cardStore.image"
+                       [data]="cardData"
+                       [mappingFields]="cardStore.mappingFields"
+                       [AuthService]="AuthService" >
+      </app-cal-card-ui>
+    </div>
+  </div>
+</div>

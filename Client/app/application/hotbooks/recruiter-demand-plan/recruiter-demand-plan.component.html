@@ -1,0 +1,78 @@
+<div class="parent-tab">
+  <!--<div class="sticky-top">
+    <app-actionitemcart [AuthService]="_authservice"></app-actionitemcart>
+  </div>-->
+
+  <div class="d-inline-flex w-100">
+
+    <div class="col-md-4 right-separator">
+      <div class="d-inline-flex mt-2 pull-right">
+      </div>
+      <div class="input-group searchBox">
+        <input class="form-control py-2 border-right-0 border searchInput" type="search" value="search"
+          id="example-search-input" placeholder="Search Demand Plan" [(ngModel)]="searchText" />
+
+        <!-- <input class="form-control py-2 border-right-0 border searchInput" type="search" value="search"
+          id="example-search-input" placeholder="Search Demand Plan" [(ngModel)]="searchText"
+          (input)="searchInDemandPlans(tagType, tagName)" /> -->
+
+        <span class="input-group-append searchIcon">
+          <div class="input-group-text bg-transparent searchBorder">
+            <i class="fa fa-search searchIcon"></i>
+          </div>
+        </span>
+      </div>
+
+      <div *ngIf="demandPlans && demandPlans?.length > 0" class="scrollContent">
+        <div *ngFor="let demandPlan of demandPlans" class="demandPlancard" [ngClass]="{
+            'current-selection':
+              selectedhotbook.id && selectedhotbook.id == demandPlan.tagid
+          }" title="{{ demandPlan.tagtype }}">
+          <div class="ellipsisDemandPlan pb-0">
+            <a class="col-8 demandPlanName">
+              <span class="reqName">
+                {{ demandPlan.demandname }} <br>
+                <!-- <p *ngIf="!demandPlan.clientname" class="clientName">Facebook</p> -->
+                <p class="clientName">{{ demandPlan.clientname }}</p>
+              </span>
+            </a>
+            <label class="col-4 mb-0 demandPlanLabel pull-right">
+              <span class="pull-right numbers">
+                <p class="currentCount mb-0">{{ demandPlan.actualcount }}</p>
+                <p class="slash mb-0">/</p>
+                <p class="totalCount mb-0">{{ demandPlan.maxcount }}</p>
+              </span>
+            </label>
+
+            <label class="col-12 dates">
+              <p class="pull-left dateTitle mb-0">End Date:
+                <span class="dateValue">{{ demandPlan.demandenddate |
+                  slice:0:10 }}</span>
+              </p>
+              <p class="pull-right dateTitle recCount mb-0">({{ demandPlan.submissioncount }})
+              </p>
+            </label>
+
+            <label class="col-12 mb-0">
+              <p class="pull-left dateTitle mb-0">DM: <span class="dmValue">{{ demandPlan.dmname }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="noDemandPlan" *ngIf="!demandPlans || demandPlans.length == 0">
+          <i class="font-weight-light"> No Demand Plans found !!</i>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Show candidates accoding to the Demand Plan selected-->
+
+    <div class="col-md-8 p-0 mt-2">
+      <div class="container">
+
+      </div>
+    </div>
+  </div>
+</div>

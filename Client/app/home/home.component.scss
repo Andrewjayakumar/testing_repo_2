@@ -1,0 +1,12 @@
+.welcome {
+  min-height:calc(100vh - 53px);
+}
+.explore-block {
+  padding: 50px 0;
+  .card {
+    min-height:100%;
+    .card-body {
+      padding: 15px;
+    }
+  }
+}

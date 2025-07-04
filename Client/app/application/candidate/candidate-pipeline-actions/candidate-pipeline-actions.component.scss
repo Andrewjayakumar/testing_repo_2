@@ -1,0 +1,107 @@
+.profile {
+border:1px solid black;
+background-color:black;
+padding:0.3rem;
+
+}
+
+.profile i {
+    padding-left:10px;
+    color:white;
+}
+
+.profile h6 {
+  font-size: 14px;
+  display: inline-block;
+  color: white;
+  padding-left: 9px;
+}
+
+.color-green {
+  color: limegreen;
+  border-color: limegreen;
+}
+
+.right-separator {
+  border-right: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.modal-dialog {
+    max-width: 400px !important;
+}
+
+.action-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.rel {
+  position: relative;
+}
+
+.modal {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  transform: translate(0, 0) !important;
+}
+
+.beak-left-outer {
+  position: absolute;
+  top: 105px;
+  left: -42px;
+  transform: translateY(-50%);
+  border: 21px solid transparent;
+  border-right-color: lightgray;
+}
+
+.beak-left-inner {
+  position: absolute;
+  top: 105px;
+  left: -39px;
+  transform: translateY(-50%);
+  border: 20px solid transparent;
+  border-right-color: white;
+}
+
+.beak-right-outer {
+  position: absolute;
+  top: 105px;
+  left: calc(100% - 0px);
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 21px solid transparent;
+  border-bottom: 21px solid transparent;
+  border-left: 21px solid lightgray;
+  z-index: 1;
+}
+
+.beak-right-inner {
+  position: absolute;
+  top: 105px;
+  left: calc(100% - 1px);
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 20px solid white;
+  z-index: 1;
+}
+
+.action-card-body {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.centre-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

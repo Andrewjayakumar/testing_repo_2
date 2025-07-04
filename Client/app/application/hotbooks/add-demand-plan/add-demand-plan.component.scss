@@ -1,0 +1,28 @@
+.heading {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+label {
+  color: #1976d2;
+  font-size: 12px;
+  line-height: 10px;
+}
+
+.closeModal {
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 0.5rem !important;
+}
+
+.finalMessages {
+  margin-bottom: 5%;
+}
+
+.mandatory:after {
+  content: " *";
+  color: red;
+}
+

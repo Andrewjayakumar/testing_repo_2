@@ -1,0 +1,454 @@
+
+
+  <form class="booleanJB" #metalboolForm="ngForm" (ngSubmit)="onSearchClicked()">
+    <div class="form-group">
+      <div class="row justify-content-between mr-0">
+        <div class="col-md-12 p-0">
+          <label for="query">
+            Keyword Search
+            <sup class="text-danger">*</sup>
+            <sup>
+              <span *ngIf="showEditButton"class="edit-icon" (click)="onEditClick()" >
+                <i class="fa fa-edit"></i>
+              </span>
+            </sup>
+             
+            
+          </label>
+        
+        
+          <span tabindex="0" data-toggle="tooltip" [title]="model.query" class="custom-tooltip">
+            <textarea class="form-control" placeholder="Search for Keywords/ Email/ Phone number" [(ngModel)]="model.query" name="query" required [disabled]="searchInputDisabled" (blur)="onKeywordSearchTyped()" ></textarea>
+
+
+          </span>
+        </div>
+        <div class="col-md-4 p-0">
+          <label for="selectedSearchType">
+            Search Type
+
+          </label>
+          <ng-select class="form-control"
+                     [items]="searchtype"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     bindLabel="key" bindValue="value"
+                     placeholder="--select--"
+                     [(ngModel)]="model.type"
+                     name="selectedSearchType"
+                     >
+          </ng-select>
+
+        </div>
+        <div class="col-md-3 d-flex mt-3 pr-0">
+          <app-metal-switch [(state)]="showAdvancedSearch" class="switch-primary" (stateChange)="OnAdvancedSearchToggled($event)" [uniqueid]="'metalbooean_adv'" name="advance" [labelname]="'Advanced Search'"></app-metal-switch>
+          <app-metal-switch [(state)]="model.isJump" class="switch-primary" [uniqueid]="'metalbooean_jump'" name="isjump" [labelname]="'Jump'"></app-metal-switch>
+
+        </div>
+
+      </div>
+
+    </div>
+    <div class="row" *ngIf="showAdvancedSearch">
+      <div class="col-md-4">
+        <div class="card mb-3 pr-2 border-right border-0">
+          <div class="card-body px-0 pb-0">
+            <div class="row" id="details">
+              <div class="col-md-12">
+                <label for="workauthorization">
+                  Work Authorization
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="workAuthDetails"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="workauthorization" bindValue="id"
+                           placeholder="--select--"
+                           [(ngModel)]="model.workauthorizationid"
+                           name="workauthorization">
+                </ng-select>
+              </div>
+              <div class="col-md-12">
+                <label for="empstatus">
+                  Employment Status
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="employmentStatus"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="key" bindValue="value"
+                           placeholder="--select--"
+                           [(ngModel)]="model.employmentstatus"
+                           name="empstatus">
+                </ng-select>
+              </div>
+              <div class="col-md-12">
+                <label for="state">
+                  State
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="stateDetails"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="state" bindValue="state"
+                           placeholder="--select--"
+                           [(ngModel)]="model.state"
+                           name="state">
+                </ng-select>
+              </div>
+              <div class="col-md-6">
+                <label for="zipcode">
+                  Zip Code
+
+                </label>
+                <input id="zipcode" name="zipcode" class="form-control" [(ngModel)]="model.ZipCode" />
+              </div>
+              <div class="col-md-6">
+                <label for="mileswithin">
+                  Miles Within
+
+                </label>
+                <input id="mileswithin" name="mileswithin" [(ngModel)]="model.mileswithin" class="form-control" />
+              </div>
+              <div class="col-md-12">
+                <app-metal-switch [uniqueid]="'relocted'" name="relocte" [(state)]="model.relocate" [labelname]="'Willing to relocate'"></app-metal-switch>
+
+              </div>
+              <div class="col-md-12">
+                <app-metal-switch [uniqueid]="'redeployable'" name="redeployable" [(state)]="model.redeployable" [labelname]="'Redeployable'"></app-metal-switch>
+
+              </div>
+
+              <div class="col-md-12">
+                <label for="industry">
+                  Select Industry
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="domainStateDetails"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="type" bindValue="id"
+                           placeholder="--select--"
+                           [(ngModel)]="model.industryid"
+                           name="industry">
+                </ng-select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!--  Middle Column -->
+      <div class="col-md-4">
+        <div class="card mb-3 pr-2 border-right border-0">
+          <div class="card-body px-0 pb-0">
+            <div class="row" id="middlecard">
+              <div class="col-md-12">
+                <label for="proactive">
+                  Proactive
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="proactiveData"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="key" bindValue="value"
+                           placeholder="--select--"
+                           [(ngModel)]="model.sector"
+                           name="proactive">
+                </ng-select>
+              </div>
+              <div class="col-md-6 p-0">
+                <app-metal-switch [uniqueid]="'activetalent'" id="activetalentpool" name="activetalentpool" [(state)]="model.activetalentpool" [labelname]="'Active Talent Pool'"></app-metal-switch>
+
+              </div>
+              <div class="col-md-6 pl-0">
+                <app-metal-switch [uniqueid]="'passivetalent'" id="passivetalentpool" name="passivetalentpool" [(state)]="model.passivetalentpool" [labelname]="'Passive Talent Pool'"></app-metal-switch>
+
+              </div>
+              <div class="col-md-12">
+                <label for="proactivemembers">
+                  Proactive Members
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="proactiveMembers"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="userid" bindValue="userid"
+                           placeholder="--select--"
+                           [(ngModel)]="model.proactivemembers"
+                           name="proactivemembers">
+                </ng-select>
+              </div>
+              <div class="col-md-12">
+                <label for="glidertest">
+                  Glider Test
+
+                </label>
+                <ng-select [items]="GliderTestItems$ |async" [multiple]="true" [closeOnSelect]="true" [searchable]="true" [loading]="glidertestArray==null"
+                           bindLabel="assessmenttestname" bindValue="assessmenttestname" placeholder="Type to Search" [typeahead]="gildertest$"
+                           name="glider" id="glider" class="form-control" [(ngModel)]="model.assessmenttestname" #glider="ngModel">
+                </ng-select>
+              </div>
+              <div class="col-md-10">
+                <app-metal-switch [uniqueid]="'videoresume'" name="video" [(state)]="model.videoresume" [labelname]="'Video Resume'"></app-metal-switch>
+
+              </div>
+              <div class="col-md-10">
+                <app-metal-switch [uniqueid]="'linkedinprofile'" name="linkdin" [(state)]="model.linkedin" [labelname]="'LinkedIn Profile'"></app-metal-switch>
+
+              </div>
+              <!--hotbook dropdown-->
+              <div class="col-md-12">
+                <label for="hotbookfilter">
+                  Hotbooks Search
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="hotbookfilter"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="key" bindValue="value"
+                           placeholder="--select--"
+                           [(ngModel)]="selectedHotbooks"
+                           name="hotbookfilter">
+                </ng-select>
+              </div>
+              <div class="col-md-12">
+                <label for="label">
+                  Labels
+                </label>
+                <ng-select class="form-control"
+                           [items]="lables"
+                           [multiple]="true"
+                           [closeOnSelect]="true"
+                           bindLabel="label" bindValue="labelid"
+                           placeholder="--select--"
+                           [(ngModel)]="model.labelIds"
+                           name="lables">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Last card details-->
+      <div class="col-md-4">
+        <div class="card mb-3 pr-2 border-right border-0">
+          <div class="card-body px-0 pb-0">
+            <div class="row" id="lastcardDetails">
+              <div class="col-md-12">
+                <label for="orderby">
+                  Order By
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="orderBy"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           bindLabel="key" bindValue="value"
+                           placeholder="--select--"
+                           [(ngModel)]="model.orderby"
+                           name="selectedSearchType">
+                </ng-select>
+              </div>
+              <div class="col-md-12">
+                <label for="lastupdateddaysback">
+                  Last Updated Days Back
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="LastUpdatedDaysback"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           bindLabel="key" bindValue="value"
+                           placeholder="--select--"
+                           [(ngModel)]="model.lastupdateddaysback"
+                           name="lastupdateddaysback">
+                </ng-select>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="label_text_candidate" for="updatedfrom">Updated From</label>
+                <div class="input-group">
+                  <input class="form-control" id="updatedfrom" [(ngModel)]="updatedfrom"
+                         (ngModelChange)="updatedFrom($event)"
+                         placeholder="yyyy-mm-dd"
+                         name="updatedfrom" ngbDatepicker #d="ngbDatepicker">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="label_text_candidate" for="updatedto">Updated To</label>
+                <div class="input-group">
+                  <input class="form-control" id="updatedto" (ngModelChange)="updatedTo($event)"
+                         placeholder="yyyy-mm-dd" [(ngModel)]="updatedto"
+                         name="updatedto" ngbDatepicker #e="ngbDatepicker">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="e.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label for="lastcontanctedback">
+                  Last Contacted Days Back
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="LastUpdatedDaysback"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           bindLabel="key" bindValue="value"
+                           placeholder="--select--"
+                           [(ngModel)]="model.lastcontacteddaysback"
+                           name="lastcontanctedback">
+                </ng-select>
+              </div>
+              <div *ngIf="!model.lastcontacteddaysback" class="form-group col-md-6">
+                <label class="label_text_candidate" for="contactedfrom">Contacted From</label>
+                <div class="input-group">
+                  <input class="form-control" id="contactedfrom" (ngModelChange)="contactedFrom($event)"
+                         placeholder="yyyy-mm-dd" [(ngModel)]="contactedfrom"
+                         name="contactedfrom" ngbDatepicker #a="ngbDatepicker">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="a.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="label_text_candidate" for="contacntedto">Contacted To</label>
+                <div class="input-group">
+                  <input class="form-control" id="contactedto" (ngModelChange)="contactedTo($event)"
+                         placeholder="yyyy-mm-dd" [(ngModel)]="contactedto"
+                         name="contacntedto" ngbDatepicker #b="ngbDatepicker">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="b.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+
+              <!--<div class="col-md-10">
+    <app-metal-switch [uniqueid]="'offshoreSwitch'" id="offshore" name="offshore" [(state)]="model.offshore" [labelname]="'Offshore'" [isdisable]="disableOffshore"></app-metal-switch>
+  </div>-->
+              <div class="col-md-12">
+                <label for="deliverymodelid">
+                  Working From
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="deliverymodelid"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           bindLabel="deliverymodelname" bindValue="deliverymodelid"
+                           placeholder="--select--"
+                           [(ngModel)]="model.deliverymodelid"
+                           name="selectedSearchType">
+                </ng-select>
+              </div>
+              <div class="col-md-12">
+                <label for="industry">
+                  Screening Level
+
+                </label>
+                <ng-select class="form-control"
+                           [items]="screenLevel"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           bindLabel="key" bindValue="value"
+                           placeholder="--select--"
+                           [(ngModel)]="model.interviewlevel"
+                           name="screeningLevel">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pull-right">
+      <input type="submit" value="Search" class="btn btn-primary   mr-3" />
+      <button id="clear" name="clear" type="reset" (click)="resetModel()" class="btn btn-outline-primary">Clear</button>
+
+    </div>
+  </form>
+
+<div [ngBusy]="{busy: busy, message: 'Please Wait ...', backdrop: true, delay: 200, minDuration: 1000}"></div>
+<section class="clear-both booleanJB">
+  <!--metal cards in results-->
+  <div>
+    <label>No. of Resumes : {{totalResults}}</label>
+  </div>
+
+  <div class="row  mt-2">
+    <div class="col-3 metal-card-col p-1"
+         *ngFor="let candidateObj of candidateResults">
+      <div class="d-block h-100">
+        <div class="card mb-0 h-100 custom-action-hover">
+          <app-candidate-card [candidate]="candidateObj"
+                              [pagename]="'MetalbooleanSearch'"
+                              [showCheckbox]=true
+                              [requisitionid]="requisitionid"
+                              (actionchecked)="onCandidateSelected($event)"
+                              [highlightskillsarray]="highlightskillsarray"
+                              [isCandidateDashboardSearch]="isCandidateDashboard"
+                              [aigenerated] ="aigenerated"
+                              ></app-candidate-card>
+          <!--<i class="fa fa-ellipsis-h"> Unfavorite</i>-->
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div *ngIf="!totalResults || totalResults == 0" class="text-center mt-4">
+    <p class="font-italic font-size-large">{{message}}</p>
+  </div>
+</section>
+
+<div class="d-flex justify-content-center mt-3 mb-0" *ngIf="totalResults >0">
+  <ngb-pagination [collectionSize]="totalResults"  [pageSize]="pagesize" [(page)]="pageIndex" [maxSize]="4"
+                  (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+</div>
+
+<button type="button"
+        *ngIf="selectedCandidates.length > 0"
+        class="
+        btn
+        position-fixed
+        btn-custom-circle
+        right
+        bottom-3
+        mb-3
+        mr-3
+        btn-xl btn-info btn-lg
+      "
+        (click)="onSourceBtnClicked()">
+  Source
+</button>
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">Ok</button>
+  </div>
+</ng-template>

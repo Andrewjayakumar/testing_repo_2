@@ -1,0 +1,464 @@
+﻿<div class="col-md-6">
+  <div class="c-form">
+    <label>Data Series</label>
+    <select [ngModel]="chartOptions.chartDataType" (ngModelChange)="chartGroupsFilter($event)">
+      <option [value]="0">All</option>
+      <option *ngFor="let type of dataTypes" [value]="type.inputFormat">{{type.inputFormat}}</option>
+    </select>
+  </div>
+</div>
+<div class="col-md-6">
+  <div class="c-form">
+    <label>Chart Type</label>
+    <select [ngModel]="chartOptions.chartType"
+            (ngModelChange)="selectChart($event)">
+      <ng-template ngFor let-group [ngForOf]="chartGroupsFilt">
+        <optgroup [label]="group.name">
+          <option *ngFor="let chart of group.charts" [value]="chart.selector">{{chart.name}}</option>
+        </optgroup>
+      </ng-template>
+    </select>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="c-form">
+    <div class="my-dd d-flex justify-content-between" (click)="dimVisiable = !dimVisiable" style="cursor: pointer">
+      <span>Dimensions</span>
+      <i class="fa" [class.fa-angle-up]="dimVisiable" [class.fa-angle-down]="!dimVisiable"></i>
+    </div>
+  </div>
+  <div [hidden]="!dimVisiable">
+    <div class="c-form">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.fitContainer" (change)="toggleFitContainer($event.target.checked)">
+          Fit Container
+        </label>
+      </div>
+    </div>
+    <div class="row" *ngIf="!chartOptions.fitContainer">
+      <div class="col-md-6">
+        <div class="md-form">
+          <input id="chartOptionsW" class="form-control" type="number" [(ngModel)]="chartOptions.width">
+          <label for="chartOptionsW">Width</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="md-form">
+          <input id="chartOptionsH" class="form-control" type="number" [(ngModel)]="chartOptions.height">
+          <label for="chartOptionsH">Height</label>
+        </div>
+      </div>
+      <div class="col-md-12 text-right">
+        <button class="btn btn-default" (click)="applyDimensions()">Apply dimensions</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="c-form">
+    <div class="my-dd d-flex justify-content-between" (click)="colorVisible = !colorVisible" style="cursor: pointer">
+      <span>Color Scheme</span>
+      <i class="fa" [class.fa-angle-up]="colorVisible" [class.fa-angle-down]="!colorVisible"></i>
+    </div>
+  </div>
+  <div class="row" [hidden]="!colorVisible">
+    <div class="col-sm-6">
+      <div class="c-form">
+        <select [ngModel]="chartOptions.selectedColorScheme" (ngModelChange)="setColorScheme($event)">
+          <option *ngFor="let scheme of colorSets" [value]="scheme.name">{{scheme.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('schemeType')">
+      <div class="c-form">
+        <select [ngModel]="chartOptions.schemeType" (ngModelChange)="chartOptions.schemeType = $event">
+          <option value="ordinal">Ordinal</option>
+          <option value="linear">Linear</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-6" [hidden]="(!chartOptions.range)">
+      <div class="md-form">
+        <div>
+          <input class="form-control" type="number" [(ngModel)]="chartOptions.rangeFillOpacity">
+          <label>Range fill color opacity (0.0 - 1.0):</label><br />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="c-form">
+    <div class="my-dd d-flex justify-content-between" (click)="optsVisible = !optsVisible" style="cursor: pointer">
+      <span>Options</span>
+      <i class="fa" [class.fa-angle-up]="optsVisible" [class.fa-angle-down]="!optsVisible"></i>
+    </div>
+  </div>
+  <div class="row" [hidden]="!optsVisible">
+    <div class="col-sm-6" *ngIf="chart.options.includes('showXAxis')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showXAxis" (change)="chartOptions.showXAxis = $event.target.checked">
+          Show X Axis
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showRefLabels')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showRefLabels" (change)="chartOptions.showRefLabels = $event.target.checked">
+          Show Reference Labels
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showRefLines')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showRefLines" (change)="chartOptions.showRefLines = $event.target.checked">
+          Show Reference Lines
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showYAxis')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showYAxis" (change)="chartOptions.showYAxis = $event.target.checked">
+          Show Y Axis
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showGridLines')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showGridLines" (change)="chartOptions.showGridLines = $event.target.checked">
+          Show Grid Lines
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('roundDomains')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.roundDomains" (change)="chartOptions.roundDomains = $event.target.checked">
+          Round Domains
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('gradient')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.gradient" (change)="chartOptions.gradient = $event.target.checked">
+          Use Gradients
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showLegend')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showLegend" (change)="chartOptions.showLegend = $event.target.checked">
+          Show Legend
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('legendTitle')">
+      <div class="c-form">
+        <div class="md-form">
+          <input class="form-control" type="text" [(ngModel)]="chartOptions.legendTitle">
+          <label>Legend Title:</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('roundEdges')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.roundEdges" (change)="chartOptions.roundEdges = $event.target.checked">
+          Round Bar Edges
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('tooltipDisabled')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.tooltipDisabled" (change)="chartOptions.tooltipDisabled = $event.target.checked">
+          Disable tooltip
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showXAxisLabel')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showXAxisLabel" (change)="chartOptions.showXAxisLabel = $event.target.checked">
+          Show X Axis Label
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('xAxisLabel')">
+      <div class="c-form">
+        <div class="md-form">
+          <input class="form-control" type="text" [(ngModel)]="chartOptions.xAxisLabel">
+          <label>X Axis Label:</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showYAxisLabel')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showYAxisLabel" (change)="chartOptions.showYAxisLabel = $event.target.checked">
+          Show Y Axis Label
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('yAxisLabel')">
+      <div class="c-form">
+        <div class="md-form">
+          <input class="form-control" type="text" [(ngModel)]="chartOptions.yAxisLabel">
+          <label>Y Axis Label:</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showLabels')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.showLabels" (change)="chartOptions.showLabels = $event.target.checked">
+          Show Labels
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('doughnut')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.doughnut" (change)="chartOptions.doughnut = $event.target.checked">
+          Doughnut
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('arcWidth') && chartOptions.doughnut">
+      <div class="c-form">
+        <div class="md-form">
+          <input class="form-control" type="number" [disabled]="!chartOptions.doughnut" [(ngModel)]="chartOptions.arcWidth" max="1" min="0" step="0.01">
+          <label>Arc width (fraction of radius):</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('explodeSlices') && !chartOptions.doughnut">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.explodeSlices" (change)="chartOptions.explodeSlices = $event.target.checked">
+          Explode Slices
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('autoScale')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.autoScale" (change)="chartOptions.autoScale = $event.target.checked">
+          Auto Scale
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('timeline')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.timeline" (change)="chartOptions.timeline = $event.target.checked">
+          Timeline
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('curve')">
+      <div class="c-form">
+        <label>Line Interpolation</label>
+        <select [(ngModel)]="chartOptions.curveType"
+                (ngModelChange)="curve = getInterpolationType($event)">
+          <option *ngFor="let interpolationType of interpolationTypes" [value]="interpolationType">
+            {{interpolationType}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('curveClosed')">
+      <div class="c-form">
+        <label>Line Interpolation</label>
+        <select [(ngModel)]="closedCurveType"
+                (ngModelChange)="closedCurve = getInterpolationType($event)">
+          <option *ngFor="let interpolationType of closedInterpolationTypes" [value]="interpolationType">
+            {{interpolationType}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('min')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugeMin">
+        <label>Min value:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('max')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugeMax">
+        <label>Max value:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('innerPadding')">
+      <div class="md-form">
+        <input class="form-control" type="text" [(ngModel)]="chartOptions.innerPadding" min="0" step="1">
+        <label>Inner padding value:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('barPadding')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.barPadding" min="0" step="1">
+        <label>Padding between bars:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('barPadding')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.barPadding" min="0" step="1">
+        <label>Padding between bars:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('groupPadding')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.groupPadding" min="0" step="1">
+        <label>Padding between groups:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('value')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugeValue">
+        <label>Value:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('previousValue')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugePreviousValue">
+        <label>Previous value:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('angleSpan')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugeAngleSpan">
+        <label>Angle span:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('startAngle')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugeStartAngle">
+        <label>Start Angle:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('showAxis')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.gaugeShowAxis" (change)="chartOptions.gaugeShowAxis = $event.target.checked">
+          Show Axis
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('largeSegments')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugeLargeSegments">
+        <label>Number of large segments:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('smallSegments')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.gaugeSmallSegments">
+        <label>Number of small segments:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('units')">
+      <div class="md-form">
+        <input class="form-control" type="text" [(ngModel)]="chartOptions.gaugeUnits">
+        <label>Units:</label>
+      </div>
+    </div>
+    <div class="col-sm-12" *ngIf="chart.options.includes('margin')">
+      <div class="c-form">
+        <label>
+          <input type="checkbox" [checked]="chartOptions.margin" (change)="chartOptions.margin = $event.target.checked">
+          Show Margin
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('margin') && margin">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.marginTop">
+        <label>Top:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('margin') && margin">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.marginRight">
+        <label>Right:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('margin') && margin">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.marginBottom">
+        <label>Bottom:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('margin') && margin">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.marginLeft">
+        <label>Left:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('minRadius')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.minRadius">
+        <label>Minimum Radius:</label>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="chart.options.includes('maxRadius')">
+      <div class="md-form">
+        <input class="form-control" type="number" [(ngModel)]="chartOptions.maxRadius">
+        <label>Maximum Radius:</label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="c-form">
+    <div class="my-dd d-flex justify-content-between" (click)="dataVisable = !dataVisable" style="cursor: pointer">
+      <span>Data</span>
+      <i class="fa" [class.fa-angle-up]="dataVisable" [class.fa-angle-down]="!dataVisable"></i>
+    </div>
+  </div>
+</div>
+<div class="col-md-6">
+  <div class="c-form">
+    <label>
+      <input type="checkbox" [checked]="chartOptions.DirectMapping" (change)="chartOptions.DirectMapping = $event.target.checked">
+      Direct Api Field Mapping
+    </label>
+  </div>
+</div>
+<div class="col-md-12" *ngIf="chartOptions.inputFormat == 'singleSeries'">
+  <label>Data View</label>
+</div>
+<div class="col-md-6" *ngIf="chartOptions.inputFormat == 'singleSeries'">
+  <div class="c-form">
+    <label>
+      <input class="form-control" type="radio" [(ngModel)]="chartOptions.dataview" value="Json">
+      Json
+    </label>
+  </div>
+</div>
+<div class="col-md-6" *ngIf="chartOptions.inputFormat == 'singleSeries'">
+  <div class="c-form">
+    <label>
+      <input class="form-control" type="radio" [(ngModel)]="chartOptions.dataview" value="Table">
+      Table
+    </label>
+  </div>
+</div>
+<div class="col-md-6" *ngIf="chartOptions.dataview=='Table'">
+  <div class="md-form">
+    <input class="form-control" type="number" [(ngModel)]="chartOptions.itemsPerPage">
+    <label>Item per page:</label>
+  </div>
+</div>
+<div class="col-md-6">
+  <button class="btn btn-default" (click)="RefreshData()">Refresh Data</button>
+</div>

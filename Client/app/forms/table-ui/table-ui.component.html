@@ -1,0 +1,32 @@
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<ngb-alert class="successMsg" *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+<div class="table-responsive">
+  <table class="table table-sm table-hover">
+    <thead class="thead-default">
+      <tr>
+        <ng-container *ngFor="let col of control.ResultDisplayField">
+          <th *ngIf="col.Show">{{col?.DisplayName}}</th>
+        </ng-container>
+        <th *ngIf="!control.hideedit || !control.hidedelete || !control.hideview">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of resultList | paginate: { itemsPerPage: control.pagesize, currentPage: page }">
+        <ng-container *ngFor="let col of control.ResultDisplayField">
+          <td *ngIf="col.Show  && !IsChild(col)">
+            {{GetValue(row,col)}}
+          </td>
+          <td *ngIf="col.Show  && IsChild(col)">
+            {{getChildvalue(row,col)}}
+          </td>
+        </ng-container>
+        <td *ngIf="!control.hideedit || !control.hidedelete || !control.hideview">
+          <a *ngIf="!control.hideedit" class="btn btn-outline-success btn-sm" href="{{getUrl('edit',row)}}"><i class="fa fa-pencil"></i></a>
+          <a *ngIf="!control.hidedelete" class="btn btn-outline-danger btn-sm" (click)="Delete(row)"><i class="fa fa-trash"></i></a>
+          <a *ngIf="!control.hideview" class="btn btn-outline-info btn-sm" href="{{getUrl('view',row)}}"><i class="fa fa-eye"></i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<pagination-controls  *ngIf="resultList && resultList.length > control.pagesize"  (pageChange)="page = $event"></pagination-controls>

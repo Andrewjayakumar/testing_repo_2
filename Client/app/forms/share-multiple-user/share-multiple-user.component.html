@@ -1,0 +1,74 @@
+<div class="linkedin popup">
+  <div class="modal-header w-100 p-1 pl-2i">
+    
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('user closed')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div #shareandsend id="#shareandsend" class="modal-body">
+    <div class="">
+      <div class="row">
+        <div class="switch-field active_consultant">
+          <input type="radio" id="activeConsultant-one" name="activeConsultant" value="send"
+                 checked (change)="onChange($event)" />
+          <label for="activeConsultant-one">Send</label>
+          <input type="radio" id="activeConsultant-two" name="activeConsultant" value="share"
+                 (change)="onChange($event)" />
+          <label for="activeConsultant-two">Share</label>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="(objshareandsend.sendshare ==='send')">
+        <div class="col-8">
+          <label class="user" for="user">Select a User</label>
+
+
+          <ng-select [items]="recruiterList$| async"
+                     [typeahead]="recruiterinput$"
+                     [multiple]="true"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="recruiter"
+                     bindValue="recruiter"
+                     [(ngModel)]="model.userid"
+                     name="recruitername"
+                     #recruitername="ngModel"
+                     [loading]="isRecruiterNameLoading"
+                     placeholder="Type atleast 2 characters"
+                     class="form-control">
+          </ng-select>
+        </div>
+
+      </div>
+
+      <div class="row" *ngIf="(objshareandsend.sendshare ==='send')">
+        <div class="col-8">
+          <label class="label_text_candidate" for="candidateSearch">Send User Comments</label>
+
+          <textarea id="comments" name="comments" [(ngModel)]="model.comments" rows="4" cols="50" class="form-control"></textarea>
+        </div>
+
+      </div>
+
+      <div class="row" *ngIf="(objshareandsend.sendshare ==='share')">
+        <div class="col-10">
+          <label class="label_text_candidate" for="candidateSearch">Candidate Profile Link</label>
+          <input type="text" id="candidadatelink" name-="profilelink" [(ngModel)]="copylink" [value]="copylink" #sharableLink class="form-control" />
+
+        </div>
+
+      </div>
+      <button class="btn btn-primary mt-2" type="button" (click)="sendAllProfiles()" [disabled]="model.userid.length == 0" *ngIf="(objshareandsend.sendshare ==='send')">SEND</button>
+      <button class="btn btn-primary mt-2" type="button" (click)="copyUrl(copylink)" *ngIf="(objshareandsend.sendshare ==='share')">Copy Link</button>
+      <div *ngIf="addloader && objshareandsend.sendshare ==='send'" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div>
+      <ngb-alert *ngIf="(objshareandsend.sendshare ==='send' && alltheUsersForSendResp)"
+                 type="success">
+        Candidate profile successfully shared.
+      </ngb-alert>
+
+    </div>
+  </div>
+
+</div>

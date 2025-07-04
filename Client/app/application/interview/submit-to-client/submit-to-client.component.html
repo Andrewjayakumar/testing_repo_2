@@ -1,0 +1,39 @@
+
+<!-- Submit to Client Popup -->
+<div class="popup-container" *ngIf="showSubmitToClientPopup ">
+    <!-- <div class="popup-container" > -->
+    <div class="popup-content" >
+      <button class="close-button" (click)="closePopup()">&times;</button>
+      <h4 class="submit-heading" >Submit to Client</h4>
+      <p class="submit-message">Do you want to mark the candidate as submitted to client?</p>
+      <div class="button-conent"  *ngIf="showButtons">
+        <button class="btn btn-primary custom-yes"(click)="submitToClient()">Yes</button>
+        <button class="btn btn-outline-primary custom-no"  (click)="closePopup()">No</button>
+      
+      </div>
+      <div class="submitted-line" [ngClass]="{'show-line': !showButtons}">
+        {{message}}
+      </div>
+      </div>
+  </div>
+  
+  <!-- Submit to Client Warning message when On Create Button -->
+  
+  <div class="error-container" *ngIf="showSTCwarning">
+    <div class="error-content">
+      <button class="close-button" (click)="errorPopup()">&times;</button>
+      <!--  Image -->
+      <div class="image-container">
+        <img src="../../../../../wwwroot/assets/img/svg/danger_icon.svg" class="image-danger" >
+      </div>
+      
+      <!--  Content -->
+      <div class="content-container">
+       
+        <div class="content">
+        <h4>'Submit to client' is Required!</h4>
+        <p>Please mark the candidate as 'Submit to client' for creating the 'Client Screenings' Interview.</p>
+      </div>
+      </div>
+    </div>
+  </div>

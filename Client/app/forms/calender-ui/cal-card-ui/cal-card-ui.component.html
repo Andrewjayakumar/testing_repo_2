@@ -1,0 +1,1012 @@
+<div draggable="false" *ngIf="sidebar==true" class="sidbar-outer sidbar75">
+  <div class="card mb-1 card-btn-show-on-hover d-none d-lg-flex" *ngIf="control?.cardtype=='Dynamic'">
+    <div [innerHTML]="safehtml(data[html.value])"></div>
+    <div class="card-btn-absolute p-1 border bg-white border-top-0">
+      <div class="d-flex justify-content-end">
+        <ng-container *ngIf="getCustomAction()">
+          <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+            [customaction]="getCustomAction()" [data]="data" [AuthService]="AuthService"></custom-action>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-3 d-flex d-lg-none" *ngIf="control?.cardtype=='Dynamic'">
+    <div [innerHTML]="safehtml(data[html.value])"></div>
+    <div class="card-footer d-flex justify-content-end">
+      <ng-container *ngIf="getCustomAction()">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="getCustomAction()" [data]="data" [AuthService]="AuthService"></custom-action>
+      </ng-container>
+    </div>
+  </div>
+  <div class="unik-1" *ngIf="control?.cardtype=='Custom'">
+    <div *ngIf="control.showcardheader" class="card-header d-flex pointer" (click)="hide = !hide">
+      <div class="m-0 align-self-center" *ngIf="title.webnametype=='nameonly'">
+        {{title.key}} : {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+        data[title.value].substring(0,15)
+        + '..' : data[title.value] ? data[title.value] : '' }}
+      </div>
+      <div class="m-0 align-self-center" *ngIf="title.webnametype=='nameicon'">
+        <i class="{{title.webicon}} mr-2"></i>
+        <span class="text-truncate">
+          {{title.key}} : {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+          data[title.value].substring(0,15)
+          + '..' : data[title.value] ? data[title.value] : '' }}
+        </span>
+      </div>
+      <div class="m-0 align-self-center" *ngIf="title.webnametype=='icononly'">
+        <i class="{{title.webicon}} mr-2"></i>
+        <span class="text-truncate">
+          {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+          data[title.value].substring(0,15) + '..'
+          : data[title.value] ? data[title.value] : '' }}
+        </span>
+      </div>
+      <div class="m-0 align-self-center" *ngIf="title.webnametype=='none' || !title.webnametype">
+        {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+        data[title.value].substring(0,15) + '..'
+        : data[title.value] ? data[title.value] : '' }}
+      </div>
+      <span class="ml-auto align-self-center" *ngIf="!hide">
+        <i class="fa fa-angle-down pl-2" aria-hidden="true"></i>
+      </span>
+      <span class="ml-auto align-self-center" *ngIf="hide">
+        <i class="fa fa-angle-up pl-2" aria-hidden="true"></i>
+      </span>
+    </div>
+    <div class="card mb-2 color-card" *ngIf="control.showcardheader">
+
+      <div class="small title-text" *ngIf="title && !title.redirecturl">
+        <span *ngIf="title.webnametype=='nameonly'">
+          {{title.key}} : {{data[title.value]}}
+        </span>
+        <span *ngIf="title.webnametype=='nameicon'">
+          <i class="{{title.webicon}} mr-2"></i>
+          <span class="text-truncate">{{title.key}} : {{data[title.value]}}</span>
+        </span>
+        <span *ngIf="title.webnametype=='icononly'">
+          <i class="{{title.webicon}} mr-2"></i>
+          <span class="text-truncate">{{data[title.value]}}</span>
+        </span>
+        <span *ngIf="title.webnametype=='none' || !title.webnametype">
+          {{data[title.value]}}
+        </span>
+      </div>
+      <a class="small title-text" *ngIf="title && title.redirecturl" (click)="redirect(title)">
+        <span *ngIf="title.webnametype=='nameonly'">
+          {{title.key}} : {{data[title.value]}}
+        </span>
+        <span *ngIf="title.webnametype=='nameicon'">
+          <i class="{{title.webicon}} mr-2"></i>
+          <span class="text-truncate">{{title.key}} : {{data[title.value]}}</span>
+        </span>
+        <span *ngIf="title.webnametype=='icononly'">
+          <i class="{{title.webicon}} mr-2"></i>
+          <span class="text-truncate">{{data[title.value]}}</span>
+        </span>
+        <span *ngIf="title.webnametype=='none' || !title.webnametype">
+          {{data[title.value]}}
+        </span>
+      </a>
+
+      <div *ngIf="description && !description.redirecturl" class="small">
+        <span *ngIf="description.webnametype=='nameonly'">
+          <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+        </span>
+        <span *ngIf="description.webnametype=='nameicon'">
+          <i class="{{description.webicon}} mr-2"></i>
+          <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+        </span>
+        <span *ngIf="description.webnametype=='icononly'">
+          <i class="{{description.webicon}} mr-2"></i>
+          <span class="text-truncate">{{data[description.value]}}</span>
+        </span>
+        <span *ngIf="description.webnametype=='none' || !description.webnametype">
+          {{data[description.value]}}
+        </span>
+      </div>
+      <a *ngIf="description && description.redirecturl" (click)="redirect(description)" class="small">
+        <span *ngIf="description.webnametype=='nameonly'">
+          <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+        </span>
+        <span *ngIf="description.webnametype=='nameicon'">
+          <i class="{{description.webicon}} mr-2"></i>
+          <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+        </span>
+        <span *ngIf="description.webnametype=='icononly'">
+          <i class="{{description.webicon}} mr-2"></i>
+          <span class="text-truncate">{{data[description.value]}}</span>
+        </span>
+        <span *ngIf="description.webnametype=='none' || !description.webnametype">
+          {{data[description.value]}}
+        </span>
+      </a>
+      <div class="card-footer border-0 py-0">
+        <ng-container *ngIf="getCustomAction()">
+          <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+            [customaction]="getCustomAction()" [data]="data" [AuthService]="AuthService"></custom-action>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="card mb-2 color-card" [ngClass]="{'relative hover-card': hide || !control.showcardheader}"
+      style="margin-left:1px; margin-right:1px;">
+      <div class="px-2 py-1">
+        <div class="d-flex justify-content-between">
+          <div class="small title-text text-truncate" *ngIf="title && !title.redirecturl">
+            <ng-container *ngIf="title.webnametype=='nameonly'">
+              {{title.key}} : {{data[title.value]}}
+            </ng-container>
+            <span class="d-flex align-items-center" *ngIf="title.webnametype=='nameicon'">
+              <i class="{{title.webicon}} mr-2"></i>
+              <span class="text-truncate">{{title.key}} : {{data[title.value]}}</span>
+            </span>
+            <span class="d-flex align-items-center" *ngIf="title.webnametype=='icononly'">
+              <i class="{{title.webicon}} mr-2"></i>
+              <span class="text-truncate">{{data[title.value]}}</span>
+            </span>
+            <ng-container *ngIf="title.webnametype=='none' || !title.webnametype">
+              {{data[title.value]}}
+            </ng-container>
+          </div>
+          <a (click)="redirect(title)" class="small title-text pointer" *ngIf="title && title.redirecturl">
+            <ng-container *ngIf="title.webnametype=='nameonly'">
+              {{title.key}} : {{data[title.value]}}
+            </ng-container>
+            <span class="d-flex align-items-center" *ngIf="title.webnametype=='nameicon'">
+              <i class="{{title.webicon}} mr-2"></i>
+              <span class="text-truncate">{{title.key}} : {{data[title.value]}}</span>
+            </span>
+            <span class="d-flex align-items-center" *ngIf="title.webnametype=='icononly'">
+              <i class="{{title.webicon}} mr-2"></i>
+              <span class="text-truncate">{{data[title.value]}}</span>
+            </span>
+            <ng-container *ngIf="title.webnametype=='none' || !title.webnametype">
+              {{data[title.value]}}
+            </ng-container>
+          </a>
+          <div class="more-dd-overright ml-1" *ngIf="getCustomAction() && control.actionview == 'popover'">
+            <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+              [customaction]="getCustomAction()" [data]="data" [AuthService]="AuthService"></custom-action>
+          </div>
+        </div>
+        <div *ngIf="description && !description.redirecturl" class="small">
+          <span class="text-truncate d-block" *ngIf="description.webnametype=='nameonly'">{{description.key}} :
+            {{data[description.value]}}</span>
+          <span class="d-flex align-items-center" *ngIf="description.webnametype=='nameicon'">
+            <i class="{{description.webicon}} mr-2"></i>
+            <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+          </span>
+          <span class="d-flex align-items-center" *ngIf="description.webnametype=='icononly'">
+            <i class="{{description.webicon}} mr-2"></i>
+            <span class="text-truncate">{{data[description.value]}}</span>
+          </span>
+          <span class="text-truncate d-block" *ngIf="description.webnametype=='none' || !description.webnametype">
+            {{data[description.value]}}
+          </span>
+        </div>
+        <div class="small" *ngIf="description && description.redirecturl">
+          <a (click)="redirect(description)">
+            <span class="text-truncate d-block" *ngIf="description.webnametype=='nameonly'">{{description.key}} :
+              {{data[description.value]}}</span>
+            <span class="d-flex align-items-center" *ngIf="description.webnametype=='nameicon'">
+              <i class="{{description.webicon}} mr-2"></i>
+              <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+            </span>
+            <span class="d-flex align-items-center" *ngIf="description.webnametype=='icononly'">
+              <i class="{{description.webicon}} mr-2"></i>
+              <span class="text-truncate">{{data[description.value]}}</span>
+            </span>
+            <span class="text-truncate d-block" *ngIf="description.webnametype=='none' || !description.webnametype">
+              {{data[description.value]}}
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div [ngClass]="{'border-top': control.actionview != 'popover'}"
+        *ngIf="getCustomAction() && control.actionview != 'popover'">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="getCustomAction()" [data]="data" [AuthService]="AuthService"></custom-action>
+      </div>
+      <div [ngClass]="{'list-card': hide || !control.showcardheader}">
+
+        <ul *ngIf="!control.showcardheader  && mappingFields.length > 0" class="list-group">
+          <ng-container *ngFor="let item of mappingFields">
+            <li class="list-group-item"
+              *ngIf="(item.fieldtype=='none' || item.fieldtype=='') && data[item.value] && !item.redirecturl">
+              <ng-container *ngIf="item.webnametype=='nameonly'">
+                <span class="text-truncate d-block">{{item.key}}</span>
+                <span class="text-truncate text-dark">{{data[item.value]}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='nameicon'">
+                <span class="d-block">
+                  <i class="{{item.webicon}} mr-2"></i>{{item.key}}</span>
+                <span class="text-truncate text-black">{{data[item.value]}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='icononly'">
+                <i class="{{item.webicon}} mr-2"></i>
+                <span class="text-truncate">{{data[item.value]}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='none' || !item.webnametype">
+                {{data[item.value]}}
+              </ng-container>
+            </li>
+            <li class="list-group-item" (click)="redirect(item)"
+              *ngIf="(item.fieldtype=='none' || item.fieldtype=='') && data[item.value] && item.redirecturl">
+              <ng-container *ngIf="item.webnametype=='nameonly'">
+                <span class="text-truncate d-block">{{item.key}}</span>
+                <span class="text-truncate text-black">{{data[item.value]}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='nameicon'">
+                <span class="text-truncate d-block">
+                  <i class="{{item.webicon}} mr-2"></i>{{item.key}}</span>
+                <span class="text-truncate text-black">{{data[item.value]}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='icononly'">
+                <i class="{{item.webicon}} mr-2"></i>
+                <span class="text-truncate">{{data[item.value]}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='none' || !item.webnametype">
+                {{data[item.value]}}
+              </ng-container>
+            </li>
+            <li class="list-group-item" *ngIf="item.fieldtype=='date' && data[item.value]">
+              <ng-container *ngIf="item.webnametype=='nameonly'">
+                <span class="text-truncate d-block">{{item.key}}</span>
+                <span class="text-truncate text-black">{{data[item.value] | dateTz : AuthService.Menu.dateformat :
+                  AuthService.Menu.timezone}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='nameicon'">
+                <span class="text-truncate d-block">
+                  <i class="{{item.webicon}} mr-2"></i>{{item.key}}</span>
+                <span class="text-truncate text-black">{{data[item.value] | dateTz : AuthService.Menu.dateformat :
+                  AuthService.Menu.timezone}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='icononly'">
+                <i class="{{item.webicon}} mr-2"></i>
+                <span class="text-truncate">{{data[item.value] | dateTz : AuthService.Menu.dateformat :
+                  AuthService.Menu.timezone}}</span>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='none' || !item.webnametype">
+                {{data[item.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}
+              </ng-container>
+            </li>
+            <li class="list-group-item" *ngIf="item.fieldtype=='email' && data[item.value]">
+              <ng-container *ngIf="item.webnametype=='nameonly'">
+                <a href="mailto:{{data[item.value]}}" class="d-flex justify-content-center align-items-center">
+                  <span class="text-truncate d-block">{{item.key}}</span>
+                  <span class="text-truncate text-black">{{data[item.value]}}</span>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='nameicon'">
+                <a href="mailto:{{data[item.value]}}" class="d-flex justify-content-center align-items-center">
+                  <span class="text-truncate d-block">
+                    <i class="{{item?.webicon}} mr-2"></i>{{item?.key}}</span>
+                  <div class="text-truncate text-black">{{data[item.value]}}</div>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='icononly'">
+                <a href="mailto:{{data[item.value]}}" class="d-flex justify-content-center align-items-center">
+                  <i class="{{item?.webicon}} mr-2"></i>
+                  <div class="text-truncate">{{data[item.value]}}</div>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="item.webnametype=='none' || !item.webnametype">
+                <a href="mailto:{{data[item.value]}}"
+                  class="d-flex justify-content-center align-items-center">{{data[item.value]}}</a>
+              </ng-container>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="sidebar==false && control?.cardtype=='Custom'" class="card text-wrap unik-2">
+  <div *ngIf="!control.showcardheader && title" class="card-header">
+    <h5 class="m-0" *ngIf="title && !title.redirecturl">
+      <span *ngIf="title.webnametype=='nameonly'">
+        {{title.key}} : {{data[title.value]}}
+      </span>
+      <span *ngIf="title.webnametype=='nameicon'">
+        <i class="{{title.webicon}} mr-2"></i>
+        <span class="text-truncate">{{title.key}} : {{data[title.value]}}</span>
+      </span>
+      <span *ngIf="title.webnametype=='icononly'">
+        <i class="{{title.webicon}} mr-2"></i>
+        <span class="text-truncate">{{data[title.value]}}</span>
+      </span>
+      <span *ngIf="title.webnametype=='none' || !title.webnametype">
+        {{data[title.value]}}
+      </span>
+    </h5>
+
+    <a *ngIf="title && title.redirecturl" (click)="redirect(title)">
+      <h5>
+        <span *ngIf="title.webnametype=='nameonly'">
+          {{title.key}} : {{data[title.value]}}
+        </span>
+        <span *ngIf="title.webnametype=='nameicon'">
+          <i class="{{title.webicon}} mr-2"></i>
+          <span class="text-truncate">{{title.key}} : {{data[title.value]}}</span>
+        </span>
+        <span *ngIf="title.webnametype=='icononly'">
+          <i class="{{title.webicon}} mr-2"></i>
+          <span class="text-truncate">{{data[title.value]}}</span>
+        </span>
+        <span *ngIf="title.webnametype=='none' || !title.webnametype">
+          {{data[title.value]}}
+        </span>
+      </h5>
+    </a>
+  </div>
+  <div *ngIf="control.showcardheader" class="card-header d-flex pointer" (click)="hide = !hide">
+
+    <h6 class="m-0 align-self-center">
+      <span class="m-0 align-self-center" *ngIf="title.webnametype=='nameonly'">
+        {{title.key}} : {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+        data[title.value].substring(0,15)
+        + '..' : data[title.value] ? data[title.value] : '' }}
+      </span>
+      <span class="m-0 align-self-center" *ngIf="title.webnametype=='nameicon'">
+        <i class="{{title.webicon}} mr-2"></i>
+        <span class="text-truncate">
+          {{title.key}} : {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+          data[title.value].substring(0,15)
+          + '..' : data[title.value] ? data[title.value] : '' }}
+        </span>
+      </span>
+      <span class="m-0 align-self-center" *ngIf="title.webnametype=='icononly'">
+        <i class="{{title.webicon}} mr-2"></i>
+        <span class="text-truncate">
+          {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+          data[title.value].substring(0,15) + '..'
+          : data[title.value] ? data[title.value] : '' }}
+        </span>
+      </span>
+      <span class="m-0 align-self-center" *ngIf="title.webnametype=='none' || !title.webnametype">
+        {{ hide ? data[title.value] : (data[title.value] && data[title.value].length>15) ?
+        data[title.value].substring(0,15) + '..'
+        : data[title.value] ? data[title.value] : '' }}
+      </span>
+    </h6>
+    <span class="ml-auto align-self-center" *ngIf="!hide">
+      <i class="fa fa-angle-down pl-2" aria-hidden="true"></i>
+    </span>
+    <span class="ml-auto align-self-center" *ngIf="hide">
+      <i class="fa fa-angle-up pl-2" aria-hidden="true"></i>
+    </span>
+  </div>
+  <a *ngIf="!image.redirecturl && (hide || !control.showcardheader)" class="card-img"
+    [style.background-image]="getBackground(image)"></a>
+  <a *ngIf="image.redirecturl && (hide || !control.showcardheader)" (click)="redirect(image)" class="card-img"
+    [style.background-image]="getBackground(image)"></a>
+
+  <div *ngIf="hide || !control.showcardheader">
+    <div *ngIf="description && !description.redirecturl" class="card-block">
+      <span *ngIf="description.webnametype=='nameonly'">
+        <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+      </span>
+      <span *ngIf="description.webnametype=='nameicon'">
+        <i class="{{description.webicon}} mr-2"></i>
+        <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+      </span>
+      <span *ngIf="description.webnametype=='icononly'">
+        <i class="{{description.webicon}} mr-2"></i>
+        <span class="text-truncate">{{data[description.value]}}</span>
+      </span>
+      <span *ngIf="description.webnametype=='none' || !description.webnametype">
+        {{data[description.value]}}
+      </span>
+    </div>
+    <a *ngIf="description && description.redirecturl" (click)="redirect(description)" class="card-block">
+      <span *ngIf="description.webnametype=='nameonly'">
+        <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+      </span>
+      <span *ngIf="description.webnametype=='nameicon'">
+        <i class="{{description.webicon}} mr-2"></i>
+        <span class="text-truncate">{{description.key}} : {{data[description.value]}}</span>
+      </span>
+      <span *ngIf="description.webnametype=='icononly'">
+        <i class="{{description.webicon}} mr-2"></i>
+        <span class="text-truncate">{{data[description.value]}}</span>
+      </span>
+      <span *ngIf="description.webnametype=='none' || !description.webnametype">
+        {{data[description.value]}}
+      </span>
+    </a>
+    <ul class="list-group list-group-flush list-group-noborder z-depth-0 mt-1">
+      <li class="list-group-item" *ngFor="let item of mappingFields">
+        <div class="mb-1 d-flex justify-content-center align-items-center"
+          *ngIf="(item.fieldtype=='none' || item.fieldtype=='') && data[item.value] && !item.redirecturl">
+          <span *ngIf="item.webnametype=='nameonly'">
+            <span class="text-truncate">{{item.key}} : {{data[item.value]}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='nameicon'">
+            <i class="{{item.webicon}} mr-2"></i>
+            <span class="text-truncate">{{item.key}} : {{data[item.value]}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='icononly'">
+            <i class="{{item.webicon}} mr-2"></i>
+            <span class="text-truncate">{{data[item.value]}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='none' || !item.webnametype">
+            {{data[item.value]}}
+          </span>
+        </div>
+        <div class="mb-1 d-flex justify-content-center align-items-center" (click)="redirect(item)"
+          *ngIf="(item.fieldtype=='none' || item.fieldtype=='') && data[item.value] && item.redirecturl">
+          <span *ngIf="item.webnametype=='nameonly'">
+            <span class="text-truncate">{{item.key}} : {{data[item.value]}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='nameicon'">
+            <i class="{{item.webicon}} mr-2"></i>
+            <span class="text-truncate">{{item.key}} : {{data[item.value]}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='icononly'">
+            <i class="{{item.webicon}} mr-2"></i>
+            <span class="text-truncate">{{data[item.value]}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='none' || !item.webnametype">
+            {{data[item.value]}}
+          </span>
+        </div>
+        <div class="mb-1 d-flex justify-content-center align-items-center"
+          *ngIf="item.fieldtype=='date' && data[item.value]">
+          <span *ngIf="item.webnametype=='nameonly'">
+            <span class="text-truncate">{{item.key}} : {{data[item.value] | dateTz : AuthService.Menu.dateformat :
+              AuthService.Menu.timezone}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='nameicon'">
+            <i class="{{item.webicon}} mr-2"></i>
+            <span class="text-truncate">{{item.key}} : {{data[item.value] | dateTz : AuthService.Menu.dateformat :
+              AuthService.Menu.timezone}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='icononly'">
+            <i class="{{item.webicon}} mr-2"></i>
+            <span class="text-truncate">{{data[item.value] | dateTz : AuthService.Menu.dateformat :
+              AuthService.Menu.timezone}}</span>
+          </span>
+          <span *ngIf="item.webnametype=='none' || !item.webnametype">
+            {{data[item.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}
+          </span>
+        </div>
+        <div class="mb-1" *ngIf="item.fieldtype=='email' && data[item.value]">
+          <div *ngIf="item.webnametype=='nameonly'">
+            <a href="mailto:{{data[item.value]}}" class="d-flex justify-content-center align-items-center">
+              {{item?.key}}
+              <div class="text-truncate">{{data[item.value]}}</div>
+            </a>
+          </div>
+          <div *ngIf="item.webnametype=='nameicon'">
+            <a href="mailto:{{data[item.value]}}" class="d-flex justify-content-center align-items-center">
+              <i class="{{item?.webicon}} mr-2">{{item?.key}}</i>
+              <div class="text-truncate">{{data[item.value]}}</div>
+            </a>
+          </div>
+          <div *ngIf="item.webnametype=='icononly'">
+            <a href="mailto:{{data[item.value]}}" class="d-flex justify-content-center align-items-center">
+              <i class="{{item?.webicon}} mr-2"></i>
+              <div class="text-truncate">{{data[item.value]}}</div>
+            </a>
+          </div>
+          <div *ngIf="item.webnametype=='none' || !item.webnametype">
+            <a href="mailto:{{data[item.value]}}"
+              class="d-flex justify-content-center align-items-center">{{data[item.value]}}</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="card-footer">
+      <div class="d-flex">
+        <ng-container *ngIf="getCustomAction()">
+          <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+            [customaction]="getCustomAction()" [data]="data" [AuthService]="AuthService"></custom-action>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="sidebar==false && control?.cardtype=='CommonCard'" class="position-relative h-100"
+  [ngClass]="{'pt-2' : BookmarkAction || highlighter.length > 0 || control.enableactionlink, 'pt-4' : highlight, 'custom-action-hover' : control.showactiononhover}">
+  <div class="highlight-iconbar d-flex align-items-center" style="z-index: 1">
+    <ng-container *ngFor="let item of highlighter;let i = index">
+      <span class="highlight-item {{getHighlighterClass(item)}}"
+        *ngIf="item && item.webnametype=='nameicon' && getHighlighterTitle(item) && !isHighlighterTitleonHover(item)">
+        <i class="fa-lg {{item.webicon}}"></i>{{getHighlighterTitle(item)}}
+      </span>
+      <span class="highlight-item {{getHighlighterClass(item)}}" title={{getHighlighterTitle(item)}}
+        *ngIf="item && item.webnametype=='icononly' && getHighlighterTitle(item) && !isHighlighterTitleonHover(item)">
+        <i class="fa-lg {{item.webicon}}"></i>
+      </span>
+      <span class="highlight-item {{getHighlighterClass(item)}}"
+        *ngIf="item && getHighlighterTitle(item)  && !isHighlighterTitleonHover(item) && item.webnametype=='nameonly'">
+        {{getHighlighterTitle(item)}}
+      </span>
+      <span class="highlight-item {{getHighlighterClass(item)}}" title={{getHighlighterTitle(item)}}
+        *ngIf="item && getHighlighterTitle(item) && isHighlighterTitleonHover(item) && (item.webnametype=='none' || !item.webnametype)">
+        <i class="fa-lg {{item.webicon}}"></i>
+      </span>
+      <span class="highlight-item {{getHighlighterClass(item)}}"
+        *ngIf="item && !getHighlighterTitle(item) && isHighlighterTitleonHover(item) && (item.webnametype=='none' || !item.webnametype)">
+        <i class="fa-lg {{item.webicon}}"></i>
+      </span>
+
+
+      <span class="highlight-item {{getHighlighterClass(item)}}" title="{{item?.key}}: {{data[item?.value]}}"
+        *ngIf="item && item.webnametype=='nameicon' && !getHighlighterTitle(item) && isHighlighterTitleonHover(item)">
+        <i class="fa-lg {{item.webicon}}"></i>
+      </span>
+      <span class="highlight-item {{getHighlighterClass(item)}}"
+        *ngIf="item && item.webnametype=='icononly' && !getHighlighterTitle(item) && isHighlighterTitleonHover(item)">
+        <i class="fa-lg {{item.webicon}}"></i>
+      </span>
+      <span class="highlight-item {{getHighlighterClass(item)}}" title="{{data[item?.value]}}"
+        *ngIf="item && !getHighlighterTitle(item)  && isHighlighterTitleonHover(item) && item.webnametype=='nameonly'">
+        <i class="fa-lg {{item.webicon}}"></i>
+      </span>
+
+      <span class="highlight-item {{getHighlighterClass(item)}}" title={{getHighlighterTitle(item)}}
+        *ngIf="item && getHighlighterTitle(item) && isHighlighterTitleonHover(item)">
+        <i class="fa-lg {{item.webicon}}"></i>
+      </span>
+    </ng-container>
+    <span class="highlight-item " *ngIf="BookmarkAction">
+      <a *ngFor="let action of BookmarkAction" class="fa-lg pointer" title="Bookmark"
+        (click)="!isbookmarked(action) ? addbookmark(action) : removebookmark(action)">
+        <i class="fa-lg {{isbookmarked(action) ? action.iconbeforebookmark : action.iconafterbookmark}}">
+        </i>
+      </a>
+    </span>
+    <span *ngIf="control.enableactionlink" class="highlight-item mt-1">
+      <i (click)="PinDataModel()" class="fa fa-lg card-pin pointer"
+        [ngClass]="{'fa-check-square-o text-success' : isPinned(), 'fa-square-o' : !isPinned()}"></i>
+    </span>
+  </div>
+  <div class="card-cap-highlight" [ngClass]="InfoHighlighterClass" *ngIf="highlight && highlight.key">
+    <div class="lable-name text-nowrap" *ngIf="highlight.key">{{highlight.key}}</div>
+    <div class="lable-value pt-1">{{data[highlight.value]}}%</div>
+  </div>
+  <div class="d-flex flex-column text-center h-100 position-relative"
+    [ngClass]="{'pt-2' : highlight || BookmarkAction || highlighter.length > 0, 'pt-4' : control.enableactionlink && !image}">
+    <ng-container *ngIf="!control.enablechart">
+      <div *ngIf="!image.redirecturl && (image || control.defaultcardimage)" class="card-img"
+        [ngClass]="{'card-img-circle':control.iscircleimage}"
+        [ngStyle]="{'height':control.imageheight, 'width':control.imagewidth}"
+        [style.background-image]="getBackground(image)"></div>
+      <div *ngIf="image.redirecturl && (image || control.defaultcardimage)" (click)="redirect(image)" class="card-img"
+        [ngStyle]="{'height':control.imageheight, 'width':control.imagewidth}"
+        [style.background-image]="getBackground(image)"></div>
+      <div
+        *ngIf="!image.redirecturl && image && (data[image.value]=='' || data[image.value] ==null || !data[image.value]) && !control.defaultcardimage"
+        class="card-img card-img-placeholder border d-flex justify-content-center align-items-center">
+        <strong>{{titleInitials}}</strong>
+      </div>
+      <div
+        *ngIf="image.redirecturl && image && (data[image.value]=='' || data[image.value] ==null || !data[image.value]) && !control.defaultcardimage"
+        (click)="redirect(image)"
+        class="card-img pointer card-img-placeholder border d-flex justify-content-center align-items-center">
+        <strong>{{titleInitials}}</strong>
+      </div>
+    </ng-container>
+    <div *ngIf="control.enablechart && chartData">
+      <div id="{{'funnel' + index}}" [data]="chartData" FunnelChart></div>
+    </div>
+    <div class="ld-card-title title-text mb-1" *ngIf="title && !title.redirecturl">
+      <div *ngIf="title.webnametype=='nameonly'" [ngClass]="{'text-truncate' : title.oneline}">{{title.key}} :
+        {{data[title.value]}}</div>
+      <div *ngIf="title.webnametype=='nameicon'" [ngClass]="{'text-truncate' : title.oneline}"><i
+          class="{{title.webicon}} mr-2"></i>{{title.key}}
+        : {{data[title.value]}}</div>
+      <div *ngIf="title.webnametype=='icononly'" [ngClass]="{'text-truncate' : title.oneline}"><i
+          class="{{title.webicon}} mr-2"></i>{{data[title.value]}}</div>
+      <div *ngIf="title.webnametype=='none' || !title.webnametype" [ngClass]="{'text-truncate' : title.oneline}">
+        {{data[title.value]}}</div>
+    </div>
+    <div class="ld-card-title title-text mb-1" *ngIf="title && title.redirecturl" (click)="redirect(title)">
+      <div *ngIf="title.webnametype=='nameonly'" [ngClass]="{'text-truncate' : title.oneline}">{{title.key}} :
+        {{data[title.value]}}</div>
+      <div *ngIf="title.webnametype=='nameicon'" [ngClass]="{'text-truncate' : title.oneline}"><i
+          class="{{title.webicon}} mr-2"></i>{{title.key}}
+        : {{data[title.value]}}</div>
+      <div *ngIf="title.webnametype=='icononly'" [ngClass]="{'text-truncate' : title.oneline}"><i
+          class="{{title.webicon}} mr-2"></i>{{data[title.value]}}</div>
+      <div *ngIf="title.webnametype=='none' || !title.webnametype" [ngClass]="{'text-truncate' : title.oneline}">
+        {{data[title.value]}}</div>
+    </div>
+    <div *ngIf="description && !description.redirecturl" class="mb-1 d-flex justify-content-center align-items-center">
+      <div *ngIf="description.webnametype=='nameonly'" [ngClass]="{'text-truncate' : description.oneline}">
+        {{description.key}}
+        : {{data[description.value]}}</div>
+      <div *ngIf="description.webnametype=='nameicon'" [ngClass]="{'text-truncate' : description.oneline}"><i
+          class="{{description.webicon}} mr-2"></i>{{description.key}}
+        : {{data[description.value]}}</div>
+      <div *ngIf="description.webnametype=='icononly'" [ngClass]="{'text-truncate' : description.oneline}"><i
+          class="{{description.webicon}} mr-2"></i>{{data[description.value]}}</div>
+      <div *ngIf="description.webnametype=='none' || !description.webnametype"
+        [ngClass]="{'text-truncate' : description.oneline}">{{data[description.value]}}</div>
+    </div>
+    <div *ngIf="description && description.redirecturl" class="mb-1 d-flex justify-content-center align-items-center"
+      (click)="redirect(title)">
+      <div *ngIf="description.webnametype=='nameonly'" [ngClass]="{'text-truncate' : description.oneline}">
+        {{description.key}}
+        : {{data[description.value]}}</div>
+      <div *ngIf="description.webnametype=='nameicon'" [ngClass]="{'text-truncate' : description.oneline}"><i
+          class="{{description.webicon}} mr-2"></i>{{description.key}}
+        : {{data[description.value]}}</div>
+      <div *ngIf="description.webnametype=='icononly'" [ngClass]="{'text-truncate' : description.oneline}"><i
+          class="{{description.webicon}} mr-2"></i>{{data[description.value]}}</div>
+      <div *ngIf="description.webnametype=='none' || !description.webnametype"
+        [ngClass]="{'text-truncate' : description.oneline}">{{data[description.value]}}</div>
+    </div>
+    <ng-container *ngFor="let item of mappingFields">
+      <div class="mb-1 d-flex justify-content-center align-items-center"
+        *ngIf="(item.fieldtype=='none' || item.fieldtype=='') && data[item.value] && !item.redirecturl">
+        <div *ngIf="item.webnametype=='nameonly'" [ngClass]="{'text-truncate' : item.oneline}">{{item.key}} :
+          {{data[item.value]}}</div>
+        <div *ngIf="item.webnametype=='nameicon'" [ngClass]="{'text-truncate' : item.oneline}"><i
+            class="{{item.webicon}} mr-2"></i>{{item.key}}
+          : {{data[item.value]}}</div>
+        <div *ngIf="item.webnametype=='icononly'" [ngClass]="{'text-truncate' : item.oneline}"><i
+            class="{{item.webicon}} mr-2"></i>{{data[item.value]}}</div>
+        <div *ngIf="item.webnametype=='none' || !item.webnametype" [ngClass]="{'text-truncate' : item.oneline}">
+          {{data[item.value]}}</div>
+      </div>
+      <div class="mb-1 d-flex justify-content-center align-items-center" (click)="redirect(item)"
+        *ngIf="(item.fieldtype=='none' || item.fieldtype=='') && data[item.value] && item.redirecturl">
+        <div *ngIf="item.webnametype=='nameonly'" [ngClass]="{'text-truncate' : item.oneline}">{{item.key}} :
+          {{data[item.value]}}</div>
+        <div *ngIf="item.webnametype=='nameicon'" [ngClass]="{'text-truncate' : item.oneline}"><i
+            class="{{item.webicon}} mr-2"></i>{{item.key}}
+          : {{data[item.value]}}</div>
+        <div *ngIf="item.webnametype=='icononly'" [ngClass]="{'text-truncate' : item.oneline}"><i
+            class="{{item.webicon}} mr-2"></i>{{data[item.value]}}</div>
+        <div *ngIf="item.webnametype=='none' || !item.webnametype" [ngClass]="{'text-truncate' : item.oneline}">
+          {{data[item.value]}}</div>
+      </div>
+      <div class="mb-1 d-flex justify-content-center align-items-center"
+        *ngIf="item.fieldtype=='date' && data[item.value]">
+        <div *ngIf="item.webnametype=='nameonly'" [ngClass]="{'text-truncate' : item.oneline}">{{item.key}} :
+          {{data[item.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</div>
+        <div *ngIf="item.webnametype=='nameicon'" [ngClass]="{'text-truncate' : item.oneline}"><i
+            class="{{item.webicon}} mr-2"></i>{{item.key}}
+          : {{data[item.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</div>
+        <div *ngIf="item.webnametype=='icononly'" [ngClass]="{'text-truncate' : item.oneline}"><i
+            class="{{item.webicon}} mr-2"></i>{{data[item.value]
+          | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</div>
+        <div *ngIf="item.webnametype=='none' || !item.webnametype" [ngClass]="{'text-truncate' : item.oneline}">
+          {{data[item.value]}}</div>
+      </div>
+      <div class="mb-1" *ngIf="item.fieldtype=='email' && data[item.value]"
+        [ngClass]="{'text-truncate' : item.oneline}">
+        <a *ngIf="item.webnametype=='nameonly'" href="mailto:{{data[item.value]}}">{{item?.key}} :
+          {{data[item.value]}}</a>
+        <a *ngIf="item.webnametype=='nameicon'" href="mailto:{{data[item.value]}}">
+          <i class="{{item?.webicon}} mr-2"></i>{{item?.key}} : {{data[item.value]}}
+        </a>
+        <a *ngIf="item.webnametype=='icononly'" href="mailto:{{data[item.value]}}">
+          <i class="{{item?.webicon}} mr-2"></i>{{data[item.value]}}
+        </a>
+        <a *ngIf="item.webnametype=='none' || !item.webnametype"
+          href="mailto:{{data[item.value]}}">{{data[item.value]}}</a>
+      </div>
+      <div class="mb-1" *ngIf="item.fieldtype=='extlink' && data[item.value]"
+        [ngClass]="{'text-truncate' : item.oneline}">
+        <a *ngIf="item.webnametype=='nameonly'" href="{{data[item.value]}}">{{item?.key}}</a>
+        <a *ngIf="item.webnametype=='nameicon'" href="{{data[item.value]}}"><i
+            class="{{item?.webicon}} mr-2"></i>{{item?.key}}</a>
+        <a *ngIf="item.webnametype=='icononly'" href="{{data[item.value]}}"><i class="{{item?.webicon}}"></i></a>
+        <a *ngIf="item.webnametype=='none' || !item.webnametype" href="{{data[item.value]}}">{{data[item.value]}}</a>
+      </div>
+    </ng-container>
+    <!-- <div [ngClass]="{'mt-auto mb--3 border-top' : control.actionview != 'popover' && control.actionview != ''}"
+      *ngIf="getCustomAction()">
+      <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+        [customaction]="getCustomAction()" [data]="data" [AuthService]="AuthService"></custom-action>
+    </div> -->
+    <ng-container *ngIf="control.actionview != 'popover' && control.actionview != '' && control.actionview != ''">
+      <div class="custom-hover-btn"
+        *ngIf="control.showactiononhover && control.CustomAction && control.CustomAction.length > 0">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="control.CustomAction" [data]="data" [AuthService]="AuthService"></custom-action>
+      </div>
+      <div class="mt-auto mb--3 border-top"
+        *ngIf="!control.showactiononhover && control.CustomAction && control.CustomAction.length > 0">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="control.CustomAction" [data]="data" [AuthService]="AuthService"></custom-action>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div class="card mb-0 h-100" *ngIf="sidebar==false && control?.cardtype=='metalcard'"
+  [ngClass]="{'custom-action-hover' : control.showactiononhover}">
+  <div class="card-header {{data['mycandidate'] ? 'bg-info' : 'bg-primary'}}">
+    <div class="proactive-status text-muted"
+      *ngIf="metalCardField?.proactivestatus && data[metalCardField?.proactivestatus?.value]">
+      {{metalCardField?.proactivestatus.key}}
+      <span class=""
+        [ngClass]="{'text-success': data[metalCardField?.proactivestatus?.value]=='Active', 'text-danger': data[metalCardField?.proactivestatus?.value]!='Active'}">
+        {{data[metalCardField?.proactivestatus?.value]}}
+      </span>
+    </div>
+    <div class="card-tag" 
+      *ngIf="metalCardField?.isredeployable && data[metalCardField?.isredeployable?.value]==true">
+      <span>Redeployable</span>
+    </div>
+    <div class="daxtrarelevance text-success"
+      *ngIf="metalCardField?.daxtrarelevance && data[metalCardField?.daxtrarelevance?.value]">
+      <span>{{data[metalCardField?.daxtrarelevance?.value] ? data[metalCardField?.daxtrarelevance?.value] : '---'}}</span>
+    </div>
+    <div *ngIf="metalCardField?.fullname" class="d-flex align-items-center"
+      title={{data[metalCardField?.fullname?.value]}}>
+      <span *ngIf="metalCardField?.actionlink" class="pr-2">
+        <i (click)="PinDataModel()" class="fa fa-lg metal-card-pin pointer"
+          [ngClass]="{'fa-check-square' : isPinned(), 'fa-square' : !isPinned()}"></i>
+      </span>
+      <div class="font-weight-bold text-truncate col-11 p-0">
+        {{data[metalCardField.fullname?.value] && data[metalCardField.fullname?.value].trim() ? data[metalCardField.fullname?.value] : '-'}}
+      </div>
+      <div *ngIf="metalCardField?.isjump && data[metalCardField?.isjump?.value]==true" class="small jump-chip float-right">
+       <span>Jump</span>
+      </div>
+    </div>
+    <div *ngIf="metalCardField?.fullName" class="d-flex align-items-center"
+         title={{data[metalCardField?.fullName?.value]}}>
+      <span *ngIf="metalCardField?.actionlink" class="pr-2">
+        <i (click)="PinDataModel()" class="fa fa-lg metal-card-pin pointer"
+           [ngClass]="{'fa-check-square' : isPinned(), 'fa-square' : !isPinned()}"></i>
+      </span>
+
+      <div class="font-weight-bold text-truncate col-md-10 p-0">
+        {{data[metalCardField.fullName?.value] ? data[metalCardField.fullName?.value] : '-'}}
+      </div>
+      <div class="col-1 float-right p-0" *ngIf="metalCardField?.downloadstatus && data[metalCardField?.downloadstatus?.value]">
+        <span title="{{data[metalCardField?.downloadstatus?.value] ? 'This profile has already been downloaded into METaL' : 'This profile will be downloaded on Add'}}">
+          <img alt="already_downloaded" src="../../../../../wwwroot/assets/img/svg/no_download_profile_white.svg" />
+        </span>
+      </div>
+      <div *ngIf="metalCardField?.isjump && data[metalCardField?.isjump?.value]==true" class="small jump-chip float-right">
+        <span>Jump</span>
+      </div>
+    </div>
+
+    <div *ngIf="metalCardField?.contactname" class="d-flex align-items-center"
+      title={{data[metalCardField?.contactname?.value]}}>
+      <span *ngIf="metalCardField?.actionlink" class="pr-2">
+        <i (click)="PinDataModel()" class="fa fa-lg metal-card-pin pointer"
+          [ngClass]="{'fa-check-square' : isPinned(), 'fa-square' : !isPinned()}"></i>
+      </span>
+      <div class="font-weight-bold text-truncate">
+        {{data[metalCardField.contactname?.value] ? data[metalCardField.contactname?.value] : '-'}}
+      </div>
+    </div>
+    <div class="row my-1" *ngIf="metalCardField?.homelocation">
+      <div class="col-10">
+        <div class="text-truncate" title={{data[metalCardField?.homelocation?.value]}}>
+          <i class="fa fa-map-marker mr-2"></i>{{data[metalCardField?.homelocation?.value] ? data[metalCardField?.homelocation?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-1 p-0 float-right">
+          <span *ngIf="metalCardField?.downloadstatus && data[metalCardField?.downloadstatus?.value]"  >
+            <img alt="already_downloaded" title="{{data[metalCardField?.downloadstatus?.value] ? 'This profile already exists in METaL' : 'This Profile will be downloaded on Add Profile click'}}" src="../../../../../wwwroot/assets/img/svg/no_download_profile_white.svg"/>
+          </span>
+      </div>
+    </div>
+    <div class="row my-1" *ngIf="metalCardField?.city">
+      <div class="col-12">
+        <div class="text-truncate" title={{data[metalCardField?.city?.value]}}>
+          <i class="fa fa-map-marker mr-2"></i>{{data[metalCardField?.city?.value] ? data[metalCardField?.city?.value] : '-'}}
+        </div>
+      </div>
+      
+    </div>
+    <div class="row my-1" *ngIf="metalCardField?.emailid">
+      <div class="col-12">
+        <div class="text-truncate" title={{data[metalCardField?.emailid?.value]}}>
+          <a href="mailto:{{data[metalCardField?.emailid?.value]}}" class="text-white">
+           <!-- <i class="fa fa-envelope mr-2"></i> -->
+            {{data[metalCardField?.emailid?.value]}}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row"
+         *ngIf="(metalCardField?.location || metalCardField?.skills) && metalCardField?.skills?.fieldtype != 'dice'">
+      
+      <div class="col-7" *ngIf="metalCardField?.location">
+        <div class="text-truncate small" [ngClass]="{'text-left': metalCardField?.skills}"
+             title={{data[metalCardField?.location?.value]}}>
+        <!--  <i class="fa fa-map-marker mr-2"></i> -->
+          {{data[metalCardField?.location?.value] ? data[metalCardField?.location?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-5 social-icons">
+        <div *ngFor="let icon of data[metalCardField?.websitelist?.value]">
+          <div class="social-icons-inner"
+               title="" *ngIf="icon.websitetype == 'Linkedin'">
+           <a class="linked" href="{{icon.weburl}}" target="_blank"><i class="fa fa-linkedin social-icons-inner"></i></a> 
+          </div>
+          <div class="social-icons-inner"
+               title="" *ngIf="icon.websitetype == 'Github'">
+            <a class="linked" href="{{icon.weburl}}" target="_blank"><i class="fa fa-github"></i></a>
+          </div>
+          <div class="social-icons-inner"
+               title="" *ngIf="icon.websitetype == 'StackOverflow'">
+            <a class="linked" href="{{icon.weburl}}" target="_blank"><i class="fa fa-stack-overflow"></i></a>
+          </div>
+          <div class="social-icons-inner"
+               title="" *ngIf="icon.websitetype == 'Twitter'">
+            <a class="linked" href="{{icon.weburl}}" target="_blank"><i class="fa fa-twitter"></i></a>
+          </div>
+        </div>
+    
+   
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="row mx-0">
+      <div class="col-6 py-2 border-right border-bottom text-center ehris" *ngIf="metalCardField?.employeestatus">
+        <div class="text-muted small">{{metalCardField?.employeestatus?.key}}</div>
+        <div class="font-weight-bold text-truncate ehris-inner"
+             title="{{data[metalCardField?.employeestatus?.value] ? data[metalCardField?.employeestatus?.value] : ''}}"
+             [ngClass]="{'text-warning': data[metalCardField?.employeestatus?.value]?.toLowerCase()=='pending workflow','text-primary': data[metalCardField?.employeestatus?.value]?.toLowerCase()=='active', 'text-success': data[metalCardField?.employeestatus?.value]?.toLowerCase()=='bench', 'text-danger': data[metalCardField?.employeestatus?.value]?.toLowerCase()=='terminated', 'text-warning': data[metalCardField?.employeestatus?.value]?.toLowerCase()=='pending', 'text-dark': data[metalCardField?.employeestatus?.value]?.toLowerCase()=='others' }">
+          {{data[metalCardField?.employeestatus?.value] ? data[metalCardField?.employeestatus?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-6 py-2 border-bottom text-center ehris">
+        <i class="fa-lg custom-icon-size fa fa-vcard-o resumeupdateddate"></i>
+        <div class="font-weight-bold text-truncate ehris-inner"
+             title="{{data[metalCardField?.latestresumedate?.value] ? data[metalCardField?.latestresumedate?.value] : ''}}">
+          {{data[metalCardField?.latestresumedate?.value] ? data[metalCardField?.latestresumedate?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-12 py-2 border-bottom" *ngIf="metalCardField?.resumetitle">
+        <div class="text-muted small">{{metalCardField?.resumetitle.key}}</div>
+        <div class="text-dark text-truncate"
+             title="{{data[metalCardField?.resumetitle?.value] ? data[metalCardField?.resumetitle?.value] : ''}}">
+          {{data[metalCardField?.resumetitle?.value] ? data[metalCardField?.resumetitle?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-12 py-2 d-flex border-bottom" *ngIf="metalCardField?.skills">
+        <!--<div class="text-muted small">Skills</div> -->
+        <img src="../../../../../wwwroot/assets/img/svg/Skills_Icon.svg" title="Skills">
+        <div class="pl-2 pr-0 text-dark text-truncate-skills"
+             title="{{data[metalCardField?.skills?.value] ? data[metalCardField?.skills?.value] : ''}}">
+          {{data[metalCardField?.skills?.value] ? data[metalCardField?.skills?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-12 journal-card-height border-bottom " *ngIf="(metalCardField?.lastcontactedon  || metalCardField?.lastcontactedby ) && !metalCardField?.lastcontacteddate">
+        <div *ngIf="metalCardField?.candidatejournal" class="candidate-journal text-truncate" title="{{data[metalCardField?.candidatejournal?.value] ? data[metalCardField?.candidatejournal?.value] : ''}}"><span>{{data[metalCardField?.candidatejournal?.value]}}</span></div>
+
+        <div *ngIf="metalCardField?.lastcontactedon" class="text-muted small">
+          <img src="../../../../../wwwroot/assets/img/svg/Contacted.svg" title="contacted">
+          <span class="pl-2">
+            ({{data[metalCardField?.lastcontactedon?.value] ? (data[metalCardField?.lastcontactedon?.value] | dateTz :  AuthService.Menu.dateformat : AuthService.Menu.timezone): 'NA'}})
+          </span>
+        </div>
+        <div *ngIf="metalCardField?.lastcontacteddate" class="text-muted small">
+          {{metalCardField?.lastcontacteddate.key}}
+          <span class="pl-2">
+            ({{data[metalCardField?.lastcontacteddate?.value] ? (data[metalCardField?.lastcontacteddate?.value] | dateTz :  AuthService.Menu.dateformat : AuthService.Menu.timezone) : '-'}})
+          </span>
+        </div>
+        <div *ngIf="metalCardField?.lastcontactedby" class="text-dark text-truncate"
+             title="{{data[metalCardField?.lastcontactedby?.value] ? data[metalCardField?.lastcontactedby?.value] : ''}}">
+          {{data[metalCardField?.lastcontactedby?.value] ? data[metalCardField?.lastcontactedby?.value] : '-'}}
+
+        </div>
+      </div>
+
+      <!-- Contacted and contacted b is deprecated  . Add lastcontacteddate in the above parent div's ngIf condition-->
+      <!-- <div class="col-12 py-2 border-bottom" *ngIf="metalCardField?.contacteddate || metalCardField?.contactedby">
+     <div *ngIf="metalCardField?.contacteddate" class="text-muted small">
+       {{metalCardField?.contacteddate.key}}
+       <span class="pl-2">
+         ({{data[metalCardField?.contacteddate?.value] ? (data[metalCardField?.contacteddate?.value] | dateTz) : 'NA'}})
+       </span>
+     </div>
+
+  <div *ngIf="metalCardField?.contactedby" class="text-dark text-truncate"
+          title="{{data[metalCardField?.contactedby?.value] ? data[metalCardField?.contactedby?.value] : ''}}">
+       {{data[metalCardField?.contactedby?.value] ? data[metalCardField?.contactedby?.value] : '-'}}
+
+     </div>
+
+    </div> -->
+
+      <div class="col-12 py-2 border-bottom">
+        <div class="text-muted small text-truncate">
+          <!--  {{metalCardField?.lastsubmittedon ? metalCardField.lastsubmittedon.key : ( metalCardField?.lastsubmittedreqname ? metalCardField?.lastsubmittedreqname.key : 'Last Submitted' ) }} -->
+          <img src="../../../../../wwwroot/assets/img/svg/REQ_Icon.svg" title="last submitted">
+          <span class="pl-1" [ngClass]="{'req-submitted-ago': data[metalCardField?.lastsubmitteddate?.value]}">
+            {{data[metalCardField?.lastsubmitteddate?.value]}}
+          </span>
+          <span class="pl-1 pr-0" title="{{data[metalCardField?.lastsubmittedby?.value] ? data[metalCardField?.lastsubmittedby?.value] : ''}}">{{data[metalCardField?.lastsubmittedby?.value]}}</span>
+        </div>
+        <div *ngIf="metalCardField?.lastsubmittedon" class="text-dark text-truncate"
+             title="{{data[metalCardField?.lastsubmittedon?.value] ? data[metalCardField?.lastsubmittedon?.value] : ''}}">
+          {{data[metalCardField?.lastsubmittedon?.value] ? data[metalCardField?.lastsubmittedon?.value] : '-'}}
+        </div>
+        <div *ngIf="metalCardField?.lastsubmittedreqname" class="text-dark text-truncate"
+             title="{{data[metalCardField?.lastsubmittedreqname?.value] ? data[metalCardField?.lastsubmittedreqname?.value] : ''}}">
+          {{data[metalCardField?.lastsubmittedreqname?.value] ? data[metalCardField?.lastsubmittedreqname?.value] : '-'}}
+        </div>
+      </div>
+
+      <div class="col-6 py-2 border-right border-bottom text-center">
+        <div class="text-muted small">Work Authorisation</div>
+        <div class="font-weight-bold text-truncate"
+             title="{{data[metalCardField?.workauthtype?.value] ? data[metalCardField?.workauthtype?.value] : ''}}">
+          {{data[metalCardField?.workauthtype?.value] ? data[metalCardField?.workauthtype?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-6 py-2 pr-0 border-right border-bottom text-center">
+        <div class="text-muted small">Job Title</div>
+        <div *ngIf="metalCardField?.jobtitle" class="font-weight-bold text-truncate"
+             title="{{data[metalCardField?.jobtitle?.value] ? data[metalCardField?.jobtitle?.value] : ''}}">
+          {{data[metalCardField?.jobtitle?.value] ? data[metalCardField?.jobtitle?.value] : '-'}}
+        </div>
+        <div *ngIf="metalCardField?.metaljobtitle" class="font-weight-bold text-truncate"
+             title="{{data[metalCardField?.metaljobtitle?.value] ? data[metalCardField?.metaljobtitle?.value] : ''}}">
+          {{data[metalCardField?.metaljobtitle?.value] ? data[metalCardField?.metaljobtitle?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-6 py-2 border-bottom border-right text-center submissiontype">
+        <div class="text-muted small">Submission type</div>
+        <div class="font-weight-bold text-truncate submissiontype-inner"
+             title="{{data[metalCardField?.submissiontype?.value] ? data[metalCardField?.submissiontype?.value] : ''}}">
+          {{data[metalCardField?.submissiontype?.value] ? data[metalCardField?.submissiontype?.value] : '-'}}
+        </div>
+      </div>
+      <div class="col-6 py-2 border-bottom text-center submissiontype" *ngIf="metalCardField?.sector">
+        <div class="text-muted small">{{metalCardField?.sector.key}}</div>
+        <div class="font-weight-bold text-truncate submissiontype-inner"
+             title="{{data[metalCardField?.sector?.value] ? data[metalCardField?.sector?.value] : ''}}"
+             [ngClass]="{'text-purple': data[metalCardField?.sector?.value]?.toLowerCase()=='tag', 'text-success': data[metalCardField?.sector?.value]?.toLowerCase()=='h1b', 'text-warning': data[metalCardField?.sector?.value]?.toLowerCase()=='rfrl', 'text-dark': data[metalCardField?.sector?.value]?.toLowerCase()=='rdpl'}">
+          {{data[metalCardField?.sector?.value] ? data[metalCardField?.sector?.value] : '-'}}
+        </div>
+      </div>
+      <!--   <div class="col-12 py-2 border-bottom" *ngIf="metalCardField?.viewedtime || metalCardField?.viewedby">
+    <div class="text-muted small">
+      {{metalCardField?.viewedtime.key}}
+      <span class="pl-2">
+        ({{data[metalCardField?.viewedtime?.value] && data[metalCardField?.viewedtime?.value].trim() ? data[metalCardField?.viewedtime?.value] : 'NA'}})
+      </span>
+    </div>
+    <div class="text-dark text-truncate"
+      title="{{data[metalCardField?.viewedby?.value] ? data[metalCardField?.viewedby?.value] : ''}}">
+      {{data[metalCardField?.viewedby?.value] && data[metalCardField?.viewedby?.value].trim() ? data[metalCardField?.viewedby?.value] : '-'}}
+    </div>
+  </div>
+  <div class="col-12 py-2 border-bottom" *ngIf="metalCardField?.updateddate">
+    <div class="text-muted small">{{metalCardField?.updateddate.key}}</div>
+    <div class="text-dark text-truncate"
+      title="{{data[metalCardField?.updateddate?.value] ? (data[metalCardField?.updateddate?.value] | dateTz) : ''}}">
+      {{data[metalCardField?.updateddate?.value] ? (data[metalCardField?.updateddate?.value] | dateTz) : '-'}}
+    </div>
+  </div> -->
+      <!-- <div class="col-12 py-2" *ngIf="metalCardField?.primaryspoc">
+    <div class="text-muted small">{{metalCardField?.primaryspoc.key}}</div>
+    <div class="text-dark text-truncate"
+         title="{{data[metalCardField?.primaryspoc?.value] ? data[metalCardField?.primaryspoc?.value] : ''}}">
+      {{data[metalCardField?.primaryspoc?.value] ? data[metalCardField?.primaryspoc?.value] : '-'}}
+    </div>
+  </div> -->
+    </div>
+    <ng-container *ngIf="control.actionview != 'popover' && control.actionview != '' && control.actionview != ''">
+      <div class="custom-hover-btn"
+        *ngIf="control.showactiononhover && control.CustomAction && control.CustomAction.length > 0">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="control.CustomAction" [data]="data" [AuthService]="AuthService"></custom-action>
+      </div>
+      <div class="mt-auto mb--3 border-top"
+        *ngIf="!control.showactiononhover && control.CustomAction && control.CustomAction.length > 0">
+        <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+          [customaction]="control.CustomAction" [data]="data" [AuthService]="AuthService"></custom-action>
+      </div>
+    </ng-container>
+  </div>
+</div>

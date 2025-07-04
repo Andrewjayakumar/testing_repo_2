@@ -1,0 +1,173 @@
+<div class="modal-content" [ngStyle]="{'position': 'absolute', 'top': position?.top, 'left': position?.left}">
+<div *ngIf="cardDisplayRight" [ngStyle]="{'top': candDiv?.top}" class="beak-left-outer"></div>
+<div *ngIf="cardDisplayRight" [ngStyle]="{'top': candDiv?.top}" class="beak-left-inner"></div>
+<div *ngIf="!cardDisplayRight" [ngStyle]="{'top': candDiv?.top}" class="beak-right-outer"></div>
+<div *ngIf="!cardDisplayRight" [ngStyle]="{'top': candDiv?.top}" class="beak-right-inner"></div>
+<div class="action-card-body">
+  <div class="modal-body pt-2i pb-2i">
+    <div class="row">
+      <div class="col-md-10">
+        <div class="text-uppercase">
+          <span class="">{{fullname}}</span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div title="View Profile" class="" (click)="pinClicked()">
+          <i class="fa-lg fa fa-eye"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+      <hr class="hr m-0i">
+  </div>
+  <div class="modal-body pt-2i pb-2i">
+    <div class="row pb-1i">
+      <div class="col-md-2">
+        <div class="color-green">
+          <i class="fa-lg fa fa-solid fa-user"></i>
+        </div>
+      </div>
+      <div class="col-md-10">
+      </div>
+    </div>
+    <div class="row pb-1i">
+      <div title="Sourced By" class="col-md-1">
+        <i class="fa-lg fa fa-plus-circle"></i>
+      </div>
+      <div class="col-md-6">
+        <span>{{candidate?.sourcedby}}</span>
+      </div>
+      <div class="col-md-4 small">
+        <span>{{candidate?.sourcedon | date: "MM/dd/yyyy"}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div title="Submitted By" class="col-md-1">
+        <i class="fa-lg fa fa-check-circle"></i>
+      </div>
+      <div class="col-md-6">
+        <span>{{candidate?.submittedby}}</span>
+      </div>
+      <div class="col-md-4 small">
+        <span>{{candidate?.submittedon | date: "MM/dd/yyyy"}}</span>
+      </div>
+    </div>
+  </div>
+  <div>
+      <hr class="hr m-0i">
+  </div>
+  <div class="modal-body pt-0i pb-0i">
+    <div class="row">
+      <div class="col-md-6 p-2i pl-3i right-separator">
+        <div class="pb-1i">
+          <i class="fa fa-usd"></i>
+        </div>
+        <div>
+          <span>$ {{candidate?.payrateoffered}}</span>
+        </div>
+      </div>
+      <div class="col-md-6 p-2i pl-2i">
+        <div class="pb-1i">
+          <img title="Status" src="../../../../../wwwroot/assets/img/svg/ic-status.svg" width="20" height="20" />
+        </div>
+        <div>
+          <span>Accepted</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+      <hr class="hr m-0i">
+  </div>
+  <div class="modal-body pt-0i pb-0i">
+    <div class="row">
+      <div
+        *ngIf="(candidateStatus == 'Sourced')"
+        class="col-md-2 p-4i right-separator">
+        <div title="Submit" class="rel" (click)="SubmitClicked()">
+          <i class="fa-lg fa fa-check-square-o action-icon"></i>
+        </div>
+      </div>
+      <div
+        *ngIf="(candidateStatus == 'Sourced' && candidate?.attestationlinkstatus != 'bypassed')"
+        class="col-md-2 p-4i right-separator">
+        <div title="Attestation" class="rel" (click)="AttestationClicked()">
+          <i class="fa-lg fa fa-address-card action-icon"></i>
+        </div>
+      </div>
+     
+      <div
+        *ngIf="(candidateStatus == 'Interview' || candidateStatus == 'In Process')"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="Interview" src="../../../../../wwwroot/assets/img/svg/ic-interview.svg" width="20" height="20" (click)="InterviewClicked()" />
+      </div>
+      
+      <div
+        *ngIf="((candidateStatus == 'Interview' || candidateStatus == 'In Process') && !candidate.clientsubmission)"
+        class="col-md-2 p-4i right-separator">
+        <div title="Submit to Client" class="rel" (click)="SubmitToClientClicked()">
+          <i class="fa-lg fa fa-sign-in action-icon"></i>
+        </div>
+      </div>
+      <div
+        *ngIf="(candidateStatus == 'In Process')"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="Reject" src="../../../../../wwwroot/assets/img/svg/ic-rejected.svg" width="20" height="20" (click)="rejectedClicked()"/>
+      </div>
+      <div
+        *ngIf="(candidate?.submissionapproval) && (candidateStatus == 'In Process' || candidateStatus == 'Interview'
+                || candidateStatus == 'Rejected' || candidateStatus == 'Hired')"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="Remove Submission" src="../../../../../wwwroot/assets/img/svg/ic-remove-submission.svg" width="20" height="20" (click)="removeSubmissionClicked()" />
+      </div>
+      <div
+        *ngIf="(candidateStatus == 'Interview')"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="Rejected" src="../../../../../wwwroot/assets/img/svg/ic-rejected.svg" width="20" height="20" (click)="rejectedClicked()" />
+      </div>
+      <div
+        *ngIf="(candidateStatus == 'Hired' && isInitiateWorkflow)"
+        class="col-md-2 p-4i right-separator">
+        <div title="Initiate Workflow" class="rel" (click)="InitiateWorkflowClicked()">
+          <i class="fa-lg fa fa-sitemap action-icon"></i>
+        </div>
+      </div>
+      <div
+        *ngIf="(candidateStatus == 'Interview')"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="Hire Candidate" src="../../../../../wwwroot/assets/img/svg/ic-hire-candidate.svg" width="20" height="20" (click)="hireCandidateClicked()"/>
+      </div>
+      <div
+        *ngIf="(candidateStatus == 'In Process' || candidateStatus == 'Interview'
+                || candidateStatus == 'Rejected' || candidateStatus == 'Hired')"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="View SC and Type" src="../../../../../wwwroot/assets/img/svg/ic-view-sc-type.svg" width="20" height="20" (click)="viewSCandTypeClicked()" />
+      </div>
+      <div
+        *ngIf="(candidateStatus == 'Interview' || candidate?.isvendorattestation)"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="Vendor Attestation" src="../../../../../wwwroot/assets/img/svg/ic-vendor-attestation.svg" width="20" height="20" (click)="vendorAttestationClicked()" />
+        </div>
+      <div
+        *ngIf="(candidateStatus == 'Hired')"
+        class="col-md-2 right-separator centre-icon p-3i">
+          <img title="Bad Delivery" src="../../../../../wwwroot/assets/img/svg/ic-remove-submission.svg" width="20" height="20" (click)="rejectedClicked()"/>
+      </div>
+      
+      <div
+        *ngIf="(candidateStatus == 'Sourced' || candidateStatus == 'In Process')"
+        class="col-md-2 p-4i right-separator">
+        <div title="Attach Tech Rec" class="rel" (click)="attachTechRecClicked()">
+          <i class="fa-lg fa fa-file-video-o action-icon"></i>
+        </div>
+      </div>
+      <div
+        *ngIf="(candidate?.isformatresume)"
+        class="col-md-2 centre-icon p-3i right-separator">
+          <img title="Formatted Resume" src="../../../../../wwwroot/assets/img/svg/ic-formatted-resume.svg" width="20" height="20" (click)="FormattedResumeClicked()"/>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

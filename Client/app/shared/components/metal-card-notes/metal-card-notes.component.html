@@ -1,0 +1,117 @@
+  <div class="">
+  <div class="d-flex justify-content-between">
+    <h6 class="p-3 m-0 pageheading">
+      NOTES
+    </h6>
+    <a class="p-3 ml-auto">
+      <i aria-hidden="true" (click)="modal.close(true)" class="fa fa-times fa-lg close-resume"></i>
+    </a>
+  </div>
+
+  <div class="">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 mt--3">
+
+          <div class="card mb-3 p-0 m-0 border-0">
+
+            <div class="card-body p-0i px-0 pb-0 collapse show" style="height: auto;">
+              <div class="row" id="nameDIsplay">
+                <div class="col-md-8">
+
+
+                  <div title="">
+                    <div class="pb-2 text-primary pb-0i text-capitalize mb--3">
+                      <span class="d-flex">
+
+                        <span id="fullname" class="">{{fullname}}</span>
+
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="">
+            <div class="form-group">
+              <label for="notes">
+                <span></span>
+              </label>
+              <textarea autocomplete="off" class="form-control" id="notes" maxlength="5000" [(ngModel)]="notes" placeholder="Start Typing.." maxlength="5000" style="height: 350px;"></textarea>
+              <span class="form-text secondary-text">{{5000-notes?.length}} character(s) Remaining</span>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <div class="row">
+            <div class="col-12">
+              <ngb-alert #selfClosingAlert
+                         *ngIf="isNotesSaved"
+                         type="success"
+                         (close)="isNotesSaved = ''">
+                Notes saved successfully.
+              </ngb-alert>
+              <ngb-alert #selfClosingAlert
+                         *ngIf="isnoteDelete"
+                         type="success"
+                         (close)="isnoteDelete = ''">
+                Notes deleted successfully.
+              </ngb-alert>
+              <div class="row m-0 float-right">
+                <div class="" *ngIf="!candidateNotesData">
+                  <button *ngIf="notes" (click)="openPopup()" type="button" class="btn pull-right m-0 mt--3 btn-outline-danger btn-md tooltip-w200px">
+                    <i class="fa fa-trash mr-2"></i>
+                    Delete
+                  </button>
+                  <span *ngIf="isnoteDelete" class="col-md-1 mt-2">
+                    <i id="blockSpinner" class="fa fa-circle-o-notch fa-1x fa-spin"></i>
+                  </span>
+                </div>
+
+                <div class="ml-3 mt--3 mr-2" *ngIf="!candidateNotesData">
+                  <button (click)="saveNotesData()" type="button" class="btn btn-primary  tooltip-w200px">
+                    Save
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+           
+
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  <ng-template #content let-c="close" let-d="dismiss" size="sm">
+    <div class="modal-header" style="background-color:#ebebeb">
+      <b class="modal-title">
+      </b>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row m-2">
+
+        Are you sure to delete this notes ?
+      </div>
+
+    </div>
+    <div class="modal-footer" >
+      <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="deleteNotes();c('YES')">Ok</button>
+    </div>
+  </ng-template>

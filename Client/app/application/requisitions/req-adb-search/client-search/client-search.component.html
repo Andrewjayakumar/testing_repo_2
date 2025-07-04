@@ -1,0 +1,272 @@
+
+<div class="list-parent col-md-12">
+
+
+
+  <div class="">
+    <div class="m-top-sm">
+
+      <div class="req-info-details req-info">
+        Client Name
+      </div>
+      <div class="priority req-info">
+        Requisitions
+      </div>
+      <div class="recruiter req-info">
+        Positions
+      </div>
+      <div class="recruiter req-info">
+        Submissions
+      </div>
+
+
+      <div class="maxsubmission req-info">
+        Interviews
+      </div>
+      <div class="positions req-info">
+        Hires
+      </div>
+      <div class="positions req-info">
+        Bad Delivery
+      </div>
+    </div>
+
+    <div class="b-all-light-border">
+
+
+      <div *ngFor="let reqObj of requisition" class="requisition-row">
+
+
+
+        <div class="req-info-details text-primary">
+          <a>{{reqObj?.clientname}}</a>
+
+        </div>
+
+
+        <div class="recruiter forestgreen">
+          {{reqObj?.reqcount}}
+        </div>
+        <div class="recruiter goldenrod">
+          {{reqObj?.noofpositions}}
+        </div>
+        <div class="positions  orangeText">
+          {{reqObj?.submitted}}
+
+        </div>
+
+        <div class="positions blueText">
+          {{reqObj?.interview}}
+
+        </div>
+        <div class="positions  lightOrangetext">
+          {{reqObj?.hired}}
+
+        </div>
+
+        <div class="maxsubmission goldenrod">
+          {{reqObj?.baddelivery}}
+
+        </div>
+
+        <div class="openrequisition openreq">
+          <span><i id="{{clientcode}}" [ngClass]="(clientcode === reqObj?.clientcode)? 'expand_client_results' : 'fa-angle-up'" (click)="expandResults(reqObj?.clientcode,$event)" class="fa fa-angle-up"></i></span>
+
+        </div>
+
+        <div *ngIf="clientcode === reqObj?.clientcode" class="nested-innergrid p-0 m-2">
+
+          <div class="m-top-sm rec-client-details-heading">
+
+            <div class="req-info-details req-info">
+              Requisition Information
+            </div>
+            <div class="priority-inner req-info">
+              Priority
+            </div>
+          <!--  <div class="recruiter-inner req-info">
+              Recruiter
+            </div> -->
+            <div class="recruiter-inner req-info">
+              Sales
+            </div>
+            <div class="positions-inner req-info">
+              Positions
+            </div>
+            <div class="maxsubmission-inner req-info">
+              Max Submission
+            </div>
+            <div class="positions-inner req-info">
+              Submitted
+            </div>
+            <div class="positions-inner req-info">
+              Interview
+            </div>
+            <div class="hire-inner req-info">
+              Hire
+            </div>
+          </div>
+          <div class="requisition-row-inner rec-client-details" *ngFor="let reqclient of reqObj.clientrows">
+
+            <div class="firstDiv">
+              <div class="secDiv">
+
+                <div class="req-info-details text-primary">
+                  <a (click)="gotoReqPage(reqclient?.requisitionid)">{{reqclient?.requisitionname}}</a>
+                  <p class="m-bottom-0 text-small text-small-align">
+                    <span class="m-bottom-0 text-small text-small-align track-clevertap js-no-action text-capitalize  text-semibold track-search-click line-height-18">&nbsp;{{reqclient?.states}}</span>
+                  </p>
+                </div>
+                <div class="priority text-primary" *ngIf="reqclient.prioritytype && reqclient.prioritytype?.toLowerCase() == 'gold'">
+                  <a><img src="../../../../../../wwwroot/assets/img/svg/Gold.svg" alt="grid"></a>
+
+                </div>
+                <div class="priority text-primary" *ngIf="reqclient.prioritytype && reqclient.prioritytype?.toLowerCase() == 'silver'">
+                  <a><img src="../../../../../../wwwroot/assets/img/svg/Silver.svg" alt="silver" /></a>
+
+                </div>
+                <div class="priority text-primary" *ngIf="reqclient.prioritytype && reqclient.prioritytype?.toLowerCase() == 'platinum'">
+                  <a><img src="../../../../../../wwwroot/assets/img/svg/Platinum.svg" alt="platinum" /></a>
+
+                </div>
+                <div class="priority text-primary" *ngIf="reqclient.prioritytype && reqclient.prioritytype?.toLowerCase() == 'bronze'">
+                  <a><img src="../../../../../../wwwroot/assets/img/svg/bronze.svg" alt="bronze" /></a>
+
+                </div>
+                <div class="priority text-primary" *ngIf="reqclient.prioritytype && reqclient.prioritytype?.toLowerCase() == 'process'">
+                  <a>-</a>
+
+                </div>
+                <div class="priority text-primary" *ngIf="reqclient.prioritytype?.toLowerCase() == 'none'">
+                  <a>-</a>
+
+                </div>
+                <div class="priority text-primary" *ngIf="reqclient.prioritytype == null">
+                  <a>-</a>
+
+                </div>
+               <!-- <div class="recruiter-inner  text-small">
+                  {{reqclient?.assignedto ? reqclient?.assignedto:'-'}}
+                </div> -->
+                <div class="recruiter-inner  text-small">
+                  {{reqclient?.salesrepid ? reqclient?.salesrepid:'-'}}
+                </div>
+                <div class="positions-inner  orangeText">
+                  {{reqclient?.positions}}
+
+                </div>
+                <div class="maxsubmission-inner goldenrod">
+                  {{reqclient?.maxsubmissions}}
+
+                </div>
+                <div class="positions-inner blueText">
+                  {{reqclient?.reqsubmitted}}
+
+                </div>
+                <div class="positions-inner  lightOrangetext">
+                  {{reqclient?.reqinterview}}
+
+                </div>
+                <div class="hire-inner greenColorText">
+                  {{reqclient?.reqhired}}
+
+                </div>
+                <div class="poscount">
+
+
+                  <div class="leave-msg-wrap common_arrow" id="{{reqclient?.requisitionid}}">
+                    <ul>
+                      <li>
+                        <a (click)="toggleClass(reqclient?.requisitionid)" class="leave-msg-trigger widthIcons leftArr">
+                          <span class="icon"><i class="fa fa-angle-left fa-lg angle-left-padding"></i></span>
+                        </a>
+                        <a (click)="toggleClass(reqclient?.requisitionid)" class="leave-msg-trigger widthIcons rightArr">
+                          <span class="icon"><i class="fa fa-angle-right fa-lg angle-right-padding"></i></span>
+                        </a>
+                      </li>
+                      <li class="IconLi">
+                        <a class="actionbtn hoverTxt" title="Assign" *ngIf="current_user_role ==3 || current_user_role ==4" (click)="assignReq(reqclient)" data-toggle=""
+                           data-placement="" data-content="">
+                          <img src="../../../../../../wwwroot/assets/img/svg/ic_assign_white.svg" alt="assign" />
+                        </a>
+         
+
+                        <a title="Change Qualification" class="actionbtn hoverTxt" (click)="setQualification(reqclient?.requisitionid)" data-toggle=""
+                           data-placement="" data-content="">
+                          <img src="../../../../../../wwwroot/assets/img/svg/ic_qualification_white.svg" alt="qualification" />
+                        </a>
+
+                        <a title="Quick View" class="actionbtn hoverTxt" data-toggle="" (click)="openQuickView(reqclient?.requisitionid)"
+                           data-placement="" data-content="">
+                          <img src="../../../../../../wwwroot/assets/img/svg/ic_quickview_white.svg" alt="summary" />
+                        </a>
+
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+              <div class="result-separator">
+
+
+              </div>
+              <p class="only-show-on-hover m-bottom-0 text-small other-details">
+                <span class="track-clevertap js-no-action text-capitalize  text-semibold track-search-click line-height-18"><label class="other-details-label">Region:&nbsp;</label>{{reqclient?.region}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small  track-clevertap js-no-action text-capitalize  text-semibold track-search-click line-height-18"><label class="other-details-label">Received Date:&nbsp;</label>&nbsp;{{reqclient?.createdon?.split('T')[0]}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small  track-clevertap js-no-action text-capitalize  text-semibold track-search-click line-height-18"><label class="other-details-label">Status:&nbsp;</label>&nbsp;{{reqclient?.status}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small  track-clevertap js-no-action text-capitalize  text-semibold track-search-click line-height-18"><label class="other-details-label">Type:&nbsp;</label>{{reqclient?.rectype}}</span>
+                <span *ngIf="router?.url == '/apps/requisitionspage/advancesearch'" class="spaceMargin h5">|</span>
+                <span *ngIf="router?.url == '/apps/requisitionspage/advancesearch'" class="m-bottom-0 text-small  track-clevertap js-no-action text-capitalize  text-semibold track-search-click line-height-18"><label class="other-details-label">Qualification:&nbsp;</label>{{reqclient?.qualification ? reqclient?.qualification:'-'}}</span>
+                <!-- <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small  track-clevertap js-no-action text-capitalize  text-semibold track-search-click line-height-18"><label class="other-details-label">Tower:&nbsp;</label>{{reqclient?.towerandsubtower ? reqclient?.towerandsubtower : '-' }}</span> -->
+                <span class="spaceMargin h5">|</span>
+                <span class="track-clevertap recruiter-name-truncate text-capitalize  text-semibold track-search-click line-height-18 recruiter-name-truncate" title="{{reqclient?.assignedto}}"><label class="other-details-label">Recruiter:&nbsp;</label>{{reqclient?.assignedto}}</span>
+
+
+
+              </p>
+
+              <div class="final-result-separator">
+
+
+              </div>
+            </div>
+
+
+          </div>
+          <div class="final-result-separator">
+
+
+          </div>
+        </div>
+
+
+
+      </div>
+
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

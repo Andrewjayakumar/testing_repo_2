@@ -1,0 +1,127 @@
+$primary: #1976d2;
+$gray-default: #7c7c7c;
+$dark-gray: #4c4c4c;
+$bg-gray: #ebebeb;
+
+.heading {
+  color: $primary;
+  padding-top: 19px;
+  margin-bottom: 0;
+  font-variant-caps: small-caps;
+  float: left;
+  font-weight: bold;
+  font-size: medium;
+  margin-top: -5px;
+  padding-left: 20px;
+}
+
+.page-content {
+  overflow: hidden;
+
+  li {
+    a {
+      color: $gray-default;
+    }
+
+    background-color: none;
+  }
+
+  .parent-tab {
+    height: 78vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    background-color: #eee;
+  }
+
+  .card-container {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0 0.5rem 0 1rem;
+    margin: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: #eee;
+
+    > metal-requisition-card {
+      width: 20%;
+    }
+  }
+
+  .sticky-switch {
+    position: sticky;
+    top: 4px;
+    z-index: 3;
+  }
+}
+
+.active-tab {
+  a {
+    color: $primary !important;
+    text-decoration: none;
+  }
+
+  background-color: $bg-gray;
+}
+
+
+.paginator {
+  position: fixed;
+  left: 50%;
+  float: right !important;
+  margin-top: 7px;
+}
+
+
+//Vishnu Added
+
+
+.apply-margin {
+  margin-top: 12px;
+}
+
+.overrides .modal.show .modal-dialog {
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  left: 50%;
+  z-index: 1050;
+  top: 50%;
+  width: 100%;
+  position: absolute;
+}
+
+.overrides .modal .modal-content {
+  height: 90%;
+}
+
+.overrides .modal-content {
+  padding: 0 !important;
+}
+
+.overrides .modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: .3rem;
+  outline: 0;
+}
+
+.modal-background{
+    opacity:0.5!important;
+}
+
+.req-filter{
+    width:92%;
+}
+      
+.req-assign-suc-err-msg{
+    margin:0 auto;
+}
+
+
+
+

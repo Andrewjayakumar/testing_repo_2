@@ -1,0 +1,59 @@
+<div class="" [ngClass]="{'mb-3' : !control.isvertical}">
+  <label *ngIf="control.label">{{control.label}}</label>
+  <ng-container *ngIf="control.progressbartype == 'line'">
+    <ng-container *ngIf="!control.isvertical">
+      <ngb-progressbar [type]="control.barcolor" [value]="data[control.key]" [striped]="control.striped" [animated]="control.animation">{{data[control.key]}}%</ngb-progressbar>
+    </ng-container>
+    <div class="v-progresbar text-center" *ngIf="control.isvertical">
+      <div class="line" [ngStyle]="{'height':control.height}">
+        <span class="bg-{{control.barcolor}}" [ngStyle]="{'height':data[control.key] + '%', 'background':control.customcolor}"></span>
+        <span class="bar-data"><strong>{{data[control.actualvalue] ? data[control.actualvalue] : 0}}</strong> / {{control.totalvalue}}</span>
+      </div>
+      <div class="bartitle">{{control.bartitle}}</div>
+      <div class="barsubtitle">{{control.barsubtitle}}</div>
+    </div>
+  </ng-container>
+  <div *ngIf="control.progressbartype == 'circle'" class="d-flex justify-content-center align-items-center">
+    <div [ngStyle]="{'height.px': control.barheight, 'width.px': control.barwidth}" class="circle-progress d-flex justify-content-center align-items-center">
+
+      <circle-progress [percent]="data[control.key]"
+                       [radius]="100"
+                       [maxPercent]="100"
+                       [clockwise]="control.clockwise"
+                       [responsive]="true"
+                       [showTitle]="control.showTitle"
+                       [title]="'auto'"
+                       [titleColor]="control.titlecolor"
+                       [titleFontSize]="control.titlefontsize"
+                       [animateTitle]="control.animatetitle"
+                       [showSubtitle]="control.showsubtitle"
+                       [subtitle]="control.subtitle"
+                       [subtitleColor]="control.subtitlecolor"
+                       [subtitleFontSize]="control.subtitlefontsize"
+                       [animateSubtitle]="control.animatesubtitle"
+                       [showUnits]="control.showunits"
+                       [units]="control.units"
+                       [unitsFontSize]="control.unitsfontsize"
+                       [unitsColor]="control.unitscolor"
+                       [showBackground]="control.showbackground"
+                       [backgroundStroke]="control.backgroundstroke"
+                       [backgroundStrokeWidth]="control.backgroundStrokeWidth"
+                       [backgroundPadding]="control.backgroundPadding"
+                       [backgroundColor]="control.backgroundColor"
+                       [backgroundOpacity]="control.backgroundOpacity"
+                       [showInnerStroke]="control.showInnerstroke"
+                       [innerStrokeWidth]="control.innerstrokewidth"
+                       [innerStrokeColor]="control.innerstrokecolor"
+                       [space]="control.space"
+                       [toFixed]="control.tofixed"
+                       [renderOnClick]="control.renderonclick"
+                       [outerStrokeWidth]="control.outerstrokewidth"
+                       [outerStrokeColor]="control.outerstrokecolor"
+                       [outerStrokeLinecap]="control.outerstrokelinecap"
+                       [animation]="control.animation"
+                       [animationDuration]="control.animationduration"
+                       [class]="'control.class'"></circle-progress>
+    </div>
+  </div>
+</div>
+

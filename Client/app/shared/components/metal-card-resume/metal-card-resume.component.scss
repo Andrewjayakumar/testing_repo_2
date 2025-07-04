@@ -1,0 +1,83 @@
+$orange: #f5a623 !default;
+.pageheading {
+  color: #1976d2;
+}
+.resume-load-mesg{
+    font-weight:bold;
+}
+.resume-heading {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1976d2;
+}
+.p-heading{
+    padding:0.3rem;
+}
+
+.m-bottom-0 {
+  margin-bottom: 0 !important;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.font-size-14 {
+  font-size: 14px !important;
+}
+
+.text-semibold {
+  font-weight: 600;
+}
+
+.text-small {
+  font-size: 12px;
+  color: darkgray;
+}
+.spaceMargin {
+  margin: 0 12px;
+  color: #a7a7a7;
+}
+
+/* for scrolling the candidate card only */
+#candidateresume {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 80vh;
+}
+
+#candidateresume::-webkit-scrollbar {
+  width: 9px;
+}
+
+#candidateresume::-webkit-scrollbar-thumb {
+  background: rgba(136, 135, 135, 0.69);
+  border-radius: 10px;
+}
+/* for scrolling the candiadte card ends*/
+.modal-header i {
+    padding:10px;
+}
+
+.pointer{
+    cursor:pointer;
+}
+.candidateresume_border {
+  height: 85vh;
+  overflow-y: auto;
+  padding: 15px;
+  border-right: solid 2px #adb5bd;
+  overflow-x: hidden;
+}
+.prescreening{
+  padding: 0 !important;
+  font-size: 12px;
+  white-space: pre-line;
+  text-align: justify;
+
+
+}

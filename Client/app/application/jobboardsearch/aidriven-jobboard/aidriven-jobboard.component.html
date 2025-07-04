@@ -1,0 +1,99 @@
+<div class="container-fluid mt-2">
+  <ul class="nav justify-content-around" role="tablist" #jobtabs>
+    <li class="nav-item">
+      <a data-toggle="tab" role="tab" data-target="#matchingTab" href="#matchingTab" class="active nav-link metal-match-border remove-underline-hover" [ngClass]="{ 'active active-jobboard' : currentTab ==='metal_match' }" (click)="currentTab='metal_match'">
+        <img src="../../../../../wwwroot/assets/img/svg/Metal_Match_Logo.svg" alt="metal_Match" width="90" class="mt-2">
+        <div class="check-image-description ">New AI Matching</div>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a data-toggle="tab" role="tab" href="#metalboolTab" class="active nav-link metal-boolean-board remove-underline-hover" [ngClass]="{ 'active-jobboard' : currentTab==='metal_boolean' }" (click)="currentTab='metal_boolean'; getSearchQuery();">
+        <img src="../../../../../wwwroot/assets/img/metal_logo_blue.png" alt="metalbool" width="90" class="ml-2">
+        <div class="check-image-description  ml-2">Boolean Search</div>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a data-toggle="tab" role="tab" href="#appliedTab" class="nav-link metal-boolean-board remove-underline-hover" [ngClass]="{ 'active-jobboard' : currentTab==='applied' }" (click)="currentTab='applied'">
+        <img src="../../../../../wwwroot/assets/img/applied.png" alt="Applied" width="100" class="ml-2 pb-1">
+      </a>
+    </li>
+    <li class="viewMore" *ngIf="!viewMore" (click)="viewMore = true">
+      <a>View More..</a> 
+    </li>
+    
+      <li *ngIf="viewMore" class="nav-item">
+        <a data-toggle="tab" role="tab" href="#monsterTab" class="nav-link monster-board-border " [ngClass]="{ 'active-jobboard' : currentTab==='monster' }"
+           (click)="currentTab='monster';getSearchQuery();">
+          <img src="../../../../../wwwroot/assets/img/monster-logo.png" alt="monster" width="90" class="ml-2 mt-2">
+        </a>
+      </li>
+      <li *ngIf="viewMore" class="nav-item">
+        <a data-toggle="tab" role="tab" href="#cbTab" class="nav-link carreer-builder-board" [ngClass]="{ 'active-jobboard' : currentTab==='careerbuilder' }" (click)="currentTab='careerbuilder';getSearchQuery();">
+          <img src="../../../../../wwwroot/assets/img/careerbuilder.jpg" alt="cb" width="100" class="mt-1">
+        </a>
+      </li>
+      <li *ngIf="viewMore && showDice" class="nav-item">
+        <a data-toggle="tab" role="tab" href="#diceTab" class="nav-link dice-board" [ngClass]="{ 'active-jobboard' : currentTab==='dice' }" (click)="currentTab='dice'">
+          <img src="../../../../../wwwroot/assets/img/dice-logo.png" alt="dice" width="90" class="ml-2">
+        </a>
+      </li>
+      <li *ngIf="viewMore" class="nav-item">
+        <a data-toggle="tab" role="tab" href="#ceTab" class="nav-link metal-boolean-board remove-underline-hover" [ngClass]="{ 'active-jobboard' : currentTab==='crown' }" (click)="currentTab='crown'">
+          <img src="../../../../../wwwroot/assets/img/svg/CES 6.svg" alt="metalbool" width="90" class="ml-2">
+          <div class="check-image-description">Corporate Employee Search</div>
+
+        </a>
+      </li>
+    
+    
+
+  </ul>
+
+</div>
+
+<div class="tab-content ml-4">
+  <!--METAL MAtch Tab-->
+  <div #metal_match_jobboard id="matchingTab" class="tab-pane fade show active" role="tabpanel" [ngClass]="{'show active' : currentTab ==='metal_match' }">
+    <app-metal-match [aidrivenuser]="isAIDrivenUser" [data]="metalmatchdata"></app-metal-match>
+
+  </div>
+  <!-- Monster Jobboard -->
+  <div #monster_jobboard id="monsterTab" class="tab-pane" [ngClass]=" (currentTab ==='monster' ) ? 'show active' : 'fade'" role="tabpanel">
+
+    <div class="container-fluid">
+ 
+<app-monster-power [requisitionid]="requisitionid"  [searchquery]="boolean_searchQuery" [aidrivenuser]="isAIDrivenUser"></app-monster-power>
+
+        
+      
+    </div>
+  </div>
+
+  <!-- CAreer Builder Tab-->
+  <div #cb_jobboard id="cbTab" class="tab-pane" [ngClass]="(currentTab ==='careerbuilder') ? 'show active' : 'fade'" role="tabpanel">
+    <app-career-builder [data]="metalmatchdata" [requisitionid]="requisitionid" [searchquery]="boolean_searchQuery"  [aidrivenuser]="isAIDrivenUser"></app-career-builder>
+  </div>
+
+  <!-- Dice Tab   -->
+  <div *ngIf="showDice" #dice_jobboard id="diceTab" class="tab-pane fade" [ngClass]="( currentTab ==='dice') ? 'show active' : 'fade'" role="tabpanel">
+    <app-metal-dice [requisitionid]="requisitionid" [searchquery]="boolean_searchQuery"  [aidrivenuser]="isAIDrivenUser"></app-metal-dice>
+  </div>
+
+  <!-- Metal Boolean Search -->
+  <div #metal_jobboard id="metalboolTab" class="tab-pane fade" [ngClass]=" (currentTab ==='metal_boolean') ? 'show active' : 'fade'" role="tabpanel">
+    <app-metal-boolean  [requisitionid]="requisitionid" [searchquery]="boolean_searchQuery" [aidrivenuser]="isAIDrivenUser"></app-metal-boolean>
+  </div>
+
+  <!-- Applied-->
+  <div  #appliedTab id="showappliedTab" class="tab-pane fade" [ngClass]=" (currentTab ==='applied') ? 'show active' : 'fade'" role="tabpanel">
+    <app-metal-applied  [requisitionid]="requisitionid"></app-metal-applied>
+  </div>
+
+
+  <!-- CE search ( CROWN) -->
+  <div #ceTab id="showceTab" class="tab-pane fade" [ngClass]=" (currentTab ==='crown') ? 'show active' : 'fade'" role="tabpanel">
+    <app-metal-ce [isCandidateDashboard]=false [requisitionid]="requisitionid"></app-metal-ce>
+  </div>
+
+</div>

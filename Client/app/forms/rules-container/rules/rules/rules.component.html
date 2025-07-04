@@ -1,0 +1,59 @@
+<div class="row" style="background: lightgray;padding: 20px;">
+  <div class="col-md-6" *ngIf="!option.manualentry">
+    <label class="">Select Control</label>
+    <ss-multiselect-dropdown [options]="dropdownlist" [settings]="mySettings"
+                             [(ngModel)]="model.control"></ss-multiselect-dropdown>
+  </div>
+  <div class="col-md-6" *ngIf="option.manualentry">
+    <label class="">Api Field</label>
+    <input class="form-control"  style="width:100%" mdbActive type="text"
+           [(ngModel)]="model.control" [required]="true">
+  </div>
+  <div class="col-md-6">
+    <label class="">Operator</label>
+    <ss-multiselect-dropdown [options]="operatorList" [settings]="mySettings"
+                             [(ngModel)]="model.operator"></ss-multiselect-dropdown>
+  </div>
+  <div class="col-md-6">
+    <label class="">Value</label>
+    <input class="form-control"  style="width:100%" mdbActive type="text"
+           [(ngModel)]="model.value" [required]="true">
+  </div>
+  <div class="col-md-6">
+    <label class="">Action</label>
+    <div style="width:100%">
+      {{model.action}}
+      <!--<div *ngFor="let opt of dataoptions" class="c-control c-radio c-inline">
+        <label>
+          <input class="c-control-input" type="radio" [name]="uniqueId" [(ngModel)]="model.action" [value]="opt.id">
+          <i class="c-control-indicator fa fa-circle-o"></i>
+          <span class="c-control-description">
+            {{opt.name}}
+          </span>
+        </label>
+      </div>-->
+    </div>
+  </div>
+  <div class="col-md-12"  *ngIf="option.manualentry">
+    <div style="width:100%" class="pb-2" >
+      <div class="c-control c-radio c-inline">
+        <label>
+          <input class="c-control-input" type="radio" [name]="uniqueId" [(ngModel)]="model.condition" [value]="'or'">
+          <i class="c-control-indicator fa fa-circle-o"></i>
+          <span class="c-control-description">
+            OR
+          </span>
+        </label>
+      </div>
+      <div class="c-control c-radio c-inline">
+        <label>
+          <input class="c-control-input" type="radio" [name]="uniqueId" [(ngModel)]="model.condition" [value]="'and'">
+          <i class="c-control-indicator fa fa-circle-o"></i>
+          <span class="c-control-description">
+            AND
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

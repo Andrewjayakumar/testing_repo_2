@@ -1,0 +1,30 @@
+.thanks-page {
+  background: #fff;
+  color: #000;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  overflow:auto;
+  z-index:99999;
+
+  .text-body {
+    background: #000 url(../../../../wwwroot/assets/img/thank-you-bg.jpg) no-repeat right 200px;
+    color: #fff;
+    background-size: cover;
+    min-height: 100vh;
+    h1 {
+      font-size: 42px;
+    }
+
+    p {
+      font-size: 20px;
+    }
+  }
+
+  .thanks-page-logo {
+    margin: 20px;
+    max-width: 300px;
+  }
+}

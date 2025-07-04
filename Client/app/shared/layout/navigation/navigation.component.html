@@ -1,0 +1,18 @@
+<ul class="navbar-nav mr-auto bg-grey" id="menu">
+
+  <li class="nav-item" *ngFor="let item of navItems" [ngClass]="{'custom-dropdown':item.children.length>0}">
+    <!--<pre>{{item|json}}</pre>-->
+    <a class="nav-link pointer sub d-flex" [title]="item.Title" *ngIf="(item.showinmenu != false) && item.children.length>0" [ngClass]="{'custom-dropdown-toggle': headerType != 'sidbar'}" >
+      <i class="{{item.WebIcon}} mr-2 icon-blue" *ngIf="item.WebIcon"></i>{{item.Title}}<i class="fa fa-angle-down ml-auto right-icon"></i>
+    </a>
+
+    <a routerLinkActive="active" [title]="item.Title" [routerLinkActiveOptions]="{exact: true}" class="nav-link" *ngIf="(item.showinmenu != false) && item.children.length==0 " routerLink="{{item.Url}}">
+      <i class="{{item.WebIcon}} mr-2 icon-blue" *ngIf="item.WebIcon"></i>{{item.Title}}
+    </a>
+    <!-- <div class="dropdown-menu dropdown-purple dropdown-primery" >-->
+    <app-navigation [ngClass]="{'custom-dropdown-menu bg-primary': headerType != 'sidbar'}" *ngIf="item.children.length>0" [nochat]="true" [navItems]="item.children"></app-navigation>
+    <!--</div>-->
+  </li>
+  
+
+</ul>

@@ -1,0 +1,397 @@
+<div class="bookmark-outer">
+  <app-actionitemcart [AuthService]="_authservice"></app-actionitemcart>
+</div>
+<div class="container req-container">
+  <div class="row">
+    <div class="col-md-12">
+      <a (click)="bookMark(requisitionDetails?.name)"><i class="fa fa-bookmark rec-name-font"></i></a>
+      <h5 class="text-primary pt-1  m-0  d-inline-block">{{requisitionDetails?.name}}</h5>
+      <div class="col-auto mt-2 pull-right">
+        <button class="btn btn-sm btn-link pull-right pt-0" tabindex="0" title="Close and Back to Req Details page" [routerLink]="['../../recoverview']" [queryParams]="{requisitionid: requisitionid }">
+          <i aria-hidden="true" class="fa fa-times x15"></i>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <nav class="all-ai-items">
+    <ul>
+
+      <li>
+        {{requisitionDetails?.clientname}}  <span class="spaceMargin h5 mr-2">|</span>
+      </li>
+      <li class="mr-2">
+        {{requisitionDetails?.region ? requisitionDetails?.region:'-'}}
+      </li>
+      <li class="mr-1">
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'gold'"><img class="mr-3" src="../../../../../wwwroot/assets/img/svg/Gold.svg" alt="grid"></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'silver'"><img class="mr-3" src="../../../../../wwwroot/assets/img/svg/Silver.svg" alt="silver" /></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'platinum'"><img class="mr-3" src="../../../../../wwwroot/assets/img/svg/Platinum.svg" alt="platinum" /></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'bronze'"><img class="mr-3" src="../../../../../wwwroot/assets/img/svg/bronze.svg" alt="bronze" /></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'diamond'"><img class="mr-3" src="../../../../../wwwroot/assets/img/svg/Diamond.svg" alt="diamond" /></a>
+
+      </li>
+      <li class="mr-1">
+        <img *ngIf="requisitionDetails?.isverified" alt="verified" src="../../../../../wwwroot/assets/img/svg/ic_verified.svg" />
+      </li>
+    </ul>
+    <div>
+      <a title="Click to View Requisition Details" (click)="reqDetails()">
+
+        <img src="../../../../../wwwroot/assets/img/svg/file-info-icon .svg" class="mr-2">
+
+      </a>
+      <a title="click to navigate addupdate Rec" [routerLink]="['/apps/requisitionspage/addupdate']" [queryParams]="{requisitionid: requisitionid }">
+        <img src="../../../../../wwwroot/assets/img/svg/edit.svg" class="ic_edit mr-2">
+
+      </a>
+      <div class="d-inline-block dropdown" ngbDropdown #myDrop="ngbDropdown">
+        <a aria-expanded="false" aria-haspopup="true" ngbDropdownAnchor class="m-r-morebtn" data-toggle="dropdown" id="btnGroupDrop1">
+          <img src="../../../../../wwwroot/assets/img/svg/ic-more.svg" class="ic_edit">
+        </a>
+        <div ngbDropdownMenu aria-labelledby="btnGroupDrop1" x-placement="bottom-end" class="dropdown-menu dropdown-menu-right">
+          <!--<a id="scrolltotop" class="btn  btn- btn-sm" (click)="postVendor()">
+            <i class="fa fa-share-alt mr-2"></i>Post to Vendor
+          </a>-->
+          <a id="scrolltotop" class="btn  btn- btn-sm" (click)="printPreview()">
+            <i class="fa fa-file-text mr-2"></i>Print Preview
+          </a>
+          <a id="scrolltotop" class="btn  btn- btn-sm" (click)="publishJobPosting(requisitionDetails?.publishurl)">
+            <i class="fa fa-telegram mr-2"></i>Publish Job Posting
+          </a>
+          <a id="scrolltotop" class="btn  btn- btn-sm" (click)="updateClientClicked()">
+            <i class="fa fa-eraser mr-2"></i>Update Client Name
+          </a>
+          <a id="scrolltotop" class="btn  btn- btn-sm" (click)="acaBtnClicked()">
+            <i class="fa fa-file-code-o mr-2"></i>Benefit Summaries
+          </a>
+          <a id="scrolltotop" class="btn  btn- btn-sm" (click)="getRateCardDetails()">
+            <i class="fa fa-money mr-2"></i>Ratecard
+          </a>
+          <a id="scrolltotop" class="btn  btn- btn-sm" (click)="getBotResponseDetails()">
+            <i class="fa fa-file-code-o mr-2"></i>BOT Responses
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </nav>
+
+  <!--<div class="row">
+    <img src="../../../../../wwwroot/assets/img/svg/ic-priority.svg" class="ic_priority">
+    {{requisitionDetails?.clientname}}  <span class="spaceMargin h5">|</span>
+    {{requisitionDetails?.region ? requisitionDetails?.region:'-'}}
+    <div class="col-auto mt-2">
+      <img *ngIf="requisitionDetails?.isverified" alt="verified" src="../../../../../wwwroot/assets/img/svg/ic_verified.svg" />
+    </div>
+    <div class="col-md-12">
+      <img src="../../../../../wwwroot/assets/img/svg/edit.svg" class="ic_edit">
+      <img src="../../../../../wwwroot/assets/img/svg/ic-more.svg" class="ic_more">
+    </div>
+
+
+  </div>-->
+
+  <div id="accordionExample" class="">
+    <div class="card card-sub">
+      <div id="headingOne" class="card-header bg-white  border-0 mt-1">
+
+        <h2 class="mb-0 accordion-background">
+
+          <button data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-link accordion-header font-weight-bold collapsible-link collapsed">
+            <span class="text-small">{{requisitionid}}</span>
+
+
+            <span class="text-small  mr-5 float-right">
+              <span class="track-clevertap  text-capitalize"><span class="text-primary">CREATED DATE:&nbsp;</span>{{requisitionDetails?.receiveddate}}</span>
+              <span class="spaceMargin h5">|</span>
+              <span class="m-bottom-0 text-small    text-capitalize"><span class="text-primary">STATUS:&nbsp;</span>&nbsp;{{requisitionDetails?.status}}</span>
+              <span class="spaceMargin h5">|</span>
+              <span class="m-bottom-0 text-small    text-capitalize "><span class="text-primary">TYPE:&nbsp;</span>&nbsp;{{requisitionDetails?.requisitiontype}}</span>
+              <span class="spaceMargin h5">|</span>
+              <span class="m-bottom-0 text-small    text-capitalize"><span class="text-primary">POSITIONS:&nbsp;</span>{{requisitionDetails?.numberofpositions}}</span>
+              <span class="spaceMargin h5">|</span>
+              <span class="m-bottom-0 text-small   text-capitalize"><span class="text-primary">SUBMISSION:&nbsp;</span>{{requisitionDetails?.submission}}</span>
+              <span class="spaceMargin h5">|</span>
+              <span class="m-bottom-0 text-small   text-capitalize"><span class="text-primary">INTERVIEW:&nbsp;</span>{{requisitionDetails?.interview}}</span>
+              <span class="spaceMargin h5">|</span>
+              <span class="track-clevertap  text-capitalize"><span class="text-primary">HIRED:&nbsp;</span>{{requisitionDetails?.hired}}</span>
+              <span class="spaceMargin h5">|</span>
+              <span class="track-clevertap  text-capitalize"><span class="text-primary">BAD DELIVERY:&nbsp;</span>{{requisitionDetails?.baddelivery}}</span>
+
+            </span>
+
+          </button>
+        </h2>
+
+      </div>
+
+      <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse">
+        <div class="card-body inside-collapsable-cotent">
+          <div class="main_div">
+            <ul class="notATable">
+              <li><label>RECEIVED</label><div class="text-small">{{requisitionDetails?.receiveddate}}</div></li>
+              <li><label>CATEGORY</label><div class="text-small">{{requisitionDetails?.category}}</div></li>
+              <li><label>BILL RATE</label><div class="text-small">{{requisitionDetails?.billrate ? requisitionDetails?.billrate: '-'}}</div></li>
+              <li>
+                <label>PRIOROTY</label>
+                <div>
+                  <img src="../../../../../wwwroot/assets/img/svg/Gold.svg" *ngIf="requisitionDetails?.requisitionpriority && requisitionDetails?.requisitionpriority?.toLowerCase() == 'gold'" class="edit-pencil" alt="Gold" width="15" height="15">
+                  <img src="../../../../../wwwroot/assets/img/svg/Silver.svg" *ngIf="requisitionDetails?.requisitionpriority && requisitionDetails?.requisitionpriority?.toLowerCase() == 'silver'" class="edit-pencil" alt="silver" width="15" height="15">
+                  <img src="../../../../../wwwroot/assets/img/svg/Platinum.svg" *ngIf="requisitionDetails?.requisitionpriority && requisitionDetails?.requisitionpriority?.toLowerCase() == 'platinum'" class="edit-pencil" alt="platinum" width="15" height="15">
+                  <img src="../../../../../wwwroot/assets/img/svg/bronze.svg" *ngIf="requisitionDetails?.requisitionpriority && requisitionDetails?.requisitionpriority?.toLowerCase() == 'bronze'" class="edit-pencil" alt="Bronze" width="15" height="15">
+                  <img src="../../../../../wwwroot/assets/img/svg/Diamond.svg" *ngIf="requisitionDetails?.requisitionpriority && requisitionDetails?.requisitionpriority?.toLowerCase() == 'diamond'" class="edit-pencil" alt="Diamond" width="15" height="15">
+                </div>
+              </li>
+
+
+            </ul>
+            <ul class="notATable column-width">
+              <li>
+
+                <label>SALES</label><div>
+
+                  <!--<span *ngIf="!edit">
+                    <input class="inp" name="salesrep" [(ngModel)]="salesrep" #ctrl="ngModel" placeholder="edit" />
+                  </span>-->
+                  <span>{{requisitionDetails?.salesrep ? requisitionDetails?.salesrep : '-' }}</span>
+                  <!--<span *ngIf="!edit">
+                    <i class="fa fa-check add-pointer" (click)="updateRequisition()" aria-hidden="true"></i>
+                    <i class="fa fa-times add-pointer" (click)="edit = !edit" aria-hidden="true"></i>
+
+                  </span>-->
+                </div>
+                <!--<span *ngIf="edit">
+                  <img src="../../../../../wwwroot/assets/img/svg/ic_edit.svg" (click)="edit = !edit" class="edit-pencil" alt="Edit" width="15" height="15">
+                </span>-->
+
+              </li>
+
+              <li>
+                <label>RECRUITER NAME</label><div>
+                  <!--<span *ngIf="!edit2">
+                    <input class="inp" placeholder="edit" />
+                  </span>-->
+                  <span>{{requisitionDetails?.recruitername ? requisitionDetails?.recruitername: '-'}}</span>
+
+                  <!--<span *ngIf="!edit2">
+                    <i class="fa fa-check add-pointer" aria-hidden="true"></i>
+                    <i class="fa fa-times add-pointer" (click)="edit2 = !edit2" aria-hidden="true"></i>
+
+                  </span>-->
+                </div>
+                <!--<span *ngIf="edit2">
+                  <img src="../../../../../wwwroot/assets/img/svg/ic_edit.svg" class="edit-pencil" (click)="edit2 = !edit2" alt="Edit" width="15" height="15">
+                </span>-->
+              </li>
+              <li>
+                <label>VMO NAME</label><div>
+                  <!--<span *ngIf="!edit3">
+                    <input class="inp" placeholder="edit" />
+                  </span>-->
+                  <span>{{requisitionDetails?.vmo ? requisitionDetails?.vmo: '-'}}</span>
+
+                  <!--<span *ngIf="!edit3">
+                    <i class="fa fa-check add-pointer" aria-hidden="true"></i>
+                    <i class="fa fa-times add-pointer" (click)="edit3 = !edit3" aria-hidden="true"></i>
+
+                  </span>-->
+                </div>
+                <!--<span *ngIf="edit3">
+                  <img src="../../../../../wwwroot/assets/img/svg/ic_edit.svg" (click)="edit3 = !edit3" class="edit-pencil" alt="Edit" width="15" height="15">
+                </span>-->
+              </li>
+              <li>
+                <label>INSIDE SALES</label><div>
+                  <!--<span *ngIf="!edit4">
+                    <input class="inp" placeholder="edit" />
+                  </span>-->
+                  <span>{{requisitionDetails?.insidesales ? requisitionDetails?.insidesales: '-'}}</span>
+                  <!--<span *ngIf="!edit4">
+                    <i class="fa fa-check add-pointer" aria-hidden="true"></i>
+                    <i class="fa fa-times add-pointer" (click)="edit4 = !edit4" aria-hidden="true"></i>
+
+                  </span>-->
+                </div>
+                <!--<span *ngIf="edit4">
+                  <img src="../../../../../wwwroot/assets/img/svg/ic_edit.svg" (click)="edit4 = !edit4" class="edit-pencil" alt="Edit" width="15" height="15">
+                </span>-->
+              </li>
+            </ul>
+
+            <ul class="notATable column-width">
+              <li>
+                <label>DELIVERY MANAGER</label><div>
+                  <span>{{requisitionDetails?.deliverymanagerdetails ? requisitionDetails?.deliverymanagerdetails : '-' }}</span>
+
+                </div>
+
+
+              </li>
+              <li>
+                <label>BAND LEVEL</label><div>
+                 <span>{{requisitionDetails?.brandlevel ? requisitionDetails?.brandlevel : '-' }}</span>
+
+                </div>
+
+
+              </li>
+              <li>
+                <label>ROLE FAMILY</label><div>
+                <span>{{requisitionDetails?.rolefamily ? requisitionDetails?.rolefamily : '-' }}</span>
+
+                </div>
+
+
+              </li>
+              <li>
+                <label>SUB ROLE FAMILY</label><div>
+                                                 <span>{{requisitionDetails?.subrolefamily ? requisitionDetails?.subrolefamily : '-' }}</span>
+
+                </div>
+
+
+              </li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <ng-container class="main-section">
+
+    <nav class="mb-4">
+      <ul #tablist role="tablist" class="nav nav-tabs justify-content-lg-start">
+
+        <li class="nav-item">
+          <a data-toggle="tab" role="tab" href="#jobboardRef" class="nav-link" [ngClass]="{ 'active' : currentTab==='jobboard' }"
+             (click)="currentTab='jobboard'">
+            Search Candidate
+          </a>
+        </li>
+        <li class="nav-item">
+          <a data-toggle="tab" role="tab" href="#pipelineRef" class="nav-link" [ngClass]="{ 'active' : currentTab==='pipeline' }"
+             (click)="currentTab='pipeline'">
+            Sourced Pipeline
+          </a>
+        </li>
+
+      </ul>
+
+    </nav>
+
+
+
+
+    <div class="tab-content">
+      <div id="jobboardRef" class="tab-pane fade" role="tabpanel" [ngClass]="{'show active': currentTab=='jobboard'}">
+        <app-jobboard-parent *ngIf="currentTab=='jobboard'" [requisitionid]="requisitionid" [requisitionname]="requisitionName"></app-jobboard-parent>
+      </div>
+    </div>
+    <div class="tab-content">
+      <div id="pipelineRef"  class="tab-pane fade show active" role="tabpanel" [ngClass]="{'show active': currentTab=='pipeline'}">
+        <app-candidate-pipeline *ngIf="currentTab=='pipeline'" [requisitionid]="requisitionid"></app-candidate-pipeline>
+
+      </div>
+    </div>
+  </ng-container>
+
+  <!--<app-jobboard-parent [requisitionid]="requisitionid"></app-jobboard-parent>-->
+
+
+</div>
+<!-- Requisition Details Popup -->
+<ng-template #requisitiondetails let-c="close" let-d="dismiss" size="sm">
+
+<!-- Modal Header -->
+  <div class="modal-header ">
+    <h5 >Requisition Details</h5>
+
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+
+  </div>
+  <!-- Loader Config -->
+  <div *ngIf="showLoader">
+    <div class="loading-indicator">
+      <div class="spinner"></div>
+    </div>
+  </div>
+ 
+  
+
+  <!-- Modal Content -->
+  <div class="modal-body" style="font-weight: 550 !important;" >
+
+    <div *ngIf="errorMessage" class="error">
+     {{errorMessage}}
+    </div>
+    <div *ngIf="!errorMessage">
+    <div class="row" >
+      <div class="col-sm-6 ">
+        <div class="card">
+          <div class="card-body custom-body ">
+            <h5 class="card-title custom-card-title">REQUISITION ID | NAME</h5>
+            <p class="card-text custom-card-text"> <span *ngIf="reqDetail?.description">{{reqDetail?.requisitionid}}</span> 
+              <img src="../../../../../wwwroot/assets/img/svg/dot_icon.svg" ><span *ngIf="reqDetail?.description">{{reqDetail?.name}}</span>  </p>
+            
+          </div>
+        </div>
+      </div>  
+      <div class="col-sm-3 ">
+        <div class="card">
+          <div class="card-body custom-body">
+            <h5 class="card-title custom-card-title">REQUISITION STATUS</h5>
+            <p class="card-text custom-card-text"><span *ngIf="reqDetail?.description">{{reqDetail?.status}}</span> </p>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 ">
+        <div class="card">
+          <div class="card-body custom-body">
+            <h5 class="card-title custom-card-title">JOB TITLE</h5>
+            <p class="card-text custom-card-text"><span *ngIf="reqDetail?.description">{{reqDetail?.jobtitle}}</span></p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body description-body">
+            <h5 class="card-title custom-card-title"> REQUISITION DESCRIPTION </h5>
+              <div class="card-text " style="overflow-y: auto; max-height: 200px;">
+                <p class="card-text custom-card-text" style="text-align: justify; padding:5px">
+                  <span *ngIf="reqDetail?.description" [innerHTML]="reqDetail?.description"></span></p>
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+    
+
+
+
+ 
+</div>
+
+</ng-template>
+
+

@@ -1,0 +1,314 @@
+<div  *ngIf="isUploading" class="customloder d-flex justify-content-center align-items-center">
+  <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+<!-- <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div> -->
+<div class="file-upload mb-3" *ngIf="access == 'write'">
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <div *ngIf="control.uploadtype =='single'" class="">
+    <label class="d-block">
+      {{control.label}}<sup class="text-danger font-weight-bold"
+                            *ngIf="control.require">*</sup>
+    </label>
+
+    
+    <div ng2FileDrop
+         [ngClass]="{'nv-file-over': isFileDropped}"
+         (fileOver)="fileOverDropZone($event)"
+         [uploader]="uploader"
+         class="file-btn well my-drop-container droptarget"
+         (drop)="fileChangeEvent($event)"
+          (dragover)="allowDrop($event)"
+         >
+      Drop File Here
+      <p>Or</p>
+
+      <div class="file-btn btn btn-light"  (mousedown)="(data[control.key] && data[control.key] != 'Attachment' ) || selectedFileNames.length>0 || isDataAvailable ? errorMessage='To upload a new file, please delete the existing one and then click here.' : errorMessage=null"
+           [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}">
+        Browse...
+        <input *ngIf="!control.isuploadonsubmit" class="pointer" type="file" ng2FileSelect [uploader]="uploader"
+               (change)="FileSelected(content)" />
+        <input *ngIf="control.isuploadonsubmit" #fileUpload type="file" name="file" class="pointer"
+               (change)="fileChangeEvent($event)" placeholder="Upload file..." [hidden]="(data[control.key] && data[control.key] != 'Attachment' ) || selectedFileNames.length>0" />
+      </div>
+
+    </div>
+    <span class="chip" *ngIf="isDataAvailable && control.isuploadonsubmit">
+      <span>{{control.placeholder}}</span>
+
+      <span class="px-1">|</span>
+      <i class="fa fa-trash-o pointer" title="Delete file" aria-hidden="true" *ngIf="isDataAvailable"
+         (click)="errorMessage=null;DeleteFile(confimation)"></i>
+    </span>
+
+    <span class="chip filename" *ngIf="selectedFileNames.length>0">
+      <ng-container *ngFor="let fileName of selectedFileNames; let i = index">
+        <span>{{fileName.name}}</span>
+        <span class="px-1">|</span>
+        <a class="p-1 icon-link" (click)="errorMessage=null;DeleteAttachedfile(fileName , true, false , confimation)">
+          <i class="fa fa-trash-o" aria-hidden="true"></i>
+        </a>
+      </ng-container>
+    </span>
+    <!--<span class="chip" *ngIf="data[control.key] && !control.isuploadonsubmit">
+    <a href={{UploadedFile.Name}} target="_blank">
+      <span [innerHTML]="safehtml(UploadedFile.Name)"></span>
+    </a>
+    <span class="px-1">|</span>
+    <i class="fa fa-trash-o pointer" title="Delete file" aria-hidden="true" *ngIf="UploadedFile.Url!='' || UploadedFile.Name!=''"
+       (click)="DeleteFile()"></i>
+  </span>-->
+    <!-- <span class="chip" *ngIf="data[control.key] && control.isuploadonsubmit">
+    <span>{{control.placeholder}}</span>
+
+    <span class="px-1">|</span>
+    <i class="fa fa-trash-o pointer" title="Delete file" aria-hidden="true" *ngIf="data[control.key]"
+      (click)="DeleteFile(confimation)"></i>
+  </span> -->
+    <loaders-css *ngIf="isUploading" [loader]="'ball-pulse'" [loaderClass]="'upload-loader'"></loaders-css>
+    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+  </div>
+
+  <div class="" *ngIf="control.uploadtype!='single'">
+    <div class="d-flex align-items-center">
+      <label class="pb-0 mb-0 pr-3">
+        {{control.label}}<sup class="text-danger font-weight-bold"
+                              *ngIf="control.require">*</sup>
+      </label>
+      <div class="file-btn pointer btn btn-light"
+           [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}">
+        Browse file...
+        <input *ngIf="!control.isuploadonsubmit" class="pointer" type="file" ng2FileSelect [uploader]="uploader"
+               multiple />
+        <input *ngIf="control.isuploadonsubmit" #fileUpload type="file" class="pointer"
+               (change)="fileChangeEvent($event)" placeholder="Upload file..." multiple />
+      </div>
+    </div>
+    <span class="tp-2">
+      <ngb-alert *ngIf="successMessage" type="warning" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+    </span>
+    <div class="text-center p-4" *ngIf="!control.isuploadonsubmit">
+      OR
+    </div>
+    <div *ngIf="!control.isuploadonsubmit" class="well my-drop-zone mb-2" ng2FileDrop
+         [ngClass]="{'nv-file-over': hasBaseDropZoneOver, 'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}"
+         (fileOver)="fileOverBase($event)" [uploader]="uploader">
+      Drop File
+    </div>
+    <div *ngIf="control.isuploadonsubmit">
+      <div class="row" *ngIf="selectedFileNames.length>0">
+
+        <div class="col-md-12 file-table">
+          <ul>
+            <li *ngFor="let fileName of selectedFileNames; let i = index">
+
+              {{fileName.name}}
+              <a class="p-1 icon-link" (click)="DeleteAttachedfile(fileName , true, false, confimation)">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-12 pt-1 pb-1" *ngIf="!control.isuploadonsubmit">
+          <!--|| control.isuploadonsubmit-->
+          <a class="p-1 icon-link" (click)="uploadMultipleFiles()" *ngIf="errorMessage">
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+          </a>
+
+        </div>
+      </div>
+      <div class="row" *ngIf="filelist && filelist.length>0">
+        <div class="col-md-12 file-table">
+          Document(s);
+        </div>
+        <div class="col-md-12 file-table">
+          <ul>
+            <li *ngFor="let file of filelist; let i = index">
+              <a href={{file.attachmenturl}} target="_blank">
+                {{getFileName(file.attachmenturl)}}
+              </a>
+
+              <a class="p-1 icon-link" (click)="DeleteAttachedfile(file, false, false, confimation)">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="uploader.queue.length > 0 && !control.isuploadonsubmit">
+      <div class="row">
+        <div class="col-md-12 file-table py-3">
+          <ngx-datatable class="bootstrap ml-0 mr-0" style="width: 100%" [rows]="uploader.queue" [columnMode]="'force'"
+                         [headerHeight]="'auto'" [footerHeight]="0" [rowHeight]="'auto'">
+            <ngx-datatable-column name="Name" [canAutoResize]="true">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row?.file?.name }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Size" [width]="150" *ngIf="uploader.options.isHTML5" [canAutoResize]="true">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row?.file?.size/1024/1024 | number:'.2' }} MB
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="100" name="status" [canAutoResize]="true">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span *ngIf="row.isSuccess">
+                  <i class="fa fa-check pointer" aria-hidden="true"></i>
+                </span>
+                <span *ngIf="row.isCancel">
+                  <i class="fa fa-window-close-o pointer" aria-hidden="true"></i>
+                </span>
+                <span *ngIf="row.isError">
+                  <i class="fa fa-exclamation pointer" aria-hidden="true"></i>
+                </span>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+        <div class="col-md-12">
+          <a class="p-1 icon-link pointer" (click)="UploadFile()">
+            <i class="fa fa-upload" aria-hidden="true"></i>
+          </a>
+          <a class="p-1 icon-link pointer" (click)="uploader.cancelAll()">
+            <i class="fa fa-ban" aria-hidden="true"></i>
+          </a>
+          <a class="p-1 icon-link pointer" (click)="uploader.clearQueue()">
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+
+  <!-- Modal -->
+  <ng-template #content let-c="close" let-d="dismiss" size="lg" style="width:80% !important">
+    <div class="modal-header">
+      <h4 class="modal-title" style="text-transform:capitalize">{{control.label}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="clearQueue();c('Close click');">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="uploader.queue.length > 0">
+        <div *ngIf="control.uploadtype =='single'">
+          <!--<div style="height:500px;overflow:hidden" *ngIf="uploader.queue[0]?._file.type=='application/pdf'">
+            {{callPreviewFromFile(uploader.queue[0]?._file)}}
+            <i [hidden]="IsPreviewComplete" style="position: absolute;left: 210px;top: 250px;z-index: 1;"><img src="../../../../wwwroot/assets/img/lightbox/preloader.gif" width="20" height="20" /></i>
+            <pdf-viewer [src]="previewSrc"
+                        [page]="1"
+                        [original-size]="false" [render-text]="false" style="overflow:hidden;display:block;width:500px;"></pdf-viewer>
+          </div>-->
+          <div *ngIf="isImage(uploader.queue[0]?._file.type)">
+            <img class="img-fluid mx-auto" src="" imgPreview [image]="uploader.queue[0]?._file" />
+          </div>
+          <div *ngIf="isVideo(uploader.queue[0]?._file.type)">
+            <video class="img-fluid mx-auto" vidpreview [video]="uploader.queue[0]?._file"></video>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="form-group col m-0 mr-2 p-0 break-all">
+        {{uploader.queue[0]?._file.name}}
+        <!--<label [for]="PreviewFileName">File Name</label>-->
+        <!--<input mdbActive type="text" [id]="PreviewFileName"
+               class="form-control"
+               [(ngModel)]="PreviewFileName || uploader.queue[0]?._file.name" (ngModelChange)="PreviewFileName = $event" >-->
+      </div>
+      <a class="btn btn-default waves-effect waves-light ml-auto" (click)="UploadFile();c('Close click');">Upload</a>
+    </div>
+  </ng-template>
+  <!-- Modal -->
+</div>
+<div *ngIf="access != 'write'" class="form-group">
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input"
+           [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+      {{control.label}}
+      <i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i>
+    </label>
+    <h6 class="font-weight-normal">
+      <a href="https://docs.google.com/a/we-empowercities.org/viewer?url={{getDocPreviewURL()}}&embedded=true"
+         *ngIf="!isImagebyExt(UploadedFile.Name)" target="_blank">{{UploadedFile.Name}}</a>
+      <a *ngIf="UploadedFile.Name!=''" href={{getDocPreviewURL()}} target="_blank">
+        <i class="fa fa-download" aria-hidden="true"></i>
+      </a>
+    </h6>
+
+    <div *ngIf="isImagebyExt(UploadedFile.Name)" class="card-block pt-0">
+      <!--<div class="bg-img" [style.background-image]="getBackground(UploadedFile.Url)">
+      </div>-->
+      <img src={{UploadedFile.Url}} class="cardImg mb-1" width="400" height="500" />
+    </div>
+
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input"
+           [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+      {{control.label}}
+      <i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'"
+         (click)="_controlService._toggleSidebar('id',control.id)"></i>
+    </label>
+    <h6 class="font-weight-normal">
+      <span *ngIf="isImagebyExt(UploadedFile.Name)">{{UploadedFile.Name}}</span>
+      <a href="https://docs.google.com/a/we-empowercities.org/viewer?url={{getDocPreviewURL()}}&embedded=true"
+         *ngIf="!isImagebyExt(UploadedFile.Name)" target="_blank">{{UploadedFile.Name}}</a>
+      <a *ngIf="UploadedFile.Name!=''" href={{getDocPreviewURL()}} target="_blank">
+        <i class="fa fa-download" aria-hidden="true"></i>
+      </a>
+    </h6>
+
+    <div *ngIf="isImagebyExt(UploadedFile.Name)" class="card-block pt-0">
+      <!--<div class="bg-img" [style.background-image]="getBackground(UploadedFile.Url)">
+        </div>-->
+      <img src={{UploadedFile.Url}} class="cardImg mb-1" width="400" height="500" />
+    </div>
+  </ng-container>
+</div>
+<!-- Modal viewer -->
+<ng-template #viewer let-c="close" let-d="dismiss" size="lg" style="width:80% !important">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">{{UploadedFile.Name}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="clearQueue();c('Close click');">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <iframe src="viewerFile"></iframe>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-default waves-effect waves-light ml-auto" (click)="c('Close click');">Close</a>
+  </div>
+</ng-template>
+<!-- Modal viewer -->
+<!-- Modal viewer -->
+<ng-template #confimation let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">Delete File</h4>
+    <button type="button" class="close" aria-label="Close" (click)="Deleteconfirm='NO';c('Close click');">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">Are you sure you want to delete this file?</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary waves-effect"
+            (click)="Deleteconfirm='NO';c('Close click')">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-outline-primary waves-effect"
+            (click)="Deleteconfirm='YES';c('Close click')">
+      Yes
+    </button>
+  </div>
+</ng-template>
+<!-- Modal viewer -->
+<ngb-alert *ngIf="errorMessage && control.uploadtype =='single'" [type]="'danger'" (close)="errorMessage = null">
+  {{errorMessage}}
+</ngb-alert>

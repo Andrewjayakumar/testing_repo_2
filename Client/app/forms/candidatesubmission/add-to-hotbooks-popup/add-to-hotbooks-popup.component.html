@@ -1,0 +1,73 @@
+<div class="box-shadow">
+  <div class="modal-header w-100 p-1 pl-3 pt-3">
+    <h5 class="text-primary">Add Candidate to Hotbook</h5>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modal.close(true);"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form #form="ngForm" (ngSubmit)="OnSubmitClicked()">
+    <div class="modal-body p-0 pb-1 pl-5">
+
+      <div class="row mb-3">
+        <div class="col-md-10 form-group ui-control-block">
+          <label class="label mandatory title" for="distance">Select Hotbook</label>
+          <ng-select
+            [items]="hotbookList | async"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="tagname"
+            bindValue="tagid"
+            [virtualScroll]="true"
+            id="hbSelected"
+            [(ngModel)]="hotbookSelected"
+            placeholder="Type to search"
+            class="form-control"
+            [ngModelOptions]="{ standalone: true }"
+            [typeahead]="hotbookInput$"
+            [loading]="isHotbookInputLoading"
+            (change)="hotbookChanged($event)"
+          >
+          </ng-select>
+        </div>
+        <div *ngIf="hotbookSelected"  class="col-md-10 form-group ui-control-block">
+          <label class="label mandatory title" for="distance">Select Demand Plan</label>
+          <ng-select 
+          class="form-control"
+                     [items]="demandPlansList"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     bindLabel="demandname"
+                     bindValue="demandid"
+                     placeholder="Select Demand Plan"
+                     [(ngModel)]="demandPlanSelected"
+                     class="form-control"
+                     [ngModelOptions]="{standalone: true}"
+                     name="Demand Plan">
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="errormessage" *ngIf="errorMessage">{{errorMessage}}</div>
+      <div class="message" *ngIf="displaymesg">{{displaymesg}}</div>
+
+    </div>
+
+    <div class="modal-footer">
+      <input
+        type="submit"
+        role="button"
+        class="btn btn-primary pull-right"
+        value="Add"
+      />
+    </div>
+  </form>
+</div>
+
+

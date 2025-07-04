@@ -1,0 +1,257 @@
+<form #projectDetailForm="ngForm" novalidate>
+  <div class="row">
+
+    <div class="form-group col-md-6 ui-control-block">
+      <label class="label_text_candidate" for="interviewfrom">Project Name</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <input class="form-control" id="projectname" [(ngModel)]="model.projectname"
+               #projectname="ngModel" placeholder="Project Name"
+               name="projectname" required>
+        <small *ngIf="!model.projectname && (projectname.dirty || projectname.touched) || (!model.projectname && nextClicked)"
+               class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+
+      </div>
+    </div>
+
+    <div class="form-group col-md-4 ui-control-block">
+      <label class="label_text_candidate" for="interviewfrom">Project Status</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <ng-select [items]="projectStatus"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="false"
+                   bindLabel="projectstatus"
+                   bindValue="projectstatusid"
+                   [(ngModel)]="model.projectstatusid"
+                   #projectstatus="ngModel"
+                   name="projectstatus"
+                   placeholder="Select Project Status" class="form-control" required>
+        </ng-select>
+
+      </div>
+      <small *ngIf="!model.projectstatusid && (projectstatus.dirty || projectstatus.touched) || (!model.projectstatusid && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+  </div>
+  <div class="row">
+
+    <div class="form-group col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="interviewfrom">Project Type</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <ng-select [items]="projectType"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="false"
+                   bindLabel="projecttype"
+                   bindValue="projecttype"
+                   [(ngModel)]="model.projecttype"
+                   (change)="onProjectTypeChange($event)"
+                   #projecttype="ngModel"
+                   name="projecttype"
+                   placeholder="Select Project Status" class="form-control"
+                   required>
+        </ng-select>
+
+      </div>
+      <small *ngIf="!model.projecttype && (projecttype.dirty || projecttype.touched) || (!model.projecttype && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+    <div class="form-group col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="interviewfrom">Total Contract Value(in $)</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <input class="form-control" id="projectname" name="totalcontractnumber" [(ngModel)]="model.totalcontractnumber" #totalcontractnumber="ngModel" placeholder="Total contract value"     (input)="ValidationAllowOnlyNumber($event)"
+         required>
+        <small *ngIf="!model.totalcontractnumber && (totalcontractnumber.dirty || totalcontractnumber.touched) || (!model.totalcontractnumber && nextClicked)"
+               class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+
+      </div>
+    </div>
+    <div class="form-group col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="interviewfrom">Expenses Budget(in $)</label>
+      <div class="input-group">
+        <input class="form-control" id="projectname" name="expensesbudget" [(ngModel)]="model.expensesbudget" #expensesbudget="ngModel" placeholder="Expenses Budget" (input)="ValidationAllowOnlyNumber($event)">
+        
+
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="row">
+
+
+
+    <div class="form-group col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="billingtype">Billing Type</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <ng-select [items]="billingType"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="false"
+                   bindLabel="name"
+                   bindValue="value"
+                   [(ngModel)]="model.msprojecttype" #msprojecttype="ngModel"
+                   name="msprojecttype"
+                   placeholder="Billing Type" class="form-control" required>
+        </ng-select>
+
+
+      </div>
+      <small *ngIf="!model.msprojecttype && (msprojecttype.dirty || msprojecttype.touched) || (!model.msprojecttype && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+    <div class=" col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="billingstatus">Billing Status</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <ng-select [items]="billingStatus"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="false"
+                   bindLabel="name"
+                   bindValue="value"
+                   [(ngModel)]="model.billingstatus" #billingstatus="ngModel"
+                   name="billingstatus"
+                   placeholder="Billing Status" class="form-control" required>
+        </ng-select>
+
+      </div>
+      <small *ngIf="!model.billingstatus && (billingstatus.dirty || billingstatus.touched) || (!model.billingstatus && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+ 
+
+
+  </div>
+
+
+  <div class="row">
+
+    <div class="form-group col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="noofpositions">No.of Positions</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <input class="form-control" id="noofpositions" type="number" [(ngModel)]="model.noofpositions" #noofpositions="ngModel"
+               placeholder="No. of Positions"
+               name="noofpositions" required>
+        <small *ngIf="!model.noofpositions && (noofpositions.dirty || noofpositions.touched) || (!model.noofpositions && nextClicked)"
+               class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+      </div>
+    </div>
+
+    <div class="form-group col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="deliverymodel">Delivery Model</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <ng-select [items]="deliveryModel"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="false"
+                   bindLabel="name"
+                   bindValue="value"
+                   name="location"
+                   [(ngModel)]="model.location" #location="ngModel"
+                   placeholder="Delivery model" class="form-control"  (change)="onDeliveryModelChange($event)" required>
+        </ng-select>
+
+      </div>
+      <small *ngIf="!model.location && (location.dirty || location.touched) || (!model.location && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+    <div class=" col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="leadsource">Lead Source</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <ng-select [items]="leadSourcelist"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="false"
+                   bindLabel="name"
+                   bindValue="value"
+                   [(ngModel)]="model.leadsource" 
+                   #leadsource="ngModel"
+                   name="leadsource"
+                   placeholder="Select Source" 
+                   class="form-control" 
+                   required>
+        </ng-select>
+
+      </div>
+      <small *ngIf="!model.leadsource && (leadsource.dirty || leadsource.touched) || (!model.leadsource && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+  
+    
+
+  </div>
+
+  <div class="row">
+
+    <div *ngIf="model.projecttype === 'Managed Fixed Capacity' || model.projecttype === 'Managed Variable Capacity'" class="form-group col-md-3 ui-control-block">
+      <label class="label_text_candidate" for="techcategoryid">Technology Category</label>
+      <sup class="text-danger font-weight-bold">*</sup>
+
+      <div class="input-group">
+        <ng-select [items]="technology"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="false"
+                   bindLabel="name"
+                   bindValue="value"
+                   name="techcategoryid"
+                   [(ngModel)]="model.techcategoryid"
+                   #techcategoryid="ngModel"
+                   placeholder="Select Category"
+                   (change)="onTechCategory($event)"
+                   class="form-control"
+                   required>
+        </ng-select>
+
+      </div>
+      <small *ngIf="!model.techcategoryid && (techcategoryid.dirty || techcategoryid.touched) || (!model.techcategoryid && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 ui-control-block">
+      <label>
+        Project Description
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+    </div>
+
+    <div class="col-md-12">
+
+      <div contenteditable="true" class="editable"  (blur)="editorFocusOut($event, this); touched=true" #editor name="desc" [innerHtml]="model.projectdescription" required>
+
+      </div>
+      <small *ngIf="!model.projectdescription && touched || (!model.projectdescription && nextClicked)"
+             class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+    </div>
+
+
+  </div>
+</form>

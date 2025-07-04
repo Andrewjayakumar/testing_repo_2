@@ -1,0 +1,347 @@
+<div class="card mb-2" *ngIf="control.viewtype !='form' && control.viewtype !='list'">
+  <div class="card-header" *ngIf="!control.hideheader">
+    <div *ngIf="access == 'write'" class="d-flex align-items-center">
+      <i class="text-primary fa fa-check-square-o pr-2"
+        *ngIf="data[this.control.key] && data[this.control.key].length > 0"></i>
+      <div>{{control.label}}</div>
+    </div>
+    <div *ngIf="access != 'write'" class="d-flex align-items-center">
+      <div
+        *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+        <i class="secondary-text fa fa-check-square-o pr-2"
+          *ngIf="data[this.control.key] && data[this.control.key].length > 0"></i>
+        <span class="editebl-input"
+          [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+            class="fa fa-pencil pointer" aria-hidden="true"
+            (click)="_controlService._toggleSidebar('id',control.id)"></i></span>
+      </div>
+      <div *ngIf="access!='mandatory'">
+        <i class="text-primary fa fa-check-square-o pr-2"
+          *ngIf="data[this.control.key] && data[this.control.key].length > 0"></i>
+        <span class="editebl-input"
+          [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+            class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'"
+            (click)="_controlService._toggleSidebar('id',control.id)"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div *ngIf="control.refresh == true">
+      <button class="btn btn-outline-primary" (click)="Refresh()" title="Refresh grid binding field details"><i
+          class="fa fa-refresh" aria-hidden="true"></i></button>
+      <small class="text-success" *ngIf="SuccessMessage!==''">{{SuccessMessage}}</small>
+      <small class="text-warning" *ngIf="ErrorMessage!==''">{{ErrorMessage}}</small>
+    </div>
+    <div *ngIf="control.viewtype=='grid'">
+      <div class="table-responsive">
+        <table class="table" *ngIf="control.viewtype=='grid'">
+          <tr *ngIf="!control.hideheader">
+            <th *ngFor="let childctrl of control.children">
+              <strong> {{childctrl?.placeholder}}</strong>
+            </th>
+            <th></th>
+            <!--<th><a (click)="Addrow()" class="btn btn-md btn-default btn-my-circle  waves-effect waves-light"><i class="fa fa-plus" aria-hidden="true"></i></a></th>-->
+          </tr>
+          <tr *ngFor="let row of data[control.key] | filter:filter">
+            <td *ngFor="let ch of control.children">
+              <app-dynamicformcontrolls [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="row"
+                [access]="access" [formdata]="formdata"></app-dynamicformcontrolls>
+            </td>
+            <td class="text-right align-middle" *ngIf="!control.hideaddbtn">
+              <a (click)="DeleteRow(row,content)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="pt-3 text-right" *ngIf="!control.hideaddbtn && (!control.Maxrow || data[control.key]?.length < control.Maxrow)">
+        <button type="button" class="btn btn-outline-primary" (click)="Addrow()"
+          *ngIf="access=='write' && sidebar==false">
+          <i class="fa fa-plus mr-1"></i>{{control.addnewlabel ? control.addnewlabel : 'Add New'}}
+        </button>
+      </div>
+    </div>
+    <div *ngIf="control.viewtype=='vertical grid'">
+      <div class="table-responsive">
+        <table class="table" *ngIf="control.viewtype=='vertical grid'">
+          <tr *ngFor="let childctrl of control.children">
+            <td><strong>{{childctrl?.placeholder}}</strong></td>
+            <td *ngFor="let row of data[control.key] | filter:filter">
+              <app-dynamicformcontrolls [AuthService]="AuthService" [control]="childctrl" [formGroup]="formGroup"
+                [data]="row" [access]="access" [formdata]="formdata"></app-dynamicformcontrolls>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="pt-3 text-right" *ngIf="!control.Maxrow || data[control.key]?.length < control.Maxrow">
+        <button type="button" (click)="Addrow()" class="btn btn-outline-primary"
+          *ngIf="access=='write' && sidebar==false">
+          <i class="fa fa-plus mr-1"></i>{{control.addnewlabel ? control.addnewlabel : 'Add'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-2" *ngIf="control.viewtype =='form'">
+  <div class="card-header">
+    <div *ngIf="access == 'write'" class="d-flex">
+      <i class="text-primary fa fa-check-square-o pr-2"
+        *ngIf="data[this.control.key] && data[this.control.key].length > 0"></i>
+      <div>{{control.label}}</div>
+    </div>
+    <div *ngIf="access != 'write'" class="d-flex">
+      <ng-container
+        *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+        <i class="text-primary fa fa-check-square-o pr-2"
+          *ngIf="data[this.control.key] && data[this.control.key].length > 0"></i>
+        <span class="editebl-input"
+          [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+            class="fa fa-pencil pointer" aria-hidden="true"
+            (click)="_controlService._toggleSidebar('id',control.id)"></i></span>
+      </ng-container>
+      <ng-container *ngIf="access!='mandatory'">
+        <i class="text-primary fa fa-check-square-o pr-2"
+          *ngIf="data[this.control.key] && data[this.control.key].length > 0"></i>
+        <span class="editebl-input"
+          [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i
+            class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'"
+            (click)="_controlService._toggleSidebar('id',control.id)"></i></span>
+      </ng-container>
+    </div>
+  </div>
+  <div class="card-body">
+    <div *ngIf="control.refresh == true">
+      <button class="btn btn-outline-primary" (click)="Refresh()" title="Refresh grid binding field details"><i
+          class="fa fa-refresh" aria-hidden="true"></i></button>
+      <small class="text-success" *ngIf="SuccessMessage!==''">{{SuccessMessage}}</small>
+      <small class="text-warning" *ngIf="ErrorMessage!==''">{{ErrorMessage}}</small>
+    </div>
+    <div *ngIf="control.viewtype=='form'">
+      <!--<div class="col-md-2 offset-10"></div>-->
+      <div *ngIf="Iscontrolladded">
+        <div *ngFor="let row of data[control.key] | filter:filter">
+          <div class="card mb-1">
+            <div class="card-header d-flex align-items-center pointer" (click)="row['Isshow'] = !row['Isshow']">
+              <div *ngIf="control.headerfield">{{row[control.headerfield]}}</div>
+              <span class="ml-auto pl-2 pr-3" *ngIf="row['Isshow']"><i class="fa fa-angle-down"
+                  aria-hidden="true"></i></span>
+              <span class="ml-auto pl-2 pr-3" *ngIf="!row['Isshow']"><i class="fa fa-angle-up"
+                  aria-hidden="true"></i></span>
+
+              <a class="pointer" (click)="DeleteRow(row,content)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            </div>
+            <div class="card-body" [ngbCollapse]="row['Isshow']">
+              <div class="row">
+                <app-dynamicformcontrolls *ngFor="let ctrl of control.children" [control]="ctrl" [formGroup]="formGroup"
+                  [data]="row" [access]="access" class="col-md-{{ctrl.width}} {{ctrl.colclass}}" [formdata]="formdata"
+                  [AuthService]="AuthService">
+                </app-dynamicformcontrolls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span *ngIf="!Iscontrolladded">
+        {{ calladdcontroll() }}
+      </span>
+
+      <div class="pt-3 text-right" *ngIf="!control.Maxrow || data[control.key]?.length < control.Maxrow">
+        <button type="button" class="btn btn-round btn-outline-primary" (click)="Addrow()"
+          *ngIf="access=='write'  && sidebar==false">
+          <i class="fa fa-plus pr-md-1"></i><span
+            class="d-none d-md-inline">{{control.addnewlabel ? control.addnewlabel : 'Add New'}}</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<ngb-alert *ngIf="formSuccessMessageText" type="custom" (close)="formSuccessMessageText = null">
+  <span class="d-flex align-items-center justify-content-center">
+    <i class="fa-3x {{formSuccessMessage.icon}} pr-3 text-success"></i>
+    <span>
+      <span class="h5 d-block text-dark">{{formSuccessMessage.title}}</span>
+      <span>{{formSuccessMessageText}}</span>
+    </span>
+  </span>
+  <!--{{ formSuccessMessageText }}-->
+</ngb-alert>
+<div class="mb-2" *ngIf="control.viewtype =='list'">
+  <ng-sidebar-container>
+    <ng-sidebar [(opened)]="_opened" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+      <div class="d-flex justify-content-between">
+        <h5 class="p-3 m-0">{{AddEditForm?.Formname}}</h5>
+        <a class="p-3 ml-auto" (click)="_opened=!_opened">
+          <i class="fa fa-close" aria-hidden="true"></i>
+        </a>
+      </div>
+      <div class="sidbar-body sidbar75 111">
+        <div class="container-fluid" *ngIf="AddEditForm && !control.isaccordion">
+          <div class="row">
+
+            <app-dynamicformcontrolls *ngFor="let ctrl of AddEditForm.controls" [control]="ctrl" [formGroup]="form"
+              [data]="row" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}}">
+            </app-dynamicformcontrolls>
+          </div>
+          <div class="pt-3 text-right">
+            <button class="btn btn-outline-primary" (click)="Save()">
+              Save
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!AddEditForm">
+          <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+        </div>
+      </div>
+    </ng-sidebar>
+    <div ng-sidebar-content>
+      <div class="text-right" *ngIf="!control.showformonpage && !control.isaccordion">
+        <button class="btn btn-round btn-outline-primary" (click)="OpenAddform()">
+          <i class="fa fa-plus pr-md-1"></i><span
+            class="d-none d-md-inline">{{control.addnewlabel ? control.addnewlabel : 'Add New'}}</span>
+        </button>
+      </div>
+      <ng-container *ngIf="control.showformonpage">
+        <div *ngIf="AddEditForm">
+          <div class="row">
+            <app-dynamicformcontrolls *ngFor="let ctrl of AddEditForm.controls" [control]="ctrl" [formGroup]="form"
+              [data]="row" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}}">
+            </app-dynamicformcontrolls>
+          </div>
+          <div class="pt-3 text-right">
+            <button class="btn btn-outline-primary" (click)="Save()">
+              Save
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!AddEditForm">
+          <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="data[control.key]">
+        <ng-container *ngIf="control.isaccordion">
+          <ngb-accordion #acc="ngbAccordion" activeIds="0" closeOthers="true" destroyOnHide="false"
+            (panelChange)="isApiCalling=true;getAccordionData($event)">
+            <ngb-panel *ngFor="let col of data[control.key]; trackBy: trackByFn;let i=index" id="{{i}}">
+              <ng-template ngbPanelTitle>
+                <app-card-option-ui *ngIf="CardForm" [FormCardUI]="CardForm" [CardformGroup]="CardformGroup"
+                  [data]="col" [control]="cardgridoption" [index]="i" [AuthService]="AuthService">
+                </app-card-option-ui>
+              </ng-template>
+              <ng-template ngbPanelContent>
+                <div class="card">
+                  <div class="card-body position-relative">
+                    <div class="row" *ngIf="AddEditForm && !isApiCalling">
+                      <app-dynamicformcontrolls *ngFor="let ctrl of AddEditForm.controls" [control]="ctrl"
+                        [formGroup]="form" [data]="accordiondata" [access]="'write'" [AuthService]="AuthService"
+                        class="col-md-{{ctrl.width}}">
+                      </app-dynamicformcontrolls>
+                    </div>
+                    <div *ngIf="!AddEditForm || isApiCalling" class="d-flex justify-content-center">
+                      <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
+          <!-- <ng-container *ngFor="let col of data[control.key];let i=index">
+            <div class="card" [ngClass]="{'mt-2': i != 0}">
+              <div class="card-header d-flex align-items-center pointer"
+                (click)="accordiondata = {};isApiCalling=true;activepanel=col[control.primarykey];getAccordionData(col)">
+                <app-card-option-ui *ngIf="CardForm" [FormCardUI]="CardForm" [CardformGroup]="CardformGroup"
+                  [data]="col" [control]="cardgridoption" [index]="i" [AuthService]="AuthService"></app-card-option-ui>
+
+                <div *ngIf="!CardForm">
+                  loading...
+                </div>
+              </div>
+              <div class="card-body position-relative d-none" [ngClass]="{'d-block': activepanel==col[control.primarykey]}">
+                <div class="row" *ngIf="AddEditForm">
+                  <app-dynamicformcontrolls *ngFor="let ctrl of AddEditForm.controls" [control]="ctrl"
+                    [formGroup]="form" [data]="accordiondata" [access]="'write'" [AuthService]="AuthService"
+                    class="col-md-{{ctrl.width}}">
+                  </app-dynamicformcontrolls>
+                </div>
+                <div *ngIf="!AddEditForm || isApiCalling" class="d-flex justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container> -->
+        </ng-container>
+        <ng-container *ngIf="!control.isaccordion">
+          <div class="row" *ngFor="let col of data[control.key] | sortarray: '-createddate'">
+            <div class="col position-relative">
+              <div class="py-2 border-bottom grid-list">
+                <app-card-option-ui [FormCardUI]="CardForm" [CardformGroup]="CardformGroup" [data]="col"
+                  [control]="cardgridoption" [index]="i" [AuthService]="AuthService"></app-card-option-ui>
+                <div class="grid-list-custom-action">
+                  <ng-container *ngFor="let action of control.CustomAction">
+                    <a *ngIf="action.ActionType == 'edit'" class="btn btn-sm btn-{{action.buttontype}}"
+                      (click)="Edit(col)">
+                      <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                        class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+                      </i>
+                      <span
+                        *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+                    </a>
+                    <a *ngIf="action.ActionType == 'delete'" class="btn btn-sm btn-{{action.buttontype}}"
+                      (click)="Delete(content,col)">
+                      <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                        class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+                      </i>
+                      <span
+                        *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+                    </a>
+                    <a *ngIf="action.ActionType == 'select'" class="btn btn-sm btn-{{action.buttontype}}"
+                      (click)="customAction(action,content)">
+                      <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                        class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+                      </i>
+                      <span
+                        *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+                    </a>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <div *ngIf="data[control.key] && data[control.key].length==0"
+        class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+        [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+        <div class="mb-3" *ngIf="control.nodataimage">
+          <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+        </div>
+        <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+        <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+      </div>
+    </div>
+
+  </ng-sidebar-container>
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <!--<div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">Alert!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="Deleteconfirm='NO';d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>-->
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">Are you sure want to delete?</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="Deleteconfirm='YES';c('Close click')">Yes</button>
+    <button type="button" class="btn btn-outline-primary" (click)="Deleteconfirm='NO';c('Close click')">No</button>
+  </div>
+</ng-template>
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>

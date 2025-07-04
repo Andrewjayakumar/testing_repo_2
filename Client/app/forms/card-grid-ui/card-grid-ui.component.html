@@ -1,0 +1,351 @@
+<!--grid-->
+<form role="form" *ngIf="control.enableadvancesearch">
+  <ng-container *ngIf="advanceSearchformJson && advanceSearchModelJson">
+    <div class="row">
+      <ng-container *ngFor="let ctrl of advanceSearchformJson.controls">
+        <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="advanceSearchModelJson" [access]="'write'"
+          [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+        </app-dynamicformcontrolls>
+      </ng-container>
+    </div>
+  </ng-container>
+  <div *ngIf="!advanceSearchformJson || !advanceSearchModelJson">
+    <b *ngIf="!nosearchform">{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+  </div>
+  <div class="mb-3 d-flex justify-content-between" *ngIf="control.enableadvancesearch && advanceSearchformJson">
+    <button *ngIf="!nosearchform" class="btn btn-primary" (click)="this.resultList=[];SearchApiCall(); page=1">Search</button>
+    <button *ngIf="!nosearchform" class="btn btn-outline-primary ml-3" (click)="resetSearchFields()">Clear</button>
+    <button *ngIf="control.enableexport" placement="{{control.exporttooltipplacement}}"
+      ngbTooltip="{{control.exporttooltip}}" type="button"
+      class="btn {{control.exportcutomclass}} btn-{{control.exportbuttontype}} btn-{{control.exportsize}}"
+      (click)="SearchApiCall(true)">
+      <ng-container *ngIf="!control.webnametype || control.webnametype=='nameonly'">
+        <span class="text-truncate d-block">{{control.exportbuttontext}}</span>
+      </ng-container>
+      <ng-container *ngIf="control.webnametype=='nameicon'">
+        <span class="text-truncate d-block">
+          <i class="{{control.webicon}} mr-2"></i>{{control.exportbuttontext}}</span>
+      </ng-container>
+      <ng-container *ngIf="control.webnametype=='icononly'">
+        <i class="{{control.webicon}} mr-2"></i>
+      </ng-container>
+    </button>
+  </div>
+</form>
+<div *ngIf="!control.enableadvancesearch && control.enableexport" class="mb-3 d-flex justify-content-between">
+  <button placement="{{control.exporttooltipplacement}}" ngbTooltip="{{control.exporttooltip}}" type="button"
+    class="btn {{control.exportcutomclass}} btn-{{control.exportbuttontype}} btn-{{control.exportsize}}"
+    (click)="ResultApiCall(true)">
+    <ng-container *ngIf="!control.webnametype || control.webnametype=='nameonly'">
+      <span class="text-truncate d-block">{{control.exportbuttontext}}</span>
+    </ng-container>
+    <ng-container *ngIf="control.webnametype=='nameicon'">
+      <span class="text-truncate d-block">
+        <i class="{{control.webicon}} mr-2"></i>{{control.exportbuttontext}}</span>
+    </ng-container>
+    <ng-container *ngIf="control.webnametype=='icononly'">
+      <i class="{{control.webicon}} mr-2"></i>
+    </ng-container>
+  </button>
+</div>
+<span class="d-flex h-auto justify-content-end pb-1" *ngIf="resultList.length > 0 && control.showtotalcount">
+  {{control.totalcountlabel}} : {{control.apifieldforcounts && totalCount ? totalCount  : resultList.length}}
+</span>
+<ng-container *ngIf="control.ViewType=='SliderView'">
+  <h3 *ngIf="control.slideviewoption!='none'">
+    <a *ngIf="control.slideviewoption=='redirectnewtab'" target="_blank" href=""
+      [routerLink]="[control.sidebarredirecturl,'']" class="btn btn-link">See All</a>
+    <a *ngIf="control.slideviewoption=='redirectsametab'" class="btn btn-link"
+      [routerLink]="[control.sidebarredirecturl,'']">See All</a>
+  </h3>
+  <ng-container *ngIf="resultList.length > 0">
+    <swiper [config]="{
+      slidesPerView:control.slidersize,
+      pagination: '.swiper-pagination',
+      paginationClickable: true,
+      nextButton: '.swiper-button-next',
+      prevButton: '.swiper-button-prev',
+      spaceBetween: -1
+    }" #usefulSwiper class="w-100">
+      <div class="swiper-wrapper d-flex">
+        <div class="swiper-slide d-flex h-auto justify-content-center" *ngFor="let col of resultList; let i=index">
+          <app-card-option-ui [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" class="w-100 d-block"
+            [data]="col" [control]="control" [title]="title" [description]="description" [image]="image" [data]="data"
+            [highlight]="highlight" [highlighter]="highlighter" [skill]="skill" [mappingFields]="mappingFields"
+            [params]="RedirectParams" [index]="i" [AuthService]="AuthService"></app-card-option-ui>
+        </div>
+      </div>
+      <div *ngIf="control.sliderpagination" class="swiper-pagination"></div>
+      <div *ngIf="control.slidernavigation" class="swiper-button-prev"></div>
+      <div *ngIf="control.slidernavigation" class="swiper-button-next"></div>
+    </swiper>
+  </ng-container>
+  <div *ngIf="resultList.length==0 && !isApiCalling"
+    class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+    [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+</ng-container>
+<!--grid-->
+<ng-container *ngIf="control.ViewType=='grid' && control.PagingType=='server' && control.masonrylayout!=true && !control.pagenumbers">
+  <ng-container *ngIf="resultList.length > 0">
+    <div class="row"
+      [ngClass]="{'matal-card-row': control.cardtype =='metalcard', 'ld-card-outer m-0 mb-3 border border-right-0 border-bottom-0': control.cardtype !='metalcard'}"
+      *ngIf="!control.enablemultiview; else multiview">
+      <div class="col-md-4 col-lg-3"
+        [ngClass]="{'matal-card-col': control.cardtype =='metalcard','ld-card p-3 border border-left-0 border-top-0':control.cardtype !='metalcard'}"
+        *ngFor="let col of resultList;  let i = index; trackBy: trackByFn;">
+        <app-card-option-ui [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [data]="col" [control]="control"
+          [title]="title" [description]="description" [image]="image" [data]="data" [highlight]="highlight"
+          [highlighter]="highlighter" [skill]="skill" [mappingFields]="mappingFields" [params]="RedirectParams"
+          [index]="i" [AuthService]="AuthService">
+        </app-card-option-ui>
+      </div>
+    </div>
+  </ng-container>
+  <div *ngIf="resultList.length==0 && !isApiCalling"
+    class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+    [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+  <div class="mb-3 text-center" *ngIf="control.PagingType=='server' && showloadmore">
+    <a class="btn btn-outline-primary" (click)="control.enableadvancesearch ? SearchApiCall() : ResultApiCall()">Load
+      More</a>
+  </div>
+</ng-container>
+<!--grid with page numbers -->
+<ng-container *ngIf="control.ViewType=='grid' && control.PagingType=='server' && control.masonrylayout!=true && control.pagenumbers">
+  <ng-container *ngIf="resultList.length > 0">
+    <div class="row"
+         [ngClass]="{'matal-card-row': control.cardtype =='metalcard', 'ld-card-outer m-0 mb-3 border border-right-0 border-bottom-0': control.cardtype !='metalcard'}"
+         *ngIf="!control.enablemultiview; else multiview">
+      <div class="col-md-4 col-lg-3"
+           [ngClass]="{'matal-card-col': control.cardtype =='metalcard','ld-card p-3 border border-left-0 border-top-0':control.cardtype !='metalcard'}"
+           *ngFor="let col of resultList | paginate: { itemsPerPage: control.PageSize, currentPage: page, totalItems : totalCount }; let i = index ">
+        <app-card-option-ui [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [data]="col" [control]="control"
+                            [title]="title" [description]="description" [image]="image" [data]="data" [highlight]="highlight"
+                            [highlighter]="highlighter" [skill]="skill" [mappingFields]="mappingFields" [params]="RedirectParams"
+                            [index]="i" [AuthService]="AuthService">
+        </app-card-option-ui>
+      </div>
+    </div>
+    <div class="mb-2 text-center" *ngIf="control.PagingType=='server' ">
+      <pagination-controls  maxSize="5" (pageChange)="page=$event; onPageChange($event)" >
+      </pagination-controls>
+    </div>
+  </ng-container>
+  <div *ngIf="resultList.length==0 && !isApiCalling"
+       class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+       [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+ 
+</ng-container>
+<ng-container *ngIf="control.ViewType=='grid' && control.PagingType=='client' && control.masonrylayout!=true">
+  <ng-container *ngIf="resultList.length > 0">
+    <div class="row"
+      [ngClass]="{'matal-card-row': control.cardtype =='metalcard', 'ld-card-outer m-0 mb-3 border border-right-0 border-bottom-0': control.cardtype !='metalcard'}"
+      *ngIf="!control.enablemultiview; else multiview">
+      <div class="ld-card col-md-4 col-lg-3 p-3 border border-left-0 border-top-0"
+        *ngFor="let col of resultList | paginate: { itemsPerPage: control.PageSize, currentPage: page };  let i = index">
+        <app-card-option-ui [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [data]="col" [control]="control"
+          [title]="title" [description]="description" [image]="image" [data]="data" [highlight]="highlight"
+          [highlighter]="highlighter" [skill]="skill" [mappingFields]="mappingFields" [params]="RedirectParams"
+          [index]="i" [AuthService]="AuthService">
+        </app-card-option-ui>
+      </div>
+      <div class="col-12" *ngIf="resultList && resultList.length > control.PageSize">
+        <pagination-controls *ngIf="resultList && resultList.length > control.PageSize" (pageChange)="page = $event">
+        </pagination-controls>
+      </div>
+    </div>
+  </ng-container>
+  <div *ngIf="resultList.length==0 && !isApiCalling"
+    class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+    [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+</ng-container>
+<!--end grid-->
+<!--list-->
+<ng-container *ngIf="control.ViewType=='list' && control.PagingType=='server'">
+  <ng-container *ngIf="resultList.length > 0">
+    <ng-container *ngIf="!control.enablemultiview; else multiview">
+      <div class="row" *ngFor="let col of resultList;  let i = index">
+        <div class="col">
+          <app-card-option-ui [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [data]="col" [control]="control"
+            [title]="title" [description]="description" [image]="image" [data]="data" [highlight]="highlight"
+            [highlighter]="highlighter" [skill]="skill" [mappingFields]="mappingFields" [params]="RedirectParams"
+            [index]="i" [AuthService]="AuthService">
+          </app-card-option-ui>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+  <div *ngIf="resultList.length==0 && !isApiCalling"
+    class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+    [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+  <div class="mb-3 mt-2 text-center" *ngIf="showloadmore">
+    <a class="btn btn-outline-primary" (click)="control.enableadvancesearch ? SearchApiCall() : ResultApiCall()">Load
+      More</a>
+  </div>
+</ng-container>
+<ng-container *ngIf="control.ViewType=='list' && control.PagingType=='client'">
+  <ng-container *ngIf="resultList.length > 0">
+    <ng-container *ngIf="!control.enablemultiview; else multiview">
+      <div class="row"
+        *ngFor="let col of resultList  | paginate: { itemsPerPage: control.PageSize, currentPage: page };  let i = index">
+        <div class="col">
+          <app-card-option-ui [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [data]="col" [control]="control"
+            [title]="title" [description]="description" [image]="image" [data]="data" [highlight]="highlight"
+            [highlighter]="highlighter" [skill]="skill" [mappingFields]="mappingFields" [params]="RedirectParams"
+            [index]="i" [AuthService]="AuthService">
+          </app-card-option-ui>
+        </div>
+      </div>
+      <pagination-controls *ngIf="resultList && resultList.length > control.PageSize" (pageChange)="page = $event">
+      </pagination-controls>
+    </ng-container>
+  </ng-container>
+  <div *ngIf="resultList.length==0 && !isApiCalling"
+    class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+    [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+</ng-container>
+<ng-template #multiview>
+  <app-grid-ui *ngIf="control.multiview && control.multiview.length == 1 && control.multiview.indexOf('accordion')>-1" [control]="control" [formGroup]="formGroup"
+    [data]="resultList" [AuthService]="AuthService">
+  </app-grid-ui>
+  <app-advance-grid-ui *ngIf="control.multiview && control.multiview.length == 1 && control.multiview.indexOf('advancegrid')>-1" [control]="control" [formGroup]="formGroup"
+    [data]="resultList" [AuthService]="AuthService">
+  </app-advance-grid-ui>
+  <ngb-tabset class="tab-filter-icon" *ngIf="control.multiview && control.multiview.length > 1">
+    <ngb-tab id="Grid" *ngIf="control.multiview.indexOf('cardgrid')>-1">
+      <ng-template ngbTabTitle>
+        <i class="fa fa-th-large"></i>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div class="row"
+          [ngClass]="{'matal-card-row': control.cardtype =='metalcard', 'ld-card-outer m-0 mb-3 border border-right-0 border-bottom-0': control.cardtype !='metalcard'}">
+          <div class="col-md-4 col-lg-3"
+            [ngClass]="{'matal-card-col': control.cardtype =='metalcard','ld-card p-3 border border-left-0 border-top-0':control.cardtype !='metalcard'}"
+            *ngFor="let col of resultList;  let i = index; trackBy: trackByFn;">
+            <app-card-option-ui [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [data]="col"
+              [control]="control" [title]="title" [description]="description" [image]="image" [data]="data"
+              [highlight]="highlight" [highlighter]="highlighter" [skill]="skill" [mappingFields]="mappingFields"
+              [params]="RedirectParams" [index]="i" [AuthService]="AuthService">
+            </app-card-option-ui>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="advancegrid" *ngIf="control.multiview.indexOf('advancegrid')>-1">
+      <ng-template ngbTabTitle>
+        <i class="fa fa-list"></i>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <app-advance-grid-ui [control]="control" [formGroup]="formGroup" [data]="resultList"
+          [AuthService]="AuthService"></app-advance-grid-ui>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="accordion" *ngIf="control.multiview.indexOf('accordion')>-1">
+      <ng-template ngbTabTitle>
+        <i class="fa fa-table"></i>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <app-grid-ui [control]="control" [formGroup]="formGroup" [data]="resultList" [AuthService]="AuthService">
+        </app-grid-ui>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</ng-template>
+<!--End list-->
+<!-- <div *ngIf="control.enableadvancesearch && advanceSearchformJson && advanceSearchModelJson">
+  <div class="d-flex justify-content-start" *ngIf="_controlservice.dataModel.length > 0">
+    <a class="btn btn-primary" (click)="submitPin(content);">Submit</a>
+  </div>
+</div> -->
+<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <!--<div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">Alert!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="Submitconfirm='NO';d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>-->
+  <div class="modal-body">
+    Are you sure want to save ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="Submitconfirm='YES';c('Close click')">Yes</button>
+    <button type="button" class="btn btn-outline-primary" (click)="Submitconfirm='NO';c('Close click')">No</button>
+  </div>
+</ng-template>
+<!-- <div *ngIf="isApiCalling && !control.cancelApiEnabled"
+  [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div> -->
+<div *ngIf="isApiCalling && !control.cancelApiEnabled"
+  class="customloder d-flex justify-content-center align-items-center">
+  <div class="lds-spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<div *ngIf="isApiCalling && control.cancelApiEnabled"
+  class="customloder d-flex justify-content-center align-items-center">
+  <div class="customloaderbody">
+    <div class="lds-spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="text-center pt-4">
+      <button *ngIf="control.cancelApiEnabled" class="btn btn-outline-dark pointer"
+        (click)="cancelCall()">Cancel</button>
+    </div>
+  </div>
+</div>

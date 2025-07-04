@@ -1,0 +1,75 @@
+<div *ngIf="control.calctype=='group'" class="row pb-5">
+    <div class="col-md-12 pt-1">
+      <label>Function :</label>
+      <div class="col-md-12 dd-blok">
+        <ss-multiselect-dropdown [options]="mathFunctions" [(ngModel)]="selectedFun" [settings]="mySettings" (ngModelChange)="onFunChange($event)"></ss-multiselect-dropdown>
+      </div>
+    </div>
+    <div class="col-md-12 pt-1" *ngIf="selectedfunId=='max' || selectedfunId=='min' || selectedfunId=='mean' || selectedfunId=='sum'">
+      <label>Array :</label>
+      <div class="col-md-12 dd-blok">
+        <ss-multiselect-dropdown [options]="ModalForGrpArray" [(ngModel)]="selectedValue1" [settings]="mySettings" (ngModelChange)="data[control.key].value1=selectedValue1.length ? selectedValue1[0] : ''"></ss-multiselect-dropdown>
+      </div>
+      <label>Expression :</label>
+      <div class="col-md-12 dd-blok">
+        <input type="text" [(ngModel)]="data[control.key].value2" />
+      </div>
+    </div>
+    <div class="col-md-12 pt-1" *ngIf="selectedfunId=='length' || selectedfunId=='abs' || selectedfunId=='ceil' || selectedfunId=='floor' || selectedfunId=='sqrt'">
+      <label>Value :</label>
+      <div class="col-md-12 dd-blok">
+        <ss-multiselect-dropdown [options]="ModalForGrpCalc" [(ngModel)]="data[control.key].value1" [settings]="mySettings" ></ss-multiselect-dropdown>
+      </div>
+    </div>
+    <div class="col-md-12 pt-1" *ngIf="selectedfunId=='pow'">
+      <label>Value :</label>
+      <div class="col-md-12 dd-blok">
+        <ss-multiselect-dropdown [options]="ModalForGrpCalc" [(ngModel)]="selectedValue1" [settings]="mySettings" (ngModelChange)="data[control.key].value1=selectedValue1.length ? selectedValue1[0] : ''"></ss-multiselect-dropdown>
+      </div>
+      <label>Power :</label>
+      <div class="col-md-12 dd-blok">
+        <input type="number" min="0" [(ngModel)]="data[control.key].value2" />
+      </div>
+    </div>
+</div>
+
+<div *ngIf="control.calctype=='expression'" class="row pb-5">
+  <div *ngIf="Error.length>0" class="col-md-12">
+    <label style="color:red">Error : {{Error}}</label>
+  </div>
+  <div class="col-md-12 pt-1">
+    <strong>{{result}}</strong>
+  </div>
+  <div class="col-md-12 pt-1">
+    <label>{{ getExpression() }}</label>
+  </div>
+  <div class="col-md-12 pt-1 border-right">
+    <button type="button" (click)="append('+')" class="btn btn-light btn-lg">+</button>
+    <button type="button" (click)="append('-')" class="btn btn-light btn-lg">-</button>
+    <button type="button" (click)="append('*')" class="btn btn-light btn-lg">X</button>
+    <button type="button" (click)="append('/')" class="btn btn-light btn-lg">/</button>
+    <button type="button" (click)="append('(')" class="btn btn-light btn-lg">(</button>
+    <button type="button" (click)="append(')')" class="btn btn-light btn-lg">)</button>
+    <button type="button" (click)="clear()" class="btn btn-light btn-lg">CLEAR</button>
+    <button type="button" (click)="evaluate()" class="btn btn-light btn-lg">=</button>
+  </div>
+  <div class="col-md-12 pt-1">
+    <div class="row">
+      <div class="col-md-8">
+        <button type="button" class="btn btn-light btn-lg mr-1  mt-2" *ngFor="let modal of getModal()" (click)="append(modal,'value')">{{modal}}</button>&nbsp;
+      </div>
+      <div class="col-md-4">
+        <Button (click)="append('7','number')" class="btn btn-light btn-lg mr-1  mt-2">7</Button>
+        <Button (click)="append('8','number')" class="btn btn-light btn-lg mr-1  mt-2">8</Button>
+        <Button (click)="append('9','number')" class="btn btn-light btn-lg mr-1  mt-2">9</Button>
+        <Button (click)="append('4','number')" class="btn btn-light btn-lg mr-1  mt-2">4</Button>
+        <Button (click)="append('5','number')" class="btn btn-light btn-lg mr-1  mt-2">5</Button>
+        <Button (click)="append('6','number')" class="btn btn-light btn-lg mr-1  mt-2">6</Button>
+        <Button (click)="append('1','number')" class="btn btn-light btn-lg mr-1  mt-2">1</Button>
+        <Button (click)="append('2','number')" class="btn btn-light btn-lg mr-1  mt-2">2</Button>
+        <Button (click)="append('3','number')" class="btn btn-light btn-lg mr-1  mt-2">3</Button>
+        <Button (click)="append('0','number')" class="btn btn-light btn-lg mr-1  mt-2">0</Button>
+      </div>
+    </div>
+  </div>
+</div>

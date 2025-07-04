@@ -1,0 +1,220 @@
+<div [ngBusy]="{busy: busy, message: 'Loading ...', backdrop: true, delay: 200, minDuration: 1000}"></div>
+
+<div class="container mb-2">
+
+  <form [formGroup]="filterform" (ngSubmit)="onApply()">
+
+    <div class="form-row">
+      <div class="form-group col-md-7 m-0 p-0">
+        <div class="input-group">
+          <input type="text" class="form-control" formControlName="searchtext" placeholder="Search using keyword" aria-label="Search using keyword" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <span class="input-group-text" id="basic-addon2">
+              <i class="fa fa-search" (click)="onApply()" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mt-2 mr--3 p-0">
+
+        <div class="form-check-inline  pl-3">
+          <label class="form-check-label">
+            <input type="radio" id="exact" class="form-check-input" name="type" [value]='0' formControlName="type" checked>Match Exact
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" id="other" [value]='1' formControlName="type" name="type">Any Words
+          </label>
+        </div>
+      </div>
+
+      <span *ngIf="current_user_role == 3 || current_user_role ==4" class="ml-4 mt-1 scale1-5x">
+        <a *ngIf="!showOnlyUnassignedReqs" class="btn btn-link fa fa-user-times" title="View Unassigned Requisitions" name="unassignedrequisitions" (click)="(showOnlyUnassignedReqs = !showOnlyUnassignedReqs); onApply()"></a>
+        <a *ngIf="showOnlyUnassignedReqs" class="btn btn-link fa fa-users text-dark" title="Remove Unassigned Requisition filter" name="unassignedrequisitions" (click)="(showOnlyUnassignedReqs = !showOnlyUnassignedReqs); onApply()"></a>
+      </span>
+
+      <ul class="list_style ml-2 mt-1 p-0 d-inline-flex">
+
+        <li class="nav-item">
+          <a title="Click here to Open filters" (click)="usersFilter = !usersFilter">
+            <img src="../../../../../../wwwroot/assets/img/svg/ic_filter_list.svg" height="20" width="20" alt="gold" style="border-radius: 50%" />
+
+
+          </a>
+          <div class="dropdown_list pop-up-details scrollbar" id="style-1" *ngIf="usersFilter">
+            <span class="close_select" (click)="usersFilter = false">&times;</span>
+            <label class="radio_label_filter">FILTERS</label>
+
+
+            <div class="form-row">
+              <div class="form-group col-md-5">
+                <div class="content-checkbox">
+                  <label class="radio_label_heading">Requisition Type</label>
+                  <div class="custom-radio">
+
+                    <input type="radio" id="process" name="requisitiontypeid" value="1" formControlName="requisitiontypeid">
+                    <label class="radio_label" for="process">Process</label>
+
+                  </div>
+                  <div class="custom-radio">
+                    <input type="radio" id="qualified" name="requisitiontypeid" value="6" formControlName="requisitiontypeid">
+                    <label class="radio_label" for="qualified">Qualified Process</label>
+                  </div>
+                  <div class="custom-radio">
+                    <input type="radio" id="project" name="requisitiontypeid" value="2" formControlName="requisitiontypeid">
+                    <label class=" radio_label" for="project">Project</label>
+                  </div>
+                  <div class=" custom-radio">
+                    <input type="radio" id="direct" name="requisitiontypeid" value="9" formControlName="requisitiontypeid">
+                    <label class=" radio_label" for="direct">Direct</label>
+                  </div>
+                  <div class="custom-radio">
+                    <input type="radio" id="passthrough" name="requisitiontypeid" value="7" formControlName="requisitiontypeid">
+                    <label class="radio_label" for="passthrough">Pass Through</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-5">
+                <div class="content-checkbox">
+                  <label class="radio_label_heading">Date</label>
+                  <div class="custom-radio">
+                    <input type="radio" id="today" value="Today" formControlName="datefilter" (change)="betweenDateSelect('Today')" name="datefilter">
+                    <label class="radio_label" for="today">Today</label>
+                  </div>
+                  <div class="custom-radio">
+                    <input type="radio" id="thisweek" name="datefilter" value="Week" (change)="betweenDateSelect('Week')" formControlName="datefilter">
+                    <label class="radio_label" for="thisweek">This Week</label>
+                  </div>
+                  <div class="custom-radio">
+                    <input type="radio" id="thismonth" name="datefilter" value="Month" (change)="betweenDateSelect('Month')" formControlName="datefilter">
+                    <label class="radio_label" for="thismonth">This Month</label>
+                  </div>
+                  <div class="custom-radio">
+                    <input type="radio" id="betweendates" value="between" name="datefilter" [checked]="betweenDates" (change)="betweenDateSelect('between')">
+                    <label class="radio_label" for="betweendates">Between Dates</label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="form-row" *ngIf="betweenDates">
+              <div class="form-group col-md-6">
+                <label class="radio_label" for="submittedfrom">From Date</label>
+                <div class="input-group">
+                  <input class="form-control" id="submittedfrom" formControlName="receivedfrom" (ngModelChange)="Submittedfromdate($event)"
+                         placeholder="yyyy-mm-dd"
+                         name="dp1" ngbDatepicker #d="ngbDatepicker">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="radio_label" for="submittedto">To Date</label>
+                <div class="input-group">
+                  <input class="form-control" formControlName="receivedto" (ngModelChange)="Submittedtodate($event)" id="submittedto" placeholder="yyyy-mm-dd"
+                         name="dp2" ngbDatepicker #c="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="c.toggle()" type="button"></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="form-row" *ngIf="current_user_role == 3 || current_user_role ==4">
+              <div class="form-group col-md-6">
+                <label class="radio_label" for="recruitername">Recruiter</label>
+
+
+                <ng-select [items]="recruiterList$| async"
+                           [typeahead]="recruiterinput$"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           [searchable]="true"
+                           bindLabel="recruiter"
+                           bindValue="recruiter"
+                           formControlName="recruitername"
+                           name="recruitername"
+                           [loading]="isRecruiterNameLoading"
+                           placeholder="Type 2 characters"
+                           class="form-control">
+                </ng-select>
+
+              </div>
+              <div class="form-group col-md-6">
+                <label class="radio_label" for="recruitername">Sales Rep</label>
+
+
+                <ng-select [items]="salesRepList$ | async"
+                           [typeahead]="salesRepinput$"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           [searchable]="true"
+                           bindLabel="salesrep"
+                           bindValue="salesrep"
+                           formControlName="salesrepid"
+                           placeholder="Type 2 characters"
+                           class="form-control"
+                           [loading]="isSalesRepLoading">
+                </ng-select>
+
+              </div>
+
+
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="radio_label" for="client">Client Name</label>
+                <ng-select [items]="clientdata$ | async"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           [searchable]="true"
+                           bindLabel="clientname"
+                           bindValue="clientcode"
+                           [typeahead]="clientdatainput$"
+                           name="client"
+                           formControlName="clientid"
+                           [loading]="isClientLoading"
+                           placeholder="Type atleast 2 characters"
+                           (change)="OnClientChanged($event)"
+                           required>
+                </ng-select>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="radio_label" for="region">Region</label>
+
+                <ng-select [items]="regionOptionsList"
+                           [multiple]="false"
+                           [closeOnSelect]="true"
+                           [searchable]="false"
+                           bindLabel="region"
+                           bindValue="id"
+                           [virtualScroll]="true"
+                           name="region"
+                           formControlName="regionid"
+                           placeholder="" class="form-control">
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="mx-4 mt-0 mb-2">
+              <button type="button" class="reset_btn" (click)="onReset()">Reset</button>
+              <button type="submit" class="apply_btn float-right">Apply</button>
+            </div>
+          </div>
+        </li>
+
+        <!-- Show Unassigned REQs-->
+
+      </ul>
+
+    </div>
+  </form>
+
+</div>
+
+
+
+
+

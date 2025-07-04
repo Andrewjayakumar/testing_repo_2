@@ -1,0 +1,123 @@
+<ng-container *ngIf="!control.ismorebutton && !control.IsExternalFormLoad && !control.isLoadAngularComponent">
+  <div class="card mb-3 {{control.panelclass ? control.panelclass : control.panalclass}}"
+    [ngClass]="{'border-0': control.hideborder}" [formGroup]="formGroup" *ngIf="!Isvalid && access=='mandatory'">
+    <div *ngIf="control.showheader==true && control.isnotcollapsible == false"
+      class="card-header d-flex align-items-center pointer {{control.panelBg}} {{control.panelTextColor}}"
+      (click)="hide = !hide">
+      <div class="pr-2 mb-0">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="Isvalid"></i>
+          <span>{{control.label}}</span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide">
+        <i class="fa fa-angle-down" aria-hidden="true"></i>
+      </span>
+      <span class="ml-auto" *ngIf="hide">
+        <i class="fa fa-angle-up" aria-hidden="true"></i>
+      </span>
+    </div>
+    <div *ngIf="control.showheader==true && control.isnotcollapsible == true"
+      class="card-header d-flex align-items-center {{control.panelBg}} {{control.panelTextColor}}">
+      <div class="pr-2 mb-0">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="Isvalid"></i>
+          <span>{{control.label}}</span>
+        </span>
+      </div>
+    </div>
+    <div class="card-body {{control.panelbodyclass ? control.panelbodyclass : control.panelbodyclass}}"
+      [ngbCollapse]="!hide" [ngClass]="{'px-0 pb-0': control.removePadding}"
+      [ngStyle]="{'background':control.backgroundcolor && control.backgroundcolor != '' ? control.backgroundcolor : '','overflow': control.height > 0 ? 'auto' : '', 'height':getHeight() }">
+      <label *ngIf="control.Subheader">{{control.Subheader}}</label>
+      <div class="row" id={{control.key}}>
+        <div *ngFor="let ch of control.children" class="col-md-{{ch.width}} {{ch.colclass}}" [formGroup]="formGroup">
+          <app-dynamicformcontrolls [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data"
+            [access]="access" [filterdata]="filterdata"></app-dynamicformcontrolls>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-2 {{control.panelclass ? control.panelclass : control.panalclass}}"
+    [ngClass]="{'border-0': control.hideborder}" [formGroup]="formGroup" *ngIf="access!='mandatory'">
+    <div *ngIf="control.showheader==true && control.isnotcollapsible == false"
+      class="card-header d-flex align-items-center pointer {{control.panelBg}} {{control.panelTextColor}}"
+      (click)="hide = !hide">
+      <div class="pr-2 mb-0">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="Isvalid"></i>
+          <span>{{control.label}}</span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide">
+        <i class="fa fa-angle-down" aria-hidden="true"></i>
+      </span>
+      <span class="ml-auto" *ngIf="hide">
+        <i class="fa fa-angle-up" aria-hidden="true"></i>
+      </span>
+    </div>
+    <div *ngIf="control.showheader==true && control.isnotcollapsible == true"
+      class="card-header d-flex align-items-center {{control.panelBg}} {{control.panelTextColor}}">
+      <div class="pr-2 mb-0">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="Isvalid"></i>
+          <span>{{control.label}}</span>
+        </span>
+      </div>
+    </div>
+    <div class="card-body {{control.panelbodyclass}}" [ngbCollapse]="!hide"
+      [ngClass]="{'px-0 pb-0': control.removePadding}"
+      [ngStyle]="{'background':control.backgroundcolor && control.backgroundcolor != '' ? control.backgroundcolor : '','overflow': control.height>0 ? 'auto' : '','height':getHeight() }">
+      <label *ngIf="control.Subheader">{{control.Subheader}}</label>
+      <div class="row" id={{control.key}}>
+        <div *ngFor="let ch of control.children" class="col-md-{{ch.width}} {{ch.colclass}}" [formGroup]="formGroup">
+          <app-dynamicformcontrolls [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data"
+            [access]="access" [filterdata]="filterdata"></app-dynamicformcontrolls>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<div class="dropdown" *ngIf="control.ismorebutton">
+  <button class="btn {{control.customclass}}" type="button" data-toggle="dropdown">
+    <i class="fa fa-ellipsis-h"></i>
+  </button>
+  <div class="dropdown-menu {{control.popupposition}}">
+    <ng-container *ngFor="let ch of control.children">
+      <app-dynamicformcontrolls [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data"
+        [access]="access" [filterdata]="filterdata"></app-dynamicformcontrolls>
+      <!--<a class="dropdown-item" href="#">Action</a>-->
+    </ng-container>
+  </div>
+</div>
+<div *ngIf="control.IsExternalFormLoad">
+  <form role="form">
+    <div class="row" id={{control.key}} *ngIf="externalformJson && externalModelJson">
+      <ng-container *ngFor="let ctrl of externalformJson.controls">
+        <ng-container *ngIf="control.formactiontype!='filter'">
+          <app-dynamicformcontrolls *ngIf="!ctrl.filterresult" [AuthService]="AuthService" [control]="ctrl"
+            [formGroup]="externalformGroup" [data]="externalModelJson" [access]="control.formactiontype"
+            class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+          </app-dynamicformcontrolls>
+        </ng-container>
+        <ng-container *ngIf="control.formactiontype=='filter'">
+          <app-dynamicformcontrolls *ngIf="ctrl.filterresult" [AuthService]="AuthService" [control]="ctrl"
+            [formGroup]="externalformGroup" [data]="externalModelJson" [access]="control.formactiontype"
+            class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+          </app-dynamicformcontrolls>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div *ngIf="isApiCalling">
+      <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="!control.IsExternalFormLoad && control.isLoadAngularComponent" id={{control.key}}>
+  <div class="card mb-3 {{control.panelclass ? control.panelclass : control.panalclass}}"
+    [ngClass]="{'border-0': control.hideborder}">
+    
+    <div appRuntime></div>
+  </div>
+</div>

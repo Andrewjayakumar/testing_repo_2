@@ -1,0 +1,138 @@
+<div class="modal-header">
+  <!--<h4 class="modal-title" id="modal-basic-title">Update Duration</h4>-->
+  <button type="button"
+          class="close"
+          aria-label="Close"
+          (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <section id="tabs" class="project-tab">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Update Duration</a>
+              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">History</a>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+              <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+                <div class="row mt-2">
+                  <div class="col-md-12">
+                    <label class="start-date">
+                      Start Date
+                      <sup class="text-danger font-weight-bold">*</sup>
+                    </label>
+                    <label class="end-date">
+                      End Date
+                      <sup class="text-danger font-weight-bold">*</sup>
+                    </label>
+                    <label class="rev-date">
+                      Revised Start date
+                      <sup class="text-danger font-weight-bold">*</sup>
+                    </label>
+                  </div>
+                  <div class="input-group col-md-4 pr-0">
+                    <input class="form-control" id="startdateField" [(ngModel)]="StartDate" (ngModelChange)="StartDateChanged()"
+                           [startDate]="currentDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="sd.toggle()"
+                           name="startdate" ngbDatepicker #sd="ngbDatepicker" [disabled]="true">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary fa fa-calendar" [disabled]="true" (click)="sd.toggle()" type="button"></button>
+                    </div>
+                    <small *ngIf="(startDate && !startDate.day) && (sd.dirty || sd.touched) || (startDate && !startDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1">This field is required</small>
+
+                  </div>
+
+                  <div class="col-md-4 pr-0">
+
+                    <div class="input-group ">
+                      <input class="form-control" id="enddatefeild" [(ngModel)]="EndDate" (ngModelChange)="EndDateChanged()"
+                             [minDate]="StartDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="ed.toggle()"
+                             name="endDate" ngbDatepicker #ed="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="ed.toggle()" type="button"></button>
+                      </div>
+                      <small *ngIf="(endDate && !endDate.day) && (ed.dirty || ed.touched) || (endDate && !endDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1" [hidden]="ed.valid">This field is required</small>
+
+                    </div>
+                  </div>
+                  <div class="col-md-4 pr-0">
+
+                    <div class="input-group ">
+                      <input class="form-control" id="revisedenddate" [(ngModel)]="revisedStartDate" (ngModelChange)="revisedStartDateChanged()"
+                             [minDate]="StartDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="rd.toggle()"
+                             name="RevisedStartDate" ngbDatepicker #rd="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="rd.toggle()" type="button"></button>
+                      </div>
+                      <small *ngIf="(RevisedStartDate && !RevisedStartDate.day) && (rd.dirty || rd.touched) || (RevisedStartDate && !RevisedStartDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1" [hidden]="rd.valid">This field is required</small>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <label class="label mandatory title start-date" for="reason">
+                      Reason
+                      <sup class="text-danger font-weight-bold">*</sup>
+                    </label>
+                    <ng-select name="reason" [items]="durationReasons" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+                               bindLabel="reason" bindValue="id" placeholder="--Select--"
+                               [(ngModel)]="datamodel.Reason" class="form-control">
+                    </ng-select>
+                
+                  </div>
+                </div>
+                <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+                  <div *ngIf="displayMessage" class="alert alert-success">
+                    <strong>{{displayMessage}}</strong>
+                  </div>
+
+                  <div *ngIf="errorMessage" class="alert alert-danger">
+                    <strong>{{errorMessage}}</strong>
+                  </div>
+                </div>
+                <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="m-3 pb-2">
+                  <button class="btn btn-primary pull-right" type="submit" [disabled]="!(StartDate && EndDate && datamodel.Reason)">Update</button>
+                </div>
+                <div *ngIf="isUploading">
+                  <button class="btn btn-primary loader pull-right" type="button" disabled="">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+              <div class="container">
+                <div id="accordion" class="accordion mt-3">
+                  <div class="card mb-1" *ngFor="let data of durationHistory;let i = index">
+                    <div class="card-header collapsed" data-toggle="collapse" [attr.data-target]="'#history' + i">
+                      <a class="card-title">
+                        Updated on: {{data.updatedtime | date: 'short'}} | Updated By:{{data?.updatedby}}({{data.updatedbyemail}})
+                      </a>
+                    </div>
+                    <div   [id]="'history' + i" class="card-body collapse" data-parent="#accordion">
+                      <p>
+
+                        Revised start Date:{{data.startdate | date: 'short'}}
+                      </p>
+                      <p>Reason: {{data.reason}}</p>
+                    </div>
+                   
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    </section>
+</div>

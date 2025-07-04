@@ -1,0 +1,55 @@
+<div class="form-group" [formGroup]="formGroup" *ngIf="access == 'write'">
+  <label [for]="control.key">
+    {{control.label}}<sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+    <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+  </label>
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+    </div>
+    <input autocomplete="off" [placeholder]="control.placeholder" class="form-control"
+           [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}"
+           [formControl]="formGroup.controls[control_id]"
+           type="text"
+           [(ngModel)]="address"
+           [options]='options'
+           (setAddress)="getAddress($event)"
+           (street_number)='result.street_number=$event'
+           (street)='result.street=$event'
+           (city)='result.city=$event'
+           (state)='result.state=$event'
+           (district)='result.district=$event'
+           (country)='result.country=$event'
+           (postal_code)='result.postal_code=$event'
+           (lat)='result.lat=$event'
+           (lng)='result.lng=$event'
+           (adr_address)='result.adr_address=$event'
+           (name)='result.name=$event'
+           (place_id)='result.place_id=$event'
+           (types)='result.types=$event'
+           (url)='result.url=$event'
+           (utc_offset)='result.utc_offset=$event'
+           (vicinity)='result.vicinity=$event'
+           (photos)='result.photos=$event'
+           (airport)='result.airport=$event'
+           (CountryCodes)='result.CountryCodes=[]'
+           id="control_id"
+           ng2-google-place-autocomplete />
+
+  </div>
+  <small class="form-text text-danger" *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write'" class="form-group">
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key]?.formatted_address)!='' && access=='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key]?.formatted_address)">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0">{{result?.formatted_address}}</div>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key]?.formatted_address)">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0">{{result?.formatted_address}}</div>
+  </ng-container>
+</div>

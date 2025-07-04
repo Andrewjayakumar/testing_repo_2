@@ -1,0 +1,47 @@
+.modal-title {
+  color: rgb(115, 115, 115);
+  font-size: large;
+  font-weight: 400;
+}
+
+.accordion-background {
+  background-color: rgb(115, 115, 115);
+  color: white;
+}
+
+.accordion-header {
+    color: white;
+}
+
+.accordion-header:hover {
+  color: white;
+}
+
+.label-color {
+  color: rgb(153, 153, 153);
+}
+
+.value-color {
+    color: blue;
+}
+
+.flex-child {
+  flex: 1;
+}
+
+.card-header {
+    border: none;
+}
+
+.card-body {
+    padding: 5px !important;
+    border: none;
+}
+
+.modal-body{
+    overflow:auto;
+}
+
+.modal-header {
+    padding: 0.5rem;
+}

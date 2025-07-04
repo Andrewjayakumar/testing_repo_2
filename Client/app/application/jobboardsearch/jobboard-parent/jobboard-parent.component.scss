@@ -1,0 +1,91 @@
+
+
+.container {
+  direction: rtl;
+}
+
+.navtop {
+  margin-top: 50px;
+}
+
+.tab-content {
+  padding-top: 25px;
+  margin-top: 10px;
+  max-width: 100%;
+  width: 95%;
+}
+
+
+
+.paginator {
+  position: fixed;
+  left: 50%;
+  float: right !important;
+  margin-top: 7px;
+  bottom:0;
+}
+
+.metal-match-border {
+  display: block;
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  padding: 0 15px 8px 15px;
+  cursor: pointer;
+}
+
+.monster-board-border {
+  display: block;
+  position: relative;
+  border: 1px solid #ddd;
+  padding: 20px 12px 27px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.carreer-builder-board {
+  display: block;
+  position: relative;
+  border: 1px solid #ddd;
+  padding: 5px 5px 25px 6px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.dice-board {
+  display: block;
+  position: relative;
+  border: 1px solid #ddd;
+  padding: 5px 22px 8px 7px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.metal-boolean-board {
+  display: block;
+  position: relative;
+  border: 1px solid #ddd;
+  padding: 10px 10px 5px 5px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.active-jobboard {
+  border: 2px solid #1b76c4 !important;
+  border-radius: 7px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+ 
+}
+
+.check-image-description {
+  text-align: center;
+
+  font-weight: 600;
+  font-size: 11px;
+  position: relative;
+  color: #2b3543;
+}
+
+.remove-underline-hover{
+    text-decoration:none;
+}

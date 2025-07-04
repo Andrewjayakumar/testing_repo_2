@@ -1,0 +1,74 @@
+card-1 {
+  padding: 10px 10px 10px 10px;
+
+  .form-row {
+    margin-right: -15px;
+
+    .form-group {
+      padding-right: 15px;
+    }
+  }
+}
+
+
+.card {
+  //margin: 0 30px; /* Added */
+  float: none; /* Added */
+  margin-bottom: 10px; /* Added */
+  max-width: 95%;
+  }
+.card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 0px !important;
+}
+
+.candidateCO {
+  margin: 20px;
+}
+
+.accordion .fa {
+  margin-right: 0.5rem;
+}
+
+.card-header {
+  margin-bottom: 0px !important;
+}
+
+.heading_label {
+  color: #1976d2;
+  margin-left: 50px;
+  margin-bottom: 0px;
+  font-weight: 700;
+}
+
+#candidateCo {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 83vh;
+}
+
+#candidateCo::-webkit-scrollbar {
+  width: 5px
+}
+
+#candidateCo::-webkit-scrollbar-thumb {
+  background: rgba(136,135,135,.69);
+  border-radius: 10px
+}
+
+.date-selection {
+  position: absolute;
+  top: 0;
+  bottom: 0px;
+  right: 0px;
+  margin-right: -8px;
+}

@@ -1,0 +1,470 @@
+<ng-container>
+  <div class="CBcontainer container">
+
+    <form #carierbuildersearch="ngForm" novalidate (ngSubmit)="OnSearchClicked()">
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="form-row">
+            <!--<div class="form-group col-md-8">
+              <label class="m-b label" for="region">Keyword Search  <sup class="text-danger">*</sup></label>
+              <input type="text" class="form-control" placeholder="Enter Keyword"
+                     name="keywordSearch" id="Name" [(ngModel)]="model.keywords" required />
+            </div>-->
+            <div class="col-md-12 p-0">
+              <label for="query">
+                Keyword Search
+                <sup class="text-danger">*</sup>
+                <sup>
+                  <span *ngIf="showEditButton" class="edit-icon" (click)="onEditClick()">
+                    <i class="fa fa-edit"></i>
+                  </span>
+                </sup>
+
+
+              </label>
+              <span tabindex="0" data-toggle="tooltip" [title]="model.keywords" class="custom-tooltip">
+                <textarea class="form-control" placeholder="Search for Keywords/ Email/ Phone number" [(ngModel)]="model.keywords" name="query" required [disabled]="searchInputDisabled"  (blur)="onKeywordSearchTyped()"></textarea>
+
+
+              </span>
+            </div>
+            <div class="form-group col-md-4">
+              <label class="m-b label" for="clientname">Country</label>
+              <ng-select [items]="countryList" [multiple]="false" [closeOnSelect]="true"
+                         placeholder="--select --" bindLabel="key" bindValue="value"
+                         class="form-control" [ngModelOptions]="{ standalone: true }"
+                         [(ngModel)]="model.country" name="country" ngDefaultControl>
+              </ng-select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label class="m-b label mandatory" for="skills">Freshness in days</label>
+              <ng-select [items]="freshnessList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                         placeholder="select days" bindLabel="key" bindValue="value"
+                         [(ngModel)]="model.freshnessindays" class="form-control" [ngModelOptions]="{ standalone: true }"
+                         name="freshness" ngDefaultControl>
+              </ng-select>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label class="m-b label mandatory" for="recruiters">Search Pattern</label>
+              <ng-select [items]="patternList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                         placeholder="Select a Pattern" bindLabel="key" bindValue="value"
+                         class="form-control" [ngModelOptions]="{ standalone: true }" [(ngModel)]="model.searchpattern"
+                         name="searchPattern" ngDefaultControl>
+              </ng-select>
+            </div>
+            <div class="col-md-3">
+
+              <app-metal-switch [(state)]="advancedsearch" (stateChange)="OnAdvancedSearchToggled($event)" [uniqueid]="'carrierbuilder'" name="advance" [labelname]="'Advanced Search'"></app-metal-switch>
+
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row" id="carrierbuild" *ngIf="advancedsearch">
+        <div class="col-md-4">
+          <div class="card mb-3 border-0">
+            <div class="card-body px-0 pb-0">
+              <div class="row" id="panel1">
+                <div class="col-md-12">
+                  <div class="card mb-3">
+                    <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                      <div class="pr-2 mb-0">
+                        <span class="d-flex align-items-center"><span>Education and Employment Details</span></span>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label for="minimumdeg">
+                            Minimum Degree
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="minimumDegree"
+                                     [multiple]="false"
+                                     [closeOnSelect]="true"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.minimumdegree" #minimumdegr="ngModel"
+                                     name="minimumdegr">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                          <label>Currently Employed</label>
+
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.currentlyemployed" #radiosearchType="ngModel" value="Yes" name="radiosearchType">Yes
+                            </label>
+                          </div>
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.currentlyemployed" #radiosearchType="ngModel" value="No" name="radiosearchType">No
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="minimumdeg">
+                            Employment Type
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="empType"
+                                     [multiple]="true"
+                                     [closeOnSelect]="true"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.employmenttype" #minimumdegr="ngModel"
+                                     name="minimumdegr">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="jobcat">
+                            Job Category
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="jobCategories"
+                                     [multiple]="true"
+                                     [closeOnSelect]="true"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.jobcategories" #jobcategory="ngModel"
+                                     name="jobcategory">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="minexp">
+                            Minimum Experience
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="minExperience"
+                                     [multiple]="false"
+                                     [closeOnSelect]="true"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.minimumexperience" #miniexperience="ngModel"
+                                     name="miniexperience">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="compensate">
+                            Compensation Type
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="compensationType"
+                                     [multiple]="false"
+                                     [closeOnSelect]="true"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.compensationtype" #compensation="ngModel"
+                                     name="compensation">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-6">
+                          <label for="msalary">
+                            Min Salary
+                          </label>
+                          <input id="msalary" name="msalary" class="form-control" [(ngModel)]="model.minimumsalary" #msalary="ngModel" />
+                        </div>
+                        <div class="col-md-6">
+                          <label for="msalary">
+                            Max Salary
+                          </label>
+                          <input id="maxsalary" name="maxsalary" class="form-control" [(ngModel)]="model.maximumsalary" #maxsalary="ngModel" />
+                        </div>
+                        <div class="col-md-12">
+                          <label for="availability">
+                            Availability
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="availability"
+                                     [multiple]="false"
+                                     [closeOnSelect]="false"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.availability" #availality="ngModel"
+                                     name="availality">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="langspoken">
+                            Languages Spoken
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="languageDetails"
+                                     [multiple]="true"
+                                     [closeOnSelect]="false"
+                                     bindLabel="name" bindValue="id"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.languagespoken" #langagesspoken="ngModel"
+                                     name="langagesspoken">
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card mb-3 border-0">
+            <div class="card-body px-0 pb-0">
+              <div class="row" id="panel1">
+                <div class="col-md-12">
+                  <div class="card mb-3">
+                    <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                      <div class="pr-2 mb-0">
+                        <span class="d-flex align-items-center"><span>Location Details</span></span>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label for="searchinradius">
+                            Search Radius In Miles
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="searchinMiles"
+                                     [multiple]="false"
+                                     [closeOnSelect]="true"
+                                    
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.searchradiusinmiles" #searchinradius="ngModel"
+                                     name="searchinradius">
+                          </ng-select>
+                        </div>
+
+
+
+
+                        <div class="col-md-12">
+                          <label for="msalary">
+                            Zip Code
+                          </label>
+                          <input id="msalary" name="msalary" class="form-control" [(ngModel)]="model.zipcode" #msalary="ngModel" />
+                        </div>
+
+                        <div class="col-md-12">
+                          <label for="city">
+                            City
+                          </label>
+                          <input id="city" name="city" class="form-control" [(ngModel)]="model.city" #msalary="ngModel" />
+                        </div>
+                        <div class="col-md-12">
+                          <label for="state">
+                            State
+                          </label>
+                          <input id="state" name="state" class="form-control" [(ngModel)]="model.state" #msalary="ngModel" />
+                        </div>
+                        <div class="col-md-12">
+                          <label for="workstatus">
+                            Work Status
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="workStatus"
+                                     [multiple]="true"
+                                     [closeOnSelect]="false"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.workstatus" #availality="ngModel"
+                                     name="availality">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="maximumcomute">
+                            Maximum Commute
+                          </label>
+                          <input id="maximumcomute" name="maximumcomute" class="form-control" [(ngModel)]="model.maximumcommute" #maximumcomute="ngModel" />
+
+                        </div>
+                        <div class="col-md-12">
+                          <label for="relocationfilter">
+                            Relocation Filter
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="relocationfilter"
+                                     [multiple]="false"
+                                     [closeOnSelect]="false"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.relocationfilter" #relocationfilterr="ngModel"
+                                     name="relocationfilterr">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                          <label class="radio-label">Security Clerance</label>
+
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.securityclearance" #securityclearance="ngModel" value="Yes" name="securityclearance">Yes
+                            </label>
+                          </div>
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.securityclearance" #securityclearance="ngModel" value="No" name="securityclearance">No
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-3 border-0">
+            <div class="card-body px-0 pb-0">
+              <div class="row" id="panel1">
+                <div class="col-md-12">
+                  <div class="card mb-3">
+                    <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                      <div class="pr-2 mb-0">
+                        <span class="d-flex align-items-center"><span>Additional Info</span></span>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+
+                        <div class="col-md-12">
+                          <label for="jobtitle">
+                            Job Title
+                          </label>
+                          <input id="jobtitle" name="jobtitle" class="form-control" [(ngModel)]="model.jobtitle" #jobtitle="ngModel" placeholder="e.g Tester,QA,Developer" />
+                        </div>
+
+                        <div class="col-md-12">
+                          <label for="company">
+                            Company
+                          </label>
+                          <input id="company" name="company" class="form-control" [(ngModel)]="model.company" #company="ngModel" placeholder="e.g IBM,HP,DELL" />
+                        </div>
+
+                        <div class="col-md-12">
+                          <label for="orderby">
+                            OrderBy
+                          </label>
+                          <ng-select class="form-control"
+                                     [items]="orderBy"
+                                     [multiple]="false"
+                                     [closeOnSelect]="false"
+                                     bindLabel="key" bindValue="value"
+                                     placeholder="--select--"
+                                     [(ngModel)]="model.orderby" #orderby="ngModel"
+                                     name="orderby">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="maximumcomute">
+                            Maximum Commute
+                          </label>
+                          <input  name="maximumcomute" class="form-control" [(ngModel)]="model.MaximumCommute" #maximumcomute="ngModel" />
+
+                        </div>
+                  
+                  
+                        <div class="col-md-12">
+
+                          <app-metal-switch [(state)]="model.applylastactivity" [uniqueid]="'lastactivity'" name="activity" [labelname]="'Apply Last Activity'"></app-metal-switch>
+
+
+                        </div>
+                        <div class="col-md-12">
+
+                          <app-metal-switch [(state)]="model.RemoveDuplicates" [uniqueid]="'duplicates'" name="duplicate" [labelname]="'Remove Duplicates'"></app-metal-switch>
+
+
+                        </div>
+                        <div class="col-md-12">
+                          <label>Exclude resumes that don't include salary information</label>
+
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.excluderesumeswithnosalary" #excluderesume="ngModel" value="Yes" name="excluderesume">Yes
+                            </label>
+                          </div>
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.excluderesumeswithnosalary" #excluderesume="ngModel" value="No" name="excluderesume">No
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <label>Exclude IVR Resumes</label>
+
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.excludeivrresumes" #excludeivr="ngModel" value="Yes" name="excludeivr">Yes
+                            </label>
+                          </div>
+                          <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" [(ngModel)]="model.excludeivrresumes" #excludeivr="ngModel" value="No" name="excludeivr">No
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finalMessages">
+        <div class="float-right">
+          <button type="reset" class="btn mr-2" (click)="resetform()">Clear</button>
+          <button type="submit" class="btn btn-primary float-right" id="apply" [disabled]="!model.keywords">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+
+<div *ngIf="showLoader" class="text-center p-2 mt-5">
+  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+</div>
+
+<div *ngIf="noCandidates && !showLoader" class="text-center font-italic mt-5">
+  No Candidates Found
+</div>
+
+<div *ngIf="!showLoader" class="col-md-12 p-0 mt-5">
+  <div class="container">
+
+    <div class="CBcontainer" *ngIf="matchingCandidates && matchingCandidates.length >0" >
+      <label>No. of Resumes : {{totalCandidatesFound}}</label>
+    </div>
+    <!-- cards -->
+    <div class="row metal-card-row mt-2">
+      <div class="col-3 metal-card-col p-1" *ngFor="let candidateObj of matchingCandidates">
+        <div class="d-block h-100">
+          <div class="card mb-0 h-100 custom-action-hover">
+            <app-candidate-card [candidate]="candidateObj" [requisitionid]="data.requisitionid"
+              [pagename]="'careerbuilder'" [priorPinAction]="cbDownloadDetails" [highlightskillsarray]="highlightskillsarray" [aigenerated] ="aigenerated"
+             >
+            </app-candidate-card>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="matchingCandidates?.length > 0" class="d-flex justify-content-center mt-3">
+      <ngb-pagination [collectionSize]="totalCandidatesFound" [pageSize]="pagesize" [(page)]="pageindex"
+        [maxSize]="4" (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+    </div>
+  </div>
+</div>

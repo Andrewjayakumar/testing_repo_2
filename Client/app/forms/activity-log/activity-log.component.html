@@ -1,0 +1,77 @@
+
+  <ng-container>
+    <form class="activity-form" #searchActivity="ngForm" (ngSubmit)="onSubmit(searchActivity)" novalidate>
+      <div class="activitysearchbox">
+
+        <span><i class="fa fa-search"></i></span>
+        <input type="text" #SearchBox placeholder="Search" id="activitysearchText" [(ngModel)]="searchText" name="searchtext" autocomplete="off" (input)="onKeyPressed($event, SearchBox.value)" />
+        <span class="close-icon" *ngIf="searchText" (click)="clearActivitySearch()">x</span>
+      </div>
+     <!--<i class="fa fa-filter"></i>-->
+    </form>
+    <!--Today Code -->
+    <div class="container dateheader">
+      <span class="col-md-8">Today</span>
+      <span *ngIf="journal && journal.Today" class="col-md-4 italic">( {{journal.Today.length}} Items)</span>
+    </div>
+    <div class="loader text-center" *ngIf="isUploading"></div>
+    <div *ngIf="journal && journal.Today">
+      <div *ngFor="let entry of journal.Today" class="activity-record">
+        <div class="activity-timestamp">{{entry.createddate| utctimeage}}</div>
+        <div>
+          <span class="title" title="{{entry.journaltype}}">{{entry.journaltype}}</span>
+          <span *ngIf="entry.candidateid !== 0"><a class="fa fa-user-o pull-right text-dark" (click)='pinclicked($event, entry, "candidate")'></a></span>
+          <span *ngIf="entry.requisitionid && entry.requisitionid !== 0"><a class="fa fa-bookmark pull-right btn-link text-dark" (click)='pinclicked($event, entry, "requisition")'></a></span>
+          <span *ngIf="entry.activitytype.toLowerCase() === 'candidate search'"><a class="btn-link fa fa-copy pull-right text-dark" (click)='copytoClipboard($event, entry)'></a></span>
+        </div>
+        <div data-toggle="tooltip" title="{{entry.activityname}}" class="activity-subtitle">
+          <span class="subtitle">{{entry.activityname}}</span>
+          <span class="col-1 pull-right text-sm-right act-time">{{entry.createddate| dateTz : 'HH:mm' : 'local'}}</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!journal" class="container">
+      <div class="text-sm-center"> No Activities found for Today !!  </div>
+    </div>
+    <div *ngIf="journal && journal.Today && journal.Today.length === 0" class="container">
+      <div class="text-sm-center"> No Activities found for Today !!  </div>
+    </div>
+
+    <!-- Yesterday -->
+    <div class="container dateheader">
+      <span class="col-md-8">Yesterday</span>
+      <span *ngIf="journal && journal.Yesterday" class="col-md-4 italic">( {{ journal.Yesterday.length }} Items)</span> <!--[textContent]=""-->
+    </div>
+
+    <div *ngIf="journal && journal.Yesterday">
+      <div *ngFor="let entry of journal.Yesterday" class="activity-record container">
+
+        <div>
+          <span class="title" title="{{entry.journaltype}}">{{entry.journaltype}}</span>
+          <span *ngIf="entry.candidateid && entry.candidateid !== 0">
+            <a class="fa fa-user-o pull-right btn-link text-dark" ngbTooltip="Candidate Bookmarked" triggers="click" placement="left" #tc="ngbTooltip" title="Profile" (click)='pinclicked($event, entry, "candidate",tc)'></a></span>
+          <span *ngIf="entry.requisitionid && entry.requisitionid !== 0">
+            <a class="fa fa-bookmark pull-right btn-link text-dark" ngbTooltip="Requisition Bookmarked" triggers="click" placement="left" #tr="ngbTooltip"
+               title="Bookmark" (click)='pinclicked($event, entry, "requisition", tr)'></a></span>
+          <span *ngIf="entry.activitytype.toLowerCase() === 'candidate search'">
+            <a class="btn-link fa fa-copy pull-right text-dark" ngbTooltip="Copied to Clipboard" triggers="click" placement="left" #ts="ngbTooltip"
+               title="Copy to clipboard" (click)='copytoClipboard($event, entry, ts )'></a></span>
+        </div>
+        <div class="activity-subtitle">
+          <span title="{{entry.activityname}}" class="subtitle">{{entry.activityname}}</span>
+          <span class="col-1 pull-right text-sm-right act-time">{{entry.createddate| dateTz : 'HH:mm' : 'local'}}</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!journal" class="container">
+      <div class=" text-sm-center"> No Activities found for Yesterday !!  </div>
+    </div>
+    <div *ngIf="journal && journal.Yesterday && journal.Yesterday.length === 0" class="container">
+      <div class="text-sm-center"> No Activities found for Yesterday !!  </div>
+    </div>
+
+    <div class="activity-footer"></div>
+    <div class="fixed-bottom">
+      <span><button class="more-button btn-light btn-sm btn-round pull-right" (click)="openSearch()">MORE..&gt;</button></span>
+    </div>
+  </ng-container>

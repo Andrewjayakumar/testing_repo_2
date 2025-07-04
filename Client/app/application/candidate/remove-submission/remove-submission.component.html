@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <h6 class="modal-title summary-heading">Remove Submission</h6>
+  <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+</div>
+<div class="modal-body">
+  <form [formGroup]="vForm" (ngSubmit)="onSubmit()" #formGroupRef="ngForm">
+    <div class="row form-group">
+      <div class="col-md-8">
+        <label for="comments" class="col-form-label-sm label-color m-b">Leave Comments Here</label>
+        <sup class="text-danger font-weight-bold">*</sup>
+      </div>
+      <div class="col-md-8">
+        <textarea class="form-control form-control-sm"
+                  (keyup.backspace)="onBackSpace($event)"
+                  (keyup)="maxLength($event)" formControlName="comments">
+        </textarea>
+        <span>
+            {{commentLengthRem}} character(s) remaining
+        </span>
+        <div>
+          <small class="font-size-small text-danger fa fa-exclamation"
+                  *ngIf="vForm.get('comments').hasError('required') && (vForm.get('comments').touched || formGroupRef.submitted)">
+              Comments is required
+          </small>
+          <small class="font-size-small text-danger fa fa-exclamation"
+                  *ngIf="vForm.get('comments').hasError('maxlength') && (vForm.get('comments').touched || formGroupRef.submitted)">
+              Maximum 4000 characters in Comments
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+        <div *ngIf="displayMessage" class="alert alert-success">
+          <strong>{{displayMessage}}</strong>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          <strong>{{errorMessage}}</strong>
+        </div>
+      </div>
+      <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="col-md-6 pb-2">
+        <button class="btn btn-primary" type="submit" [disabled]="!(vForm.valid)">Remove Submission</button>
+      </div>
+      <div *ngIf="isUploading" class="col-md-6">
+        <button class="btn btn-primary loader" type="button" disabled="">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,114 @@
+$primary: #1976d2;
+$red-dark: #b84d49;
+
+.ui-control-block {
+  display: inline-block;
+  // margin-left:5px;
+  margin: 7px;
+
+  input {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background: none;
+    border: 1px solid #999;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: 0;
+    cursor: default;
+    border-radius: 4px;
+    padding: 5px;
+    padding-top: 7px;
+    // padding-bottom:10px;
+    display: block;
+    width: 100%;
+
+    &:focus {
+      border: 1px solid #007eff;
+      // outline-color: $primary;
+      box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+    }
+  }
+
+  .ng-select {
+    border: 1px solid #999 !important;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 19px;
+
+    .ng-select-single .ng-select-container {
+      border: 1px solid #999 !important;
+      padding: 5px;
+      margin-top: 19px;
+    }
+
+    .ng-select-focused {
+      margin-top: 15px !important;
+    }
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+  }
+
+  > label {
+    color: $primary;
+    //  font-size: smaller;
+    margin-bottom: 0px !important;
+    float: left;
+  }
+}
+
+.ng-select {
+  border: 1px solid #999 !important;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 19px;
+}
+
+.label-only {
+  color: $primary;
+//  font-size: smaller;
+  margin-bottom: 0px !important;
+  float: left;
+}
+
+::ng-deep .modal-xl .modal-lg {
+  width: 1070px !important;
+  max-width: 1070px !important;
+}
+
+.ng-select.ng-select-opened .ng-select-container {
+  border: 1px solid #999 !important;
+  padding: 2px;
+}
+
+
+/** Others*/
+.font-size-small {
+  font-size: smaller;
+}
+
+.errorpane {
+  background-color: rgba(25,118,210, 0.2);
+  padding: 20px;
+  color: $red-dark;
+  border-radius: 10px;
+}
+
+.save {
+  padding: 2px;
+  margin-top: 12px;
+}
+
+.resumes {
+  margin-left: -30px;
+}
+
+.saveAlignment {
+  margin-left: -76px !important;
+  width: fit-content;
+  height:fit-content;
+  
+}

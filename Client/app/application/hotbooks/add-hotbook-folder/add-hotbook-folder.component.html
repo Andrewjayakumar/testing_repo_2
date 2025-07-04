@@ -1,0 +1,268 @@
+<ng-container>
+  <div>
+    <div class="modal-header">
+      <h6 *ngIf="!isEdit" class="modal-title hotbook-heading">Add Hotbook</h6>
+      <h6 *ngIf="isEdit" class="modal-title hotbook-heading">Edit Hotbook</h6>
+      <i
+        class="fa fa-times fa-lg close-hotbook"
+        (click)="modal.close()"
+        aria-hidden="true"
+      ></i>
+    </div>
+
+    <div class="modal-body hotbook-body">
+      <div class="card-2 card-3 card-1">
+        <form
+          name="rForm"
+          [formGroup]="rForm"
+          (ngSubmit)="rForm.valid && onClickSubmit(rForm.value)"
+        >
+          <div class="row">
+            <div class="col-md-12">
+              <div id="accordionExample" class="">
+                <div class="">
+                  <div
+                    id="collapseOne"
+                    aria-labelledby="headingOne"
+                    data-parent="#accordionExample"
+                    class="collapse show"
+                  >
+                    <div class="">
+                      <div *ngIf="!isEdit" class="form-row">
+                        <div class="form-group col-md-12">
+                          <label for="jobtitle" class="m-b label mandatory"
+                            >Job Title</label
+                          >
+                          <ng-select
+                            [items]="jobtitledetails | async"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="jobtitle"
+                            bindValue="jobtitle"
+                            id="jobtitle"
+                            formControlName="jobtitle"
+                            placeholder="Type to Search Job Title"
+                            class="form-control"
+                            [(ngModel)]="jobTitleClear"
+                            [ngModelOptions]="{ standalone: true }"
+                            [typeahead]="jobtitleinput$"
+                            [loading]="isJobTitleLoading"
+                          >
+                          </ng-select>
+                        </div>
+                      </div>
+
+                      <!-- Edit Job title -->
+                      <div *ngIf="isEdit" class="form-row">
+                        <div class="form-group col-md-12 disabled">
+                          <label for="jobtitle" class="m-b label mandatory">
+                            Job Title</label
+                          >
+                          <ng-select
+                            [items]="jobtitledetails | async"
+                            [multiple]="false"
+                            [disabled]="true"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="jobtitle"
+                            bindValue="jobtitle"
+                            id="jobtitle"
+                            formControlName="jobtitle"
+                            placeholder="Type to Search Job Title"
+                            class="form-control disabledInputs"
+                            [(ngModel)]="jobTitleClear"
+                            [ngModelOptions]="{ standalone: true }"
+                            [typeahead]="jobtitleinput$"
+                            [loading]="isJobTitleLoading"
+                          >
+                          </ng-select>
+                        </div>
+                      </div>
+
+                      <!-- <div
+                        class="form-row"
+                        *ngIf="
+                          !isEdit || (isEdit && !(towerClear && subtowerClear))
+                        "
+                      >
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="State">Tower</label>
+                          <ng-select
+                            [items]="towerDetails?.requisitiontower"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="tower"
+                            bindValue="towerid"
+                            placeholder="Select Tower"
+                            class="form-control"
+                            formControlName="towerid"
+                            (change)="getTowerCode($event)"
+                          >
+                          </ng-select>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="State">Sub Tower</label>
+                          <ng-select
+                            [items]="subTowerDetails?.requisitionsubtower"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="subtower"
+                            bindValue="subtowerid"
+                            formControlName="subtowerid"
+                            placeholder="Select Sub Tower"
+                            class="form-control"
+                          >
+                          </ng-select>
+                        </div>
+                      </div> -->
+
+                      <!-- Edit Tower and Subtower -->
+                      <!-- <div
+                        class="form-row"
+                        *ngIf="isEdit && towerClear && subtowerClear"
+                      >
+                        <div
+                          class="form-group col-md-6"
+                        >
+                          <label class="m-b label" for="State">Tower</label>
+                          <ng-select
+                            [items]="towerDetails?.requisitiontower"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="tower"
+                            bindValue="tower"
+                            placeholder="Select Tower"
+                            class="form-control disabledInputs"
+                            formControlName="towerid"
+                            (change)="getTowerCode($event)"
+                            [(ngModel)]="towerClear"
+                          >
+                          </ng-select>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="State">Sub Tower</label>
+                          <ng-select
+                            [items]="subTowerDetails?.requisitionsubtower"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="subtower"
+                            bindValue="subtower"
+                            formControlName="subtowerid"
+                            placeholder="Select Sub Tower"
+                            class="form-control disabledInputs"
+                            [(ngModel)]="subtowerClear"
+                          >
+                          </ng-select>
+                        </div>
+                      </div> -->
+
+                      <p class="label declaration">
+                        One of the following fields is mandatory
+                      </p>
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="country">Region</label>
+                          <ng-select
+                            [items]="region?.regions"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="region"
+                            bindValue="region"
+                            formControlName="region"
+                            placeholder="Select region"
+                            class="form-control"
+                            [(ngModel)]="regionClear"
+                            [ngModelOptions]="{ standalone: true }"
+                          >
+                          </ng-select>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="city">City</label>
+                          <input
+                            class="form-control"
+                            formControlName="city"
+                            name="city"
+                            id="city"
+                            [(ngModel)]="cityClear"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="State">Client</label>
+                          <ng-select
+                            [items]="clientNameDetails | async"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="clientname"
+                            bindValue="clientname"
+                            [virtualScroll]="true"
+                            formControlName="clientname"
+                            placeholder="Type to Search Client Name"
+                            class="form-control"
+                            [(ngModel)]="clientClear"
+                            [ngModelOptions]="{ standalone: true }"
+                            [typeahead]="clientdatainput$"
+                            [loading]="isClientLoading"
+                          >
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="final_search">
+            <ngb-alert
+              #selfClosingAlert
+              *ngIf="successMessage"
+              type="success"
+              (close)="successMessage = ''"
+              >{{ successMessage }}
+            </ngb-alert>
+
+            <ngb-alert
+              #selfClosingAlert
+              *ngIf="failureMessage"
+              type="danger"
+              (close)="failureMessage = ''"
+              >{{ failureMessage }}
+            </ngb-alert>
+
+            <button
+              class="btn btn-primary float-right"
+              id="apply"
+              *ngIf="!(successMessage || failureMessage) && !isEdit"
+              type="submit"
+              [disabled]="
+                !(jobTitleClear && (regionClear || cityClear || clientClear))
+              "
+            >
+              Add
+            </button>
+
+            <button
+              class="btn btn-primary float-right"
+              id="apply"
+              *ngIf="!(successMessage || failureMessage) && isEdit"
+              type="submit"
+              [disabled]="
+                !(jobTitleClear && (regionClear || cityClear || clientClear))
+              "
+            >
+              Edit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-container>

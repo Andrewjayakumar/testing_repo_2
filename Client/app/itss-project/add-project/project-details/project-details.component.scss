@@ -1,0 +1,55 @@
+$primary: #1976d2;
+
+div.editable {
+  width: 100%;
+  height: 160px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  &:focus {
+    outline: $primary auto 1px;
+    outline-color: $primary;
+    box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+  }
+}
+
+
+
+
+.ui-control-block {
+  display: inline-block;
+  // margin-left:5px;
+  margin: 7px;
+
+  input {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background: none;
+    //  border: 1px solid #999;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: 0;
+    cursor: default;
+    border-radius: 4px;
+    padding: 5px;
+    padding-top: 7px;
+    // padding-bottom:10px;
+    display: block;
+    width: 100%;
+
+    &:focus {
+      border: 1px solid #007eff;
+      // outline-color: $primary;
+      box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+    }
+  }
+
+  > label {
+    color: $primary;
+    font-size: smaller;
+    margin-bottom: 0px !important;
+    float: left;
+  }
+}

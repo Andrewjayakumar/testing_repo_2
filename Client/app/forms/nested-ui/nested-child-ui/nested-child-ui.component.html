@@ -1,0 +1,23 @@
+<div class="" [ngClass]="{'card border-0' : nestedItems.children.length > 0}" *ngFor="let _data of data;let i=index;">
+  <div (click)="headeClick(i)" class="card-header pointer px-0 nested-header" [ngClass]="{'text-info' : gethClass(i) == 'fa-minus-circle', 'text-success' : gethClass(i) == 'fa-plus-circle'}"
+    *ngIf="nestedItems.children.length > 0">
+    <i class="fa {{gethClass(i)}} mr-2"></i>
+    <img *ngIf="nestedItems.logo && _data[nestedItems.logo]" class="rounded-circle mr-2" width="40" src={{_data[nestedItems.logo]}} />
+    <img *ngIf="nestedItems.locallogo" class="rounded-circle mr-2" width="40" src={{nestedItems.locallogo}} />
+    {{nestedItems.header ? _data[nestedItems.header] : ""}}</div>
+  <div class="card-body py-0 pl-3 pr-0 {{getbClass(i)}}" [ngClass]="{'card-body' : nestedItems.children.length > 0}">
+    <ng-container *ngIf="nestedItems.formid && _controlservice.formData[nestedItems.formid]">
+      <div class="h-100 position-relative">
+        <div class="row">
+          <ng-container *ngFor="let ctrl of _controlservice.formData[nestedItems.formid]?.formUIJson.controls">
+            <app-dynamicformcontrolls *ngIf="!ctrl.filterresult" [control]="ctrl" [formGroup]="_controlservice.formData[nestedItems.formid]?.form" [data]="_data" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+            </app-dynamicformcontrolls>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="nestedItems.children.length>0">
+      <app-nested-child-ui *ngFor="let item of nestedItems.children" [nestedItems]="item" [data]="_data[item.key]" [AuthService]="AuthService"></app-nested-child-ui>
+    </ng-container>
+  </div>
+</div>

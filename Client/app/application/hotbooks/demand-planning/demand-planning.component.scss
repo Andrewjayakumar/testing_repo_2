@@ -1,0 +1,35 @@
+$primary: #1976d2;
+$gray-default: #7c7c7c;
+$dark-gray: #4c4c4c;
+$bg-gray: #ebebeb;
+$purple: purple;
+$green: green;
+$orange: #f5a623 !default;
+$yellow: #f0c40f !default;
+$font-size: 12px;
+
+
+.pageheading {
+  color: $orange;
+  font-size: medium; //14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding-left: 0;
+  padding-top: 5px;
+  font-variant-caps: small-caps;
+}
+
+.parent-tab {
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem !important;
+  //margin-left: 2rem;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  background-color: white;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 4px;
+
+}

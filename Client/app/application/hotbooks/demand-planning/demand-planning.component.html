@@ -1,0 +1,17 @@
+<section>
+  <div class="sticky-top">
+    <app-actionitemcart [AuthService]="_authservice"></app-actionitemcart>
+  </div>
+  <div class="parent-tab">
+    <h5 class="pageheading">DEMAND PLANNING</h5>
+  </div>
+
+  <div *ngIf="current_user_role == 3|| current_user_role == 4">
+    <app-owner-demand-plan></app-owner-demand-plan>
+  </div>
+
+  <div *ngIf="current_user_role != 3 && current_user_role != 4">
+    <app-recruiter-demand-plan></app-recruiter-demand-plan>
+  </div>
+
+</section>

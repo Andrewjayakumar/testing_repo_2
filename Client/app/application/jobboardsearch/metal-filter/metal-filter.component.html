@@ -1,0 +1,255 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Search Filters</h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body"  id="candidateresume">
+  <div class="container mb-5">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="form-row">
+        <div class="mb-3 p-0">
+          <div class="d-inline-flex skillSpace">
+            <label class="col-4">
+              <input type="radio"
+                     name="filterSkills"
+                     value="0"
+                     (click)="onSkillsSelected('0')"
+                     [(ngModel)]="selectedSkills" />
+              All Skills are required
+            </label>
+            <label class="col-5">
+              <input type="radio"
+                     name="filterSkills"
+                     value="1"
+                     (click)="onSkillsSelected('1')"
+                     [checked]="true"
+                     [(ngModel)]="selectedSkills" />
+              Only one of the skill is required
+            </label>
+            <span class="col-3 mt--3 p-0">
+              <app-metal-switch [(state)]="isJump" [uniqueid]="'jumpflagfilter'" [labelname]="'Jump'" name="isjump"></app-metal-switch>
+            </span>
+
+          </div>
+
+          <div class="d-inline">
+            <label>
+              <input type="radio"
+                     name="filterSkills"
+                     value="1"
+                     (click)="onSkillsSelected('1')"
+                     [checked]="true"
+                     [(ngModel)]="selectedSkills" />
+              Only one of the skill is required
+            </label>
+
+            <div *ngIf="showSpecificSkills">
+              <span *ngFor="let entry of skillList" class="label-chips">
+                <label class="text-primary"
+                       title="{{ entry.skill }} ({{ entry.skilllevel }})">{{ entry.skill }} ({{ entry.skilllevel }})</label>
+                <a role="button"
+                   class="btn delButton"
+                   (click)="
+                    deleteSkillsAndExperience(entry.skill, entry.skilllevel)
+                  ">x</a>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <label class="m-b label mandatory title">
+            Total Work Experience (Years)
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <span>
+            <input class="form-control minYearCSS"
+                   type="number"
+                   name="minYears"
+                   #minYears="ngModel"
+                   (input)="onExpChange($event.target.value)"
+                   [(ngModel)]="minexperience"
+                   placeholder="Min"
+                   autocomplete="off" />
+            <input class="form-control maxYearCSS"
+                   type="number"
+                   name="maxYears"
+                   #maxYears="ngModel"
+                   (input)="onExpChange($event.target.value)"
+                   [(ngModel)]="maxexperience"
+                   placeholder="Max"
+                   autocomplete="off" />
+          </span>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="label mandatory title" for="skills">Job title</label>
+              <ng-select [items]="jobList | async"
+                         [multiple]="true"
+                         [closeOnSelect]="true"
+                         [searchable]="true"
+                         bindLabel="jobtitle"
+                         bindValue="jobtitle"
+                         [virtualScroll]="true"
+                         id="job"
+                         [(ngModel)]="jobTitleList"
+                         placeholder="Type to Search Job titles"
+                         class="form-control"
+                         [ngModelOptions]="{ standalone: true }"
+                         [typeahead]="jobinput$"
+                         [loading]="isJobLoading">
+              </ng-select>
+            </div>
+            <div class="col-md-6">
+
+              <label class="label mandatory title" for="updateddays">Last Updated Days Back</label>
+              <ng-select class="form-control"
+                         [items]="LastUpdatedDaysback"
+                         [multiple]="false"
+                         [closeOnSelect]="true"
+                         bindLabel="key" bindValue="value"
+                         placeholder="--select--"
+                         [(ngModel)]="LastUpdatedDaysBack"
+                         name="noofdaysback">
+              </ng-select>
+         
+
+            </div>
+          </div>
+    
+       
+        </div>
+     
+
+        <!-- Switch to Zipcode and Radius -->
+        <div class="col-md-12 mb-3 alignSwitchButton"
+             [ngClass]="{
+            'justify-content-between': position == 'justify',
+            'mr-5': position == 'justify'
+          }">
+          <label [attr.for]="'isZipAndRadius'"
+                 class="checkbox-label mt-1 mr-1 mb-1"
+                 innerHTML="Switch to Zipcode and Radius">Switch to Zipcode and Radius</label>
+          <div class="custom-switch">
+            <input type="checkbox"
+                   class="custom-control-input"
+                   [attr.id]="'isZipAndRadius'"
+                   [(ngModel)]="isZipAndRadius"
+                   (click)="onStateChanged($event)"
+                   [ngModelOptions]="{ standalone: true }" />
+            <label [attr.for]="'isZipAndRadius'"
+                   class="custom-control-label"></label>
+          </div>
+        </div>
+
+        <div *ngIf="!isZipAndRadius" class="col-md-12 mb-3">
+          <label class="label title">Location</label>
+          <div class="form-check d-inline mr-2">
+            <input type="radio"
+                   name="country"
+                   [value]="'Canada'"
+                   id="CA"
+                   [(ngModel)]="selectedCountry"
+                   (click)="onCountrySelected(country)" />
+            <label class="form-check-label" for="CA">Canada</label>
+          </div>
+          <div class="form-check d-inline mr-2">
+            <input type="radio"
+                   name="country"
+                   [value]="'United States'"
+                   id="US"
+                   [(ngModel)]="selectedCountry"
+                   (click)="onCountrySelected(country)" />
+            <label class="form-check-label" for="US">United States</label>
+          </div>
+        </div>
+
+        <div *ngIf="!isZipAndRadius" class="col-md-6 mb-3">
+          <ng-select [items]="stateList | async"
+                     [multiple]="true"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="state"
+                     bindValue="state"
+                     [virtualScroll]="true"
+                     id="statecode"
+                     [(ngModel)]="statelist"
+                     placeholder="Enter 3 characters to search State"
+                     class="form-control"
+                     [ngModelOptions]="{ standalone: true }"
+                     [typeahead]="stateinput$"
+                     [disabled]="statefilter"
+                     [loading]="isStateLoading">
+          </ng-select>
+        </div>
+
+        <div *ngIf="!isZipAndRadius" class="col-md-6 mb-3">
+          <ng-select [items]="cityList | async"
+                     [multiple]="true"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="city"
+                     bindValue="city"
+                     placeholder="Enter 3 characters to search City"
+                     [virtualScroll]="true"
+                     id="city"
+                     class="form-control"
+                     [(ngModel)]="cityChosen"
+                     [ngModelOptions]="{ standalone: true }"
+                     [typeahead]="cityinput$"
+                     [loading]="isCityLoading">
+          </ng-select>
+        </div>
+
+        <div *ngIf="isZipAndRadius" class="col-md-6 mb-3">
+          <label class="label mandatory title" for="zipcode">Zipcode</label>
+          <ng-select [items]="zipList | async"
+                     [multiple]="true"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="zipcode"
+                     bindValue="zipcode"
+                     [virtualScroll]="true"
+                     id="zipcode"
+                     [(ngModel)]="zipcodeList"
+                     placeholder="Type to Search zipcode"
+                     class="form-control"
+                     [ngModelOptions]="{ standalone: true }"
+                     [typeahead]="zipinput$"
+                     [loading]="isZipcodeLoading">
+          </ng-select>
+        </div>
+
+        <div *ngIf="isZipAndRadius" class="col-md-6 mb-3">
+          <label class="label mandatory title" for="distance">Radius in miles</label>
+          <input class="form-control"
+                 type="number"
+                 name="distance"
+                 #distanceInRadius="ngModel"
+                 [(ngModel)]="distance"
+                 placeholder="Radius in miles"
+                 autocomplete="off" />
+        </div>
+
+      </div>
+
+      <div>
+        <button
+          class="btn btn-primary pull-right"
+          type="submit"
+          [disabled]="!showSetButton"
+        >
+          Set
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

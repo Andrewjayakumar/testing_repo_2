@@ -1,0 +1,19 @@
+$primary: #1976d2;
+
+.ceemail {
+  display: block;
+  width: 66%;
+  padding-left: 20px;
+  padding-top: 25px;
+}
+
+.CEcontainer {
+ // width: 1110px !important;
+
+  label {
+    color: $primary !important;
+    font-size: small !important;
+    margin-bottom: 0rem !important;
+    margin-top: 0.5rem;
+  }
+}

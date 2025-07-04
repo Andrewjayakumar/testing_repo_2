@@ -1,0 +1,59 @@
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<strong *ngIf="isApiCalling">Loading...</strong>
+<ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null" style="position: fixed; top: 53px; right: 0; left: 0">{{ successMessage }}</ngb-alert>
+<div class="d-none d-lg-block">
+  <div class="row kanban-row flex-nowrap" *ngIf="apiResult?.length > 0">
+    <ng-container *ngIf="!control.disbalesave">
+      <div class="col color{{i}}" [ngStyle]="{'min-height.px': control.height, 'width': 100/l + '%'}" *ngFor="let list of lists; let i = index; let l = count" [class.dropOverActive]="dropOverActive"
+           mwlDroppable
+           (dragEnter)="dropOverActive = true"
+           (dragLeave)="dropOverActive = false"
+           (drop)="onDrop($event,list.state)">
+        <h6 class="d-flex justify-content-center align-items-center kanban-label css-arrow-right p-1 mb-3"><span>{{getStatuskey(list.state) }}</span></h6>
+        <ng-container *ngFor="let cardId of list.cards; trackBy: trackByFn">
+          <app-card  [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [groupid]="groupid" [list]="list" [cardStore]="cardStore" [cardId]="cardId" [AuthService]="AuthService"></app-card>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="control.disbalesave">
+      <div class="col color{{i}}" [ngStyle]="{'min-height.px': control.height, 'width': 100/l + '%'}" *ngFor="let list of lists; let i = index; let l = count">
+        <h6 class="d-flex justify-content-center align-items-center kanban-label css-arrow-right p-1 mb-3"><span>{{getStatuskey(list.state) }}</span></h6>
+        <ng-container *ngFor="let cardId of list.cards; trackBy: trackByFn">
+          <app-card  [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [allowdrag]="false" [groupid]="groupid" [list]="list" [cardStore]="cardStore" [cardId]="cardId" [AuthService]="AuthService"></app-card>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <div *ngIf="apiResult?.length == 0" class="d-flex justify-content-center text-center align-items-center align-content-center flex-column" [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+</div>
+<div class="d-block d-lg-none">
+  <ng-container *ngIf="apiResult?.length > 0">
+    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+      <ngb-panel *ngFor="let list of lists; let i = index">
+        <ng-template ngbPanelTitle>
+          {{getStatuskey(list.state)}}
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <div class="card-body border-bottom">
+            <ng-container *ngFor="let cardId of list.cards; trackBy: trackByFn">
+              <app-card  [FormCardUI]="FormCardUI" [CardformGroup]="CardformGroup" [groupid]="groupid" [list]="list" [cardStore]="cardStore" [cardId]="cardId" [AuthService]="AuthService"></app-card>
+            </ng-container>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </ng-container>
+  <div *ngIf="apiResult?.length == 0" class="d-flex justify-content-center text-center align-items-center align-content-center flex-column" [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+</div>

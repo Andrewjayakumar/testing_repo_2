@@ -1,0 +1,135 @@
+<div class="parent-tab">
+  <div class="text-center col-md-12 req-assign-suc-err-msg">
+    <ngb-alert *ngIf="successMessageHide" type="success">{{
+      successMessage
+    }}</ngb-alert>
+  </div>
+  <div class="text-center col-md-12 req-assign-suc-err-msg">
+    <ngb-alert *ngIf="assignmentErrorMessage" type="danger">{{
+      assignmentErrorMessage
+    }}</ngb-alert>
+  </div>
+  <div class="w-100">
+    <div class="row">
+      <div *ngIf="!showSpinner" class="col-md-9">
+        <h4 class="candidateTitle">
+          Matching requisitions for
+          <span class="candidateName">{{ candidateTitle }}</span>
+        </h4>
+      </div>
+
+      <div *ngIf="!showSpinner" class="col-md-1 filterAlign">
+          <label class="filtersicon">Filters</label>
+          <a
+            class="dropdown-item filterButton btn btn-link text-dark filters"
+            (click)="openFilters()"
+          >
+            <span class="fa-stack">
+              <i class="fa fa-filter fa-stack-2x"></i>
+              <i
+                *ngIf="showNotifyBadge"
+                class="fa fa-circle fa-stack-1x notifyBadge text-danger"
+              ></i>
+            </span>
+          </a>
+      </div>
+      <div *ngIf="!showSpinner" class="col-md-1 p-0 pt-1 ">
+          <button (click)="getMatchingReq()" class="btn btn-primary">
+            Search
+          </button>
+      </div>
+      <div *ngIf="!showSpinner" class="col-auto ">
+        <span
+          ><i
+            class="fa fa-times fa-2x pull-right closeIcon"
+            aria-hidden="true"
+            (click)="goToHome()"
+          ></i
+        ></span>
+      </div>
+    </div>
+
+    <div *ngIf="showSpinner" class="text-center p-2 mt-3">
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    </div>
+
+    <div *ngIf="!reqResponse && !showLoader" class="text-center font-italic">
+      {{ reqMessage }}
+    </div>
+
+    <!-- Show candidates accoding to the hotbook selected-->
+    <div *ngIf="!showSpinner" class="row cardsSection">
+      <div class="col-md-12 p-0 mt-2">
+        <div class="container" id="candidatecard">
+          <div *ngIf="showLoader" class="text-center p-2">
+            <i class="fa fa-2x fa-spinner fa-spin"></i>
+          </div>
+
+          <div
+            class="row metal-card-row mt-2"
+            *ngIf="candidatesList?.length > 0"
+          >
+            <div
+              class="col-3 metal-card-col"
+              *ngFor="let reqObj of candidatesList"
+            >
+              <div class="d-block h-100">
+                <div class="mb-0 h-100 custom-action-hover">
+                  <metal-requisition-card
+                    [userrole]="current_user_role"
+                    [isCandidateMatchLink]="isCandidateMatchLink"
+                    [requisition]="reqObj"
+                    [showCheckbox]="true"
+                    (actionchecked)="actionchecked($event)"
+                    (actionClicked)="onActionClicked($event)"
+                  >
+                  </metal-requisition-card>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="noRecordMsg" class="text-center">
+              <label>{{ noRecordMsg }}</label>
+            </div>
+
+            <button
+              type="button"
+              *ngIf="candidateidArray.length > 0"
+              class="
+                btn
+                position-fixed
+                btn-custom-circle
+                right
+                bottom-3
+                mb-3
+                mr-3
+                btn-xl btn-info btn-lg
+              "
+              (click)="sourceCandidates()"
+            >
+              Source
+            </button>
+          </div>
+
+          <!-- pagination -->
+          <div
+            *ngIf="candidatesList?.length > 0"
+            class="d-flex justify-content-center mt-3"
+          >
+            <ngb-pagination
+              [collectionSize]="totalRecords"
+              [pageSize]="pagesize"
+              [(page)]="pageindex"
+              [maxSize]="4"
+              (pageChange)="onPageChanged($event)"
+              [ellipses]="true"
+              [boundaryLinks]="true"
+              size="sm"
+            >
+            </ngb-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

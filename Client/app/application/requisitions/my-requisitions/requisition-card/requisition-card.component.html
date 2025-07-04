@@ -1,0 +1,145 @@
+<div class="card-body" [ngClass]="{'bulkreq' : requisition.isbulk == true}">
+  <div style="height:15px;" *ngIf="showCheckbox">
+    <span class="pr-2">
+      <input type="checkbox" class="card-checkbox-action"
+        (change)="onReqSelected(requisition.requisitionid,$event.target.checked)">
+    </span>
+    <div class="recType">
+      <label class="d-block type-tag">{{requisition.rectype}}</label>
+    </div>
+
+    <div class="popup-score-btn">
+      <button class="btn sovrenScore" title="Match Score" (click)="launchScorePopup(requisition.requisitionid)">{{requisition.sovrenrelevance}}</button>
+    </div>
+  </div>
+
+  <div style="height:15px;" *ngIf="!showCheckbox">
+    <div>
+      <label class="d-block type-tag">{{requisition.rectype}}</label>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="col-md-9 pr-0" >
+      <a class="btn-link rec-link cursor-hand" title="{{requisition.requisitionname}}"
+        (click)="gotoReqPage()">{{requisition.requisitionname}}</a>
+      <span class="d-block text-truncate text-smaller"
+        title="{{requisition.clientname}}">{{requisition.clientname}}</span>
+      
+    </div>
+    <div class="col-md-2 p-0 pt-1" title="{{requisition.prioritytype}}">
+      <div *ngIf="requisition.prioritytype && requisition.prioritytype.toLowerCase() == 'gold'">
+        <img src="../../../../../../wwwroot/assets/img/svg/Gold.svg" height="30" width="30" alt="gold" />
+      </div>
+      <div *ngIf="requisition.prioritytype && requisition.prioritytype.toLowerCase() == 'silver'">
+        <img src="../../../../../../wwwroot/assets/img/svg/Silver.svg" height="30" width="30" alt="silver" />
+      </div>
+      <div *ngIf="requisition.prioritytype && requisition.prioritytype.toLowerCase() == 'platinum'">
+        <img src="../../../../../../wwwroot/assets/img/svg/Platinum.svg" height="30" width="30" alt="platinum" />
+      </div>
+      <div *ngIf="requisition.prioritytype && requisition.prioritytype.toLowerCase() == 'bronze'">
+        <img src="../../../../../../wwwroot/assets/img/svg/bronze.svg" height="30" width="30" alt="bronze" />
+      </div>
+      <div *ngIf="requisition.prioritytype && requisition.prioritytype.toLowerCase() == 'diamond'">
+        <img src="../../../../../../wwwroot/assets/img/svg/Diamond.svg" height="30" width="30" alt="diamond" />
+      </div>
+    </div>
+  </div>
+  <div class="w-100">
+    <hr class="m-0 mb-1">
+    <div class="d-flex">
+      <span class="col-md-4"><label>City</label></span>
+      <span class="col-md-8 pl-0 pr-0">{{requisition.states}}</span>
+
+    </div>
+    <hr class="mb-1 mt-0" />
+    <div class="d-flex">
+      <span class="col-md-4"><label>Region</label></span>
+      <span title="{{requisition.region}}" class="col-md-8 pl-0 pr-0">{{requisition.region}}</span>
+
+    </div>
+    <!-- <hr class="mb-1 mt-0" />
+    <div class="d-flex">
+      <span class="col-md-4"><label>Tower</label></span>
+      <span class="col-md-8 pl-0 pr-0 text-truncate"
+        title="{{requisition.towerandsubtower}}">{{requisition.towerandsubtower? requisition.towerandsubtower : '-'
+        }}</span>
+
+    </div> -->
+    <hr class="mb-1 mt-0" />
+    <div class="d-flex">
+      <span class="col-md-4"><label>Sales</label></span>
+      <span title="{{requisition.salesrepid}}"
+        class="col-md-8 pl-0 pr-0 text-truncate">{{requisition.salesrepid}}</span>
+
+    </div>
+    <hr class="mb-1 mt-0" />
+    <div class="d-flex">
+      <span class="col-md-4"><label>Recruiter</label></span>
+      <span title="{{requisition.assignedto}}"
+        class="col-md-8 pl-0 pr-0 text-truncate">{{requisition.assignedto}}</span>
+
+    </div>
+    <hr class="m-0" />
+  </div>
+  <div class="col-md-12 d-flex font-weight-bold justify-content-around">
+
+    <span class="col-md-3 p-0 pr-1 text-center right-separator text-smaller">
+
+      <h5 title="Positions" class="m-0"> {{requisition.noofpositions}}</h5>
+      <img title="Positions" src="../../../../../../wwwroot/assets/img/svg/iconPositions.svg" />
+
+    </span>
+    <span class="col-md-3 p-0 pl-1 pr-1 text-center right-separator text-smaller">
+      <h5 title="Submisions" class="m-0"> {{requisition.submitted}}</h5>
+      <img title="Submisions" src="../../../../../../wwwroot/assets/img/svg/iconSubmission.svg" />
+
+    </span>
+    <span class="col-md-3 pl-1 pr-1 text-center right-separator text-smaller">
+      <h5 title="Interviews" class="m-0"> {{requisition.interview}}</h5>
+      <img title="Interviews" src="../../../../../../wwwroot/assets/img/svg/iconInterview.svg" />
+
+    </span>
+    <span class="col-md-3 p-0 pl-2 text-center text-smaller">
+      <h5 title="Hires" class="m-0"> {{requisition.hired}}</h5>
+      <img title="Hires" src="../../../../../../wwwroot/assets/img/svg/iconHire.svg" />
+
+    </span>
+
+  </div>
+  <hr class="m-1" />
+  <div class="d-flex">
+
+    <span class="col-md-6 right-separator pr-0 pl-0 text-center h-75">
+      <div class="figure-caption">{{requisition.createdon | dateTz : 'MMM dd yyyy'}}</div>
+      <label class="m-0i">Received Date</label>
+    </span>
+
+    <span class="col-md-6 pr-0 text-center">
+      <div class="figure-caption">{{requisition.status}}</div><label>Status</label>
+    </span>
+
+  </div>
+  <div class="hideblock">
+    <div class="d-flex justify-content-around">
+
+
+      <a title="Assign" *ngIf="current_user_role ==3 || current_user_role ==4" class="btn btn-link"
+        (click)="assignReq()">
+        <img src="../../../../../../wwwroot/assets/img/svg/ic_assign_white.svg" alt="assign" />
+      </a>
+      <!--  <a title="Clone Requisition" *ngIf="current_user_role == 3 || current_user_role ==4" class="btn btn-link" (click)="cloneRequisition()">
+    <img src="../../../../../../wwwroot/assets/img/svg/ic_clone_white.svg" alt="clone" />
+  </a> -->
+      <!-- <a title="Go to Requisition" class="btn btn-link"><img src="../../../../../../wwwroot/assets/img/svg/ic_openfile_white.svg" alt="open" /></a> -->
+      <a title="Change Qualification" class="btn btn-link" (click)="setQualification()">
+        <img src="../../../../../../wwwroot/assets/img/svg/ic_qualification_white.svg" alt="qualification" />
+      </a>
+      <a title="Quick View" class="btn btn-link" (click)="openQuickView()">
+        <img src="../../../../../../wwwroot/assets/img/svg/ic_quickview_white.svg" alt="summary" />
+      </a>
+    </div>
+  </div>
+
+
+</div>

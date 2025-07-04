@@ -1,0 +1,56 @@
+.hotbook-heading {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+label {
+  color: #1976d2;
+  font-size: 12px;
+  line-height: 10px;
+}
+
+.close-hotbook {
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 0.5rem !important;
+}
+
+.final_search {
+  margin-bottom: 5%;
+}
+
+.mandatory:after,
+.declaration:before {
+  content: " *";
+  color: red;
+}
+
+.disabledInputs {
+  cursor: not-allowed;
+}
+
+// ng-select.disabledInputs .ng-input > input {
+//   cursor: not-allowed !important;
+// }
+
+// .disabledInputs.ng-select .ng-select-container .ng-value-container .ng-input {
+//   cursor: not-allowed !important;
+// }
+
+// .ng-select.disabledInputs .ng-select-container .ng-value-container .ng-input {
+//   cursor: not-allowed !important;
+// }
+
+// .ng-select.disabledInputs {
+//   .ng-select-container {
+//     .ng-value-container {
+//       .ng-input {
+//         input {
+//           cursor: not-allowed;
+//         }
+//       }
+//     }
+//   }
+// }

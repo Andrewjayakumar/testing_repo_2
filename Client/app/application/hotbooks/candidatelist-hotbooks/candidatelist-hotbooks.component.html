@@ -1,0 +1,271 @@
+<div class="parent-tab">
+  <div class="sticky-top">
+    <app-actionitemcart [AuthService]="_authservice"></app-actionitemcart>
+  </div>
+
+  <div class="d-inline-flex w-100">
+    <!--Hotbooks list section-->
+    <div class="col-md-4 hotbookssection right-separator">
+      <div class="d-inline-flex mt-2">
+        <label class="col-md-5 pageheading">HOT BOOKS</label>
+        <div class="col-auto pull-right checkboxes">
+          <input type="checkbox" class="m-2" name="personal" [(ngModel)]="isPersonal" value="Personal"
+                 (change)="personalClicked($event)" checked />Personal
+          <input type="checkbox" class="m-2" name="shared" [(ngModel)]="isShared" value="Shared"
+                 (change)="sharedClicked($event)" />Shared
+        </div>
+        <button type="button" class="btn btn-default addHotbookButton" aria-label="Left Align"
+                (click)="showHotbookPopup()" title="Add Hotbook">
+          <span class="fa fa-plus plusIcon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="input-group searchBox">
+        <input class="form-control py-2 border-right-0 border searchInput" type="search" value="search"
+               id="example-search-input" placeholder="Search Hotbook" [(ngModel)]="searchText"
+               (input)="searchInHotbook(tagType, tagName)" />
+
+        <span class="input-group-append searchIcon">
+          <div class="input-group-text bg-transparent searchBorder">
+            <i class="fa fa-search searchIcon"></i>
+          </div>
+        </span>
+      </div>
+
+      <div *ngIf="showSpinner" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div>
+
+      <div *ngIf="!showSpinner" class="scrollContent">
+        <div *ngFor="let hotbook of hotbooks" class="hotbookcard" [ngClass]="{
+            'border-personal': hotbook.tagtype === 'Personal',
+            'border-shared': hotbook.tagtype === 'Shared',
+            'current-selection':
+              selectedhotbook.id && selectedhotbook.id == hotbook.tagid
+          }" title="{{ hotbook.tagtype }}">
+          <div class="ellipsisHotbook">
+            <a class="col-9 hotbookName"
+               (click)="OnHotbookSelected(hotbook.tagid, hotbook.tagname,hotbook.activefocuscount,hotbook.passivefocuscount)">
+              {{
+              hotbook.tagname
+              }}
+            </a>
+            <label class="col-1 hotbookLabel">
+              {{ hotbook.candidatecount }}
+            </label>
+
+            <div class="btn-group">
+              <button class="btn dropdown-toggle" id="dropdownBasic1" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                <h3>...</h3>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right menuItems">
+                <button *ngIf="hotbook.tagtype === 'Personal'" class="dropdown-item" type="button"
+                        (click)="openEditModal(hotbook.tagid)">
+                  Edit
+                </button>
+                <button *ngIf="hotbook.tagtype === 'Personal'" class="dropdown-item" type="button"
+                        (click)="openShareModal(hotbook.tagid)">
+                  Share
+                </button>
+                <button class="dropdown-item" type="button"
+                        (click)="openDeleteModal(hotbook.tagid, hotbook.tagtype.toLowerCase() === 'shared')">
+                  Delete
+                </button>
+              </div>
+            </div>
+            <label *ngIf="hotbook.tagtype == 'Shared'" class="col-12 hotbookLabel ownerInfo">
+              Owner: {{ hotbook.createdby }}
+            </label>
+          </div>
+        </div>
+
+        <div class="noHotbook" *ngIf="!hotbooks || hotbooks.length == 0">
+          <i class="font-weight-light"> No Hotbook folders found for you !!</i>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Show candidates accoding to the hotbook selected-->
+
+    <div class="col-md-8 p-0 mt-2">
+      <div class="container" id="candidatecard">
+        <div class="row" *ngIf="selectedhotbook.name">
+          <div class="col-md-4 text-truncate">
+            <label class="selectedfoldername" title="{{ selectedhotbook.name }}">{{ selectedhotbook.name }}</label>
+          </div>
+          <div class="col-md-4 d-inline-flex">
+            <!-- filters are here -->
+            <div ngbDropdown class="custom-class">
+              <button class="btn btn-outline-primary" title="Select days to Filter" id="dropdownBasic1"
+                      ngbDropdownToggle>
+                <i class="fa fa-filter fa-2x" aria-hidden="true"></i>
+              </button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdownMenu">
+                <button ngbDropdownItem class="menuItem" (click)="onNotContactedClicked(7)">7 days</button>
+                <button ngbDropdownItem class="menuItem" (click)="onNotContactedClicked(14)">14 days</button>
+                <button ngbDropdownItem class="menuItem" (click)="onNotContactedClicked(21)">21 days</button>
+              </div>
+            </div>
+            <div class="col-auto pull-right pr-0">
+              <input type="checkbox" class="m-2" name="activefocus" value="active"
+                     (change)="activeClicked($event)" />Active [{{ activeFocusCount }}]
+              <input type="checkbox" class="m-2" name="passivefocus" value="passive"
+                     (change)="passiveClicked($event)" />Passive [{{ passiveFocusCount }}]
+            </div>
+          </div>
+
+          <div class="col-md-3 pl-0 pr-0">
+            <form (ngSubmit)="searchCandidates()" #searchCandidatesForm="ngForm">
+              <div class="input-group searchinputBox">
+                <input class="form-control py-2 pr-0 border-right-0 border searchInput" id="example-search-input"
+                       name="querystring" [(ngModel)]="querystring" type="search"
+                       placeholder="Search by candidate Name or Email" value="Search candidate Name or Email" />
+
+                <span class="input-group-append">
+                  <div class="input-group-text bg-transparent searchBorder">
+                    <i (click)="searchCandidates()" class="fa fa-search searchIcon"></i>
+                  </div>
+                </span>
+              </div>
+            </form>
+
+          </div>
+          <div class="col-md-1" *ngIf="current_user_role == 3 || current_user_role == 4">
+            <div class="btn-group">
+              <button class="btn dropdown-toggle" id="dropdownBasic1" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                <h3>...</h3>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right menuItems cursor-pointer">
+
+                <button class="dropdown-item" type="button"
+                        (click)="openPopup(closePopup)">
+                  Delete Profiles
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="current_user_role != 3 && current_user_role != 4">
+            <div *ngIf="enableActions" class="col-md-1 pl-0">
+              <div ngbDropdown>
+                <button class="btn btn-outline-primary dotsButton" id="dropdownBasic2" ngbDropdownToggle>
+                  <i class="fa fa-ellipsis-h fa-2x" aria-hidden="true"></i>
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic2" class="dropdownMenu demandMenu">
+                  <button ngbDropdownItem #closebutton class="menuItem" data-toggle="modal"
+                          data-target="#exampleModal">
+                    Add to
+                    Demand
+                    Plan
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!selectedhotbook.name" class="text-center font-italic">
+          Select a hotbook to display candidates
+        </div>
+
+        <div *ngIf="showLoader" class="text-center p-2">
+          <i class="fa fa-2x fa-spinner fa-spin"></i>
+        </div>
+        <div *ngIf="
+            (candidateList &&
+              candidateList.length == 0 &&
+              selectedhotbook.name) ||
+            errormesg
+          " class="text-center font-italic">
+          No Candidates Found!!
+        </div>
+        <div class="row metal-card-row mt-2">
+          <div class="col-4 metal-card-col" *ngFor="let candidateObj of candidatesList">
+            <div class="d-block h-100">
+              <div class="card mb-0 h-100 custom-action-hover">
+                <app-candidate-card [candidate]="candidateObj"
+                                    [pagename]="pagename" [showCheckbox]="tagType == 'Personal'" (actionchecked)="actionchecked($event)">
+                </app-candidate-card>
+                <!--<i class="fa fa-ellipsis-h"> Unfavorite</i>-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+          <ngb-pagination [collectionSize]="totalRecords" [pageSize]="pagesize" [(page)]="pageindex"
+                          [maxSize]="4" (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+          </ngb-pagination>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Choose Demand Plan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <ng-select [items]="demandPlansList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                   bindLabel="demandname" bindValue="demandid" placeholder="Choose Demand Plan" class="form-control"
+                   [(ngModel)]="demandPlanValue">
+        </ng-select>
+
+      </div>
+      <div class="modal-footer">
+        <ngb-alert #selfClosingAlert *ngIf="successMessage" type="success" (close)="successMessage = ''">
+          {{
+          successMessage
+          }}
+        </ngb-alert>
+
+        <ngb-alert #selfClosingAlert *ngIf="failureMessage" type="danger" (close)="failureMessage = ''">
+          {{
+          failureMessage
+          }}
+        </ngb-alert>
+
+        <button *ngIf="!(successMessage || failureMessage)" [disabled]="!(demandPlanValue)" type="button"
+                id="closeModal" class="btn btn-primary" (click)="submitCandidates()">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- delete the profile confirmation window -->
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title">
+      Delete Candidate Profiles
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      Are you sure to delete the candidate profile ?
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok');deleteCandidateProfiles()">Ok</button>
+  </div>
+</ng-template>

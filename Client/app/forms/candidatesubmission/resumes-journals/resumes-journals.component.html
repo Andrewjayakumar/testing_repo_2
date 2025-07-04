@@ -1,0 +1,497 @@
+<div *ngIf="pageerrors" class="col-11 row errorpane">
+  <i class="fa fa-exclamation-triangle mr-2 "></i> 
+  <div class="col-10 mt-2" innerHTML="{{pageerrors}}"></div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <!-- START TABS DIV -->
+    <div class="tabbable-responsive">
+      <div class="tabbable">
+        <ul
+          class="nav nav-tabs"
+          id="linxea-avenir"
+          role="tablist"
+        >
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              id="eleve-tab"
+              data-toggle="tab"
+              href="#eleve"
+              role="tab"
+              aria-controls="first"
+              aria-selected="true"
+              >Resume</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="moyen-tab"
+              data-toggle="tab"
+              href="#moyen"
+              role="tab"
+              aria-controls="second"
+              aria-selected="false"
+              (click)="getJournals()" 
+              >Journal</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="faible-tab"
+              data-toggle="tab"
+              href="#faible"
+              role="tab"
+              aria-controls="third"
+              aria-selected="false"
+              (click)="getReqs()" 
+              >Requisition</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tab-content" style="margin-top: 2px">
+      <div
+        class="tab-pane fade show active"
+        id="eleve"
+        role="tabpanel"
+        aria-labelledby="eleve-tab"
+      >
+        <!-- START TABS DIV -->
+        <div class="tabbable-responsive">
+          <div class="tabbable">
+            <ul
+              class="nav nav-tabs"
+              id="eleve-nav"
+              role="tablist"
+            >
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  id="eleve-eco-tab"
+                  data-toggle="tab"
+                  href="#eleve-eco"
+                  role="tab"
+                  aria-controls="first"
+                  aria-selected="true"
+                  (click)="getMetalResume()"
+                  >Metal</a
+                >
+              </li>
+
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  id="eleve-standard-tab"
+                  data-toggle="tab"
+                  href="#eleve-standard"
+                  role="tab"
+                  aria-controls="second"
+                  aria-selected="false"
+                  (click)="getMonsterResume()"
+                  >Monster</a
+                >
+              </li>
+
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  id="eleve-standard-tab2"
+                  data-toggle="tab"
+                  href="#eleve-standard2"
+                  role="tab"
+                  aria-controls="third"
+                  aria-selected="false"
+                  (click)="getCbResume()"
+                  >Career Builder</a
+                >
+              </li>
+
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  id="eleve-standard-tab3"
+                  data-toggle="tab"
+                  href="#eleve-standard3"
+                  role="tab"
+                  aria-controls="fourth"
+                  aria-selected="false"
+                  (click)="getDiceResume()"
+                  >Dice Resume</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tab-content">
+          <div
+            class="tab-pane fade show active"
+            id="eleve-eco"
+            role="tabpanel"
+            aria-labelledby="eleve-eco-tab"
+          >
+            <!-- Metal resume -->
+            <div>
+              <div *ngIf="!noMetalResume"  class="resume-body">
+                <div class="container">
+                  <div
+                    [innerHTML]="metalresume"
+                    class="p-0"
+                  ></div>
+                </div>
+              </div>
+
+              <div *ngIf="loadingMetal" class="p-1 modal-height">
+                <h6 class="resume-load-mesg">Please Wait...</h6>
+              </div>
+              <div class="text-center p-5 modal-height" *ngIf="noMetalResume">
+                <h5>Resume not found!</h5>
+              </div>
+            </div>
+            <!-- Metal resume ends -->
+          </div>
+          <div
+            class="tab-pane fade"
+            id="eleve-standard"
+            role="tabpanel"
+            aria-labelledby="eleve-standard-tab"
+          >
+            <!-- Monster resume -->
+            <div>
+              <div *ngIf="!noMonsterResume"  class="resume-body">
+                <div class="container">
+                  <div
+                    [innerHTML]="monsterresume"
+                    class="p-0"
+                  ></div>
+                </div>
+              </div>
+
+              <div *ngIf="loadingMonster" class="p-1 modal-height">
+                <h6 class="resume-load-mesg">Please Wait...</h6>
+              </div>
+              <div class="text-center p-5 modal-height" *ngIf="noMonsterResume">
+                <h5>Resume not found!</h5>
+              </div>
+            </div>
+            <!-- Monster resume ends -->
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="eleve-standard2"
+            role="tabpanel"
+            aria-labelledby="eleve-standard-tab2"
+          >
+            <!-- Career Builder resume -->
+            <div>
+              <div *ngIf="!noCBResume"  class="resume-body">
+                <div class="container">
+                  <div
+                    [innerHTML]="cbresume"
+                    class="p-0"
+                  ></div>
+                </div>
+              </div>
+
+              <div *ngIf="loadingCB" class="p-1 modal-height">
+                <h6 class="resume-load-mesg">Please Wait...</h6>
+              </div>
+              <div class="text-center p-5 modal-height" *ngIf="noCBResume">
+                <h5>Resume not found!</h5>
+              </div>
+            </div>
+            <!-- Career builder resume ends -->
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="eleve-standard3"
+            role="tabpanel"
+            aria-labelledby="eleve-standard-tab3"
+          >
+            <!-- Dice resume -->
+            <div>
+              <div *ngIf="!noDiceResume"  class="resume-body">
+                <div class="container">
+                  <div
+                    [innerHTML]="
+                      diceresume"
+                    class="p-0"
+                  ></div>
+                </div>
+              </div>
+
+              <div *ngIf="loadingDice" class="p-1 modal-height">
+                <h6 class="resume-load-mesg">Please Wait...</h6>
+              </div>
+              <div class="text-center p-5 modal-height" *ngIf="noDiceResume">
+                <h5>Resume not found!</h5>
+              </div>
+            </div>
+            <!-- Dice resume ends -->
+          </div>
+        </div>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="moyen"
+        role="tabpanel"
+        aria-labelledby="moyen-tab"
+      >
+        <div class="tab-content" style="margin-top: 2px">
+          <div
+            class="tab-pane fade show active"
+            id="moyen"
+            role="tabpanel"
+            aria-labelledby="moyen-tab"
+          >
+            <!-- START TABS DIV -->
+            <div class="tabbable-responsive">
+              <div class="tabbable">
+                <ul
+                  class="nav nav-pills nav-justified"
+                  id="moyen-nav"
+                  role="tablist"
+                >
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active journalTab"
+                      id="moyen-eco-tab"
+                      data-toggle="tab"
+                      href="#moyen-eco"
+                      role="tab"
+                      aria-controls="first"
+                      aria-selected="true"
+                    ></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tab-content">
+              <div
+                class="tab-pane fade show active"
+                id="moyen-eco"
+                role="tabpanel"
+                aria-labelledby="moyen-eco-tab"
+              >
+
+              <div class="row m-0 mt-4">
+                <div class="form-group col-md-4">
+                  <label class="m-b label"
+                  >Journal Type</label
+                >
+                  <ng-select
+                    [items]="journalTypeList"
+                    [multiple]="false"
+                    [closeOnSelect]="true"
+                    [searchable]="true"
+                    bindLabel="category"
+                    bindValue="categoryid"
+                    placeholder="Select"
+                    class="form-control"
+                    [(ngModel)]="mainJournalType"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="getSubJournals($event)"
+                  >
+                  </ng-select>
+                </div>
+        
+                <div class="form-group col-md-4">
+                  <label class="m-b label"
+                  >Journal Sub Type</label
+                >
+                  <ng-select
+                    [items]="subJournalTypeList"
+                    [multiple]="false"
+                    [closeOnSelect]="true"
+                    [searchable]="true"
+                    bindLabel="journaltype"
+                    bindValue="id"
+                    placeholder="Select"
+                    class="form-control"
+                    [(ngModel)]="subJournalType"
+                    [ngModelOptions]="{ standalone: true }"
+                  >
+                  </ng-select>
+                </div>
+        
+                <div class="form-group col-md-1 mr-4 mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-primary applyButton"
+                    aria-label="Left Align"
+                    (click)="getJournals()"
+                    title="Search"
+                  >
+                    Search
+                  </button>
+                </div>
+                <div class="form-group col-md-1 mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-default resetButton"
+                    aria-label="Left Align"
+                    (click)="resetJournals()"
+                    title="Reset"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              <!-- Journal table -->
+                <div class="container">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Created On</th>
+                        <th>Description</th>
+                        <th>Created By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let journal of journalDetails">
+                        <td>{{journal.journaltype}}</td>
+                        <td>{{journal.createdon}}</td>
+                        <td>{{journal.journal}}</td>
+                        <td>{{journal.createdby}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="faible"
+        role="tabpanel"
+        aria-labelledby="faible-tab"
+      >
+        <div class="tab-content" style="margin-top: 2px">
+          <div
+            class="tab-pane fade show active"
+            id="faible"
+            role="tabpanel"
+            aria-labelledby="faible-tab"
+          >
+            <!-- START TABS DIV -->
+            <div class="tabbable-responsive">
+              <div class="tabbable">
+                <ul
+                  class="nav nav-pills nav-justified"
+                  id="faible-nav"
+                  role="tablist"
+                >
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active reqTab"
+                      id="faible-eco-tab"
+                      data-toggle="tab"
+                      href="#faible-eco"
+                      role="tab"
+                      aria-controls="first"
+                      aria-selected="true"
+                    ></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tab-content">
+              <div
+                class="tab-pane fade show active"
+                id="faible-eco"
+                role="tabpanel"
+                aria-labelledby="faible-eco-tab"
+              >
+              <div class="row m-0 mt-4">
+                <div class="form-group col-md-4">
+                  <label class="m-b label"
+                  >Status</label
+                >
+                  <ng-select
+                    [items]="statusList?.status"
+                    [multiple]="false"
+                    [closeOnSelect]="true"
+                    [searchable]="true"
+                    bindLabel="status"
+                    bindValue="id"
+                    placeholder="Select status to filter"
+                    class="form-control"
+                    [(ngModel)]="statusType"
+                    [ngModelOptions]="{ standalone: true }"
+                  >
+                  </ng-select>
+                </div>
+        
+                <div class="form-group col-md-1 mr-4 mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-primary applyButton"
+                    aria-label="Left Align"
+                    (click)="getReqs()"
+                    title="Search"
+                  >
+                    Search
+                  </button>
+                </div>
+                <div class="form-group col-md-1 mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-default resetButton"
+                    aria-label="Left Align"
+                    (click)="resetReqs()"
+                    title="Reset"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+                            <!-- Req table -->
+                            <div class="container">
+                              <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th>Requisition Name</th>
+                                    <th>Client Name</th>
+                                    <th>Rate</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let req of reqList">
+                                    <td>{{req.requisitionname}}</td>
+                                    <td>{{req.clientname}}</td>
+                                    <td>{{req.rateinfo}}</td>
+                                    <td>{{req.location}}</td>
+                                    <td>{{req.pipelineinfo}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,197 @@
+<div>
+
+  <div class="">
+
+    <div class="interview-slots mb--3">
+      <h6>TIME SLOTS</h6>
+
+      <span class="interview-slot-icon"><a role="button" class="btn btn-link fa fa-plus-square fa-2x text-primary" aria-hidden="true" (click)="showTimeSlotForm=true"></a></span>
+
+    </div>
+
+    <hr class="interview-separator">
+
+
+
+  </div>
+
+  <div class="col-md-12" *ngFor="let data of interviewtimeslots;let i = index">
+    <div class="card candidate-card">
+
+      <div class="row">
+        <div class="col-md-12">
+          <h6>Candidate Interview <span class="remove_interview" (click)="removeItem(i)"><i class="fa fa-times" aria-hidden="true"></i></span></h6>
+          <span class="pr-2">
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+            {{data.startdatetime.split(' ')[0]}}
+          </span>
+          <span class="pr-2"><i class="fa fa-clock-o"></i>{{data.startdatetime?.split(' ')[1]}} - {{data.enddatetime?.split(' ')[1]}}</span>
+          <span>{{data.timezone}}</span>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <hr [hidden]="interviewtimeslots && interviewtimeslots.length ==0" class="interview-separator">
+  <div class="col-md-12" *ngFor="let data of managertimeslots;let i = index">
+    <div class="card  manager-card">
+
+      <div class="row">
+        <div class="col-md-12">
+          <h6>Manager Follow-Up <span class="remove_interview" (click)="removeItemMgr(i)"><i class="fa fa-times" aria-hidden="true"></i></span></h6>
+          <span>
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+            {{data.startdatetime.split(' ')[0]}}
+          </span>
+          <span><i class="fa fa-clock-o"></i>{{data.startdatetime?.split(' ')[1]}} - {{data.enddatetime?.split(' ')[1]}}</span>
+          <span>{{data.timezone}}</span>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <hr [hidden]="managertimeslots && managertimeslots.length==0" class="interview-separator">
+
+  <form class="container" [formGroup]="interviewForm" [hidden]="!showTimeSlotForm">
+
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <div class="form-check-inline">
+          <label class="form-check-label font-size-small">
+            <input type="radio" class="form-check-input" (change)="onradioSelected('candidate')" name="optradio">Candidate Interview
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <label class="form-check-label font-size-small">
+            <input type="radio" class="form-check-input" (change)="onradioSelected('manager')" name="optradio">Manager Follow-Up
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="form-row" *ngIf="candidate">
+      <div class="form-group col-md-12">
+        <label class="rec-label" for="interviewtype">Type</label>
+
+
+        <ng-select [items]="interviewTypedetails"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="true"
+                   bindLabel="Type"
+                   bindValue="id"
+                   formControlName="interviewtypeid"
+                   [virtualScroll]="true"
+                   name="interviewtypeid"
+                   placeholder="Select Interview Type"
+                   class="form-control"
+                   id="interviewtype">
+        </ng-select>
+
+        <!--   <select id="interviewtype" formControlName="interviewtypeid" class="form-control" placeholder="Select Value">
+
+        <option *ngFor="let data of interviewTypedetails?.interviewtype" [value]="data.id">{{data.Type}}</option>
+
+      </select>
+       -->
+
+      </div>
+    </div>
+
+    <div class="form-row" *ngIf="manager">
+      <div class="form-group col-md-12">
+        <label class="rec-label" for="interviewMgr"> Type</label>
+
+
+        <ng-select [items]="interviewTypeDetailsMgr"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="true"
+                   bindLabel="Type"
+                   bindValue="id"
+                   formControlName="interviewtypeid"
+                   [virtualScroll]="true"
+                   name="interviewtypeid"
+                   placeholder="Select Followup Type"
+                   class="form-control"
+                   id="interviewMgr">
+        </ng-select>
+
+      </div>
+    </div>
+
+
+    <div class="form-row">
+      <div class="col-md-12">
+        <label class="rec-label" for="timezone">Time Zone</label>
+        <select id="timezone" formControlName="timezone" class="form-control">
+          <option selected value="">Select Timezone</option>
+
+          <option *ngFor="let data of timezoneDetails?.timezones" [value]="data.timezonecode">{{data.name}}</option>
+
+        </select>
+      </div>
+    </div>
+    <div class="form-row mt-2">
+      <div class="col-md-12">
+        <label class="rec-label" for="interviewdate"> Date</label>
+        <angular2-date-picker [(ngModel)]="startdate" formControlName="startdatetime" (onDateSelect)="onStartDateSelected($event)" [settings]="settings"></angular2-date-picker>
+
+      </div>
+    </div>
+
+    <div class="form-row mt-2">
+      <div class="form-group col-md-12">
+        <label class="rec-label" for="intrwDuration"> Duration</label>
+
+
+        <ng-select [items]="durationList"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="true"
+                   bindLabel="duration"
+                   bindValue="value"
+                   formControlName="interviewduration"
+                   (change)="onDurationSelected($event)"
+                   name="interviewduration"
+                   placeholder="Select Duration"
+                   class="form-control"
+                   id="intrwDuration">
+        </ng-select>
+
+      </div>
+    </div>
+    <!--  <div class="form-row mt-2">
+
+     <div class="col-md-12">
+       <label class="rec-label" for="interenddate">Interview End Date</label>
+
+       <angular2-date-picker [(ngModel)]="enddate" formControlName="enddatetime" id="interenddate" (onDateSelect)="onEndDateSelected($event)" [settings]="settings"></angular2-date-picker>
+
+     </div>
+
+   </div> -->
+
+    <div class="form-row mt-2">
+      <div class="from-group col-md-12">
+        <label class="rec-label" for="description">Description</label>
+        <input type="text" class="form-control" formControlName="description" id="description" placeholder="Description">
+      </div>
+    </div>
+
+
+    <div class="action-buttons">
+      <button type="button" class="btn btn-outline-primary btn-sm mr-2" (click)="showTimeSlotForm = false">Cancel</button>
+      <button type="button" (click)="formReset()" class="btn btn-outline-primary btn-sm mr-2">Reset</button>
+      <button type="button" (click)="add()" [disabled]="!interviewForm.valid" class="btn btn-primary btn-sm mr-3">Add</button>
+
+
+    </div>
+  </form>
+</div>

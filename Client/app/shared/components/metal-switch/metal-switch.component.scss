@@ -1,0 +1,188 @@
+$primary: #1976d2;
+
+.switch.round label .lever {
+    width: 44px;
+    height: 22px;
+    border-radius: 10em;
+}
+.switch.round label .lever:after {
+    width: 19px;
+    height: 18px;
+    border-radius: 50%;
+    left: 4px;
+    top: 2px;
+}
+.switch.square label .lever {
+    width: 54px;
+    height: 34px;
+    border-radius: 0px;
+}
+.switch.square label .lever:after {
+    width: 26px;
+    height: 26px;
+    border-radius: 0px;
+    left: 4px;
+    top: 4px;
+}
+
+:host.switch-primary {
+  label {
+    color: $primary !important;
+  }
+}
+
+input[type="checkbox"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.switch label input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch label .lever {
+    position: relative;
+    display: inline-block;
+    margin: 0 1rem;
+    margin-right: .625rem;
+    vertical-align: middle;
+    content: "";
+    background-color: #818181;
+    border-radius: .9375rem;
+    width: 2.5rem;
+    height: .9375rem;
+    -webkit-transition: background-color.3s ease;
+    transition: background-color .3s ease;
+}
+
+.switch.blue-white-switch label .lever {
+    background-color: #ccc;
+}
+
+.switch.blue-white-switch label .lever:after {
+    background-color: #fff;
+}
+
+.switch label .lever:after {
+    position: absolute;
+    /* top: -.1875rem; */
+    /* left: -.3125rem; */
+    display: inline-block;
+    content: "";
+    background-color: #f1f1f1;
+    border-radius: 1.3125rem;
+   // -webkit-box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,0.4);
+   //  box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,0.4);
+    width: 1.3125rem;
+    height: 1.3125rem;
+   // -webkit-transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+   -webkit-transform: translateX(0.9rem);
+   transform: translateX(0.9rem);
+   -webkit-transition: left background-color .3s ease-in-out,border-color .3s ease-in-out,-webkit-box-shadow 1s ease-in-out;
+   // transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+   // transition: left .3s ease,background .3s ease,box-shadow 1s ease;
+   // transition: left .3s ease,background .3s ease,box-shadow 1s ease,-webkit-box-shadow 1s ease;
+    transition: background-color .3s ease-in-out,border-color .3s ease-in-out,box-shadow .3s ease-in-out;
+}
+
+.switch.blue-white-switch label input[type=checkbox]:checked+.lever {
+    background-color: $primary;
+}
+
+.switch.blue-white-switch label input[type=checkbox]:checked+.lever:after {
+    background-color: #fff;
+}
+
+/**
+The Style sUSed are below
+=======================
+**/
+
+.checkbox-label {
+    margin-left : -15px; // to remove unnecessary padding that comes from bootstrap
+    top : 6px;
+    font-size: small;
+    cursor: pointer;
+    color: #4c4c4c;
+}
+
+:host-context(.rec-label) label{
+    color: $primary ;
+    font-size: small;
+    margin-bottom: 0px !important;
+    float:left;
+  }
+
+.custom-control-label {
+    position: relative;
+    margin-bottom: 0;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.custom-control-input:checked~
+ .custom-control-label{
+     &:before {
+    color: #fff;
+    border-color: $primary;
+    background-color: $primary;
+    //border-color: #007bff;
+    //background-color: #007bff;
+     
+    }
+}
+
+.custom-switch .custom-control-label::before {
+    left: -2.25rem;
+    width: 2.5rem;
+    pointer-events: all;
+    border-radius: 1rem;
+}
+
+.custom-control-label::before, .custom-file-label, .custom-select {
+    transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.custom-control-label::before {
+    position: absolute;
+    top: .25rem;
+    left: -1.5rem;
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    pointer-events: none;
+    content: "";
+    background-color: #fff;
+    border: #adb5bd solid 1px;
+}
+
+.custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+    background-color: #fff;
+    -webkit-transform: translateX(1rem);
+    transform: translateX(1rem);
+}
+
+.custom-switch .custom-control-label::after {
+    top: calc(0.25rem + 2px);
+    left: calc(-2.25rem + 2px);
+    width: calc(1.5rem - 4px);
+    height: calc(1.5rem - 4px);
+    background-color: #adb5bd;
+    border-radius: .8rem;
+    transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-transform .15s ease-in-out;
+    transition: transform .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: transform .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-transform .15s ease-in-out;
+}
+
+.custom-control-label::after {
+    position: absolute;
+    top: .25rem;
+    left: -1.5rem;
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    content: "";
+    background: no-repeat 50% / 50% 50%;
+}

@@ -1,0 +1,481 @@
+﻿[
+  {
+    "id": "1",
+    "key": "Attributes",
+    "Name": "Textbox",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-text-width",
+    "type": "textbox",
+    "width": 6,
+    "order": 1,
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+  },
+  {
+    "id": "1",
+    "key": "Attributes",
+    "Name": "Number",
+    "label": "Number",
+    "placeholder": "Number",
+    "icon": "fa fa-sort-numeric-desc",
+    "type": "number",
+    "width": 6,
+    "order": 2,
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+  },
+  {
+    "key": "Attributes",
+    "Name": "Editor",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-font",
+    "type": "editor",
+    "width": 12,
+    "order": 3,
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+  },
+  {
+    "key": "Attributes",
+    "Name": "Date",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-calendar",
+    "type": "date",
+    "width": 6,
+    "order": 4,
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+  },
+  {
+    "key": "Attributes",
+    "Name": "Email",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-envelope-o",
+    "type": "email",
+    "width": 6,
+    "order": 5,
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+  },
+  {
+    "key": "Attributes",
+    "Name": "Phone",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-phone-square",
+    "type": "phonenumber",
+    "width": 6,
+    "order": 6,
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+
+  },
+  {
+    "key": "Attributes",
+    "Name": "Password",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-unlock-alt",
+    "type": "password",
+    "width": 6,
+    "order": 7,
+    "require": true,
+    "showinlist": false,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+  },
+
+
+
+  {
+    "id": "1",
+    "key": "Attributes",
+    "Name": "Dropdown",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-chevron-circle-down",
+    "type": "dropdown",
+    "width": 6,
+    "order": 8,
+    "textfield": "key",
+    "valuefield": "value",
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "hasdatasource": true,
+    "isTableView": false,
+    "apiurl": "",
+    "optionlist": []
+
+  },
+  {
+    "key": "Attributes",
+    "Name": "Autocomplete",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-search",
+    "type": "autocomplete",
+    "width": 6,
+    "order": 9,
+    "textfield": "key",
+    "valuefield": "value",
+    "queryfield": "",
+    "require": false,
+    "showinlist": true,
+    "haschildren": false,
+    "hasdatasource": true,
+    "isTableView": false,
+    "apiurl": "",
+    "optionlist": [
+    ]
+  },
+  {
+    "key": "Attributes",
+    "Name": "Checkbox",
+    "label": "Display Text",
+    "placeholder": "Placeholder Text",
+    "icon": "fa fa-check-square-o",
+    "type": "checkbox",
+    "width": 6,
+    "order": 10,
+    "require": false,
+    "showinlist": false,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": false
+
+  },
+  {
+    "key": "Attributes",
+    "Name": "Radio List",
+    "label": "Radio List",
+    "placeholder": "Radio List",
+    "icon": "fa fa-bars",
+    "type": "radio",
+    "width": 6,
+    "order": 11,
+    "textfield": "key",
+    "valuefield": "value",
+    "require": false,
+    "showinlist": false,
+    "haschildren": false,
+    "hasdatasource": true,
+    "isTableView": false,
+    "apiurl": "",
+    "optionlist": []
+
+  },
+  {
+    "key": "Tablename",
+    "Name": "Grid",
+    "label": "",
+    "icon": "fa fa-table",
+    "type": "grid",
+    "width": 12,
+    "order": 12,
+    "viewtype": "grid",
+    "showinlist": false,
+    "haschildren": true,
+    "hasdatasource": true,
+    "isTableView": false,
+    "children": []
+  },
+  {
+    "key": "Tab",
+    "Name": "Tab",
+    "label": "Tab",
+    "Totaltab": "0",
+    "icon": "fa fa-files-o",
+    "type": "tab",
+    "width": 12,
+    "order": 13,
+    "showinlist": false,
+    "haschildren": true,
+    "hasdatasource": false,
+    "isTableView": false,
+    "children": []
+
+  },
+  {
+    "key": "Formwizard",
+    "Name": "Form wizard",
+    "label": "Form wizard",
+    "Totalstep": "0",
+    "icon": "fa fa-magic",
+    "type": "formwizard",
+    "width": 12,
+    "order": 14,
+    "showinlist": false,
+    "haschildren": true,
+    "hasdatasource": false,
+    "isTableView": false,
+    "children": []
+
+  },
+  {
+    "key": "Panel",
+    "Name": "Panel",
+    "label": "Panel",
+    "placeholder": "Panel",
+    "icon": "fa fa-square-o",
+    "type": "panel",
+    "width": 12,
+    "order": 15,
+    "showinlist": false,
+    "haschildren": true,
+    "hasdatasource": false,
+    "isTableView": false,
+    "children": []
+
+  },
+  {
+    "key": "Upload",
+    "Name": "Upload",
+    "label": "Upload",
+    "placeholder": "Upload",
+    "icon": "fa fa-upload",
+    "type": "Upload",
+    "apiurl": "",
+    "width": 12,
+    "order": 16,
+    "showinlist": false,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": true
+
+  },
+  {
+    "key": "chart",
+    "Name": "Chart",
+    "label": "Chart",
+    "placeholder": "Upload",
+    "icon": "fa fa-line-chart",
+    "type": "chart",
+    "width": 12,
+    "order": 18,
+    "ResultApi": "",
+    "ResultApiParam": [],
+    "ResultDisplayField": [],
+    "chartOptions": {
+      "chartType": "",
+      "chartName": "",
+      "theme": "light",
+      "curveType": "Linear"
+    },
+    "showinlist": false,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": true
+
+  },
+  {
+    "key": "search",
+    "Name": "Search",
+    "label": "",
+    "placeholder": "",
+    "icon": "fa fa-search-plus",
+    "type": "search",
+    "width": 12,
+    "order": 18,
+    "showinlist": false,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": true,
+    "SearchApiParams": [],
+    "ResultApiParam": [],
+    "CollectionList": [],
+    "ResultDisplayField": [
+      {
+        "DisplayName": "Name",
+        "id": "c565e9ca-75e2-5e17-24b8-7c83cb4991fb",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "UserId",
+        "id": "73e78d2c-c5a1-0972-1799-b135a3578eef",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "ProfilePhotoUrl",
+        "id": "97489262-8565-c20d-ef6a-d4bae004cef6",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "PictureUrl",
+        "id": "9405b50e-56e2-c0a8-b7fb-39f2d993c2b6",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Text",
+        "id": "d2553176-644c-418a-8bcd-f866dba9d3da",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Follower",
+        "id": "f105834d-8be1-db10-95e3-f722e1a0a218",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Tweet_Share",
+        "id": "2264f2ed-127e-41c1-3bae-b8b21f21d6f8",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Time",
+        "id": "da279824-2e4d-4aab-dce2-a583bcc43da2",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "RedirectUrl",
+        "id": "e87870d7-976c-be27-509a-453800d25a58",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      }
+    ],
+    "Collection": "Collection",
+    "Add": false,
+    "Edit": false,
+    "Delete": false,
+    "Up": false,
+    "Down": false
+  },
+  {
+    "key": "data",
+    "Name": "List",
+    "label": "",
+    "icon": "fa fa-th-list",
+    "type": "list",
+    "width": 12,
+    "order": 19,
+    "haschildren": false,
+    "isTableView": false,
+    "hasdatasource": true,
+    "ResultDisplayField": [
+      {
+        "DisplayName": "Name",
+        "id": "c565e9ca-75e2-5e17-24b8-7c83cb4991fb",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "UserId",
+        "id": "73e78d2c-c5a1-0972-1799-b135a3578eef",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "ProfilePhotoUrl",
+        "id": "97489262-8565-c20d-ef6a-d4bae004cef6",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "PictureUrl",
+        "id": "9405b50e-56e2-c0a8-b7fb-39f2d993c2b6",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Text",
+        "id": "d2553176-644c-418a-8bcd-f866dba9d3da",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Follower",
+        "id": "f105834d-8be1-db10-95e3-f722e1a0a218",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Tweet_Share",
+        "id": "2264f2ed-127e-41c1-3bae-b8b21f21d6f8",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "Time",
+        "id": "da279824-2e4d-4aab-dce2-a583bcc43da2",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      },
+      {
+        "DisplayName": "RedirectUrl",
+        "id": "e87870d7-976c-be27-509a-453800d25a58",
+        "BindingField": "",
+        "BindingFieldList": [],
+        "Show": true
+      }
+    ],
+    "Add": false,
+    "Edit": false,
+    "Delete": false,
+    "Up": false,
+    "Down": false
+
+  },
+  {
+    "key": "Sidebar",
+    "Name": "Side bar",
+    "label": "Side bar",
+    "placeholder": "Side bar",
+    "icon": "fa fa-bars",
+    "openicon": "fa fa-bars",
+    "type": "sidebar",
+    "width": 12,
+    "order": 15,
+    "showinlist": false,
+    "haschildren": true,
+    "hasdatasource": false,
+    "isTableView": false,
+    "children": []
+  }
+]

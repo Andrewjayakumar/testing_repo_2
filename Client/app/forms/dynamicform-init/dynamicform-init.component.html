@@ -1,0 +1,32 @@
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<div class="card mb-2 {{Content.penalClass}}" [ngStyle]="{'background':Content.penalbg}">
+  <div class="card-header d-flex align-items-center pointer" (click)="hide = !hide" *ngIf="Content.hideheader != true">
+    <div class="pr-2 mb-0" *ngIf="FormJson">
+      <span class="d-flex align-items-center">
+        <span>{{getTitle()}}</span>
+      </span>
+    </div>
+    <div class="ml-auto">
+      <a *ngIf="AuthService.currentUser && AuthService.currentUser.roles.indexOf('Tenant Admin') > -1 && FormJson"
+        [routerLink]="['../../forms/Edit', FormJson.Id]" class="mr-2">
+        <i class="fa-lg fa fa-cog"></i>
+      </a>
+      <span *ngIf="!hide"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+      <span *ngIf="hide"><i class="fa fa-angle-up" aria-hidden="true"></i></span>
+    </div>
+  </div>
+  <div class="card-body {{Content.penalBodyClass}}" [ngbCollapse]="!hide">
+    <div class="row">
+      <div class="col-md-12" *ngIf="FormJson">
+        <!--<button type="button" class="btn btn-default-focus" (click)="addaction()">Add to Action </button>-->
+        <!--<pre>{{FormJson.ModelJson|json}}</pre>-->
+        <app-dynamicform [FormUI]="FormJson" [controls]="FormJson.controls" [datamodel]="FormJson.ModelJson"
+          [AuthService]="AuthService" [filterdata]="FormJson.FilterModelJson" [access]="Content.access">
+        </app-dynamicform>
+      </div>
+      <div *ngIf="!FormJson">
+        <b class="pl-3">loading...</b>
+      </div>
+    </div>
+  </div>
+</div>

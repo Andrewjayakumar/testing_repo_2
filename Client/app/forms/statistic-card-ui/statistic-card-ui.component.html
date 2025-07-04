@@ -1,0 +1,85 @@
+
+<div class="statistic-card card mb-3 {{control.fontColor}} {{control.bgColor}}" style="background-image:url({{bgImage}}); background-size:cover; background-position:center" *ngIf="control.cardType == 'sratistic'">
+  <div class="card-body">
+    <h5 class="card-title" *ngIf="control.title">{{control.title}}</h5>
+    <h3 class="d-flex justify-content-between align-items-center mb-3">
+      <i class="fa {{control.cardIcon}} {{control.cardIconColor}}"></i>
+      <span *ngIf="data[control.value]">{{data[control.value]}}</span>
+    </h3>
+    <div *ngIf="control.showchart" >
+      <!--<ngx-charts-sparkline *ngIf="sparklineData"
+                            [view]="[100,50]"
+                            class="chart-container"
+                            [scheme]="'flame'"
+                            [results]="sparklineData"
+                            [curve]="curve">
+      </ngx-charts-sparkline>-->
+      <app-chart-ui class="" [control]="control" [formGroup]="formGroup" [AuthService]="AuthService"  [data]="data"></app-chart-ui>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <span *ngIf="control.subTitle">{{control.subTitle}}</span>
+      <span class="m-0" *ngIf="data[control.subValue]">{{data[control.subValue]}}</span>
+    </div>
+  </div>
+</div>
+<div class="statistic-card card mb-3 text-center {{control.fontColor}} {{control.bgColor}}" *ngIf="control.cardType == 'social'">
+  <div class="card-body">
+    <h3 class="card-title">
+      <strong class="{{control.cardIconColor}}">{{data[control.value]}}</strong>
+    </h3>
+    <h5 class="mb-0">
+      <i class="mr-2 fa {{control.cardIcon}} {{control.cardIconColor}}"></i>{{control.title}}
+    </h5>
+    <div *ngIf="control.showchart">
+      <!--<ngx-charts-sparkline *ngIf="sparklineData"
+                            [view]="[100,50]"
+                            class="chart-container"
+                            [scheme]="'flame'"
+                            [results]="sparklineData"
+                            [curve]="curve">
+      </ngx-charts-sparkline>-->
+      <app-chart-ui  [control]="control" [formGroup]="formGroup" [AuthService]="AuthService"  [data]="data"></app-chart-ui>
+    </div>
+    <p *ngIf="control.subTitle">{{control.subTitle}}</p>
+    <a *ngIf="control.cardButton" [ngClass]="{'color-inherit': !control.cardButtonColor}" class="btn {{control.cardButtonColor}}" [href]="control.CardButtonUrl">{{control.cardButton}}</a>
+  </div>
+
+</div>
+<div class="statistic-card card mb-3 text-center {{control.fontColor}} {{control.bgColor}}" *ngIf="control.cardType == 'image'">
+  <div class="card-body">
+    <img src="{{control.cardIcon}}" />
+    <h5 class="mb-0">
+      <i class="mr-2 fa {{control.cardIcon}} {{control.cardIconColor}}"></i>{{control.title}}
+    </h5>
+    <div *ngIf="control.showchart">
+      <!--<ngx-charts-sparkline *ngIf="sparklineData"
+                            [view]="[100,50]"
+                            class="chart-container"
+                            [scheme]="'flame'"
+                            [results]="sparklineData"
+                            [curve]="curve">
+      </ngx-charts-sparkline>-->
+      <app-chart-ui [control]="control" [formGroup]="formGroup" [AuthService]="AuthService"  [data]="data"></app-chart-ui>
+    </div>
+    <p *ngIf="control.subTitle">{{control.subTitle}}</p>
+    <a *ngIf="control.cardButton" [ngClass]="{'color-inherit': !control.cardButtonColor}" class="btn {{control.cardButtonColor}}" [href]="control.CardButtonUrl">{{control.cardButton}}</a>
+  </div>
+
+</div>
+<div class="statistic-card card mb-3 {{control.fontColor}} {{control.bgColor}}" *ngIf="control.cardType == 'small'">
+  <div class="card-body p-2 d-flex justify-content-center align-items-center">
+    <div class="mr-3" *ngIf="control.showchart">
+      <app-chart-ui [control]="control" [formGroup]="formGroup" [AuthService]="AuthService"  [data]="data"></app-chart-ui>
+    </div>
+    <i *ngIf="!control.showchart" class="mr-2 fa fa-2x {{control.cardIcon}} {{control.cardIconColor}}"></i>
+    <div class="">
+      <label class="mb-0">{{control.title}}</label>
+      <strong class="{{control.cardIconColor}} d-block">{{data[control.value]}}</strong>
+      <p *ngIf="control.subTitle" class="pt-2">{{control.subTitle}}</p>
+      <a *ngIf="control.cardButton" [ngClass]="{'color-inherit': !control.cardButtonColor}" class="btn {{control.cardButtonColor}}"
+        [href]="control.CardButtonUrl">{{control.cardButton}}</a>
+    </div>
+  </div>
+</div>
+<!--<easy-pie-chart [percent]="data[control.value]" [options]="options">Kanti</easy-pie-chart>
+{{control.title}}-->

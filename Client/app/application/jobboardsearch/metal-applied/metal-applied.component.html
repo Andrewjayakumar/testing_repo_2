@@ -1,0 +1,46 @@
+<div *ngIf="showloader" class="text-center p-2">
+  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+</div>
+
+<div *ngIf="appliedCandidateDetails?.length == 0 && !appliedCandidateDetails && !showLoader"  class="text-center font-italic">
+{{message}}
+</div>
+<div *ngIf="sourceCandidatesResp" class="text-center font-italic">
+  {{sourceCandidatesResp}}
+</div>
+
+<div *ngIf="!showloader" class="col-md-12 p-0 mt-2">
+  <div class="container" id="candidatecard">
+    <!-- cards -->
+    <div class="row metal-card-row mt-2">
+      <div class="col-3 metal-card-col p-1" *ngFor="let candidateObj of appliedCandidateDetails">
+        <div class="d-block h-100">
+          <div class="card mb-0 h-100 custom-action-hover">
+            <app-candidate-card [candidate]="candidateObj" [pagename]="'appliedCandidates'" [showCheckbox]="true" 
+            [requisitionid]="requisitionid" (actionchecked)="actionchecked($event)" [isCandidateDashboardSearch]="isCandidateDashboard" >
+            </app-candidate-card>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" *ngIf="candidateidArray?.length > 0" class="
+      btn
+      position-fixed
+      btn-custom-circle
+      right
+      bottom-3
+      mb-3
+      mr-3
+      btn-xl btn-info btn-lg
+    " (click)="sourceCandidates()">
+    Source
+  </button>
+
+    <div *ngIf="totalprofilesfound?.length > 0" class="d-flex justify-content-center mt-3">
+      <ngb-pagination [collectionSize]="totalprofilesfound" [pageSize]="pagesize" [(page)]="pageindex"
+                      [maxSize]="4" (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+    </div>
+  </div>
+</div>

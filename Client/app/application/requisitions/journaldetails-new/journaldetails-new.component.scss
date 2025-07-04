@@ -1,0 +1,121 @@
+
+
+.card-2 {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0px !important;
+    height: 100%;
+  }
+  
+  .card-3 {
+    margin: 20px 0;
+    float: none;
+    max-width: 100%;
+    height: 100%;
+  }
+  
+  .mv-right {
+    float: right;
+  }
+  
+  
+  .card-2 h6 {
+    color: #6495ED;
+    font-variant-caps: small-caps;
+    font-weight: bold;
+    font-size: medium;
+  }
+  
+  .label-color {
+    color: #6495ED;
+  }
+  
+  label.m-b {
+    margin-bottom: 0px !important;
+  }
+  
+  .collapsible-link {
+    width: 100%;
+    position: relative;
+    text-align: left;
+  }
+  
+  .collapsible-link::before {
+    content: '\f107';
+    position: absolute;
+    top: 50%;
+    right: 0.8rem;
+    transform: translateY(-50%);
+    display: block;
+    font-family: 'FontAwesome';
+    font-size: 1.1rem;
+  }
+  
+  .collapsible-link[aria-expanded='true']::before {
+    content: '\f106';
+  }
+  
+  
+  
+  .card-sub {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  
+  .card-header {
+    padding: 0 0 !important;
+  }
+  
+  .accordion-background {
+    border-bottom:1px solid #ebebeb;
+  }
+  
+  .project-name{
+    width:26%;
+  }
+  
+  .client{
+    width:16%;
+  }
+  
+  .noresults{
+    text-align:center;
+    color:red;
+  }
+  
+  .search-table{
+    border-bottom:1px solid #ebebeb;
+    margin-bottom:14px;
+  }
+  
+
+  .table-jd thead tr th {
+    border-top: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
+    background-color: #f4f4f4;
+    font-size: 14px;
+  }
+
+  .table-jd tbody tr td{
+    border-bottom: 1px solid #d3d3d3;
+    font-size: 1.2em;
+  }
+
+  .table-jd thead tr{
+    line-height: 1em;
+  }
+
+  .d-saparator:after{
+    content: ' \00B7';
+    transform: scale(2);
+    display: inline-block;
+  }

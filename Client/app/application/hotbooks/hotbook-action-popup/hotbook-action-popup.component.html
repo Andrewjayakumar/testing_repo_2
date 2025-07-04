@@ -1,0 +1,114 @@
+<ng-container>
+  <div>
+    <div class="modal-header">
+      <h6 *ngIf="!isShared" class="modal-title summary-heading">
+        Delete Hotbook
+      </h6>
+      <h6 *ngIf="isShared" class="modal-title summary-heading">
+        Share Hotbook
+      </h6>
+      <i
+        class="fa fa-times fa-lg close-summary"
+        (click)="modal.close(true)"
+        aria-hidden="true"
+      ></i>
+    </div>
+
+    <div class="modal-body sumamry-body">
+      <div class="card-2 card-3 card-1">
+        <form
+          name="rForm"
+          [formGroup]="rForm"
+          (ngSubmit)="rForm.valid && onClickSubmit(rForm.value)"
+        >
+          <div class="row">
+            <div class="col-md-12">
+              <div id="accordionExample" class="">
+                <div class="">
+                  <div
+                    id="collapseOne"
+                    aria-labelledby="headingOne"
+                    data-parent="#accordionExample"
+                    class="collapse show"
+                  >
+                    <div *ngIf="isShared" class="">
+                      <div class="form-row">
+                        <div class="form-group col-md-12">
+                          <label for="jobtitle" class="m-b label mandatory"
+                            >Select Recruiter/s name</label
+                          >
+                          <ng-select
+                            [items]="recruiterdetails | async"
+                            [multiple]="true"
+                            [closeOnSelect]="true"
+                            [searchable]="true"
+                            bindLabel="recruiter"
+                            bindValue="recruiter"
+                            id="recruiter"
+                            formControlName="recruiter"
+                            placeholder="Search Name Here"
+                            class="form-control"
+                            [(ngModel)]="recruiterClear"
+                            [ngModelOptions]="{ standalone: true }"
+                            [typeahead]="recruiterinput$"
+                            [loading]="isJobTitleLoading"
+                          >
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="!isShared" class="">
+                      <div class="form-row">
+                        <div class="form-group col-md-12">
+                          <label for="jobtitle" class="m-b label mandatory"
+                            >Are you sure you want to delete?</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="final_search">
+            <ngb-alert
+              #selfClosingAlert
+              *ngIf="successMessage"
+              type="success"
+              (close)="successMessage = ''"
+              >{{ successMessage }}
+            </ngb-alert>
+
+            <ngb-alert
+              #selfClosingAlert
+              *ngIf="failureMessage"
+              type="danger"
+              (close)="failureMessage = ''"
+              >{{ failureMessage }}
+            </ngb-alert>
+
+            <button
+              class="btn btn-primary float-right"
+              id="apply"
+              *ngIf="isShared && !(successMessage || failureMessage)"
+              type="submit"
+              [disabled]="!recruiterClear"
+            >
+              Share
+            </button>
+            <button
+              class="btn btn-primary float-right"
+              id="apply"
+              *ngIf="!isShared && !(successMessage || failureMessage)"
+              type="submit"
+            >
+              Delete Hotbook
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-container>

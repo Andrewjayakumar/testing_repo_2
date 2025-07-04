@@ -1,0 +1,166 @@
+<div class="container-fluid m-3 ml-4 backdrop">
+  <div class="Title text-primary">
+    <h5>My Pool</h5>
+  </div>
+ 
+  <ngb-alert #selfClosingAlert
+             *ngIf="exportMessage"
+             type="success"
+             (close)="exportMessage = ''">
+    {{ exportMessage }}
+  </ngb-alert>
+  
+  <div *ngIf="dataset && dataset.length >0" class=" pull-right mb-4">
+    <button role="button" class="btn btn-success" (click)="exportMyPool()">Export to Excel</button>
+  </div>
+
+  <div class="col-12 mt-4">
+
+
+    <form #mypoolForm="ngForm" (ngSubmit)="searchMyPool(mypoolForm)">
+
+
+      <div class="row m-2">
+        <div class="col-md-3">
+          <label>
+            Pool
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <div>
+            <ng-select class="form-control" [items]="poolList" [multiple]="false" [closeOnSelect]="true" [searchable]="false" placeholder="--Select--" [(ngModel)]="datamodel.poolstatus" name="poolstatus"
+                       #poolstatus="ngModel" required>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <label class="start-date">
+            Closure Start Date
+
+          </label>
+          <div class="input-group p-0">
+            <input class="form-control" id="startdateField" [(ngModel)]="startDate" (ngModelChange)="StartDateChanged()"
+                   placeholder="yyyy-mm-dd" (focus)="sd.toggle()"
+                   name="startdate" ngbDatepicker #sd="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-calendar" (click)="sd.toggle()" type="button"></button>
+            </div>
+
+          </div>
+        </div>
+
+        <div class=" col-md-3">
+          <label class="end-date">
+            Closure End Date
+
+          </label>
+          <div class="input-group">
+            <input [disabled]="!startDate" class="form-control" id="enddatefeild" [(ngModel)]="endDate" (ngModelChange)="EndDateChanged()"
+                   [minDate]="startDate" placeholder="yyyy-mm-dd" (focus)="ed.toggle()"
+                   name="endDate" ngbDatepicker #ed="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-calendar" (click)="ed.toggle()" type="button"></button>
+            </div>
+
+
+          </div>
+        </div>
+
+       
+      </div>
+      
+
+      <div class="row m-2">
+        <div class="col-md-6">
+          <label>
+            Location
+          </label>
+          <div>
+            <ng-select [items]="stateslist" [multiple]="true" [closeOnSelect]="true" [searchable]="true" bindLabel="state"
+                       bindValue="state" placeholder="--Select--" [loading]="stateslist===null" [(ngModel)]="datamodel.state"
+                       name="location" class="form-control" #location="ngModel" (focus)="onLocationFocus()">
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="istagadmin">
+          <label>
+            Tag Members
+
+          </label>
+          <div>
+            <ng-select [items]="tagmembersList" class="form-control" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                       bindLabel="userid" bindValue="userid" placeholder="Type to search"
+                       [(ngModel)]="datamodel.tagmember" name="taglist"
+                       #taglist="ngModel">
+            </ng-select>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+      <div class="mb-3 pull-right">
+          <button (click)="resetForm()" type="reset" class="btn btn-outline-primary float-right m-2">Reset</button>
+        <button type="submit" class="btn btn-primary float-right m-2" [disabled]="!datamodel.poolstatus" >Search</button>
+
+      
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <div *ngIf="loading" class="text-center p-2">
+    <i class="fa fa-2x fa-spinner fa-spin"></i>
+  </div>
+  <div *ngIf="(!dataset || dataset.length ==0) && searchClicked && !loading" class=" text-center p-2 mt-4">
+    <i><p>No Records found !!</p></i>
+  </div>
+
+  <div class="row col-12 container mt-4 zoomOut tblscroll" *ngIf="dataset && dataset.length >0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Candidate</th>
+          <th>Tag Member</th>
+
+          <th>Job Title</th>
+          <th>Sector</th>
+          <th>TCU</th>
+          <th>City</th>
+          <th>Email</th>
+          <th>Work Auth</th>
+          <th>Tag Closure</th>
+        </tr>
+      </thead>
+
+      <tbody class="table-striped">
+        <tr *ngFor="let record of dataset">
+
+          <td>{{record.candidatename}}</td>
+          <td>{{record.tagmember}}</td>
+          <td>{{record.jobtitle}}</td>
+          <td>{{record.sector}}</td>
+          <td>{{record.tcu}}</td>
+          <td>{{record.city}}</td>
+          <td>{{record.emailid}}</td>
+          <td>{{record.workauthorization}}</td>
+          <td>{{record.tagclosuretype}}</td>
+        </tr>
+      </tbody>
+
+    </table>
+    <!--
+    <div *ngIf="dataset?.length > 15" class="d-flex justify-content-center mt-3">
+      <ngb-pagination [collectionSize]="dataset" [pageSize]="pagesize" [maxSize]="5"
+                      [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+
+    </div>  -->
+  </div>
+
+</div>

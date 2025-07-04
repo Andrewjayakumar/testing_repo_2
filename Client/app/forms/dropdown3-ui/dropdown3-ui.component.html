@@ -1,0 +1,793 @@
+<!--<pre>{{data|json}}</pre>-->
+
+<div class="form-group" *ngIf="access == 'write'" [formGroup]="formGroup">
+  <div class="dd-blok">
+    <label class="" [for]="formGroup.controls[control_id]">
+      {{control.label}}
+      <sup class="text-danger font-weight-bold" *ngIf="control.label && control.require">*</sup>
+      <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}"
+        ngbTooltip="{{control.help}}"></i>
+    </label>
+    <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+    <div class="d-flex align-items-center">
+      <ng-select *ngIf="control.groupby" #api appHoverDir formControlName={{control_id}} class="form-control"
+        [items]="dropdownList" bindLabel={{control.textfield}} bindValue={{control.valuefield}} [loading]="isApiCalling"
+        [(ngModel)]="data[control.key]" placeholder={{control.placeholder}}
+        [ngClass]="{'border-danger' :control.require && formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched}"
+        (change)="onChange($event)" [multiple]="control.selectiontype=='single' ? false : true"
+        [addTag]="control.addTag ? addTag : false" groupBy={{control.groupbyfield}}
+        [selectableGroup]="control.selectablegroup" [closeOnSelect]="control.closeOnSelect"
+        [hideSelected]="control.hideSelected" [searchable]="control.enablesearchfilter"
+        [maxSelectedItems]="control.selectionLimit ? control.selectionLimit : 9999999"
+        [typeToSearchText]="control.searchtext" [notFoundText]="control.notFoundText">
+        <ng-template ng-optgroup-tmp let-item="item">
+          {{item[control.groupbyfield] || 'Unnamed group'}}
+        </ng-template>
+        <ng-template ng-header-tmp *ngIf="control.enablecustomsearch">
+          <input style="width: 100%; line-height: 24px" type="text" (input)="api.filter($event.target.value)" />
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item" *ngIf="control.customlabel">
+          <img height="15" width="15" [src]="item[control.imagefield]" />
+          {{item[control.textfield]}}
+        </ng-template>
+      </ng-select>
+      <ng-select *ngIf="!control.isLazyLoad && !control.groupby" #api appHoverDir formControlName={{control_id}}
+        class="form-control" [items]="dropdownList" bindLabel={{control.textfield}} bindValue={{control.valuefield}}
+        [loading]="isApiCalling" [(ngModel)]="data[control.key]" placeholder={{control.placeholder}}
+        [ngClass]="{'border-danger' :control.require && formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched}"
+        (change)="onChange($event)" [multiple]="control.selectiontype=='single' ? false : true"
+        [addTag]="control.addTag ? addTag : false" [closeOnSelect]="control.closeOnSelect"
+        [hideSelected]="control.hideSelected" [searchable]="control.enablesearchfilter"
+        [maxSelectedItems]="control.selectionLimit ? control.selectionLimit : 9999999"
+        [typeToSearchText]="control.searchtext" [notFoundText]="control.notFoundText" [disableControl]="disabled">
+        <ng-template ng-header-tmp *ngIf="control.enablecustomsearch">
+          <input style="width: 100%; line-height: 24px" type="text" (input)="api.filter($event.target.value)" />
+        </ng-template>
+        <ng-template ng-header-tmp
+          *ngIf="control.selectiontype=='multi' && (control.showcheckall || control.showuncheckall)">
+          <button *ngIf="control.showcheckall" (click)="selectAll()" class="btn btn-sm btn-secondary">Select
+            all</button>
+          <button *ngIf="control.showuncheckall" (click)="unselectAll()" class="btn btn-sm btn-secondary">Unselect
+            all</button>
+        </ng-template>
+        <ng-template ng-footer-tmp *ngIf="control.selectiontype=='multi' && control.showselectedcount">
+          Selected count: {{data[this.control.key].length}}
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item" *ngIf="control.customlabel">
+          <img height="15" width="15" [src]="item[control.imagefield]" />
+          {{item[control.textfield]}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm"
+          *ngIf="control.customoption">
+          <div class="position-relative h-100">
+            <div class="d-flex flex-column h-100 position-relative">
+              <div *ngIf="image" class="card-img rounded-circle" [style.background-image]="getBackground(image)"></div>
+
+              <div class="ld-card-title text-truncate" [ngOptionHighlight]="search"
+                *ngIf="title && !title.redirecturl">
+                <span *ngIf="title.webnametype=='nameonly'">
+                  {{title.key}} : {{item[title.value]}}
+                </span>
+                <span *ngIf="title.webnametype=='nameicon'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{title.key}} : {{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='icononly'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='none' || !title.webnametype">
+                  {{item[title.value]}}
+                </span>
+              </div>
+              <div class="ld-card-title text-truncate" [ngOptionHighlight]="search"
+                *ngIf="title && title.redirecturl" (click)="redirect(title)">
+                <span *ngIf="title.webnametype=='nameonly'">
+                  {{title.key}} : {{item[title.value]}}
+                </span>
+                <span *ngIf="title.webnametype=='nameicon'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{title.key}} : {{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='icononly'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='none' || !title.webnametype">
+                  {{item[title.value]}}
+                </span>
+              </div>
+              <div *ngIf="description && !description.redirecturl"
+                class="d-flex figure-caption">
+                <span *ngIf="description.webnametype=='nameonly'">
+                  {{description.key}} : {{item[description.value]}}
+                </span>
+                <span *ngIf="description.webnametype=='nameicon'">
+                  <i class="{{description.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{description.key}} : {{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='icononly'">
+                  <i class="{{description.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='none' || !description.webnametype">
+                  {{item[description.value]}}
+                </span>
+              </div>
+              <div *ngIf="description && description.redirecturl"
+                class="d-flex" (click)="redirect(title)">
+                <span *ngIf="description.webnametype=='nameonly'">
+                  {{description.key}} : {{item[description.value]}}
+                </span>
+                <span *ngIf="description.webnametype=='nameicon'">
+                  <i class="{{description.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{description.key}} : {{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='icononly'">
+                  <i class="{{description.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='none' || !description.webnametype">
+                  {{item[description.value]}}
+                </span>
+              </div>
+              <ng-container *ngFor="let _field of mappingFields">
+                <div class="mb-1 d-flex justify-content-center align-items-center"
+                  *ngIf="(_field.fieldtype=='none' || _field.fieldtype=='') && item[_field.value] && !_field.redirecturl">
+                  <span *ngIf="_field.webnametype=='nameonly'">
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='nameicon'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='icononly'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                    {{item[_field.value]}}
+                  </span>
+                </div>
+                <div class="mb-1 d-flex justify-content-center align-items-center" (click)="redirect(item)"
+                  *ngIf="(_field.fieldtype=='none' || _field.fieldtype=='') && item[_field.value] && _field.redirecturl">
+                  <span *ngIf="_field.webnametype=='nameonly'">
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='nameicon'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='icononly'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                    {{item[_field.value]}}
+                  </span>
+                </div>
+                <div class="mb-1 d-flex justify-content-center align-items-center"
+                  *ngIf="_field.fieldtype=='date' && item[_field.value]">
+                  <span *ngIf="_field.webnametype=='nameonly'">
+                    <span class="text-truncate">{{_field.key}} :
+                      {{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='nameicon'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{_field.key}} :
+                      {{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='icononly'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span
+                      class="text-truncate">{{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</span>
+                  </span>
+                </div>
+                <div class="mb-1" *ngIf="_field.fieldtype=='email' && item[_field.value]">
+                  <div *ngIf="_field.webnametype=='nameonly'">
+                    <a href="mailto:{{item[_field.value]}}" class="d-flex justify-content-center align-items-center">
+                      {{item?.key}}
+                      <div class="text-truncate">{{item[_field.value]}}</div>
+                    </a>
+                  </div>
+                  <div *ngIf="_field.webnametype=='nameicon'">
+                    <a href="mailto:{{item[_field.value]}}" class="d-flex justify-content-center align-items-center">
+                      <i class="{{item?.webicon}} mr-2">{{item?.key}}</i>
+                      <div class="text-truncate">{{item[_field.value]}}</div>
+                    </a>
+                  </div>
+                  <div *ngIf="_field.webnametype=='icononly'">
+                    <a href="mailto:{{item[_field.value]}}" class="d-flex justify-content-center align-items-center">
+                      <i class="{{item?.webicon}} mr-2"></i>
+                      <div class="text-truncate">{{item[_field.value]}}</div>
+                    </a>
+                  </div>
+                  <div *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                    <a href="mailto:{{item[_field.value]}}"
+                      class="d-flex justify-content-center align-items-center">{{item[_field.value]}}</a>
+                  </div>
+                </div>
+              </ng-container>
+              <div
+                [ngClass]="{'mt-auto mb--3 border-top' : control.actionview != 'popover' && control.actionview != ''}"
+                *ngIf="control.CustomAction">
+                <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+                  [customaction]="control.CustomAction" [data]="item" [AuthService]="AuthService"></custom-action>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear"
+          *ngIf="control.selectiontype=='multi' && control.dynamictitlemaxitems>0">
+          <div class="ng-value" *ngFor="let item of (items ? items.slice(0,control.dynamictitlemaxitems): [])">
+            <span class="ng-value-label"><img *ngIf="control.imagefield" [src]="item[control.imagefield]" width="20px"
+                height="20px"> {{item[control.textfield]}}</span>
+            <span class="ng-value-icon right" (click)="clear(item[control.valuefield])" aria-hidden="true">×</span>
+          </div>
+          <div class="ng-value" *ngIf="items.length > control.dynamictitlemaxitems">
+            <span class="ng-value-label">{{items.length - control.dynamictitlemaxitems}} more...</span>
+          </div>
+        </ng-template>
+      </ng-select>
+      <ng-select *ngIf="control.isLazyLoad && !control.groupby" appHoverDir formControlName={{control_id}}
+                 class="form-control" [items]="apidata$ | async" bindLabel={{control.textfield}} bindValue={{control.valuefield}}
+                 [loading]="apidataLoading" [typeahead]="apidatainput$" [(ngModel)]="data[control.key]"
+                 placeholder={{control.placeholder}} (change)="onChange($event)" (focus)="onFocus($event)"
+                 [ngClass]="{'border-danger' :control.require && formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched}"
+                 [multiple]="control.selectiontype=='single' ? false : true" [addTag]="control.addTag ? addTag : false"
+                 [closeOnSelect]="control.closeOnSelect" [hideSelected]="control.hideSelected"
+                 [searchable]="control.enablesearchfilter"
+                 [maxSelectedItems]="control.selectionLimit ? control.selectionLimit : 9999999"
+                 [typeToSearchText]="control.searchtext" [notFoundText]="control.notFoundText">
+        <ng-template ng-header-tmp *ngIf="control.enablecustomsearch">
+          <input style="width: 100%; line-height: 24px" type="text" (input)="api.filter($event.target.value)" />
+        </ng-template>
+        <ng-template ng-typetosearch-tmp>
+          <div class="ng-option disabled">
+            Start typing...
+          </div>
+        </ng-template>
+        <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+          <div class="ng-option disabled">
+            Fetching data for "{{searchTerm}}"
+          </div>
+        </ng-template>
+        <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+          <div class="ng-option disabled">
+            No data found for "{{searchTerm}}"
+          </div>
+        </ng-template>
+        <ng-template ng-header-tmp
+          *ngIf="control.selectiontype=='multi' && (control.showcheckall || control.showuncheckall)">
+          <button *ngIf="control.showcheckall" (click)="selectAll()" class="btn btn-sm btn-secondary">Select
+            all</button>
+          <button *ngIf="control.showuncheckall" (click)="unselectAll()" class="btn btn-sm btn-secondary">Unselect
+            all</button>
+        </ng-template>
+        <ng-template ng-footer-tmp *ngIf="control.selectiontype=='multi' && control.showselectedcount">
+          Selected count: {{data[this.control.key].length}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm"
+                     *ngIf="control.customoption">
+          <div class="position-relative h-100">
+            <div class="d-flex flex-column h-100 position-relative">
+              <div *ngIf="image" class="card-img rounded-circle" [style.background-image]="getBackground(image)"></div>
+
+              <div class="ld-card-title text-truncate" [ngOptionHighlight]="search"
+                   *ngIf="title && !title.redirecturl">
+                <span *ngIf="title.webnametype=='nameonly'">
+                  {{title.key}} : {{item[title.value]}}
+                </span>
+                <span *ngIf="title.webnametype=='nameicon'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{title.key}} : {{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='icononly'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='none' || !title.webnametype">
+                  {{item[title.value]}}
+                </span>
+              </div>
+              <div class="ld-card-title text-truncate" [ngOptionHighlight]="search"
+                   *ngIf="title && title.redirecturl" (click)="redirect(title)">
+                <span *ngIf="title.webnametype=='nameonly'">
+                  {{title.key}} : {{item[title.value]}}
+                </span>
+                <span *ngIf="title.webnametype=='nameicon'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{title.key}} : {{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='icononly'">
+                  <i class="{{title.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[title.value]}}</span>
+                </span>
+                <span *ngIf="title.webnametype=='none' || !title.webnametype">
+                  {{item[title.value]}}
+                </span>
+              </div>
+              <div *ngIf="description && !description.redirecturl"
+                   class="d-flex figure-caption">
+                <span *ngIf="description.webnametype=='nameonly'">
+                  {{description.key}} : {{item[description.value]}}
+                </span>
+                <span *ngIf="description.webnametype=='nameicon'">
+                  <i class="{{description.webicon}} mr-2 figure-caption"></i>
+                  <span class="text-truncate">{{description.key}} : {{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='icononly'">
+                  <i class="{{description.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='none' || !description.webnametype" class="figure-caption">
+                  {{item[description.value]}}
+                </span>
+              </div>
+              <div *ngIf="description && description.redirecturl"
+                   class="d-flex figure-caption" (click)="redirect(title)">
+                <span *ngIf="description.webnametype=='nameonly'">
+                  {{description.key}} : {{item[description.value]}}
+                </span>
+                <span *ngIf="description.webnametype=='nameicon'">
+                  <i class="{{description.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{description.key}} : {{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='icononly'">
+                  <i class="{{description.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[description.value]}}</span>
+                </span>
+                <span *ngIf="description.webnametype=='none' || !description.webnametype" class="figure-caption">
+                  {{item[description.value]}}
+                </span>
+              </div>
+              <ng-container *ngFor="let _field of mappingFields">
+                <div class="mb-1 d-flex"
+                     *ngIf="(_field.fieldtype=='none' || _field.fieldtype=='') && item[_field.value] && !_field.redirecturl">
+                  <span *ngIf="_field.webnametype=='nameonly'">
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='nameicon'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='icononly'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                    {{item[_field.value]}}
+                  </span>
+                </div>
+                <div class="mb-1 d-flex" (click)="redirect(item)"
+                     *ngIf="(_field.fieldtype=='none' || _field.fieldtype=='') && item[_field.value] && _field.redirecturl">
+                  <span *ngIf="_field.webnametype=='nameonly'">
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='nameicon'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='icononly'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{item[_field.value]}}</span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                    {{item[_field.value]}}
+                  </span>
+                </div>
+                <div class="mb-1 d-flex"
+                     *ngIf="_field.fieldtype=='date' && item[_field.value]">
+                  <span *ngIf="_field.webnametype=='nameonly'">
+                    <span class="text-truncate">
+                      {{_field.key}} :
+                      {{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}
+                    </span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='nameicon'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">
+                      {{_field.key}} :
+                      {{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}
+                    </span>
+                  </span>
+                  <span *ngIf="_field.webnametype=='icononly'">
+                    <i class="{{_field.webicon}} mr-2"></i>
+                    <span class="text-truncate">{{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</span>
+                  </span>
+                </div>
+                <div class="mb-1" *ngIf="_field.fieldtype=='email' && item[_field.value]">
+                  <div *ngIf="_field.webnametype=='nameonly'">
+                    <a href="mailto:{{item[_field.value]}}" class="d-flex">
+                      {{item?.key}}
+                      <div class="text-truncate">{{item[_field.value]}}</div>
+                    </a>
+                  </div>
+                  <div *ngIf="_field.webnametype=='nameicon'">
+                    <a href="mailto:{{item[_field.value]}}" class="d-flex">
+                      <i class="{{item?.webicon}} mr-2">{{item?.key}}</i>
+                      <div class="text-truncate">{{item[_field.value]}}</div>
+                    </a>
+                  </div>
+                  <div *ngIf="_field.webnametype=='icononly'">
+                    <a href="mailto:{{item[_field.value]}}" class="d-flex">
+                      <i class="{{item?.webicon}} mr-2"></i>
+                      <div class="text-truncate">{{item[_field.value]}}</div>
+                    </a>
+                  </div>
+                  <div *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                    <a href="mailto:{{item[_field.value]}}"
+                       class="d-flex justify-content-center">{{item[_field.value]}}</a>
+                  </div>
+                </div>
+              </ng-container>
+              </div>
+          </div>
+              </ng-template>
+      </ng-select>
+    </div>
+    <div class="d-flex align-items-center form-text">
+      <div *ngIf="control.additemlink" class="pr-1">{{control.linktext}}</div>
+      <button *ngIf="control.additemlink"
+        class="btn pointer btn-{{control.buttontype ? control.buttontype : 'link px-0'}}"
+        [ngClass]="{'px-0': control.buttontype=='link'}" (click)="additemAction(contentpopup)">
+        <i *ngIf="control.webnametype=='icononly' || control.webnametype=='nameicon'" class="fa-lg {{control.WebIcon}}"
+          [ngClass]="{'mr-2': control.webnametype=='nameicon'}">
+        </i>
+        <span *ngIf="control.webnametype=='nameicon' || control.webnametype=='nameonly'">{{control.linkname}}</span>
+      </button>
+    </div>
+  </div>
+  <small class="form-text text-danger"
+    *ngIf="formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+  <small class="form-text text-danger"
+    *ngIf="data[control.key] && data[control.key].length < control.minimumselect &&  data[control.key].length > 0">Select
+    minimum {{control.minimumselect}} {{control.label}}</small>
+  <small class="form-text text-danger"
+    *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('maxlength') && formGroup.controls[control_id].touched : false">
+    You can enter maximum {{control.charlimit}} characters.
+  </small>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write' && access != 'filter'" class="form-group">
+  <div [ngBusy]="{busy: busy, message: '', backdrop: true, delay: 500, minDuration: 1000}"></div>
+  <ng-container
+    *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+      {{control.label}}
+      <i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i>
+    </label>
+    <div class="form-control border-0 p-0" *ngIf="control.selectiontype == 'single'">
+      {{data[control.textfield]}}{{selectedNode.name}}</div>
+    <div *ngIf="control.selectiontype == 'multi'">
+      <div class="badge badge-success" *ngFor="let item of selectedNodeColl">
+        {{item.name}}
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+      {{control.label}}
+      <i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'"
+        (click)="_controlService._toggleSidebar('id',control.id)"></i>
+    </label>
+    <div class="form-control border-0 p-0" *ngIf="control.selectiontype == 'single'">
+      {{data[control.textfield]}}{{selectedNode.name}}</div>
+    <div *ngIf="control.selectiontype == 'multi'">
+      <div class="badge badge-success" *ngFor="let item of selectedNodeColl">
+        {{item.name}}
+      </div>
+    </div>
+  </ng-container>
+</div>
+<div class="form-group" *ngIf="access == 'filter'">
+  <div class="dd-blok">
+    <label class="">{{control.label}}</label>
+    <ng-select *ngIf="control.groupby" #api formControlName={{control_id}} class="form-control" [items]="dropdownList"
+      bindLabel={{control.textfield}} bindValue={{control.valuefield}} [loading]="isApiCalling"
+      [(ngModel)]="data[control.key]" placeholder={{control.placeholder}}
+      [ngClass]="{'border-danger' :control.require && formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched}"
+      (change)="onChange($event)" [multiple]="control.selectiontype=='single' ? false : true"
+      [addTag]="control.addTag ? addTag : false" groupBy="control.groupbyfield"
+      [selectableGroup]="control.selectablegroup" [closeOnSelect]="control.closeOnSelect"
+      [hideSelected]="control.hideSelected" [searchable]="control.enablesearchfilter"
+      [maxSelectedItems]="control.selectionLimit ? control.selectionLimit : 9999999"
+      [typeToSearchText]="control.searchtext" [notFoundText]="control.notFoundText">
+      <ng-template ng-optgroup-tmp let-item="item">
+        {{item[control.groupbyfield] || 'Unnamed group'}}
+      </ng-template>
+      <ng-template ng-header-tmp *ngIf="control.enablecustomsearch">
+        <input style="width: 100%; line-height: 24px" type="text" (input)="api.filter($event.target.value)" />
+      </ng-template>
+      <ng-template ng-label-tmp let-item="item" *ngIf="control.customlabel">
+        <img height="15" width="15" [src]="item[control.imagefield]" />
+        {{item[control.textfield]}}
+      </ng-template>
+    </ng-select>
+    <ng-select *ngIf="!control.isLazyLoad && !control.groupby" #api formControlName={{control_id}} class="form-control"
+      [items]="dropdownList" bindLabel={{control.textfield}} bindValue={{control.valuefield}} [loading]="isApiCalling"
+      [(ngModel)]="data[control.key]" placeholder={{control.placeholder}}
+      [ngClass]="{'border-danger' :control.require && formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched}"
+      (change)="onChange($event)" [multiple]="control.selectiontype=='single' ? false : true"
+      [addTag]="control.addTag ? addTag : false" [closeOnSelect]="control.closeOnSelect"
+      [hideSelected]="control.hideSelected" [searchable]="control.enablesearchfilter"
+      [maxSelectedItems]="control.selectionLimit ? control.selectionLimit : 9999999"
+      [typeToSearchText]="control.searchtext" [notFoundText]="control.notFoundText">
+      <ng-template ng-header-tmp *ngIf="control.enablecustomsearch">
+        <input style="width: 100%; line-height: 24px" type="text" (input)="api.filter($event.target.value)" />
+      </ng-template>
+      <ng-template ng-header-tmp
+        *ngIf="control.selectiontype=='multi' && (control.showcheckall || control.showuncheckall)">
+        <button *ngIf="control.showcheckall" (click)="selectAll()" class="btn btn-sm btn-secondary">Select all</button>
+        <button *ngIf="control.showuncheckall" (click)="unselectAll()" class="btn btn-sm btn-secondary">Unselect
+          all</button>
+      </ng-template>
+      <ng-template ng-footer-tmp *ngIf="control.selectiontype=='multi' && control.showselectedcount">
+        Selected count: {{data[this.control.key].length}}
+      </ng-template>
+      <ng-template ng-label-tmp let-item="item" *ngIf="control.customlabel">
+        <img height="15" width="15" [src]="item[control.imagefield]" />
+        {{item[control.textfield]}}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm" *ngIf="control.customoption">
+        <!-- <div style="margin: 10px 0;" class="card">
+            <div class="card-body">
+                <h5 class="card-title" [ngOptionHighlight]="search">{{item.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <p class="card-text">
+                    <img height="15" width="15" [src]="item.avatar"/>
+                    Some quick example text to build
+                </p>
+                <div *ngIf="item.name === 'Pavilnys'">
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        </div> -->
+        <div class="position-relative h-100">
+          <!-- <span class="common-card-icon-top-right" *ngIf="highlighter">
+            <svg viewBox="0 0 52 52" width="20" [ngClass]="getHighlighterClass()">
+              <path d="M26,0C11.664,0,0,11.663,0,26s11.664,26,26,26s26-11.663,26-26S40.336,0,26,0z M26,50C12.767,50,2,39.233,2,26   S12.767,2,26,2s24,10.767,24,24S39.233,50,26,50z" />
+              <path d="M26,10c-0.552,0-1,0.447-1,1v22c0,0.553,0.448,1,1,1s1-0.447,1-1V11C27,10.447,26.552,10,26,10z" />
+              <path d="M26,37c-0.552,0-1,0.447-1,1v2c0,0.553,0.448,1,1,1s1-0.447,1-1v-2C27,37.447,26.552,37,26,37z" />
+            </svg>
+          </span> -->
+          <!-- <div class="card-cap-highlight" *ngIf="highlight && highlight.key">
+            <div class="lable-name text-nowrap" *ngIf="highlight.key">{{highlight.key}}</div>
+            <div class="lable-value pt-1">{{item[highlight.value]}}%</div>
+          </div> -->
+          <div class="d-flex flex-column text-center h-100 position-relative">
+            <div *ngIf="image" class="card-img rounded-circle" [style.background-image]="getBackground(image)"></div>
+
+            <div class="ld-card-title title-text text-truncate" [ngOptionHighlight]="search"
+              *ngIf="title && !title.redirecturl">
+              <span *ngIf="title.webnametype=='nameonly'">
+                {{title.key}} : {{item[title.value]}}
+              </span>
+              <span *ngIf="title.webnametype=='nameicon'">
+                <i class="{{title.webicon}} mr-2"></i>
+                <span class="text-truncate">{{title.key}} : {{item[title.value]}}</span>
+              </span>
+              <span *ngIf="title.webnametype=='icononly'">
+                <i class="{{title.webicon}} mr-2"></i>
+                <span class="text-truncate">{{item[title.value]}}</span>
+              </span>
+              <span *ngIf="title.webnametype=='none' || !title.webnametype">
+                {{item[title.value]}}
+              </span>
+            </div>
+            <div class="ld-card-title title-text text-truncate" [ngOptionHighlight]="search"
+              *ngIf="title && title.redirecturl" (click)="redirect(title)">
+              <span *ngIf="title.webnametype=='nameonly'">
+                {{title.key}} : {{item[title.value]}}
+              </span>
+              <span *ngIf="title.webnametype=='nameicon'">
+                <i class="{{title.webicon}} mr-2"></i>
+                <span class="text-truncate">{{title.key}} : {{item[title.value]}}</span>
+              </span>
+              <span *ngIf="title.webnametype=='icononly'">
+                <i class="{{title.webicon}} mr-2"></i>
+                <span class="text-truncate">{{item[title.value]}}</span>
+              </span>
+              <span *ngIf="title.webnametype=='none' || !title.webnametype">
+                {{item[title.value]}}
+              </span>
+            </div>
+            <div *ngIf="description && !description.redirecturl"
+              class="d-flex justify-content-center align-items-center">
+              <span *ngIf="description.webnametype=='nameonly'">
+                {{description.key}} : {{item[description.value]}}
+              </span>
+              <span *ngIf="description.webnametype=='nameicon'">
+                <i class="{{description.webicon}} mr-2"></i>
+                <span class="text-truncate">{{description.key}} : {{item[description.value]}}</span>
+              </span>
+              <span *ngIf="description.webnametype=='icononly'">
+                <i class="{{description.webicon}} mr-2"></i>
+                <span class="text-truncate">{{item[description.value]}}</span>
+              </span>
+              <span *ngIf="description.webnametype=='none' || !description.webnametype">
+                {{item[description.value]}}
+              </span>
+            </div>
+            <div *ngIf="description && description.redirecturl"
+              class="mb-1 d-flex justify-content-center align-items-center" (click)="redirect(title)">
+              <span *ngIf="description.webnametype=='nameonly'">
+                {{description.key}} : {{item[description.value]}}
+              </span>
+              <span *ngIf="description.webnametype=='nameicon'">
+                <i class="{{description.webicon}} mr-2"></i>
+                <span class="text-truncate">{{description.key}} : {{item[description.value]}}</span>
+              </span>
+              <span *ngIf="description.webnametype=='icononly'">
+                <i class="{{description.webicon}} mr-2"></i>
+                <span class="text-truncate">{{item[description.value]}}</span>
+              </span>
+              <span *ngIf="description.webnametype=='none' || !description.webnametype">
+                {{item[description.value]}}
+              </span>
+            </div>
+            <ng-container *ngFor="let _field of mappingFields">
+              <div class="mb-1 d-flex justify-content-center align-items-center"
+                *ngIf="(_field.fieldtype=='none' || _field.fieldtype=='') && item[_field.value] && !_field.redirecturl">
+                <span *ngIf="_field.webnametype=='nameonly'">
+                  <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='nameicon'">
+                  <i class="{{_field.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='icononly'">
+                  <i class="{{_field.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[_field.value]}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                  {{item[_field.value]}}
+                </span>
+              </div>
+              <div class="mb-1 d-flex justify-content-center align-items-center" (click)="redirect(item)"
+                *ngIf="(_field.fieldtype=='none' || _field.fieldtype=='') && item[_field.value] && _field.redirecturl">
+                <span *ngIf="_field.webnametype=='nameonly'">
+                  <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='nameicon'">
+                  <i class="{{_field.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{_field.key}} : {{item[_field.value]}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='icononly'">
+                  <i class="{{_field.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{item[_field.value]}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                  {{item[_field.value]}}
+                </span>
+              </div>
+              <div class="mb-1 d-flex justify-content-center align-items-center"
+                *ngIf="_field.fieldtype=='date' && item[_field.value]">
+                <span *ngIf="_field.webnametype=='nameonly'">
+                  <span class="text-truncate">{{_field.key}} :
+                    {{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='nameicon'">
+                  <i class="{{_field.webicon}} mr-2"></i>
+                  <span class="text-truncate">{{_field.key}} :
+                    {{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</span>
+                </span>
+                <span *ngIf="_field.webnametype=='icononly'">
+                  <i class="{{_field.webicon}} mr-2"></i>
+                  <span
+                    class="text-truncate">{{item[_field.value] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone}}</span>
+                </span>
+              </div>
+              <div class="mb-1" *ngIf="_field.fieldtype=='email' && item[_field.value]">
+                <div *ngIf="_field.webnametype=='nameonly'">
+                  <a href="mailto:{{item[_field.value]}}" class="d-flex justify-content-center align-items-center">
+                    {{item?.key}}
+                    <div class="text-truncate">{{item[_field.value]}}</div>
+                  </a>
+                </div>
+                <div *ngIf="_field.webnametype=='nameicon'">
+                  <a href="mailto:{{item[_field.value]}}" class="d-flex justify-content-center align-items-center">
+                    <i class="{{item?.webicon}} mr-2">{{item?.key}}</i>
+                    <div class="text-truncate">{{item[_field.value]}}</div>
+                  </a>
+                </div>
+                <div *ngIf="_field.webnametype=='icononly'">
+                  <a href="mailto:{{item[_field.value]}}" class="d-flex justify-content-center align-items-center">
+                    <i class="{{item?.webicon}} mr-2"></i>
+                    <div class="text-truncate">{{item[_field.value]}}</div>
+                  </a>
+                </div>
+                <div *ngIf="_field.webnametype=='none' || !_field.webnametype">
+                  <a href="mailto:{{item[_field.value]}}"
+                    class="d-flex justify-content-center align-items-center">{{item[_field.value]}}</a>
+                </div>
+              </div>
+            </ng-container>
+            <div [ngClass]="{'mt-auto mb--3 border-top' : control.actionview != 'popover' && control.actionview != ''}"
+              *ngIf="control.CustomAction">
+              <custom-action [actionview]="control.actionview" [customActionAlign]="control.customActionAlign"
+                [customaction]="control.CustomAction" [data]="item" [AuthService]="AuthService"></custom-action>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear"
+        *ngIf="control.selectiontype=='multi' && !control.addTag && control.dynamictitlemaxitems>0">
+        <div class="ng-value" *ngFor="let item of (items ? items.slice(0,control.dynamictitlemaxitems): [])">
+          <span class="ng-value-label"><img [src]="_field.avatar_url" width="20px" height="20px">
+            {{item[control.textfield]}}</span>
+          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+        </div>
+        <div class="ng-value" *ngIf="items.length > control.dynamictitlemaxitems">
+          <span class="ng-value-label">{{items.length - control.dynamictitlemaxitems}} more...</span>
+        </div>
+      </ng-template>
+    </ng-select>
+    <ng-select *ngIf="control.isLazyLoad && !control.groupby" formControlName={{control_id}} class="form-control"
+      [items]="apidata$ | async" bindLabel={{control.textfield}} bindValue={{control.valuefield}}
+      [loading]="apidataLoading" [typeahead]="apidatainput$" [(ngModel)]="data[control.key]"
+      placeholder={{control.placeholder}} (change)="onChange($event)" (focus)="onFocus($event)"
+      [multiple]="control.selectiontype=='single' ? false : true" [addTag]="control.addTag ? addTag : false"
+      [closeOnSelect]="control.closeOnSelect" [hideSelected]="control.hideSelected"
+      [searchable]="control.enablesearchfilter"
+      [maxSelectedItems]="control.selectionLimit ? control.selectionLimit : 9999999"
+      [typeToSearchText]="control.searchtext" [notFoundText]="control.notFoundText">
+      <ng-template ng-header-tmp *ngIf="control.enablecustomsearch">
+        <input style="width: 100%; line-height: 24px" type="text" (input)="api.filter($event.target.value)" />
+      </ng-template>
+      <ng-template ng-typetosearch-tmp>
+        <div class="ng-option disabled">
+          Start typing...
+        </div>
+      </ng-template>
+      <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+        <div class="ng-option disabled">
+          No data found for "{{searchTerm}}"
+        </div>
+      </ng-template>
+      <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+        <div class="ng-option disabled">
+          Fetching data for "{{searchTerm}}"
+        </div>
+      </ng-template>
+      <ng-template ng-header-tmp
+        *ngIf="control.selectiontype=='multi' && (control.showcheckall || control.showuncheckall)">
+        <button *ngIf="control.showcheckall" (click)="selectAll()" class="btn btn-sm btn-secondary">Select all</button>
+        <button *ngIf="control.showuncheckall" (click)="unselectAll()" class="btn btn-sm btn-secondary">Unselect
+          all</button>
+      </ng-template>
+      <ng-template ng-footer-tmp *ngIf="control.selectiontype=='multi' && control.showselectedcount">
+        Selected count: {{data[this.control.key].length}}
+      </ng-template>
+    </ng-select>
+  </div>
+</div>
+<ng-template #contentpopup let-c="close" let-d="dismiss" size="lg">
+  <div class="modal-header">
+    <h4 *ngIf="advanceSearchformJson" class="modal-title" style="text-transform:capitalize">
+      {{advanceSearchformJson.Formname}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row" *ngIf="advanceSearchformJson && advanceSearchModelJson">
+      <ng-container *ngFor="let ctrl of advanceSearchformJson.controls">
+        <app-dynamicformcontrolls *ngIf="!ctrl.filterresult==true" [control]="ctrl" [formGroup]="form"
+          [data]="advanceSearchModelJson" [access]="'write'" [AuthService]="AuthService"
+          class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+        </app-dynamicformcontrolls>
+      </ng-container>
+    </div>
+    <div *ngIf="!advanceSearchformJson || !advanceSearchModelJson">
+      <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button> -->
+  </div>
+</ng-template>
+<ng-template #tipContent>{{data[control.textfield]}}</ng-template>

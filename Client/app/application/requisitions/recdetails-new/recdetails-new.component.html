@@ -1,0 +1,350 @@
+<div class="container" 
+style="height: 90%;
+overflow-y: auto;
+overflow-x: hidden;"
+*ngIf="details && allReqDetails">
+    <div>
+        <div>
+            <p><strong>View Details</strong>
+                <i class="fa fa-times fa-lg close-summary float-right" (click)="closeSidebar()" aria-hidden="true"></i>
+            </p>
+
+            <hr style="
+             margin-top: 0;
+         ">
+
+            <div class="mb-2" >
+                <p class="mb-6"><strong style="font-size: 13px;"> Req Details </strong></p>
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        Supermerged
+                    </div>
+                    <div class="col-md-3">
+                        Req Fullfillment Reason
+                    </div>
+                    <div class="col-md-3">
+                        Redep Led By
+                    </div>
+                    <div class="col-md-3">
+                        Delivery Model
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.supermerged}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.reqfulfillmentreason}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.redepledby}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.deliverymodelname}}</strong>
+                    </div>
+                </div>
+
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-6">
+                        <app-metal-switch [(state)]='details.gotowork' [uniqueid]="'gotoworkcheckbox'" [isdisable]="true"
+                        [labelname]="'Client Interview Required?'" >
+                      </app-metal-switch>
+                    </div>
+                    <div class="col-md-6">
+                        <app-metal-switch [(state)]='details.exclusive' [uniqueid]="'exclusivecheckbox'" [labelname]="'Exclusive'" [isdisable]="true">
+                      </app-metal-switch>
+                    </div>
+                  </div>
+                  
+
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        Standard Job Title
+                    </div>
+                    <div class="col-md-3">
+                        Descriptive JOB TITLE
+                    </div>
+                    <div class="col-md-3">
+                        Circle
+                    </div>
+                    <div class="col-md-3">
+                        Community
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.standardjobtitle}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.jobtitle}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.circle}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.community}}</strong>
+                    </div>
+                </div>
+                <div class="row text-title mb-1" style="font-size: smaller" >
+                    <div class="col-md-9">
+                        Skill Mapping
+                    </div>
+                    <div class="col-md-3">
+                        Standard Job Title + Horizon
+                    </div>
+
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-9">
+                        <strong>{{details?.skillmapping}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.standardrolehorizon}}</strong>
+                    </div>
+               </div>
+
+                <div class="row text-title mb-1" style="font-size: smaller" >
+                    <div class="col-md-3">
+                        Role Family
+                    </div>
+                    <div class="col-md-3">
+                        Sub Role Family
+                    </div>
+                    <div class="col-md-3">
+                        Band Level
+                    </div>
+                    <div class="col-md-3">
+                        EXperience Level
+                    </div>
+
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.rolefamily}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.subrolefamily}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.brandlevel}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.experiencelevel}}</strong>
+                    </div>
+
+                </div>
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        {{details?.deliverymodelname=="India"?"State":"Zipcode" }}                    </div>
+                    <div class="col-md-3">
+                        CITY
+                    </div>
+                    <div class="col-md-3">
+                        TRAVEL TYPE
+                    </div>
+                    <div class="col-md-3">
+                        REMOTE
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.deliverymodelname=="India"?details.state:details.zipcode }}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.city}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.traveltype}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.isremote==null?"-":details.remote}}</strong>
+                    </div>
+
+                </div>
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        MIN. EXPERIENCE
+                    </div>
+                    <div class="col-md-3">
+                        MAX. EXPERIENCE
+                    </div>
+                    <div class="col-md-6">
+                        SKILLS BY EXPERIENCE
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.minexperience}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.maxexperience}}</strong>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>{{details?.readskills}}</strong>
+                    </div>
+                    
+                </div>
+
+                <div class="row  mb-1">
+                    <div class="col-md-12">
+                        <p class="mb-6"><strong style="font-size: 13px;"> BILL RATE & ASSIGNEE DETAILS </strong></p>
+                    </div>
+             </div>
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        BIL RATE
+                    </div>
+                    <div class="col-md-3">
+                        CURRENCY
+                    </div>
+                    <div class="col-md-3">
+                        BILL RATE TYPE
+                    </div>
+                    <div class="col-md-3">
+                        EMPLOYMENT TYPE
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.billrate}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.currency}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.billratetype}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.projecttype}}</strong>
+                    </div>
+                </div>
+
+
+            </div>
+            
+
+                <div class="row text-title mb-1" style="font-size: smaller" >
+                    <div class="col-md-3">
+                        START DATE
+                    </div>
+                    <div class="col-md-3">
+                        END DATE
+                    </div>
+                    <div class="col-md-3">
+                        DURATION
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.startdate | date : 'MM/dd/yyyy'}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.duedate | date : 'MM/dd/yyyy'}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.projectdurationweeks}}&nbsp;week(s)&nbsp;and&nbsp;{{details?.projectdurationmonths}}&nbsp;day(s)</strong>
+                    </div>
+                </div>
+
+            
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        OPPORTUNITY
+                    </div>
+                    <div class="col-md-3">
+                        ENGAGEMENT TYPE
+                    </div>
+                    <div class="col-md-3">
+                        JUMP
+                    </div>
+                    <div class="col-md-3">
+                        SOW
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.opportunityname}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.engagementtype}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.jump}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.isclientsow}}</strong>
+                    </div>
+                </div>
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        HIRING MANAGER NAME                    
+                    </div>
+                    <div class="col-md-3">
+                        HIRING MANAGER EMAIL
+                    </div>
+                    <div class="col-md-3">
+                        SOW/PROJECT NAME
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.hiringmanagername}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.hiringmanageremail}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.projectname}}</strong>
+                    </div>
+                </div>
+
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        TALENT SPECIALIST                    </div>
+                    <div class="col-md-3">
+                        CLIENT  POC
+                    </div>
+                    <div class="col-md-3">
+                        VMO
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.recruitername}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.salesrepid}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.vmo}}</strong>
+                    </div>
+                </div>
+
+                <div class="row text-title mb-1" style="font-size: smaller">
+                    <div class="col-md-3">
+                        HIRED CANDIATE - JOB TITLE + HORIZON                    
+                    </div>
+                    <div class="col-md-3">
+                        HIRED CANDIATE - EXPERIENCE LEVEL
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <strong>{{details?.hiredcandidatestandardjobtitlehorizon}}</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>{{details?.hiredcandidateexperiencelevel}}</strong>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>

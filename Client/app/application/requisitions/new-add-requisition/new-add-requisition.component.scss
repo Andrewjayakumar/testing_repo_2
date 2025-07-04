@@ -1,0 +1,327 @@
+// Variables
+$primary-color: #3a3a3a;
+$border-color: #e0e0e0;
+$background-color: #ffffff;
+$input-padding: 0.5rem 0.75rem;
+$border-radius: 6px;
+$font-size: 14px;
+$primary: #1976d2;
+$ai: #6666cc;
+
+// Reset Scrollbar Issue Globally
+
+// Main Container
+.metal-requisition-form {
+  padding: 2rem;
+  background-color: $background-color;
+  max-width: 100%;
+  overflow-x: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+
+  .metal-requisition-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: $primary-color;
+  }
+
+  form.metal-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .metal-form-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); // Maintains flexibility
+    gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    // Ensure skills section has enough space
+    .metal-form-group.skills-container {
+      grid-column: span 2; // Span 2 columns to give more width
+      min-width: 500px; // Minimum width to accommodate chips
+    }
+  }
+
+  .metal-form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+
+    label {
+      margin-bottom: 0.25rem;
+      font-size: $font-size;
+      color: $primary-color;
+    }
+
+    .metal-input,
+    .metal-select,
+    .metal-textarea {
+      padding: $input-padding;
+      font-size: $font-size;
+      border: 1px solid $border-color;
+      border-radius: $border-radius;
+      width: 100%;
+      box-sizing: border-box;
+
+      &:focus {
+        border-color: darken($border-color, 10%);
+        outline: none;
+        background-color: #fff;
+      }
+    }
+
+    .metal-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+
+  .metal-form-group-full {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+
+    label {
+      margin-bottom: 0.25rem;
+      font-size: $font-size;
+      color: $primary-color;
+    }
+
+    .metal-textarea {
+      padding: $input-padding;
+      font-size: $font-size;
+      border: 1px solid $border-color;
+      border-radius: $border-radius;
+      background-color: #f9f9f9;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+
+  .metal-flex {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+
+    .metal-input {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  .metal-radio-group {
+    display: flex;
+    gap: 1rem;
+
+    label {
+      font-size: $font-size;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+  }
+
+  .metal-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+
+    .metal-btn-cancel,
+    .metal-btn-submit {
+      padding: 0.5rem 1rem;
+      font-size: $font-size;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+    }
+
+    .metal-btn-cancel {
+      background-color: #e0e0e0;
+      color: #333;
+
+      &:hover {
+        background-color: darken(#e0e0e0, 5%);
+      }
+    }
+
+    .metal-btn-submit {
+      background-color: #007bff;
+      color: #fff;
+
+      &:hover {
+        background-color: darken(#007bff, 5%);
+      }
+    }
+  }
+
+  .metal-full-width {
+    grid-column: span 2;
+  }
+
+  .metal-full-width-skill-mapping {
+    grid-column: span 3;
+  }
+
+  .metal-width-one {
+    grid-column: span 1;
+  }
+}
+
+.editable {
+  width: 100%;
+  height: 160px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  white-space: pre-line;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  &:focus {
+    outline: $primary auto 1px;
+    outline-color: $primary;
+    box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+  }
+}
+
+.metal-flex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.metal-select-new {
+  flex: 1 1 auto;
+  min-width: 200px;
+}
+
+.metal-icon-button {
+  margin-top: 0 !important;
+  margin-bottom: 0.25rem;
+  padding: 0.5rem;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label-chips {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background-color: #e8f0fe;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.metal-flex-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+}
+
+.label-chips {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background-color: #e9f5ff;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  margin: 0;
+
+  label {
+    margin-right: 0.5rem;
+    margin-bottom: 0;
+    cursor: default;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  a {
+    margin-top: -5px;
+    color: #4c4c4c;
+  }
+}
+
+.delButton {
+  color: #dc3545;
+  font-weight: bold;
+  padding: 0 0.25rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+.new-requisition-wrapper {
+  padding: 2rem;
+  background-color: #f9fafb;
+
+  .new-requisition-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1.25rem;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.metal-requisition-form .metal-form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Duration and Benefit Summaries Styling
+.metal-form-group.duration-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  label {
+    margin-bottom: 0;
+  }
+
+  .metal-input {
+    padding: $input-padding;
+    font-size: $font-size;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-size: $font-size;
+    margin-top: 0.25rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

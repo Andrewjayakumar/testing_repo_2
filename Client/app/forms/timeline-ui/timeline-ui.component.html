@@ -1,0 +1,142 @@
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<div *ngIf="sidebar==true">
+  <!--<strong id="timeline">Question(s) on your Venture Proposal.</strong>-->
+  <div class="d-flex justify-content-between align-items-center mb-1">
+    <strong>You answered: {{answered}} out of {{total}}, {{unanswered}} remaining to be answered.</strong>
+    <div style="min-width:207px; margin-left:10px;" class="">
+      <div class="switch-outer d-flex justify-content-end m-0">
+        <label class="switch-label-text align-self-center" [for]="'unansweredonly'">Unanswered only</label>
+        <div class="switch align-self-center col-auto">
+          <input [id]="'unansweredonly'" type="checkbox" class="switch-checkbox"
+                 [(ngModel)]="isUnansweredonly"
+                 (ngModelChange)="FilterTimeline()">
+          <label class="switch-label" [for]="'unansweredonly'">
+            <span class="switch-inner"></span>
+            <span class="switch-switch"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="sidbar-outer sidbar75">
+  <ng-sidebar-container>
+    <ng-sidebar [(opened)]="_opened" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+      <div class="d-flex justify-content-between">
+        <h5 class="p-3"></h5>
+        <a class="p-3 ml-auto" (click)="_opened=!_opened">
+          <i class="fa fa-close" aria-hidden="true"></i>
+        </a>
+      </div>
+      <div class="sidbar-body">
+        <div class="container-fluid">
+          <div *ngIf="isReadMore==true" class="row mb-2">
+            <div class="col-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <h5>{{question[title]}}</h5>
+                  <!--<p *ngIf="!isAdmin" class="grey-text m-0 font-italic">Question:</p>
+                  <div *ngIf="!isAdmin" class="chat-box">{{getQuestion(question.questionid)}}</div>
+                  <p *ngIf="isAdmin" class="grey-text m-0 font-italic">Question:</p>-->
+                  <p *ngIf="!isAdmin" class="grey-text m-0 font-italic">Answer:</p>
+                  <div class="chat-box">{{question[description]}}</div>
+                </div>
+                <div class="col-md-12 mt-1" *ngIf="control.documemtid && question[control.documemtid]">
+                  <span>Document Uploaded</span>
+                  <span *ngFor="let doc of question['undefined']" class="chip">
+                    <span>{{doc.item}}</span>
+                  </span>
+                </div>
+                <div class="col-md-12 mt-2 text-right">
+                  <button class="btn btn-default" type="button" (click)="isReadMore=false;setQuestion(question,'reply')">Reply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2" *ngIf="isReadMore==false">
+            <div class="col-md-12">
+              <div *ngIf="isAdmin" class="form-group">
+                <label class="" [for]="'title'">Title</label>
+                <input type="text" [id]="'title'"
+                       class="form-control"
+                       [(ngModel)]="question[title]" [required]="true">
+              </div>
+              <div *ngIf="!isAdmin" class="form-group">
+                <label class="" [for]="'title'">Title</label>
+                <input type="text" [id]="'title'" readonly="readonly"
+                       class="form-control"
+                       [(ngModel)]="question[title]" [required]="true">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="" [for]="'discription'" [class.active]="question[description]">Description</label>
+                <textarea type="text" [id]="'discription'" maxlength="2500"
+                          class="form-control"
+                          [(ngModel)]="question[description]" [required]="true"></textarea>
+                <small *ngIf="question[description].trim().length==0 && isValidateErr" class="form-text text-danger">
+                  You must enter a Description.
+                </small>
+              </div>
+            </div>
+            <div *ngIf="!isAdmin" class="col-md-12">
+              <app-dynamicform [controls]="UploadControls" [datamodel]="uploadModel">
+              </app-dynamicform>
+            </div>
+            <div class="col-md-12">
+              <button class="btn btn-outline-secondary mt-2" (click)="Validate(question);">SUBMIT</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-sidebar>
+    <div ng-sidebar-content>
+      <button *ngIf="isShowAddButton" class="btn btn-outline-primary btn-round" (click)="setQuestion(item,'new');isReadMore=false;_opened=!_opened;isAdmin=true">
+        <i class="fa fa-question mr-1" aria-hidden="true"></i>Add
+      </button>
+      <vertical-timeline class="timelineOuter" *ngIf="ApiResult.length>0">
+        <!--<vertical-timeline-card *ngFor="let item of FilterTimeline()" [dateValue]="item[control.timelinedate]" [ngClass]="{'reviewer-q': isAdminfun(item), 'reviewer-a': !isAdminfun(item)}">-->
+        <vertical-timeline-card *ngFor="let item of FilterTimeline(); let i = index" [dateValue]="item[control.timelinedate]" [ngClass]="{'even': isAdminfun(item), 'odd': !isAdminfun(item)}">
+          <div class="pointer" >
+            <div class="reply-status" *ngIf="isAdminfun(item)">
+              <i title="Responded" class="fa fa-check fa-lg" *ngIf="item.replied"></i>
+              <!--<i title="Waiting for Response" class="fa fa-clock-o fa-lg" *ngIf="!item.replied"></i>-->
+            </div>
+            <!--<div class="chip-img d-flex align-items-center" *ngIf="admin==true">
+              <img src="/dist/avatar.png" class="mr-2" /> <strong>{{item[control.Userid]}}</strong>
+            </div>-->
+            <h5>{{item[title]}}</h5>
+            <span class="grey-text font-italic" *ngIf="!isAdminfun(item)">{{control.questionlabel}}</span><span class="grey-text font-italic" *ngIf="isAdminfun(item)">{{control.answerlabel}}</span>
+            <p (click)="isReadMore=true;_opened=!_opened;setQuestion(item)" *ngIf="item[description]">{{item[description].length>200 ? item[description].substring(0,200) + '... read more' : item[description]}}</p>
+            <span *ngIf="control.filefield"><a target="_blank" *ngIf="item[control.filefield]" [href]="item[control.filefield]">
+  
+  <span>View File<i class="fa fa-file" aria-hidden="true"></i></span>
+</a></span>
+            <ng-container *ngIf="control.documemtid">
+
+              <div *ngIf="item[control.documemtid] && isAdminfun(item)">
+                <span>Document Uploaded</span>
+
+                <span *ngFor="let doc of item[control.documemtid]">
+                  <strong>{{doc.item}}</strong>
+                </span>
+              </div>
+              <div *ngIf="item[control.documemtid] && !isAdminfun(item)">
+                <span>
+                  Document Required
+
+                </span>
+                <span *ngFor="let doc of item[control.documemtid]" class="chip">
+                  <span>{{doc}}</span>
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <!--<button class="btn btn-outline-secondary" *ngIf="!isAdminfun(item)" type="button" (click)="isReadMore=false;setDocuments(item[control.documemtid]);_opened=!_opened;setQuestion(item,'reply')">Reply</button>-->
+        </vertical-timeline-card>
+      </vertical-timeline>
+    </div>
+  </ng-sidebar-container>
+</div>

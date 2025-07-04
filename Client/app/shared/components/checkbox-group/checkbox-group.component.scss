@@ -1,0 +1,27 @@
+.checkbox-row {
+  &:hover {
+    background-color: ghostwhite;
+    label {
+      color: black;
+      }
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
+   // vertical-align: middle;
+   // display: inline-block;
+  }
+
+  label {
+    display: inline-block;
+    text-overflow: clip;
+   // overflow: hidden;
+    white-space: no-wrap;
+    max-width:200px;
+    vertical-align: top;
+  }
+}
+
+.smaller {
+  font-size: small;
+}

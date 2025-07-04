@@ -1,0 +1,178 @@
+<div class="main-container">
+<div class="modal-header">
+  <h6 class="modal-title summary-heading">View SC and Type</h6>
+  <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-11 mx-auto">
+          <!-- Accordion -->
+          <div id="accordionViewSCType" class="">
+              <div class="card card-sub">
+                <div id="headingSC" class="card-header">
+                  <h2 class="accordion-background">
+                    <button type="button" data-toggle="collapse"
+                        data-target="#collapseSC" aria-expanded="false"
+                        aria-controls="collapseSC"
+                        class="btn btn-link collapsed accordion-header font-weight-bold  collapsible-link">
+                        Submission Checklist
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseSC" aria-labelledby="headingSC" data-parent="#accordionViewSCType" class="collapse">
+                  <div class="card-body">
+                      <div class="">
+                        <label class="label-color">Have we discussed about Ascendion benifits?</label>
+                        <span class="value-color">{{this.responseData?.collaberabenefits}}</span>
+                      </div>
+                      <div class="">
+                        <label class="label-color">As Per Compliance, Ascendion will conduct a drug test and background check on you. Are you comfortable with that?</label>
+                        <span class="value-color">{{this.responseData?.drugtestcomplaince}}</span>
+                      </div>
+                      <div class="">
+                        <label class="label-color">Accomodation needed?</label>
+                        <span class="value-color">{{this.responseData?.accomodationneeded}}</span>
+                      </div>
+                      <div class="">
+                        <label class="label-color">Is W3 Submission?</label>
+                        <span class="value-color">{{this.responseData?.isw3submission}}</span>
+                      </div>
+                  </div>
+                </div>
+              </div><!-- End -->
+
+              <div class="card card-sub">
+                <div id="headingST" class="card-header">
+                  <h2 class="accordion-background">
+                    <button type="button" data-toggle="collapse"
+                        data-target="#collapseST" aria-expanded="false"
+                        aria-controls="collapseST"
+                        class="btn btn-link collapsed accordion-header font-weight-bold  collapsible-link">
+                        Submission Type
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseST" aria-labelledby="headingST" data-parent="#accordionViewSCType" class="collapse">
+                  <div class="card-body">
+
+                      <div id="accordionST" class="">
+                      <div class="card card-sub">
+                        <div id="headingSourcingInfo" class="card-header">
+                          <h2 class="accordion-background">
+                            <button type="button" data-toggle="collapse"
+                                data-target="#collapseSourcingInfo" aria-expanded="false"
+                                aria-controls="collapseSourcingInfo"
+                                class="btn btn-link collapsed accordion-header font-weight-bold  collapsible-link">
+                                Sourcing Information
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapseSourcingInfo" aria-labelledby="headingSourcingInfo" data-parent="#accordionST" class="collapse">
+                          <div class="card-body">
+                            <div class="">
+                                <label class="label-color">Sourcing Information</label>
+                                <span class="value-color">{{this.responseData?.source}}</span>
+                            </div>
+                            <div class="">
+                                <label class="label-color">Employee Job Type</label>
+                                <span class="value-color">{{this.responseData?.employeejobtype}}</span>
+                            </div>
+                            <div class="">
+                                <label class="label-color">Employee Category</label>
+                                <span class="value-color">{{this.responseData?.employeecategory}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div><!-- End -->
+
+                      <div class="card card-sub">
+                        <div id="headingRateConfirmation" class="card-header">
+                          <h2 class="accordion-background">
+                            <button type="button" data-toggle="collapse"
+                                data-target="#collapseRateConfirmation" aria-expanded="false"
+                                aria-controls="collapseRateConfirmation"
+                                class="btn btn-link collapsed accordion-header font-weight-bold  collapsible-link">
+                                Rate Confirmation
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapseRateConfirmation" aria-labelledby="headingRateConfirmation" data-parent="#accordionST" class="collapse">
+                          <div class="card-body">
+                            <div class="">
+                                <label class="label-color">Is candidate C2C or W2?</label>
+                                <span class="value-color">{{this.responseData?.iscandidatepositionpayratetype}}</span>
+                            </div>
+                            <div class="">
+                                <label class="label-color">Pay Rate Type</label>
+                                <span class="value-color">{{this.responseData?.payrateunittype}}</span>
+                            </div>
+                            <div style="display:flex;">
+                                <div class="flex-child">
+                                    <label class="label-color">Per Diem</label>
+                                    <span class="value-color">{{this.responseData?.perdiem}}</span>
+                                </div>
+                                <div class="flex-child">
+                                    <label class="label-color">Subtier Referral/HR</label>
+                                    <span class="value-color">{{this.responseData?.subtierreferral}}</span>
+                                </div>
+                            </div>
+                            <div style="display:flex;">
+                                <div class="flex-child">
+                                    <label class="label-color">Free Billing Hours</label>
+                                    <span class="value-color">{{this.responseData?.freebillinghours}}</span>
+                                </div>
+                                <div class="flex-child">
+                                    <label class="label-color">Other Discounts</label>
+                                    <span class="value-color">{{this.responseData?.otherdiscounts}}</span>
+                                </div>
+                            </div>
+                            <div style="display:flex;">
+                                <div class="flex-child">
+                                    <label class="label-color">Payrate Offered</label>
+                                    <span class="value-color">{{this.responseData?.payrateoffered}}$</span>
+                                </div>
+                                <div class="flex-child">
+                                    <label class="label-color">Bill Rate</label>
+                                    <span class="value-color">{{this.responseData?.billrate}}</span>
+                                </div>
+                            </div>
+                            <div style="display:flex;">
+                                <div class="flex-child">
+                                    <label class="label-color">Minimum GP</label>
+                                    <span class="value-color">{{this.responseData?.minimumgp}}</span>
+                                </div>
+                                <div class="flex-child">
+                                    <label class="label-color">Minimum GPM</label>
+                                    <span class="value-color">{{this.responseData?.minimumgpm}}%</span>
+                                </div>
+                            </div>
+                            <div class="">
+                                <label class="label-color">Is Mark Up?</label>
+                                <span class="value-color">{{this.responseData?.markup}}</span>
+                            </div>
+                            <div style="display:flex;">
+                                <div class="flex-child">
+                                    <label class="label-color">Actual Mark Up</label>
+                                    <span class="value-color">{{this.responseData?.actualmarkup}}</span>
+                                </div>
+                                <div class="flex-child">
+                                    <label class="label-color">Maximum Mark Up</label>
+                                    <span class="value-color">{{this.responseData?.maximummarkup}}</span>
+                                </div>
+                            </div>
+                            <div class="">
+                                <label class="label-color">Weekly Spread</label>
+                                <span class="value-color">{{this.responseData?.weeklyspread}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div><!-- End -->
+                      </div>
+                  </div>
+                </div>
+              </div><!-- End -->
+            </div>
+        </div>
+    </div>
+</div>
+</div>

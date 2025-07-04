@@ -1,0 +1,66 @@
+/*.wizard {
+  margin: 20px auto;
+
+  .tab-pane {
+    position: relative;
+    padding-top: 50px;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .nav-tabs {
+    position: relative;
+    margin: 10px auto;
+    margin-bottom: 0;
+    border-bottom-color: #e0e0e0;
+
+    li.nav-item {
+      padding: 0;
+      background: #ccc;
+      color: #fff;
+
+      a {
+        padding: 1rem 0rem;
+        display: block;
+        border: 0;
+        border-bottom-color: transparent;
+        color: #000;
+
+        &.active {
+          color: #fff;
+          background: #2C2940;
+          cursor: default;
+        }
+      }
+
+      &.active {
+        a {
+          color: #fff;
+          background: #2C2940;
+          cursor: default;
+        }
+      }
+
+      &.enabled {
+        a {
+          cursor: pointer;
+          color: #fff;
+          background: #666;
+        }
+      }
+    }
+  }
+
+  > div.wizard-inner {
+    position: relative;
+  }
+
+  > div.wizard-inner-top {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+  }
+}
+  */

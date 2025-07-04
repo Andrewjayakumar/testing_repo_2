@@ -1,0 +1,81 @@
+<div class="form-group" style="padding-left:12px">
+  <div class="row">
+    <div class="col-md-12">
+      <label class="label">Format Type :</label>
+      <div class="radio">
+        <label>
+          <input class="md-form" type="radio" [(ngModel)]="formatoption.format" value="number">
+          <span>Number</span>
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input class="md-form" type="radio" [(ngModel)]="formatoption.format" value="currency"> <span>Currency</span>
+        </label>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div *ngIf="formatoption.format=='number'">
+        <div class="panel panel-default">
+          <div class="panel-heading">Sample</div>
+          <div class="panel-body">{{formatoption.numbersample}}</div>
+        </div>
+        <label [for]="descimalplaces" [class.active]="formatoption.descimalplaces > 0">Descimal Places</label>
+        <input mdbActive
+               [id]="descimalplaces" min="0" max="30"
+               [(ngModel)]="formatoption.descimalplaces" (change)="format()" 
+               class="form-control" type="number" />
+        
+        <!--<label class="switch-label-text align-self-center" [for]="descimalplaces">Descimal Places</label>-->
+        <div class="switch-outer d-flex justify-content-between">
+          <label class="switch-label-text align-self-center" [for]="separator">Use 1000 Separator (,) </label>
+          <div class="switch align-self-center col-auto">
+            <input [id]="separator" type="checkbox" class="switch-checkbox" [(ngModel)]="formatoption.separator" (change)="format()" />
+            <label class="switch-label" [for]="separator">
+              <span class="switch-inner"></span>
+              <span class="switch-switch"></span>
+            </label>
+          </div>
+        </div>
+        <div class="c-form">
+          <label>Negative Numbers :</label>
+          <select [(ngModel)]="formatoption.negativenumbers" (ngModelChange)="format()">
+            <option [value]="0">-1234</option>
+            <option [value]="1">1234</option>
+          </select>
+        </div>
+      </div>
+      <div *ngIf="formatoption.format=='currency'">
+        <div class="panel panel-default">
+          <div class="panel-heading">Sample</div>
+          <div class="panel-body">{{formatoption.currencysample}}</div>
+        </div>
+        <label [for]="cdescimalplaces" [class.active]="formatoption.cdescimalplaces > 0">Descimal Places</label>
+        <input mdbActive min="0" max="30"
+               [id]="cdescimalplaces"
+               [(ngModel)]="formatoption.cdescimalplaces" (change)="format()" 
+               class="form-control" type="number" />
+
+        <div class="c-form">
+          <label>Symbol :</label>
+          <select [(ngModel)]="formatoption.symbol" (ngModelChange)="format()">
+            <option [value]="0">None</option>
+            <option [value]="1">$</option>
+            <option [value]="2">₹</option>
+            <option [value]="3">£</option>
+            <option [value]="4">€</option>
+            <option [value]="5">¥</option>
+          </select>
+        </div>
+
+        <div class="c-form">
+          <label>Negative Numbers :</label>
+          <select [(ngModel)]="formatoption.cnegativenumbers" (ngModelChange)="format()">
+            <option [value]="0">-1234</option>
+            <option [value]="1">1234</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<div [hidden]="access!='write' && control.hideonedit==true" title={{Title}}>
+  <div class=" {{control.horizontalalignment}} {{control.verticalalignment}} {{control.customClass}}"
+    [ngClass]="{'d-flex': control.oneline, 'form-group': !control.oneline}" *ngIf="control.viewtype=='namevalue'">
+    <label *ngIf="control.WebIcon || control.Text" [ngClass]="{'mb-0 pr-2': control.oneline}"><i class="{{control.WebIcon}} mr-2"
+        *ngIf="control.WebIcon"></i>{{control.Text}}</label>
+    <ng-container *ngIf="control.outputtype == 'time'">
+      <div class=" border-0 px-0" [ngClass]="{'form-control': !control.oneline}">{{data[control.valueField] | timeAgo}}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="control.outputtype == 'datetime'">
+      {{data[control.valueField] ? (data[control.valueField] | dateTz : AuthService.Menu.dateformat : AuthService.Menu.timezone)  : this.control.defaultvalue}}
+    </ng-container>
+    <ng-container *ngIf="control.outputtype == 'email'">
+      <a class="{{control.customClass}}" href="mailto:{{data[control.valueField]}}">{{data[control.valueField]}}</a>
+    </ng-container>
+    <ng-container *ngIf="control.outputtype != 'time' && control.outputtype != 'datetime' && control.outputtype != 'email'">
+      <div class=" border-0 px-0" [ngClass]="{'form-control': !control.oneline}" [innerHTML]="value"></div>
+    </ng-container>
+    <ng-container *ngIf="control.aftertext">
+      <span>{{control.aftertext}}</span>
+    </ng-container>
+    <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}"
+      ngbTooltip="{{control.help}}"></i>
+  </div>
+  <div class="pb-2 {{control.customClass}}" *ngIf="control.viewtype=='value'">
+    <span class="{{control.horizontalalignment}} {{control.verticalalignment}}" [ngClass]="{'d-flex': control.oneline}">
+      <i class="{{control.WebIcon}} mr-2" *ngIf="control.WebIcon"></i>
+      <ng-container *ngIf="control.outputtype == 'time'">
+        {{data[control.valueField] | timeAgo}}
+      </ng-container>
+      <ng-container *ngIf="control.outputtype == 'datetime'">
+        {{data[control.valueField] ? (data[control.valueField] | dateTz : AuthService.Menu.dateformat : (control.localetype ? control.localetype : AuthService.Menu.timezone)) : this.control.defaultvalue}}
+      </ng-container>
+      <ng-container *ngIf="control.outputtype == 'email'">
+        <a class="{{control.customClass}}" href="mailto:{{data[control.valueField]}}">{{data[control.valueField]}}</a>
+      </ng-container>
+      <ng-container *ngIf="control.outputtype != 'time' && control.outputtype != 'datetime' && control.outputtype != 'email'">
+        <span id="{{control.key}}" *ngIf="this.control.ispagevarible" [innerHTML]="value"></span>
+        <span id="{{control.key}}" *ngIf="!this.control.ispagevarible" [innerHTML]="value"></span>
+      </ng-container>
+      <ng-container *ngIf="control.aftertext">
+        <span>{{control.aftertext}}</span>
+      </ng-container>
+      <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}"
+        ngbTooltip="{{control.help}}"></i>
+    </span>
+  </div>
+  <ng-container *ngIf="control.viewtype=='name'">
+    <ng-container *ngIf="control.formattype !='plain'">
+      <div class="{{control.customClass}}" [innerHTML]="gethtml(control.Text)"></div>
+      <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}"
+        ngbTooltip="{{control.help}}"></i>
+    </ng-container>
+    <ng-container *ngIf="control.formattype =='plain'">
+      <div class="{{control.customClass}}" [innerHTML]="safehtml(control.Text)"></div>
+      <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}"
+        ngbTooltip="{{control.help}}"></i>
+    </ng-container>
+  </ng-container>
+</div>

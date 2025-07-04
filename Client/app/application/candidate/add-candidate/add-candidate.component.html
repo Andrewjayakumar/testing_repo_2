@@ -1,0 +1,353 @@
+<ng-container>
+<div class="modal-header">
+    <h5 class="modal-title haedertitle l-1" id="exampleModalLabel">Add Candidate</h5>
+    <button type="button" class="close" data-dismiss="modal" (click)="OnReset();modal.close(true)" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="addCandidateForm">
+      <div class="container">
+
+        <div class="row">
+          <div class="form-group col-6">
+            <label for="email">Email Address <span class="req_color">*</span></label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email"
+                   placeholder="Enter email" [(ngModel)]="objAddCandidate.email">
+            <div class="error_msg">
+              <span *ngIf="(addCandidateForm.get('email').hasError('required') && isSubmitClicked && !isResetClicked)">
+                Please Enter Email
+              </span>
+              <span *ngIf="(addCandidateForm.get('email').hasError('pattern') && isSubmitClicked && !isResetClicked)">
+                Enter a valid Email Id
+              </span>
+            </div>
+
+          </div>
+          <div class=" form-group col-6">
+            <label for="deliverymodelid">
+              Working From
+              <span class="req_color">*</span>
+            </label>
+
+            <ng-select name="deliverymodelid"
+                       id="deliverymodelid"
+                       [items]="deliveryModelList"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       bindLabel="deliverymodelname"
+                       bindValue="deliverymodelid"
+                       placeholder="--Select--"
+                       [(ngModel)]="objAddCandidate.deliverymodelid"
+                       formControlName="deliveryModel"
+                       class='form-control'>
+            </ng-select>
+
+            <div class="error_msg">
+              <span *ngIf="(addCandidateForm.get('deliveryModel').hasError('required') && isSubmitClicked && !isResetClicked)">
+                Please select working from
+              </span>
+
+            </div>
+            <!-- <div class="form-check offshore">
+    <app-metal-switch [(state)]='objAddCandidate.offShore' [uniqueid]="'addcand_offshore'" class="switch-primary" [labelname]="'Offshore'"  (stateChange)="onChangeOffShore($event)"></app-metal-switch>
+
+        </div>
+         -->
+         
+          </div>
+         
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <label class="form-check-label" for="source"> Source <span class="req_color">*</span></label>
+            <ng-select formControlName="source" name="source"
+                       [items]="sourcelist"
+                       [searchable]="true"
+                       bindLabel="source"
+                       bindValue="sourceid"
+                       class="form-control"
+                       placeholder="-- Select Source --"
+                       required>
+
+            </ng-select>
+            <div class="error_msg">
+              <span *ngIf="(addCandidateForm.get('source').hasError('required') && isSubmitClicked && !isResetClicked) ">
+                Please select a source
+              </span>
+            </div>
+
+          </div>
+          <div class="col-md-4">
+            <label for="labels" class="form-check-label">
+              Labels
+            </label>
+
+            <ng-select name="labels"
+                       id="labelid"
+                       [items]="labelsList"
+                       [multiple]="true"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       bindLabel="label"
+                       bindValue="labelid"
+                       placeholder="--Select--"
+                       [(ngModel)]="objAddCandidate.labelId"
+                       formControlName="labels"
+                       class='form-control'>
+            </ng-select>
+          </div>
+
+          <div class="form-group  col-md-3">
+            <app-metal-switch [(state)]='objAddCandidate.referral' [uniqueid]="'addcand_referral'" class="switch-primary" [labelname]="'Referral'" (stateChange)="onChangeReferral($event)"></app-metal-switch>
+
+          </div>
+        </div>
+        <div class="form-group mb-0">
+          <label for="resume">Resume upload <span class="req_color">*</span></label>
+          <div class="fileAttach selectbox cust attachement_jump t-1">
+            <div class="attachmentsWrap">
+              <div class="form-control fileBox">
+                <input type="file" class="file-upload-input w-16 attachedFile" id="jrnFile" name="resumeFile" #candidate_resume
+                       placeholder="Select file" (change)="onFileChange(candidate_resume.files)" accept=".doc,.docx,.pdf" />
+                <label for="jrnFile">Click to select Resume</label>
+                <span class="crm-file-plus crm-icon right-icon"></span>
+                <span class="d-flex justify-content-center">Or</span>
+                <div ng2FileDrop
+                     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                     (fileOver)="fileOverBase($event)"
+                     [uploader]="uploader"
+                     (onFileDrop)="onFileDrop($event)"
+                     class="well my-drop-zone">
+                  Drop your resume here
+                </div>
+
+              </div>
+
+              <div *ngIf="attachments.length != 0" class="form-group attachmentsBox">
+                <div *ngFor="let file of attachments" class="file-name">
+                  <div class="attachment-label" *ngIf="file.useradd">
+                    {{file.file.name}}
+                    <span type="button" class="close" (click)="clearResume()">
+                      <span aria-hidden="true">&times;</span>
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+     
+        <small *ngIf="(fileslist?.length == 0 && !datafromDragndrop) && isSubmitClicked && !isResetClicked" class="error_msg">Please upload a resume file.</small>
+
+        <span class="chip filename" *ngIf="fileName">
+
+          <span>{{fileName}}</span>
+          <span class="px-1">|</span>
+          <a class="p-1 icon-link" (click)="removeFile()">
+            <i aria-hidden="true" class="fa fa-trash-o"></i>
+          </a>
+
+        </span>
+        <span class="chip filename" *ngIf="datafromDragndrop">
+
+          <span>{{uploader?.queue[0]?.file?.name}}</span>
+          <span class="px-1">|</span>
+          <a class="p-1 icon-link" (click)="removeFile()">
+            <i aria-hidden="true" class="fa fa-trash-o"></i>
+          </a>
+
+        </span>
+        <div>
+          <small *ngIf="(fileslist.length == 0 && resumeWrongFormat) || (candidate_resume.touched && candidate_resume.invalid)" class="error_msg">Please upload a resume file of PDF or MS Word document format</small>
+        </div>
+
+        <div class="refereel_form" *ngIf="objAddCandidate.referral">
+          <h5 class="modal-title haedertitle referral_details" id="exampleModalLabel">Referral Details</h5>
+          <div class="row">
+
+            <div class="switch-field active_consultant">
+              <input type="radio" id="activeConsultant-one" name="activeConsultant" value="EMP"
+                     checked formControlName="activeConsultant" [(ngModel)]="objAddCandidate.referraltype" />
+              <label for="activeConsultant-one">Employee Referral</label>
+              <input type="radio" id="activeConsultant-two" name="activeConsultant" value="GCI"
+                     formControlName="activeConsultant" [(ngModel)]="objAddCandidate.referraltype" />
+              <label for="activeConsultant-two"> Active Consultant</label>
+              <input type="radio" id="activeConsultant-three" name="activeConsultant" value="Other" formControlName="activeConsultant"
+                     [(ngModel)]="objAddCandidate.referraltype" />
+              <label for="activeConsultant-three"> Others</label>
+            </div>
+          </div>
+          <div>Details check {{objAddCandidate.referraltype}}</div>
+          <div class="row" *ngIf="(objAddCandidate.referraltype ==='EMP')">
+            <div class="col-4" *ngIf="(objAddCandidate.referraltype ==='EMP')">
+              <div class="form-group">
+                <label for="refemp">Referee Employee<span class="req_color">*</span></label>
+                  <ng-select [items]="recruiterItems$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                           [loading]="isrecruiterLoading" [(ngModel)]="objAddCandidate.employeeId" bindLabel="recruiter" bindValue="recruiter"
+                           placeholder="Type at least 2 characters" formControlName="employeeid" [typeahead]="recruiterinput$" [typeToSearchText]="text" class="form-control"
+                           name="employeeid" (change)="selectedItem(objAddCandidate?.employeeId)">
+                </ng-select>
+                <div class="error_msg">
+                  <span *ngIf="(addCandidateForm.get('employeeid').hasError('required') && isSubmitClicked && !isResetClicked) ">
+                    Please Enter Referee Employee
+                  </span>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label for="empFullName">Employee Full Name</label>
+                <input type="email" class="form-control" id="empFullName" [attr.disabled]="objAddCandidate.fullname ? true : false"
+                       aria-describedby="emailHelp" placeholder="Employee Full Name" [(ngModel)]="objAddCandidate.fullname" formControlName="fullname">
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label for="EmpEmailId">Employee Email ID</label>
+                <input type="email" class="form-control" id="EmpEmailId" [attr.disabled]="objAddCandidate.emailid"
+                       aria-describedby="emailHelp" placeholder="Employee Email-ID" [(ngModel)]="objAddCandidate.emailid" formControlName="emailid">
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="(objAddCandidate.referraltype ==='EMP')">
+            <div class="col-4">
+              <div class="form-group">
+                <label for="desgnation">Designation</label>
+                <input type="email" class="form-control" id="desgnation" formControlName="designation" [attr.disabled]="objAddCandidate.designation ? true : false"
+                       aria-describedby="designation" [(ngModel)]="objAddCandidate.designation"  placeholder="Designation">
+              </div>
+            </div>
+            <div class="form-group  col-md-3">
+              <label></label>
+              <app-metal-switch [(state)]='objAddCandidate.isexecutive' [isdisable]="true" [uniqueid]="'Executive'" class="switch-primary" [labelname]="'Executive ? '" (stateChange)="onChangeReferral($event)"></app-metal-switch>
+
+            </div>
+          </div>
+          <div class="row" *ngIf="(objAddCandidate.referraltype =='GCI') || (objAddCandidate.referraltype =='Other')">
+            <div class="col-4" *ngIf="(objAddCandidate.referraltype ==='GCI')">
+              <div class="form-group">
+                <label for="GCID">GCID</label>
+                <!--<input type="email" class="form-control" id="exampleInputEmail1" formControlName="gcid"
+                       aria-describedby="emailHelp" placeholder="GCID" [(ngModel)]="objAddCandidate.gcid">-->
+                <ng-select [items]="gcidItems$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                           [loading]="isgcidLoading" [(ngModel)]="objAddCandidate.gcid" bindLabel="gciid" bindValue="gciid"
+                           placeholder="Type at least 2 numbers" formControlName="gcid" [typeahead]="gcidinput$" [typeToSearchText]="text" class="form-control"
+                           name="gcid" (change)="getallgcidDetails($event)">
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label for="refereeFirstName"> Referee First Name <span class="req_color">*</span></label>
+                <input type="email" class="form-control" id="refereeFirstName" formControlName="refereeFirstName"
+                       aria-describedby="emailHelp" placeholder="Referee First Name"
+                       [(ngModel)]="objAddCandidate.refereeFirstName" [attr.disabled]="objAddCandidate.referraltype ==='GCI' ? true : null">
+                <div class="error_msg">
+                  <span *ngIf="(addCandidateForm.get('refereeFirstName').hasError('required') && isSubmitClicked && !isResetClicked) ">
+                    Please Enter Referee First Name
+                  </span>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label for="refereeLastName">Referee Last Name <span class="req_color">*</span></label>
+                <input type="email" class="form-control" id="refereeLastName" formControlName="refereeLastName"
+                       aria-describedby="emailHelp" placeholder="Referee Last Name"
+                       [(ngModel)]="objAddCandidate.refereeLastName" [attr.disabled]="objAddCandidate.referraltype ==='GCI' ? true : null">
+                <div class="error_msg">
+                  <span *ngIf="(addCandidateForm.get('refereeLastName').hasError('required') && isSubmitClicked && !isResetClicked)">
+                    Please Enter Referee Last Name
+                  </span>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row" *ngIf="(objAddCandidate.referraltype =='GCI') || (objAddCandidate.referraltype =='Other')">
+            <div class="col-4">
+              <div class="form-group">
+                <label for="refereeMobileName">Referee Mobile Number</label>
+
+                <input type="email" minlength="10" maxlength="10" class="form-control" id="refereeMobileName"
+                       formControlName="refereeMobileName" aria-describedby="emailHelp"
+                       placeholder="Referee Mobile Number" [(ngModel)]="objAddCandidate.refereeMobileName" [attr.disabled]="objAddCandidate.referraltype ==='GCI' ? true : null">
+                <div class="error_msg">
+                  <span *ngIf="(addCandidateForm.get('refereeMobileName').hasError('minlength')&& isSubmitClicked && !isResetClicked)">
+                    Enter valid Referee Mobile Number
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-8">
+              <div class="form-group">
+                <label for="refereeEmailId">Referee Email ID <span class="req_color">*</span> </label>
+                <input type="email" class="form-control" id="refereeEmailId" aria-describedby="emailHelp"
+                       formControlName="refereeEmailId" placeholder="Referee Email ID"
+                       [(ngModel)]="objAddCandidate.refereeEmailId" [attr.disabled]="objAddCandidate.referraltype ==='GCI' ? true : null">
+                <div class="error_msg">
+                  <span *ngIf="(addCandidateForm.get('refereeEmailId').hasError('required') && isSubmitClicked && !isResetClicked)">
+                    Please Enter Referee Email
+                  </span>
+                  <span *ngIf="(addCandidateForm.get('refereeEmailId').hasError('pattern') && isSubmitClicked && !isResetClicked)">
+                    Enter a valid Referee Email Id
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div *ngIf="addloader" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div>
+      <ngb-alert *ngIf="isModalClosedsuccess"
+                 type="success">
+        {{createCandidateResp}}
+      </ngb-alert>
+      <ngb-alert *ngIf="isModalClosederror"
+                 type="danger">
+        {{createCandidateResp}}
+      </ngb-alert>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="OnReset()">Reset</button>
+    <button type="button" class="btn btn-primary" [disabled]="resumeWrongFormat" (click)="OnSubmit()">Add Candidate</button>
+  </div>
+
+</ng-container>
+
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok');clearResume()">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>

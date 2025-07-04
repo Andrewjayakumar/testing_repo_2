@@ -1,0 +1,64 @@
+<div class="linkedinpopup">
+  <div class="modal-header w-100 text-primary p-1">
+    <i class="fa fa-envelope-o p-2 pr-0i"></i>
+    <h6 class="col-md-9 modal-title pt-1">
+     In Mail Conversation
+    </h6>
+    <a href="https://www.linkedin.com/recruiter/mailbox" class="pt-1 pull-right pr-0" target="_blank">LinkedIn InMail</a>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('user closed'); ">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div #linkedinmail class="modal-body p-0 inmail_window">
+    <div *ngIf="isLoading" class="text-center">
+      <i class="fa fa-2x fa-spinner fa-spin"></i>
+    </div>
+    <div class="accordion" id="inconversation">
+      <div class="card" *ngFor="let thread of mailhistory; let i = index">
+        <div class="card-header p-0">
+
+          <div class="btn btn-link text-justify font-weight-bold text-capitalize" role="button" data-toggle="collapse"
+               attr.data-target="#recruiter_{{i}}" attr.aria-expanded="{{i==0}}" title="Recruiter">{{thread.recruitername}}</div>
+          <span><input type="checkbox" hidden #toggleState [checked]="false|| i==0" /></span>
+          <i><span class="btn btn-link pull-right fa" data-toggle="collapse" attr.data-target="#recruiter_{{i}}"  [ngClass]="{'fa-chevron-up': !toggleState.checked, 'fa-chevron-down': toggleState.checked }" (click)="toggleState.checked = !toggleState.checked"></span></i>
+          <!-- -->
+        </div>
+        <div attr.id="recruiter_{{i}}" class="collapse" [ngClass]="{'show': i==0}" data-parent="inconversation">
+          
+          <div class="card-body p-0 scroll-chatwindow ">
+            <div *ngFor="let message of thread.messages">
+              <!-- <i *ngIf="message.authortype && message.authortype.toLowerCase()=='recruiter'" class="fa fa-caret-right fa-2x arrow_recruiter"></i> -->
+              <div *ngIf="message.authortype && message.authortype.toLowerCase()=='recruiter'" class="chat_recruiter">
+                <span class="recruiter_pic_bg">{{thread.recruitername.charAt(0)+thread.recruitername.charAt(thread.recruitername.indexOf(".")+ 1)}}</span>
+                <div class="d-inline">
+                  <span class="font-weight-bold text-dark  pl-2">{{message.subject}}</span>
+                  <div class="inmail_timestamp p-0 mr-1">{{message.createddate|  dateTz : 'MMM DD YYYY hh:mm a' : 'local' }}</div>
+                </div>
+
+
+                <div class="col-12 mailbody" [innerHTML]="getSafeHtml(message.body)"></div>
+
+              </div>
+
+
+              <div *ngIf="message.authortype && message.authortype.toLowerCase()!=='recruiter'" class="chat_candidate">
+                <!-- <i *ngIf="message.authortype && message.authortype.toLowerCase()!=='recruiter'" class="fa fa-caret-left fa-2x arrow_candidate"></i> -->
+                <span class="candidate_pic_bg">{{candidate_pic}}</span>
+                <div class="d-inline">
+                  <span class="font-weight-bold text-dark  pl-2">{{message.subject}}</span>
+                  <div class="inmail_timestamp p-0 mr-1">{{message.createddate|  dateTz : 'MMM DD YYYY hh:mm a' : 'local'}}</div>
+                </div>
+                <div class="col-12 mailbody" [innerHTML]="getSafeHtml(message.body)"></div>
+
+              </div>
+            </div>
+          </div>
+          <div *ngIf="(!mailhistory ) || (mailhistory.length == 0 && !isLoading)">
+            <p class="text-sm-center"> No In-mail conversation history available for this candidate </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>

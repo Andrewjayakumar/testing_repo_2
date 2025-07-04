@@ -1,0 +1,54 @@
+<div class="modal-header pb-1">
+    <!-- Modal Header -->
+    <h5 id="modal-title" 
+        class="text-primary" 
+        *ngIf="differenceInDays<270">
+        Benefit Summaries - Less than 270 days</h5>
+    <h5 id="modal-title" 
+        class="text-primary" 
+        *ngIf="differenceInDays>=270">
+        Benefit Summaries - Greater than equal to 270 days</h5>
+   
+    <h5 class="close">
+        <i class="fa fa-times fa-lg close-summary"
+        (click)="modal.close(true)"
+        aria-hidden="true"> </i>
+    </h5>
+
+</div>
+<div class="modal-body" style="overflow-y:auto; height: 80vh">
+    <p id="modal-title"class="text-danger text-justify">Please note that based on various AScendion policies, the following are the only
+            medical plan options to be provided to new employees. Employees are locked in for a 12 month period into the
+            plan selected. 
+            For existing employees going on a new project, do not refer to the table below. Depending on what plan they
+            are already in, they continue in the same plan
+            regardless of  W-2 employee type changes until their 12-month period is up.
+        </p>
+    <div align="center">
+        <!-- Modal Table Fetchig Data from API -->
+        <table border="1" align="center" >
+            <tr>
+                <th align="center" class="p-2">Group Name</th>
+                <th align="center" class="w-75 p-2">Employee Type</th>
+                <th align="center" class= "p-2">Year</th>
+                <th align="center" class="p-2">Document</th>
+            </tr>
+      
+            <tr class="p-1" *ngFor="let data of documentList ">
+                <td class="text-center p-1">{{data.groupname}}</td>
+                <td class="p-1"> {{data.employeetype}}</td>
+                <td class="text-center p-1"> {{data.year}}</td>
+                <td class="p-1 text-center">
+                    <a class="btn btn-primary btn-sm p-1"href="{{data.documenturl}}"
+                    target="_blank">Open</a></td>
+            </tr>
+        </table>
+        <!-- Loader -->
+        <div class="modal-body p-0 pb-1 p-4 stsmodal">
+            <div *ngIf="showLoader" class="text-center p-2">
+              <i class="fa fa-spinner fa-spin fa-2x fa-fw">  </i>
+              Please Wait
+            </div>
+        </div>
+    </div>
+</div>

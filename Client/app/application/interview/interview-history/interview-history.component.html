@@ -1,0 +1,12 @@
+<ng-container>
+  <div class="interview-histry">
+    <div>
+      <app-interview-round-card></app-interview-round-card>
+    </div>
+
+  </div>
+
+  <div *ngIf="interviewHistoryDetails[0]?.results==undefined||interviewHistoryDetails[0]?.results==null||interviewHistoryDetails[0]?.results[0]?.candidateinterviewid==0" class="no-record">
+    No Interview scheduled!
+  </div>
+</ng-container>

@@ -1,0 +1,68 @@
+<form class="container CEcontainer" #CesSearchForm="ngForm" novalidate (ngSubmit)="Search()">
+  <div class="row">
+    <div class="form-group col-md-4">
+      <label class="label_text_candidate" for="clientName">Name</label>
+      <input class="form-control" placeholder="First Name" [(ngModel)]="model.firstname" name="firstname" id="fname" />
+    </div>
+    <div class="form-group col-md-4">
+      <label class="label_text_crown" for="fname">Last Name</label>
+      <input class="form-control" placeholder="Last Name" name="lastname" [(ngModel)]="model.lastname" id="lname" />
+
+    </div>
+    
+  </div>
+  <div class="row">
+    <div class="form-group col-md-4">
+      <label class="label_text_crown" for="gcid">GCID</label>
+      <input class="form-control" placeholder="Search Active consultant by Name" [(ngModel)]="model.gciid" id="gcid" name="gciid" />
+    </div>
+    <div class="form-group col-md-4">
+      <label class="label_text_crown" for="mailid">E-Mail</label>
+      <input class="form-control" placeholder="E-Mail" [(ngModel)]="model.emailid" id="mailid" name="mailid" />
+    </div>
+  </div>
+  <div class="row mt-2  col-md-12 d-inline">
+    <div class="col-4 float-right ">
+      <button type="submit" id="sub" name="sub" class="btn btn-primary mr-2">Search</button>
+      <button id="clear" name="clear" type="reset" (click)="resetform()" class="btn btn-outline-primary">Clear</button>
+    </div>
+  </div>
+
+</form>
+
+
+<div *ngIf="showloader" class="text-center p-2">
+  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+</div>
+
+<div *ngIf="message" class="text-center p-2 text-center">
+  <h5 class="text-danger">{{message}}</h5>
+</div>
+<div *ngIf="!showloader" class="col-md-12 ml-4 mt-5">
+  <div class="container" id="candidatecard">
+
+    <div *ngIf="cesSearchDetails && cesSearchDetails.length >0">
+      <label>No. of Resumes : {{totalprofilefound}}</label>
+    </div>
+
+    <!-- cards -->
+    <div class="row metal-card-row mt-2">
+      <div class="col-3 metal-card-col p-1" *ngFor="let candidateObj of cesSearchDetails">
+        <div class="d-block h-100">
+          <div class="card mb-0 h-100 custom-action-hover">
+            <app-candidate-card [candidate]="candidateObj" [pagename]="'cesSearch'" 
+            [priorPinAction]="cesDownloadDetails" [requisitionid]="requisitionid"
+            [isCandidateDashboardSearch]="isCandidateDashboard">
+            </app-candidate-card>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="cesSearchDetails?.length >= pagesize " class="d-flex justify-content-center mt-3">
+      <ngb-pagination [collectionSize]="totalprofilefound" [pageSize]="pagesize" [(page)]="pageindex"
+                      [maxSize]="4" (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+    </div>
+  </div>
+</div>

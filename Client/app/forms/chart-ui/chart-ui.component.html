@@ -1,0 +1,1484 @@
+<div *ngIf="(_chartService.multi[control.key] && _chartService.multi[control.key].length > 0) 
+    || (_chartService.single[control.key] && _chartService.single[control.key].length) > 0 
+    || (_chartService.bubble[control.key] && _chartService.bubble[control.key].length > 0); else empty">
+    
+  <div class="row" *ngIf="control.Name=='Statistic Card' || control.Name==''; else tabs">
+    <div class="col-md-12">
+      <div [class]="control.chartOptions.theme">
+        <div class="chart-outer" [ngStyle]="{'height.px': control.height}">
+          <div class="chart-col">
+            <ngx-charts-bar-vertical *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical'"
+                                    class="chart-container"
+                                    [view]="control.chartOptions.view"
+                                    [scheme]="control.chartOptions.colorScheme"
+                                    [schemeType]="control.chartOptions.schemeType"
+                                    [customColors]="control.chartOptions.customColors"
+                                    [results]="_chartService.single[control.key]"
+                                    [gradient]="control.chartOptions.gradient"
+                                    [xAxis]="control.chartOptions.showXAxis"
+                                    [yAxis]="control.chartOptions.showYAxis"
+                                    [legend]="control.chartOptions.showLegend"
+                                    [legendTitle]="control.chartOptions.legendTitle"
+                                    [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                    [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                    [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                    [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                    [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                    [showGridLines]="control.chartOptions.showGridLines"
+                                    [barPadding]="control.chartOptions.barPadding"
+                                    [roundDomains]="control.chartOptions.roundDomains"
+                                    [roundEdges]="control.chartOptions.roundEdges"
+                                    (select)="select($event)"
+                                    (legendLabelClick)="onLegendLabelClick($event)">
+            </ngx-charts-bar-vertical>
+            <ngx-charts-bar-horizontal *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal'"
+                                      class="chart-container"
+                                      [view]="control.chartOptions.view"
+                                      [scheme]="control.chartOptions.colorScheme"
+                                      [schemeType]="control.chartOptions.schemeType"
+                                      [results]="_chartService.single[control.key]"
+                                      [gradient]="control.chartOptions.gradient"
+                                      [xAxis]="control.chartOptions.showXAxis"
+                                      [yAxis]="control.chartOptions.showYAxis"
+                                      [legend]="control.chartOptions.showLegend"
+                                      [legendTitle]="control.chartOptions.legendTitle"
+                                      [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                      [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                      [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                      [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                      [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                      [showGridLines]="control.chartOptions.showGridLines"
+                                      [barPadding]="control.chartOptions.barPadding"
+                                      [roundDomains]="control.chartOptions.roundDomains"
+                                      [roundEdges]="control.chartOptions.roundEdges"
+                                      (legendLabelClick)="onLegendLabelClick($event)"
+                                      (select)="select($event)">
+            </ngx-charts-bar-horizontal>
+            <ngx-charts-bar-vertical-2d *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical-2d'"
+                                        class="chart-container"
+                                        [view]="control.chartOptions.view"
+                                        [scheme]="control.chartOptions.colorScheme"
+                                        [schemeType]="control.chartOptions.schemeType"
+                                        [results]="_chartService.multi[control.key]"
+                                        [gradient]="control.chartOptions.gradient"
+                                        [xAxis]="control.chartOptions.showXAxis"
+                                        [yAxis]="control.chartOptions.showYAxis"
+                                        [legend]="control.chartOptions.showLegend"
+                                        [legendTitle]="control.chartOptions.legendTitle"
+                                        [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                        [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                        [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                        [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                        [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                        (legendLabelClick)="onLegendLabelClick($event)"
+                                        [showGridLines]="control.chartOptions.showGridLines"
+                                        [barPadding]="control.chartOptions.barPadding"
+                                        [groupPadding]="control.chartOptions.groupPadding"
+                                        [roundDomains]="control.chartOptions.roundDomains"
+                                        [roundEdges]="control.chartOptions.roundEdges"
+                                        (select)="select($event)">
+            </ngx-charts-bar-vertical-2d>
+            <ngx-charts-bar-horizontal-2d *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal-2d'"
+                                          class="chart-container"
+                                          [view]="control.chartOptions.view"
+                                          [scheme]="control.chartOptions.colorScheme"
+                                          [schemeType]="control.chartOptions.schemeType"
+                                          [results]="_chartService.multi[control.key]"
+                                          [gradient]="control.chartOptions.gradient"
+                                          [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                          [xAxis]="control.chartOptions.showXAxis"
+                                          [yAxis]="control.chartOptions.showYAxis"
+                                          [legend]="control.chartOptions.showLegend"
+                                          [legendTitle]="control.chartOptions.legendTitle"
+                                          (legendLabelClick)="onLegendLabelClick($event)"
+                                          [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                          [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                          [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                          [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                          [showGridLines]="control.chartOptions.showGridLines"
+                                          [barPadding]="control.chartOptions.barPadding"
+                                          [groupPadding]="control.chartOptions.groupPadding"
+                                          [roundDomains]="control.chartOptions.roundDomains"
+                                          [roundEdges]="control.chartOptions.roundEdges"
+                                          (select)="select($event)">
+            </ngx-charts-bar-horizontal-2d>
+            <ngx-charts-bar-vertical-stacked *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical-stacked'"
+                                            class="chart-container"
+                                            [view]="control.chartOptions.view"
+                                            [scheme]="control.chartOptions.colorScheme"
+                                            [schemeType]="control.chartOptions.schemeType"
+                                            [results]="_chartService.multi[control.key]"
+                                            [gradient]="control.chartOptions.gradient"
+                                            [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                            [xAxis]="control.chartOptions.showXAxis"
+                                            [yAxis]="control.chartOptions.showYAxis"
+                                            [legend]="control.chartOptions.showLegend"
+                                            [legendTitle]="control.chartOptions.legendTitle"
+                                            (legendLabelClick)="onLegendLabelClick($event)"
+                                            [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                            [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                            [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                            [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                            [showGridLines]="control.chartOptions.showGridLines"
+                                            [barPadding]="control.chartOptions.barPadding"
+                                            [roundDomains]="control.chartOptions.roundDomains"
+                                            (select)="select($event)">
+            </ngx-charts-bar-vertical-stacked>
+            <ngx-charts-bar-horizontal-stacked *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal-stacked'"
+                                              class="chart-container"
+                                              [view]="control.chartOptions.view"
+                                              [scheme]="control.chartOptions.colorScheme"
+                                              [schemeType]="control.chartOptions.schemeType"
+                                              [results]="_chartService.multi[control.key]"
+                                              [gradient]="control.chartOptions.gradient"
+                                              [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                              [xAxis]="control.chartOptions.showXAxis"
+                                              [yAxis]="control.chartOptions.showYAxis"
+                                              [legend]="control.chartOptions.showLegend"
+                                              [legendTitle]="control.chartOptions.legendTitle"
+                                              [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                              (legendLabelClick)="onLegendLabelClick($event)"
+                                              [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                              [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                              [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                              [showGridLines]="control.chartOptions.showGridLines"
+                                              [barPadding]="control.chartOptions.barPadding"
+                                              [roundDomains]="control.chartOptions.roundDomains"
+                                              (select)="select($event)">
+            </ngx-charts-bar-horizontal-stacked>
+            <ngx-charts-bar-vertical-normalized *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical-normalized'"
+                                                class="chart-container"
+                                                [view]="control.chartOptions.view"
+                                                [scheme]="control.chartOptions.colorScheme"
+                                                [schemeType]="control.chartOptions.schemeType"
+                                                [results]="_chartService.multi[control.key]"
+                                                [gradient]="control.chartOptions.gradient"
+                                                [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                [xAxis]="control.chartOptions.showXAxis"
+                                                [yAxis]="control.chartOptions.showYAxis"
+                                                [legend]="control.chartOptions.showLegend"
+                                                [legendTitle]="control.chartOptions.legendTitle"
+                                                [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                (legendLabelClick)="onLegendLabelClick($event)"
+                                                [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                [showGridLines]="control.chartOptions.showGridLines"
+                                                [barPadding]="control.chartOptions.barPadding"
+                                                [roundDomains]="control.chartOptions.roundDomains"
+                                                (select)="select($event)">
+            </ngx-charts-bar-vertical-normalized>
+            <ngx-charts-bar-horizontal-normalized *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal-normalized'"
+                                                  class="chart-container"
+                                                  [view]="control.chartOptions.view"
+                                                  [scheme]="control.chartOptions.colorScheme"
+                                                  [schemeType]="control.chartOptions.schemeType"
+                                                  [results]="_chartService.multi[control.key]"
+                                                  [gradient]="control.chartOptions.gradient"
+                                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                  [xAxis]="control.chartOptions.showXAxis"
+                                                  [yAxis]="control.chartOptions.showYAxis"
+                                                  [legend]="control.chartOptions.showLegend"
+                                                  [legendTitle]="control.chartOptions.legendTitle"
+                                                  [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                  [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                  [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                  [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                  (legendLabelClick)="onLegendLabelClick($event)"
+                                                  [showGridLines]="control.chartOptions.showGridLines"
+                                                  [barPadding]="control.chartOptions.barPadding"
+                                                  [roundDomains]="control.chartOptions.roundDomains"
+                                                  (select)="select($event)">
+            </ngx-charts-bar-horizontal-normalized>
+            <ngx-charts-pie-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'pie-chart'"
+                                  class="chart-container"
+                                  [view]="control.chartOptions.view"
+                                  [scheme]="control.chartOptions.colorScheme"
+                                  [results]="_chartService.single[control.key]"
+                                  [legend]="control.chartOptions.showLegend"
+                                  [legendTitle]="control.chartOptions.legendTitle"
+                                  [explodeSlices]="control.chartOptions.explodeSlices"
+                                  [labels]="control.chartOptions.showLabels"
+                                  [doughnut]="control.chartOptions.doughnut"
+                                  [arcWidth]="control.chartOptions.arcWidth"
+                                  (legendLabelClick)="onLegendLabelClick($event)"
+                                  [gradient]="control.chartOptions.gradient"
+                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                  [tooltipText]="pieTooltipText"
+                                  (select)="select($event)">
+            </ngx-charts-pie-chart>
+            <ngx-charts-advanced-pie-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'advanced-pie-chart'"
+                                          class="chart-container"
+                                          [view]="control.chartOptions.view"
+                                          [scheme]="control.chartOptions.colorScheme"
+                                          [results]="_chartService.single[control.key]"
+                                          (legendLabelClick)="onLegendLabelClick($event)"
+                                          [gradient]="control.chartOptions.gradient"
+                                          [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                          [tooltipText]="pieTooltipText"
+                                          (select)="select($event)">
+            </ngx-charts-advanced-pie-chart>
+            <ngx-charts-pie-grid *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'pie-grid'"
+                                class="chart-container"
+                                [view]="control.chartOptions.view"
+                                [scheme]="control.chartOptions.colorScheme"
+                                (legendLabelClick)="onLegendLabelClick($event)"
+                                [results]="_chartService.single[control.key]"
+                                [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                [tooltipText]="pieTooltipText"
+                                (select)="select($event)">
+            </ngx-charts-pie-grid>
+            <ngx-charts-line-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'line-chart'"
+                                  [view]="control.chartOptions.view"
+                                  class="chart-container"
+                                  [scheme]="control.chartOptions.colorScheme"
+                                  [schemeType]="control.chartOptions.schemeType"
+                                  [results]="_chartService.multi[control.key]"
+                                  [legend]="control.chartOptions.showLegend"
+                                  [legendTitle]="control.chartOptions.legendTitle"
+                                  (legendLabelClick)="onLegendLabelClick($event)"
+                                  [gradient]="control.chartOptions.gradient"
+                                  [xAxis]="control.chartOptions.showXAxis"
+                                  [yAxis]="control.chartOptions.showYAxis"
+                                  [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                  [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                  [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                  [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                  [autoScale]="control.chartOptions.autoScale"
+                                  [timeline]="control.chartOptions.timeline"
+                                  [showGridLines]="control.chartOptions.showGridLines"
+                                  [curve]="curves[control.chartOptions.curveType]"
+                                  [rangeFillOpacity]="control.chartOptions.rangeFillOpacity"
+                                  [roundDomains]="control.chartOptions.roundDomains"
+                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                  (select)="select($event)">
+            </ngx-charts-line-chart>
+            <ngx-charts-polar-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'polar-chart'"
+                                    [view]="control.chartOptions.view"
+                                    class="chart-container"
+                                    [scheme]="control.chartOptions.colorScheme"
+                                    [schemeType]="control.chartOptions.schemeType"
+                                    [results]="_chartService.multi[control.key]"
+                                    [legend]="control.chartOptions.showLegend"
+                                    [legendTitle]="control.chartOptions.legendTitle"
+                                    (legendLabelClick)="onLegendLabelClick($event)"
+                                    [gradient]="control.chartOptions.gradient"
+                                    [xAxis]="control.chartOptions.showXAxis"
+                                    [yAxis]="control.chartOptions.showYAxis"
+                                    [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                    [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                    [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                    [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                    [autoScale]="control.chartOptions.autoScale"
+                                    [showGridLines]="control.chartOptions.showGridLines"
+                                    [rangeFillOpacity]="control.chartOptions.rangeFillOpacity"
+                                    [roundDomains]="control.chartOptions.roundDomains"
+                                    [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                    [showSeriesOnHover]="control.chartOptions.showSeriesOnHover"
+                                    [curve]="curves[control.chartOptions.closedCurveType]"
+                                    (select)="select($event)">
+            </ngx-charts-polar-chart>
+            <ngx-charts-bubble-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bubble-chart'"
+                                    [view]="control.chartOptions.view"
+                                    class="chart-container"
+                                    [results]="_chartService.bubble[control.key]"
+                                    [showGridLines]="control.chartOptions.showGridLines"
+                                    [legend]="control.chartOptions.showLegend"
+                                    [legendTitle]="control.chartOptions.legendTitle"
+                                    [xAxis]="control.chartOptions.showXAxis"
+                                    [yAxis]="control.chartOptions.showYAxis"
+                                    [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                    [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                    [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                    [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                    [autoScale]="control.chartOptions.autoScale"
+                                    [scheme]="control.chartOptions.colorScheme"
+                                    [schemeType]="control.chartOptions.schemeType"
+                                    [roundDomains]="control.chartOptions.roundDomains"
+                                    [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                    [minRadius]="control.chartOptions.minRadius"
+                                    [maxRadius]="control.chartOptions.maxRadius"
+                                    (select)="select($event)">
+            </ngx-charts-bubble-chart>
+            <ngx-charts-force-directed-graph *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'force-directed-graph'"
+                                            class="chart-container"
+                                            [legend]="control.chartOptions.showLegend"
+                                            [legendTitle]="control.chartOptions.legendTitle"
+                                            [links]="graph.links"
+                                            (legendLabelClick)="onLegendLabelClick($event)"
+                                            [nodes]="graph.nodes"
+                                            [scheme]="control.chartOptions.colorScheme"
+                                            [view]="control.chartOptions.view"
+                                            [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                            (select)="select($event)">
+            </ngx-charts-force-directed-graph>
+            <ngx-charts-area-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'area-chart'"
+                                  class="chart-container"
+                                  [view]="control.chartOptions.view"
+                                  [scheme]="control.chartOptions.colorScheme"
+                                  [schemeType]="control.chartOptions.schemeType"
+                                  [results]="_chartService.multi[control.key]"
+                                  [legend]="control.chartOptions.showLegend"
+                                  [legendTitle]="control.chartOptions.legendTitle"
+                                  (legendLabelClick)="onLegendLabelClick($event)"
+                                  [gradient]="control.chartOptions.gradient"
+                                  [xAxis]="control.chartOptions.showXAxis"
+                                  [yAxis]="control.chartOptions.showYAxis"
+                                  [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                  [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                  [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                  [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                  [autoScale]="control.chartOptions.autoScale"
+                                  [timeline]="control.chartOptions.timeline"
+                                  [showGridLines]="control.chartOptions.showGridLines"
+                                  [roundDomains]="control.chartOptions.roundDomains"
+                                  [curve]="curves[control.chartOptions.curveType]"
+                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                  (select)="select($event)">
+            </ngx-charts-area-chart>
+            <ngx-charts-area-chart-stacked *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'area-chart-stacked'"
+                                          class="chart-container"
+                                          [view]="control.chartOptions.view"
+                                          [scheme]="control.chartOptions.colorScheme"
+                                          [schemeType]="control.chartOptions.schemeType"
+                                          [results]="_chartService.multi[control.key]"
+                                          [legend]="control.chartOptions.showLegend"
+                                          [legendTitle]="control.chartOptions.legendTitle"
+                                          [gradient]="control.chartOptions.gradient"
+                                          [xAxis]="control.chartOptions.showXAxis"
+                                          [yAxis]="control.chartOptions.showYAxis"
+                                          (legendLabelClick)="onLegendLabelClick($event)"
+                                          [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                          [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                          [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                          [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                          [timeline]="control.chartOptions.timeline"
+                                          [showGridLines]="control.chartOptions.showGridLines"
+                                          [roundDomains]="control.chartOptions.roundDomains"
+                                          [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                          [curve]="curves[control.chartOptions.curveType]"
+                                          (select)="select($event)">
+            </ngx-charts-area-chart-stacked>
+            <ngx-charts-area-chart-normalized *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'area-chart-normalized'"
+                                              class="chart-container"
+                                              [view]="control.chartOptions.view"
+                                              [scheme]="control.chartOptions.colorScheme"
+                                              [schemeType]="control.chartOptions.schemeType"
+                                              [results]="_chartService.multi[control.key]"
+                                              [legend]="control.chartOptions.showLegend"
+                                              [legendTitle]="control.chartOptions.legendTitle"
+                                              [gradient]="control.chartOptions.gradient"
+                                              [xAxis]="control.chartOptions.showXAxis"
+                                              (legendLabelClick)="onLegendLabelClick($event)"
+                                              [yAxis]="control.chartOptions.showYAxis"
+                                              [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                              [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                              [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                              [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                              [timeline]="control.chartOptions.timeline"
+                                              [showGridLines]="control.chartOptions.showGridLines"
+                                              [roundDomains]="control.chartOptions.roundDomains"
+                                              [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                              [curve]="curves[control.chartOptions.curveType]"
+                                              (select)="select($event)">
+            </ngx-charts-area-chart-normalized>
+            <!--<combo-chart-component *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'combo-chart'"
+                                  class="chart-container"
+                                  [view]="control.chartOptions.view"
+                                  [scheme]="comboBarScheme"
+                                  [colorSchemeLine]="lineChartScheme"
+                                  [results]="barChart"
+                                  [lineChart]="lineChartSeries"
+                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                  [yAxisTickFormatting]="yLeftTickFormat"
+                                  [yLeftAxisScaleFactor]="yLeftAxisScale"
+                                  [yRightAxisScaleFactor]="yRightAxisScale"
+                                  [yRightAxisTickFormatting]="yRightTickFormat"
+                                  [gradient]="control.chartOptions.gradient"
+                                  [xAxis]="control.chartOptions.showXAxis"
+                                  [yAxis]="control.chartOptions.showYAxis"
+                                  [legend]="control.chartOptions.showLegend"
+                                  [legendTitle]="control.chartOptions.legendTitle"
+                                  [showGridLines]="control.chartOptions.showGridLines"
+                                  [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                  [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                  [showRightYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                  [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                  [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                  [yAxisLabelRight]="yAxisLabelRight"
+                                  (select)="onSelect($event)">
+            </combo-chart-component>-->
+            <ngx-charts-heat-map *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'heat-map'"
+                                class="chart-container"
+                                [view]="control.chartOptions.view"
+                                [scheme]="control.chartOptions.colorScheme"
+                                [results]="_chartService.multi[control.key]"
+                                [legend]="control.chartOptions.showLegend"
+                                [gradient]="control.chartOptions.gradient"
+                                (legendLabelClick)="onLegendLabelClick($event)"
+                                [xAxis]="control.chartOptions.showXAxis"
+                                [yAxis]="control.chartOptions.showYAxis"
+                                [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                [innerPadding]="control.chartOptions.innerPadding"
+                                [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                (select)="select($event)">
+            </ngx-charts-heat-map>
+            <ngx-charts-heat-map *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'calendar'"
+                                class="chart-container"
+                                [view]="control.chartOptions.view"
+                                [scheme]="control.chartOptions.colorScheme"
+                                [results]="calendarData"
+                                [legend]="control.chartOptions.showLegend"
+                                [gradient]="control.chartOptions.gradient"
+                                (legendLabelClick)="onLegendLabelClick($event)"
+                                [xAxis]="control.chartOptions.showXAxis"
+                                [yAxis]="control.chartOptions.showYAxis"
+                                [showXAxisLabel]="false"
+                                [showYAxisLabel]="false"
+                                [xAxisTickFormatting]="calendarAxisTickFormatting"
+                                [tooltipText]="calendarTooltipText"
+                                [innerPadding]="control.chartOptions.innerPadding"
+                                [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                (select)="select($event)">
+            </ngx-charts-heat-map>
+            <ngx-charts-tree-map *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'tree-map'"
+                                class="chart-container"
+                                [view]="control.chartOptions.view"
+                                (legendLabelClick)="onLegendLabelClick($event)"
+                                [scheme]="control.chartOptions.colorScheme"
+                                [results]="_chartService.single[control.key]"
+                                [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                [labelFormatting]="gdpLabelFormatting"
+                                [gradient]="control.chartOptions.gradient"
+                                (select)="select($event)">
+            </ngx-charts-tree-map>
+            <ngx-charts-number-card *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'number-card'"
+                                    class="chart-container"
+                                    [view]="control.chartOptions.view"
+                                    (legendLabelClick)="onLegendLabelClick($event)"
+                                    [scheme]="control.chartOptions.colorScheme"
+                                    cardColor="#232837"
+                                    emptyColor="#1e222e"
+                                    [results]="_chartService.single[control.key]"
+                                    (select)="select($event)">
+            </ngx-charts-number-card>
+            <div *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'status-demo'">
+              <!--<ngx-slider [(ngModel)]="salePrice"
+                          [step]="100"
+                          [filled]="true"
+                          [min]="0"
+                          [max]="10000"
+                          (change)="statusData = calcStatusData()">
+              </ngx-slider>-->
+              Price: ${{salePrice}}
+              <br />
+              <!--<ngx-slider [(ngModel)]="personnelCost"
+                          [step]="100"
+                          [filled]="true"
+                          [min]="0"
+                          [max]="10000"
+                          (change)="statusData = calcStatusData()">
+              </ngx-slider>-->
+              Cost: ${{personnelCost}} / hr
+              <ngx-charts-number-card class="chart-container"
+                                      [view]="control.chartOptions.view"
+                                      (legendLabelClick)="onLegendLabelClick($event)"
+                                      [scheme]="control.chartOptions.colorScheme"
+                                      cardColor="#232837"
+                                      emptyColor="#1e222e"
+                                      [results]="statusData"
+                                      [valueFormatting]="statusValueFormat"
+                                      [labelFormatting]="statusLabelFormat">
+              </ngx-charts-number-card>
+            </div>
+            <ngx-charts-gauge *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'gauge'"
+                              class="chart-container"
+                              [view]="control.chartOptions.view"
+                              [legend]="control.chartOptions.showLegend"
+                              [legendTitle]="control.chartOptions.legendTitle"
+                              [results]="_chartService.single[control.key]"
+                              [textValue]="control.chartOptions.gaugeTextValue"
+                              [scheme]="control.chartOptions.colorScheme"
+                              [min]="control.chartOptions.gaugeMin"
+                              [max]="control.chartOptions.gaugeMax"
+                              [units]="control.chartOptions.gaugeUnits"
+                              [angleSpan]="control.chartOptions.gaugeAngleSpan"
+                              [startAngle]="control.chartOptions.gaugeStartAngle"
+                              [showAxis]="control.chartOptions.gaugeShowAxis"
+                              [bigSegments]="control.chartOptions.gaugeLargeSegments"
+                              [smallSegments]="control.chartOptions.gaugeSmallSegments"
+                              [margin]="control.chartOptions.margin ? [control.chartOptions.marginTop, control.chartOptions.marginRight, control.chartOptions.marginBottom, control.chartOptions.marginLeft] : null"
+                              [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                              (select)="select($event)"
+                              (legendLabelClick)="onLegendLabelClick($event)">
+            </ngx-charts-gauge>
+            <ngx-charts-linear-gauge *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'linear-gauge'"
+                                    class="chart-container"
+                                    [view]="control.chartOptions.view"
+                                    [scheme]="control.chartOptions.colorScheme"
+                                    [min]="control.chartOptions.gaugeMin"
+                                    [max]="control.chartOptions.gaugeMax"
+                                    [value]="control.chartOptions.gaugeValue"
+                                    [previousValue]="control.chartOptions.gaugePreviousValue"
+                                    [units]="control.chartOptions.gaugeUnits"
+                                    (select)="select($event)">
+            </ngx-charts-linear-gauge>
+            <div *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'plot-demo'">
+              <!--<ngx-input type="text"
+                        [required]="true"
+                        [(ngModel)]="mathText"
+                        (change)="mathFunction = getFunction(mathText); plotData = generatePlotData()">
+              </ngx-input>-->
+              <ngx-charts-line-chart style="position: static; display: inline-block; transform: none;"
+                                    [view]="control.chartOptions.view"
+                                    class="chart-container"
+                                    [scheme]="control.chartOptions.colorScheme"
+                                    [schemeType]="control.chartOptions.schemeType"
+                                    [results]="plotData"
+                                    [legend]="false"
+                                    [legendTitle]="control.chartOptions.legendTitle"
+                                    (legendLabelClick)="onLegendLabelClick($event)"
+                                    [gradient]="control.chartOptions.gradient"
+                                    [xAxis]="control.chartOptions.showXAxis"
+                                    [yAxis]="control.chartOptions.showYAxis"
+                                    [showXAxisLabel]="false"
+                                    [showYAxisLabel]="false"
+                                    [xAxisLabel]="'angle'"
+                                    [yAxisLabel]="'radius'"
+                                    [autoScale]="control.chartOptions.autoScale"
+                                    [timeline]="timeline"
+                                    [showGridLines]="control.chartOptions.showGridLines"
+                                    [curve]="curves['Cardinal']"
+                                    [rangeFillOpacity]="rangeFillOpacity"
+                                    [roundDomains]="control.chartOptions.roundDomains"
+                                    [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                    (select)="select($event)">
+              </ngx-charts-line-chart>
+              <p></p>
+              <ngx-charts-polar-chart style="position: static; display: inline-block; transform: none;"
+                                      [view]="control.chartOptions.view"
+                                      class="chart-container"
+                                      [scheme]="control.chartOptions.colorScheme"
+                                      [schemeType]="control.chartOptions.schemeType"
+                                      [results]="plotData"
+                                      [legend]="false"
+                                      [legendTitle]="control.chartOptions.legendTitle"
+                                      (legendLabelClick)="onLegendLabelClick($event)"
+                                      [gradient]="control.chartOptions.gradient"
+                                      [xAxis]="false"
+                                      [yAxis]="true"
+                                      [showXAxisLabel]="false"
+                                      [showYAxisLabel]="false"
+                                      [xAxisLabel]="'angle'"
+                                      [yAxisLabel]="'radius'"
+                                      [autoScale]="control.chartOptions.autoScale"
+                                      [showGridLines]="control.chartOptions.showGridLines"
+                                      [rangeFillOpacity]="rangeFillOpacity"
+                                      [roundDomains]="control.chartOptions.roundDomains"
+                                      [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                      [showSeriesOnHover]="showSeriesOnHover"
+                                      [curve]="curves['Cardinal Closed']"
+                                      (select)="select($event)">
+              </ngx-charts-polar-chart>
+            </div>
+            <div class="chart-container"
+                *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'tree-map-demo'"
+                style="padding: 10px; border: 1px solid white;">
+              <h4 style="text-align: center;">
+                <button class="btn btn-link" [class.active]="sumBy === 'Size'" (click)="treemapProcess('Size')">By Size</button>
+                <button class="btn btn-link" [class.active]="sumBy === 'Count'" (click)="treemapProcess('Count')">By Count</button>
+              </h4>
+              <div style="height: 17px; font-size: 12px;">
+                <ng-container *ngFor="let item of treemapPath; let last = last;">
+                  <button class="btn btn-link"
+                          [class.active]="last"
+                          [disabled]="last"
+                          (click)="treemapSelect(item)">
+                    {{item.name}} ({{item.value}})
+                  </button>
+                  <span *ngIf="!last"> / </span>
+                </ng-container>
+              </div>
+              <ngx-charts-tree-map [view]="control.chartOptions.view"
+                                  (legendLabelClick)="onLegendLabelClick($event)"
+                                  [scheme]="control.chartOptions.colorScheme"
+                                  [results]="treemap"
+                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                  [gradient]="control.chartOptions.gradient"
+                                  (select)="treemapSelect($event)">
+              </ngx-charts-tree-map>
+            </div>
+            <ngx-charts-line-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'line-reference-lines'"
+                                  [view]="control.chartOptions.view"
+                                  class="chart-container"
+                                  [scheme]="control.chartOptions.colorScheme"
+                                  [schemeType]="control.chartOptions.schemeType"
+                                  [results]="_chartService.multi[control.key]"
+                                  [legend]="control.chartOptions.showLegend"
+                                  [legendTitle]="control.chartOptions.legendTitle"
+                                  (legendLabelClick)="onLegendLabelClick($event)"
+                                  [gradient]="control.chartOptions.gradient"
+                                  [xAxis]="control.chartOptions.showXAxis"
+                                  [yAxis]="control.chartOptions.showYAxis"
+                                  [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                  [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                  [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                  [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                  [autoScale]="control.chartOptions.autoScale"
+                                  [timeline]="timeline"
+                                  [showGridLines]="control.chartOptions.showGridLines"
+                                  [curve]="curves[control.chartOptions.curveType]"
+                                  [rangeFillOpacity]="rangeFillOpacity"
+                                  [roundDomains]="control.chartOptions.roundDomains"
+                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                  [showRefLines]="showRefLines"
+                                  [showRefLabels]="showRefLabels"
+                                  [referenceLines]="refLines"
+                                  (select)="select($event)">
+            </ngx-charts-line-chart>
+            <ngx-charts-bar-vertical *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'tooltip-templates'"
+                                    class="chart-container"
+                                    [view]="control.chartOptions.view"
+                                    [scheme]="control.chartOptions.colorScheme"
+                                    [schemeType]="control.chartOptions.schemeType"
+                                    [customColors]="control.chartOptions.customColors"
+                                    [results]="_chartService.single[control.key]"
+                                    [gradient]="control.chartOptions.gradient"
+                                    [xAxis]="control.chartOptions.showXAxis"
+                                    [yAxis]="control.chartOptions.showYAxis"
+                                    [legend]="control.chartOptions.showLegend"
+                                    [legendTitle]="control.chartOptions.legendTitle"
+                                    [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                    [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                    [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                    [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                    [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                    [showGridLines]="control.chartOptions.showGridLines"
+                                    [barPadding]="control.chartOptions.barPadding"
+                                    [roundDomains]="control.chartOptions.roundDomains"
+                                    (select)="select($event)"
+                                    (legendLabelClick)="onLegendLabelClick($event)">
+              <ng-template #tooltipTemplate let-model="model">
+                <h1>
+                  {{getFlag(model.name)}}
+                </h1>
+                <h2>{{model.name}}: {{model.value}}</h2>
+              </ng-template>
+            </ngx-charts-bar-vertical>
+            <ngx-charts-sparkline *ngIf="sparkline"
+                                  [view]="control.chartOptions.view"
+                                  class="chart-container"
+                                  [scheme]="'flame'"
+                                  [results]="_chartService.multi[control.key]"
+                                  [curve]="control.chartOptions.curve">
+            </ngx-charts-sparkline>
+            <!--<ngx-charts-sparkline *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'sparkline'"
+                                  [view]="control.chartOptions.view"
+                                  class="chart-container"
+                                  [scheme]="'flame'"
+                                  [results]="_chartService.multi[control.key]"
+                                  [curve]="control.chartOptions.curve">
+            </ngx-charts-sparkline>-->
+            <!--<ngx-charts-timeline-filter-bar-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'timeline-filter-bar-chart-demo'"
+                                                  [view]="control.chartOptions.view"
+                                                  class="chart-container"
+                                                  [scheme]="control.chartOptions.colorScheme"
+                                                  [schemeType]="control.chartOptions.schemeType"
+                                                  [results]="timelineFilterBarData"
+                                                  [gradient]="control.chartOptions.gradient"
+                                                  [xAxis]="control.chartOptions.showXAxis"
+                                                  [yAxis]="control.chartOptions.showYAxis"
+                                                  [showXAxisLabel]="false"
+                                                  [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                  [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                  [yAxisLabel]="'Executions'"
+                                                  [showGridLines]="control.chartOptions.showGridLines"
+                                                  (onFilter)="onFilter($event)">
+            </ngx-charts-timeline-filter-bar-chart>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #tabs>
+  <div class="tab-card pb-3">
+    <ngb-tabset type="tabs">
+      <ngb-tab *ngIf="control.hidechart==false">
+        <ng-template ngbTabTitle><b>{{control.Name}}</b> </ng-template>
+        <ng-template ngbTabContent>
+          <div class="row" *ngIf="Filters.length>0 && control.isTableView==false">
+            <div *ngFor="let filter of Filters" class="col-md-6">
+              <div *ngIf="filter.type=='textbox'">
+                <input mdbActive type="text" [id]="filter.id"
+                       class="form-control"
+                       [(ngModel)]="filter.value">
+                <label [for]="filter.id" [class.active]="filter.value !== ''">{{filter.label}}</label>
+              </div>
+              <div *ngIf="filter.type=='list'">
+                {{filter.label}}
+                <select [(ngModel)]="filter.value">
+                  <option *ngFor="let item of filter.data" [value]="item">
+                    {{item}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12"> <button class="btn btn-default waves-effect waves-light" (click)="Search()">Search</button></div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div [class]="control.chartOptions.theme">
+                <div class="chart-outer" [ngStyle]="{'height.px': control.height}">
+                  <div class="chart-col">
+                    <ngx-charts-bar-vertical *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical'"
+                                             class="chart-container"
+                                             [view]="control.chartOptions.view"
+                                             [scheme]="control.chartOptions.colorScheme"
+                                             [schemeType]="control.chartOptions.schemeType"
+                                             [customColors]="control.chartOptions.customColors"
+                                             [results]="_chartService.single[control.key]"
+                                             [gradient]="control.chartOptions.gradient"
+                                             [xAxis]="control.chartOptions.showXAxis"
+                                             [yAxis]="control.chartOptions.showYAxis"
+                                             [legend]="control.chartOptions.showLegend"
+                                             [legendTitle]="control.chartOptions.legendTitle"
+                                             [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                             [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                             [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                             [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                             [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                             [showGridLines]="control.chartOptions.showGridLines"
+                                             [barPadding]="control.chartOptions.barPadding"
+                                             [roundDomains]="control.chartOptions.roundDomains"
+                                             [roundEdges]="control.chartOptions.roundEdges"
+                                             (select)="select($event)"
+                                             (legendLabelClick)="onLegendLabelClick($event)">
+                    </ngx-charts-bar-vertical>
+                    <ngx-charts-bar-horizontal *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal'"
+                                               class="chart-container"
+                                               [view]="control.chartOptions.view"
+                                               [scheme]="control.chartOptions.colorScheme"
+                                               [schemeType]="control.chartOptions.schemeType"
+                                               [results]="_chartService.single[control.key]"
+                                               [gradient]="control.chartOptions.gradient"
+                                               [xAxis]="control.chartOptions.showXAxis"
+                                               [yAxis]="control.chartOptions.showYAxis"
+                                               [legend]="control.chartOptions.showLegend"
+                                               [legendTitle]="control.chartOptions.legendTitle"
+                                               [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                               [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                               [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                               [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                               [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                               [showGridLines]="control.chartOptions.showGridLines"
+                                               [barPadding]="control.chartOptions.barPadding"
+                                               [roundDomains]="control.chartOptions.roundDomains"
+                                               [roundEdges]="control.chartOptions.roundEdges"
+                                               (legendLabelClick)="onLegendLabelClick($event)"
+                                               (select)="select($event)">
+                    </ngx-charts-bar-horizontal>
+                    <ngx-charts-bar-vertical-2d *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical-2d'"
+                                                class="chart-container"
+                                                [view]="control.chartOptions.view"
+                                                [scheme]="control.chartOptions.colorScheme"
+                                                [schemeType]="control.chartOptions.schemeType"
+                                                [results]="_chartService.multi[control.key]"
+                                                [gradient]="control.chartOptions.gradient"
+                                                [xAxis]="control.chartOptions.showXAxis"
+                                                [yAxis]="control.chartOptions.showYAxis"
+                                                [legend]="control.chartOptions.showLegend"
+                                                [legendTitle]="control.chartOptions.legendTitle"
+                                                [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                (legendLabelClick)="onLegendLabelClick($event)"
+                                                [showGridLines]="control.chartOptions.showGridLines"
+                                                [barPadding]="control.chartOptions.barPadding"
+                                                [groupPadding]="control.chartOptions.groupPadding"
+                                                [roundDomains]="control.chartOptions.roundDomains"
+                                                [roundEdges]="control.chartOptions.roundEdges"
+                                                (select)="select($event)">
+                    </ngx-charts-bar-vertical-2d>
+                    <ngx-charts-bar-horizontal-2d *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal-2d'"
+                                                  class="chart-container"
+                                                  [view]="control.chartOptions.view"
+                                                  [scheme]="control.chartOptions.colorScheme"
+                                                  [schemeType]="control.chartOptions.schemeType"
+                                                  [results]="_chartService.multi[control.key]"
+                                                  [gradient]="control.chartOptions.gradient"
+                                                  [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                  [xAxis]="control.chartOptions.showXAxis"
+                                                  [yAxis]="control.chartOptions.showYAxis"
+                                                  [legend]="control.chartOptions.showLegend"
+                                                  [legendTitle]="control.chartOptions.legendTitle"
+                                                  (legendLabelClick)="onLegendLabelClick($event)"
+                                                  [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                  [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                  [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                  [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                  [showGridLines]="control.chartOptions.showGridLines"
+                                                  [barPadding]="control.chartOptions.barPadding"
+                                                  [groupPadding]="control.chartOptions.groupPadding"
+                                                  [roundDomains]="control.chartOptions.roundDomains"
+                                                  [roundEdges]="control.chartOptions.roundEdges"
+                                                  (select)="select($event)">
+                    </ngx-charts-bar-horizontal-2d>
+                    <ngx-charts-bar-vertical-stacked *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical-stacked'"
+                                                     class="chart-container"
+                                                     [view]="control.chartOptions.view"
+                                                     [scheme]="control.chartOptions.colorScheme"
+                                                     [schemeType]="control.chartOptions.schemeType"
+                                                     [results]="_chartService.multi[control.key]"
+                                                     [gradient]="control.chartOptions.gradient"
+                                                     [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                     [xAxis]="control.chartOptions.showXAxis"
+                                                     [yAxis]="control.chartOptions.showYAxis"
+                                                     [legend]="control.chartOptions.showLegend"
+                                                     [legendTitle]="control.chartOptions.legendTitle"
+                                                     (legendLabelClick)="onLegendLabelClick($event)"
+                                                     [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                     [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                     [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                     [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                     [showGridLines]="control.chartOptions.showGridLines"
+                                                     [barPadding]="control.chartOptions.barPadding"
+                                                     [roundDomains]="control.chartOptions.roundDomains"
+                                                     (select)="select($event)">
+                    </ngx-charts-bar-vertical-stacked>
+                    <ngx-charts-bar-horizontal-stacked *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal-stacked'"
+                                                       class="chart-container"
+                                                       [view]="control.chartOptions.view"
+                                                       [scheme]="control.chartOptions.colorScheme"
+                                                       [schemeType]="control.chartOptions.schemeType"
+                                                       [results]="_chartService.multi[control.key]"
+                                                       [gradient]="control.chartOptions.gradient"
+                                                       [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                       [xAxis]="control.chartOptions.showXAxis"
+                                                       [yAxis]="control.chartOptions.showYAxis"
+                                                       [legend]="control.chartOptions.showLegend"
+                                                       [legendTitle]="control.chartOptions.legendTitle"
+                                                       [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                       (legendLabelClick)="onLegendLabelClick($event)"
+                                                       [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                       [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                       [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                       [showGridLines]="control.chartOptions.showGridLines"
+                                                       [barPadding]="control.chartOptions.barPadding"
+                                                       [roundDomains]="control.chartOptions.roundDomains"
+                                                       (select)="select($event)">
+                    </ngx-charts-bar-horizontal-stacked>
+                    <ngx-charts-bar-vertical-normalized *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-vertical-normalized'"
+                                                        class="chart-container"
+                                                        [view]="control.chartOptions.view"
+                                                        [scheme]="control.chartOptions.colorScheme"
+                                                        [schemeType]="control.chartOptions.schemeType"
+                                                        [results]="_chartService.multi[control.key]"
+                                                        [gradient]="control.chartOptions.gradient"
+                                                        [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                        [xAxis]="control.chartOptions.showXAxis"
+                                                        [yAxis]="control.chartOptions.showYAxis"
+                                                        [legend]="control.chartOptions.showLegend"
+                                                        [legendTitle]="control.chartOptions.legendTitle"
+                                                        [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                        (legendLabelClick)="onLegendLabelClick($event)"
+                                                        [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                        [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                        [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                        [showGridLines]="control.chartOptions.showGridLines"
+                                                        [barPadding]="control.chartOptions.barPadding"
+                                                        [roundDomains]="control.chartOptions.roundDomains"
+                                                        (select)="select($event)">
+                    </ngx-charts-bar-vertical-normalized>
+                    <ngx-charts-bar-horizontal-normalized *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bar-horizontal-normalized'"
+                                                          class="chart-container"
+                                                          [view]="control.chartOptions.view"
+                                                          [scheme]="control.chartOptions.colorScheme"
+                                                          [schemeType]="control.chartOptions.schemeType"
+                                                          [results]="_chartService.multi[control.key]"
+                                                          [gradient]="control.chartOptions.gradient"
+                                                          [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                          [xAxis]="control.chartOptions.showXAxis"
+                                                          [yAxis]="control.chartOptions.showYAxis"
+                                                          [legend]="control.chartOptions.showLegend"
+                                                          [legendTitle]="control.chartOptions.legendTitle"
+                                                          [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                          [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                          [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                          [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                          (legendLabelClick)="onLegendLabelClick($event)"
+                                                          [showGridLines]="control.chartOptions.showGridLines"
+                                                          [barPadding]="control.chartOptions.barPadding"
+                                                          [roundDomains]="control.chartOptions.roundDomains"
+                                                          (select)="select($event)">
+                    </ngx-charts-bar-horizontal-normalized>
+                    <ngx-charts-pie-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'pie-chart'"
+                                          class="chart-container"
+                                          [view]="control.chartOptions.view"
+                                          [scheme]="control.chartOptions.colorScheme"
+                                          [results]="_chartService.single[control.key]"
+                                          [legend]="control.chartOptions.showLegend"
+                                          [legendTitle]="control.chartOptions.legendTitle"
+                                          [explodeSlices]="control.chartOptions.explodeSlices"
+                                          [labels]="control.chartOptions.showLabels"
+                                          [doughnut]="control.chartOptions.doughnut"
+                                          [arcWidth]="control.chartOptions.arcWidth"
+                                          (legendLabelClick)="onLegendLabelClick($event)"
+                                          [gradient]="control.chartOptions.gradient"
+                                          [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                          [tooltipText]="pieTooltipText"
+                                          (select)="select($event)">
+                    </ngx-charts-pie-chart>
+                    <ngx-charts-advanced-pie-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'advanced-pie-chart'"
+                                                   class="chart-container"
+                                                   [view]="control.chartOptions.view"
+                                                   [scheme]="control.chartOptions.colorScheme"
+                                                   [results]="_chartService.single[control.key]"
+                                                   (legendLabelClick)="onLegendLabelClick($event)"
+                                                   [gradient]="control.chartOptions.gradient"
+                                                   [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                   [tooltipText]="pieTooltipText"
+                                                   (select)="select($event)">
+                    </ngx-charts-advanced-pie-chart>
+                    <ngx-charts-pie-grid *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'pie-grid'"
+                                         class="chart-container"
+                                         [view]="control.chartOptions.view"
+                                         [scheme]="control.chartOptions.colorScheme"
+                                         (legendLabelClick)="onLegendLabelClick($event)"
+                                         [results]="_chartService.single[control.key]"
+                                         [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                         [tooltipText]="pieTooltipText"
+                                         (select)="select($event)">
+                    </ngx-charts-pie-grid>
+                    <ngx-charts-line-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'line-chart'"
+                                           [view]="control.chartOptions.view"
+                                           class="chart-container"
+                                           [scheme]="control.chartOptions.colorScheme"
+                                           [schemeType]="control.chartOptions.schemeType"
+                                           [results]="_chartService.multi[control.key]"
+                                           [legend]="control.chartOptions.showLegend"
+                                           [legendTitle]="control.chartOptions.legendTitle"
+                                           (legendLabelClick)="onLegendLabelClick($event)"
+                                           [gradient]="control.chartOptions.gradient"
+                                           [xAxis]="control.chartOptions.showXAxis"
+                                           [yAxis]="control.chartOptions.showYAxis"
+                                           [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                           [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                           [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                           [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                           [autoScale]="control.chartOptions.autoScale"
+                                           [timeline]="control.chartOptions.timeline"
+                                           [showGridLines]="control.chartOptions.showGridLines"
+                                           [curve]="curves[control.chartOptions.curveType]"
+                                           [rangeFillOpacity]="control.chartOptions.rangeFillOpacity"
+                                           [roundDomains]="control.chartOptions.roundDomains"
+                                           [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                           (select)="select($event)">
+                    </ngx-charts-line-chart>
+                    <ngx-charts-polar-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'polar-chart'"
+                                            [view]="control.chartOptions.view"
+                                            class="chart-container"
+                                            [scheme]="control.chartOptions.colorScheme"
+                                            [schemeType]="control.chartOptions.schemeType"
+                                            [results]="_chartService.multi[control.key]"
+                                            [legend]="control.chartOptions.showLegend"
+                                            [legendTitle]="control.chartOptions.legendTitle"
+                                            (legendLabelClick)="onLegendLabelClick($event)"
+                                            [gradient]="control.chartOptions.gradient"
+                                            [xAxis]="control.chartOptions.showXAxis"
+                                            [yAxis]="control.chartOptions.showYAxis"
+                                            [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                            [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                            [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                            [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                            [autoScale]="control.chartOptions.autoScale"
+                                            [showGridLines]="control.chartOptions.showGridLines"
+                                            [rangeFillOpacity]="control.chartOptions.rangeFillOpacity"
+                                            [roundDomains]="control.chartOptions.roundDomains"
+                                            [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                            [showSeriesOnHover]="control.chartOptions.showSeriesOnHover"
+                                            [curve]="curves[control.chartOptions.closedCurveType]"
+                                            (select)="select($event)">
+                    </ngx-charts-polar-chart>
+                    <ngx-charts-bubble-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'bubble-chart'"
+                                             [view]="control.chartOptions.view"
+                                             class="chart-container"
+                                             [results]="_chartService.bubble[control.key]"
+                                             [showGridLines]="control.chartOptions.showGridLines"
+                                             [legend]="control.chartOptions.showLegend"
+                                             [legendTitle]="control.chartOptions.legendTitle"
+                                             [xAxis]="control.chartOptions.showXAxis"
+                                             [yAxis]="control.chartOptions.showYAxis"
+                                             [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                             [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                             [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                             [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                             [autoScale]="control.chartOptions.autoScale"
+                                             [scheme]="control.chartOptions.colorScheme"
+                                             [schemeType]="control.chartOptions.schemeType"
+                                             [roundDomains]="control.chartOptions.roundDomains"
+                                             [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                             [minRadius]="control.chartOptions.minRadius"
+                                             [maxRadius]="control.chartOptions.maxRadius"
+                                             (select)="select($event)">
+                    </ngx-charts-bubble-chart>
+                    <ngx-charts-force-directed-graph *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'force-directed-graph'"
+                                                     class="chart-container"
+                                                     [legend]="control.chartOptions.showLegend"
+                                                     [legendTitle]="control.chartOptions.legendTitle"
+                                                     [links]="graph.links"
+                                                     (legendLabelClick)="onLegendLabelClick($event)"
+                                                     [nodes]="graph.nodes"
+                                                     [scheme]="control.chartOptions.colorScheme"
+                                                     [view]="control.chartOptions.view"
+                                                     [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                     (select)="select($event)">
+                    </ngx-charts-force-directed-graph>
+                    <ngx-charts-area-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'area-chart'"
+                                           class="chart-container"
+                                           [view]="control.chartOptions.view"
+                                           [scheme]="control.chartOptions.colorScheme"
+                                           [schemeType]="control.chartOptions.schemeType"
+                                           [results]="_chartService.multi[control.key]"
+                                           [legend]="control.chartOptions.showLegend"
+                                           [legendTitle]="control.chartOptions.legendTitle"
+                                           (legendLabelClick)="onLegendLabelClick($event)"
+                                           [gradient]="control.chartOptions.gradient"
+                                           [xAxis]="control.chartOptions.showXAxis"
+                                           [yAxis]="control.chartOptions.showYAxis"
+                                           [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                           [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                           [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                           [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                           [autoScale]="control.chartOptions.autoScale"
+                                           [timeline]="control.chartOptions.timeline"
+                                           [showGridLines]="control.chartOptions.showGridLines"
+                                           [roundDomains]="control.chartOptions.roundDomains"
+                                           [curve]="curves[control.chartOptions.curveType]"
+                                           [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                           (select)="select($event)">
+                    </ngx-charts-area-chart>
+                    <ngx-charts-area-chart-stacked *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'area-chart-stacked'"
+                                                   class="chart-container"
+                                                   [view]="control.chartOptions.view"
+                                                   [scheme]="control.chartOptions.colorScheme"
+                                                   [schemeType]="control.chartOptions.schemeType"
+                                                   [results]="_chartService.multi[control.key]"
+                                                   [legend]="control.chartOptions.showLegend"
+                                                   [legendTitle]="control.chartOptions.legendTitle"
+                                                   [gradient]="control.chartOptions.gradient"
+                                                   [xAxis]="control.chartOptions.showXAxis"
+                                                   [yAxis]="control.chartOptions.showYAxis"
+                                                   (legendLabelClick)="onLegendLabelClick($event)"
+                                                   [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                   [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                   [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                   [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                   [timeline]="control.chartOptions.timeline"
+                                                   [showGridLines]="control.chartOptions.showGridLines"
+                                                   [roundDomains]="control.chartOptions.roundDomains"
+                                                   [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                   [curve]="curves[control.chartOptions.curveType]"
+                                                   (select)="select($event)">
+                    </ngx-charts-area-chart-stacked>
+                    <ngx-charts-area-chart-normalized *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'area-chart-normalized'"
+                                                      class="chart-container"
+                                                      [view]="control.chartOptions.view"
+                                                      [scheme]="control.chartOptions.colorScheme"
+                                                      [schemeType]="control.chartOptions.schemeType"
+                                                      [results]="_chartService.multi[control.key]"
+                                                      [legend]="control.chartOptions.showLegend"
+                                                      [legendTitle]="control.chartOptions.legendTitle"
+                                                      [gradient]="control.chartOptions.gradient"
+                                                      [xAxis]="control.chartOptions.showXAxis"
+                                                      (legendLabelClick)="onLegendLabelClick($event)"
+                                                      [yAxis]="control.chartOptions.showYAxis"
+                                                      [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                                      [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                      [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                      [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                                      [timeline]="control.chartOptions.timeline"
+                                                      [showGridLines]="control.chartOptions.showGridLines"
+                                                      [roundDomains]="control.chartOptions.roundDomains"
+                                                      [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                                      [curve]="curves[control.chartOptions.curveType]"
+                                                      (select)="select($event)">
+                    </ngx-charts-area-chart-normalized>
+                    <!--<combo-chart-component *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'combo-chart'"
+                                           class="chart-container"
+                                           [view]="control.chartOptions.view"
+                                           [scheme]="comboBarScheme"
+                                           [colorSchemeLine]="lineChartScheme"
+                                           [results]="barChart"
+                                           [lineChart]="lineChartSeries"
+                                           [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                           [yAxisTickFormatting]="yLeftTickFormat"
+                                           [yLeftAxisScaleFactor]="yLeftAxisScale"
+                                           [yRightAxisScaleFactor]="yRightAxisScale"
+                                           [yRightAxisTickFormatting]="yRightTickFormat"
+                                           [gradient]="control.chartOptions.gradient"
+                                           [xAxis]="control.chartOptions.showXAxis"
+                                           [yAxis]="control.chartOptions.showYAxis"
+                                           [legend]="control.chartOptions.showLegend"
+                                           [legendTitle]="control.chartOptions.legendTitle"
+                                           [showGridLines]="control.chartOptions.showGridLines"
+                                           [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                           [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                           [showRightYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                           [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                           [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                           [yAxisLabelRight]="yAxisLabelRight"
+                                           (select)="onSelect($event)">
+                    </combo-chart-component>-->
+                    <ngx-charts-heat-map *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'heat-map'"
+                                         class="chart-container"
+                                         [view]="control.chartOptions.view"
+                                         [scheme]="control.chartOptions.colorScheme"
+                                         [results]="_chartService.multi[control.key]"
+                                         [legend]="control.chartOptions.showLegend"
+                                         [gradient]="control.chartOptions.gradient"
+                                         (legendLabelClick)="onLegendLabelClick($event)"
+                                         [xAxis]="control.chartOptions.showXAxis"
+                                         [yAxis]="control.chartOptions.showYAxis"
+                                         [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                         [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                         [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                         [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                         [innerPadding]="control.chartOptions.innerPadding"
+                                         [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                         (select)="select($event)">
+                    </ngx-charts-heat-map>
+                    <ngx-charts-heat-map *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'calendar'"
+                                         class="chart-container"
+                                         [view]="control.chartOptions.view"
+                                         [scheme]="control.chartOptions.colorScheme"
+                                         [results]="calendarData"
+                                         [legend]="control.chartOptions.showLegend"
+                                         [gradient]="control.chartOptions.gradient"
+                                         (legendLabelClick)="onLegendLabelClick($event)"
+                                         [xAxis]="control.chartOptions.showXAxis"
+                                         [yAxis]="control.chartOptions.showYAxis"
+                                         [showXAxisLabel]="false"
+                                         [showYAxisLabel]="false"
+                                         [xAxisTickFormatting]="calendarAxisTickFormatting"
+                                         [tooltipText]="calendarTooltipText"
+                                         [innerPadding]="control.chartOptions.innerPadding"
+                                         [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                         (select)="select($event)">
+                    </ngx-charts-heat-map>
+                    <ngx-charts-tree-map *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'tree-map'"
+                                         class="chart-container"
+                                         [view]="control.chartOptions.view"
+                                         (legendLabelClick)="onLegendLabelClick($event)"
+                                         [scheme]="control.chartOptions.colorScheme"
+                                         [results]="_chartService.single[control.key]"
+                                         [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                         [labelFormatting]="gdpLabelFormatting"
+                                         [gradient]="control.chartOptions.gradient"
+                                         (select)="select($event)">
+                    </ngx-charts-tree-map>
+                    <ngx-charts-number-card *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'number-card'"
+                                            class="chart-container"
+                                            [view]="control.chartOptions.view"
+                                            (legendLabelClick)="onLegendLabelClick($event)"
+                                            [scheme]="control.chartOptions.colorScheme"
+                                            cardColor="#232837"
+                                            emptyColor="#1e222e"
+                                            [results]="_chartService.single[control.key]"
+                                            (select)="select($event)">
+                    </ngx-charts-number-card>
+                    <div *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'status-demo'">
+                      <!--<ngx-slider [(ngModel)]="salePrice"
+                                  [step]="100"
+                                  [filled]="true"
+                                  [min]="0"
+                                  [max]="10000"
+                                  (change)="statusData = calcStatusData()">
+                      </ngx-slider>-->
+                      Price: ${{salePrice}}
+                      <br />
+                      <!--<ngx-slider [(ngModel)]="personnelCost"
+                                  [step]="100"
+                                  [filled]="true"
+                                  [min]="0"
+                                  [max]="10000"
+                                  (change)="statusData = calcStatusData()">
+                      </ngx-slider>-->
+                      Cost: ${{personnelCost}} / hr
+                      <ngx-charts-number-card class="chart-container"
+                                              [view]="control.chartOptions.view"
+                                              (legendLabelClick)="onLegendLabelClick($event)"
+                                              [scheme]="control.chartOptions.colorScheme"
+                                              cardColor="#232837"
+                                              emptyColor="#1e222e"
+                                              [results]="statusData"
+                                              [valueFormatting]="statusValueFormat"
+                                              [labelFormatting]="statusLabelFormat">
+                      </ngx-charts-number-card>
+                    </div>
+                    <ngx-charts-gauge *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'gauge'"
+                                      class="chart-container"
+                                      [view]="control.chartOptions.view"
+                                      [legend]="control.chartOptions.showLegend"
+                                      [legendTitle]="control.chartOptions.legendTitle"
+                                      [results]="_chartService.single[control.key]"
+                                      [textValue]="control.chartOptions.gaugeTextValue"
+                                      [scheme]="control.chartOptions.colorScheme"
+                                      [min]="control.chartOptions.gaugeMin"
+                                      [max]="control.chartOptions.gaugeMax"
+                                      [units]="control.chartOptions.gaugeUnits"
+                                      [angleSpan]="control.chartOptions.gaugeAngleSpan"
+                                      [startAngle]="control.chartOptions.gaugeStartAngle"
+                                      [showAxis]="control.chartOptions.gaugeShowAxis"
+                                      [bigSegments]="control.chartOptions.gaugeLargeSegments"
+                                      [smallSegments]="control.chartOptions.gaugeSmallSegments"
+                                      [margin]="control.chartOptions.margin ? [control.chartOptions.marginTop, control.chartOptions.marginRight, control.chartOptions.marginBottom, control.chartOptions.marginLeft] : null"
+                                      [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                      (select)="select($event)"
+                                      (legendLabelClick)="onLegendLabelClick($event)">
+                    </ngx-charts-gauge>
+                    <ngx-charts-linear-gauge *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'linear-gauge'"
+                                             class="chart-container"
+                                             [view]="control.chartOptions.view"
+                                             [scheme]="control.chartOptions.colorScheme"
+                                             [min]="control.chartOptions.gaugeMin"
+                                             [max]="control.chartOptions.gaugeMax"
+                                             [value]="control.chartOptions.gaugeValue"
+                                             [previousValue]="control.chartOptions.gaugePreviousValue"
+                                             [units]="control.chartOptions.gaugeUnits"
+                                             (select)="select($event)">
+                    </ngx-charts-linear-gauge>
+                    <div *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'plot-demo'">
+                      <!--<ngx-input type="text"
+                                 [required]="true"
+                                 [(ngModel)]="mathText"
+                                 (change)="mathFunction = getFunction(mathText); plotData = generatePlotData()">
+                      </ngx-input>-->
+                      <ngx-charts-line-chart style="position: static; display: inline-block; transform: none;"
+                                             [view]="control.chartOptions.view"
+                                             class="chart-container"
+                                             [scheme]="control.chartOptions.colorScheme"
+                                             [schemeType]="control.chartOptions.schemeType"
+                                             [results]="plotData"
+                                             [legend]="false"
+                                             [legendTitle]="control.chartOptions.legendTitle"
+                                             (legendLabelClick)="onLegendLabelClick($event)"
+                                             [gradient]="control.chartOptions.gradient"
+                                             [xAxis]="control.chartOptions.showXAxis"
+                                             [yAxis]="control.chartOptions.showYAxis"
+                                             [showXAxisLabel]="false"
+                                             [showYAxisLabel]="false"
+                                             [xAxisLabel]="'angle'"
+                                             [yAxisLabel]="'radius'"
+                                             [autoScale]="control.chartOptions.autoScale"
+                                             [timeline]="timeline"
+                                             [showGridLines]="control.chartOptions.showGridLines"
+                                             [curve]="curves['Cardinal']"
+                                             [rangeFillOpacity]="rangeFillOpacity"
+                                             [roundDomains]="control.chartOptions.roundDomains"
+                                             [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                             (select)="select($event)">
+                      </ngx-charts-line-chart>
+                      <p></p>
+                      <ngx-charts-polar-chart style="position: static; display: inline-block; transform: none;"
+                                              [view]="control.chartOptions.view"
+                                              class="chart-container"
+                                              [scheme]="control.chartOptions.colorScheme"
+                                              [schemeType]="control.chartOptions.schemeType"
+                                              [results]="plotData"
+                                              [legend]="false"
+                                              [legendTitle]="control.chartOptions.legendTitle"
+                                              (legendLabelClick)="onLegendLabelClick($event)"
+                                              [gradient]="control.chartOptions.gradient"
+                                              [xAxis]="false"
+                                              [yAxis]="true"
+                                              [showXAxisLabel]="false"
+                                              [showYAxisLabel]="false"
+                                              [xAxisLabel]="'angle'"
+                                              [yAxisLabel]="'radius'"
+                                              [autoScale]="control.chartOptions.autoScale"
+                                              [showGridLines]="control.chartOptions.showGridLines"
+                                              [rangeFillOpacity]="rangeFillOpacity"
+                                              [roundDomains]="control.chartOptions.roundDomains"
+                                              [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                              [showSeriesOnHover]="showSeriesOnHover"
+                                              [curve]="curves['Cardinal Closed']"
+                                              (select)="select($event)">
+                      </ngx-charts-polar-chart>
+                    </div>
+                    <div class="chart-container"
+                         *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'tree-map-demo'"
+                         style="padding: 10px; border: 1px solid white;">
+                      <h4 style="text-align: center;">
+                        <button class="btn btn-link" [class.active]="sumBy === 'Size'" (click)="treemapProcess('Size')">By Size</button>
+                        <button class="btn btn-link" [class.active]="sumBy === 'Count'" (click)="treemapProcess('Count')">By Count</button>
+                      </h4>
+                      <div style="height: 17px; font-size: 12px;">
+                        <ng-container *ngFor="let item of treemapPath; let last = last;">
+                          <button class="btn btn-link"
+                                  [class.active]="last"
+                                  [disabled]="last"
+                                  (click)="treemapSelect(item)">
+                            {{item.name}} ({{item.value}})
+                          </button>
+                          <span *ngIf="!last"> / </span>
+                        </ng-container>
+                      </div>
+                      <ngx-charts-tree-map [view]="control.chartOptions.view"
+                                           (legendLabelClick)="onLegendLabelClick($event)"
+                                           [scheme]="control.chartOptions.colorScheme"
+                                           [results]="treemap"
+                                           [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                           [gradient]="control.chartOptions.gradient"
+                                           (select)="treemapSelect($event)">
+                      </ngx-charts-tree-map>
+                    </div>
+                    <ngx-charts-line-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'line-reference-lines'"
+                                           [view]="control.chartOptions.view"
+                                           class="chart-container"
+                                           [scheme]="control.chartOptions.colorScheme"
+                                           [schemeType]="control.chartOptions.schemeType"
+                                           [results]="_chartService.multi[control.key]"
+                                           [legend]="control.chartOptions.showLegend"
+                                           [legendTitle]="control.chartOptions.legendTitle"
+                                           (legendLabelClick)="onLegendLabelClick($event)"
+                                           [gradient]="control.chartOptions.gradient"
+                                           [xAxis]="control.chartOptions.showXAxis"
+                                           [yAxis]="control.chartOptions.showYAxis"
+                                           [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                           [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                           [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                           [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                           [autoScale]="control.chartOptions.autoScale"
+                                           [timeline]="timeline"
+                                           [showGridLines]="control.chartOptions.showGridLines"
+                                           [curve]="curves[control.chartOptions.curveType]"
+                                           [rangeFillOpacity]="rangeFillOpacity"
+                                           [roundDomains]="control.chartOptions.roundDomains"
+                                           [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                           [showRefLines]="showRefLines"
+                                           [showRefLabels]="showRefLabels"
+                                           [referenceLines]="refLines"
+                                           (select)="select($event)">
+                    </ngx-charts-line-chart>
+                    <ngx-charts-bar-vertical *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'tooltip-templates'"
+                                             class="chart-container"
+                                             [view]="control.chartOptions.view"
+                                             [scheme]="control.chartOptions.colorScheme"
+                                             [schemeType]="control.chartOptions.schemeType"
+                                             [customColors]="control.chartOptions.customColors"
+                                             [results]="_chartService.single[control.key]"
+                                             [gradient]="control.chartOptions.gradient"
+                                             [xAxis]="control.chartOptions.showXAxis"
+                                             [yAxis]="control.chartOptions.showYAxis"
+                                             [legend]="control.chartOptions.showLegend"
+                                             [legendTitle]="control.chartOptions.legendTitle"
+                                             [showXAxisLabel]="control.chartOptions.showXAxisLabel"
+                                             [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                             [tooltipDisabled]="control.chartOptions.tooltipDisabled"
+                                             [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                             [yAxisLabel]="control.chartOptions.yAxisLabel"
+                                             [showGridLines]="control.chartOptions.showGridLines"
+                                             [barPadding]="control.chartOptions.barPadding"
+                                             [roundDomains]="control.chartOptions.roundDomains"
+                                             (select)="select($event)"
+                                             (legendLabelClick)="onLegendLabelClick($event)">
+                      <ng-template #tooltipTemplate let-model="model">
+                        <h1>
+                          {{getFlag(model.name)}}
+                        </h1>
+                        <h2>{{model.name}}: {{model.value}}</h2>
+                      </ng-template>
+                    </ngx-charts-bar-vertical>
+                    <ngx-charts-sparkline *ngIf="sparkline"
+                                          [view]="control.chartOptions.view"
+                                          class="chart-container"
+                                          [scheme]="'flame'"
+                                          [results]="_chartService.multi[control.key]"
+                                          [curve]="control.chartOptions.curve">
+                    </ngx-charts-sparkline>
+                    <!--<ngx-charts-sparkline *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'sparkline'"
+                                          [view]="control.chartOptions.view"
+                                          class="chart-container"
+                                          [scheme]="'flame'"
+                                          [results]="_chartService.multi[control.key]"
+                                          [curve]="control.chartOptions.curve">
+                    </ngx-charts-sparkline>-->
+                    <!--<ngx-charts-timeline-filter-bar-chart *ngIf="_chartService.IsRefreshComplete[this.control.key] && control.chartOptions.chartType === 'timeline-filter-bar-chart-demo'"
+                                                          [view]="control.chartOptions.view"
+                                                          class="chart-container"
+                                                          [scheme]="control.chartOptions.colorScheme"
+                                                          [schemeType]="control.chartOptions.schemeType"
+                                                          [results]="timelineFilterBarData"
+                                                          [gradient]="control.chartOptions.gradient"
+                                                          [xAxis]="control.chartOptions.showXAxis"
+                                                          [yAxis]="control.chartOptions.showYAxis"
+                                                          [showXAxisLabel]="false"
+                                                          [showYAxisLabel]="control.chartOptions.showYAxisLabel"
+                                                          [xAxisLabel]="control.chartOptions.xAxisLabel"
+                                                          [yAxisLabel]="'Executions'"
+                                                          [showGridLines]="control.chartOptions.showGridLines"
+                                                          (onFilter)="onFilter($event)">
+                    </ngx-charts-timeline-filter-bar-chart>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab *ngIf="control.hidedata==false">
+        <ng-template ngbTabTitle><b>{{control.hidechart==true ? control.Name : 'Data'}}</b> </ng-template>
+        <ng-template ngbTabContent>
+          <div *ngIf="control.chartOptions.dataview=='Table' && control.chartOptions.inputFormat=='singleSeries'; else json">
+            <div class="card">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="thead-default">
+                    <tr>
+                      <th>{{control.chartOptions.xAxisLabel}}</th>
+                      <th>{{control.chartOptions.yAxisLabel}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of _chartService.single[control.key] | paginate: { itemsPerPage: control.chartOptions.itemsPerPage, currentPage: page }">
+                      <td>
+                        {{row['name']}}
+                      </td>
+                      <td>
+                        {{row['value']}}
+                      </td>
+                    </tr>
+                    <pagination-controls (pageChange)="page = $event"></pagination-controls>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <ng-template #json>
+            <pre style="height: calc(100vh - 138px);overflow: auto;" *ngIf="control.chartOptions.inputFormat=='singleSeries'">{{_chartService.single[control.key] | json}}</pre>
+            <pre style="height: calc(100vh - 138px);overflow: auto;" *ngIf="control.chartOptions.inputFormat=='multiSeries'">{{_chartService.multi[control.key] | json}}</pre>
+            <pre style="height: calc(100vh - 138px);overflow: auto;" *ngIf="control.chartOptions.inputFormat=='bubble'">{{_chartService.bubble[control.key] | json}}</pre>
+          </ng-template>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+</ng-template>
+<ng-template #empty>
+    <div class="d-flex justify-content-center text-center align-items-center align-content-center flex-column"
+    [ngStyle]="{'min-height.px': control.nodataheight, 'background-color': control.nodatabgcolor}">
+    <div class="mb-3" *ngIf="control.nodataimage">
+      <img [src]="control.nodataimage" class="img-fluid" [ngStyle]="{'width.px': control.nodataimagewidth}" />
+    </div>
+    <h3 *ngIf="control.nodatatitle" class="text-dark">{{control.nodatatitle}}</h3>
+    <p class="m-0" *ngIf="control.nodatamsg">{{control.nodatamsg}}</p>
+  </div>
+</ng-template>
+
+

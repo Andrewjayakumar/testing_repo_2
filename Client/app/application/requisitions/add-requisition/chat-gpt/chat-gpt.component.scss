@@ -1,0 +1,91 @@
+$primary : #1edae6;
+$ai: rgb(102,102,204) ;
+
+.text-ai {
+  color : $ai !important;
+}
+
+.editable {
+  width: 100%;
+  height: 350px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  white-space: pre-line;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  &:focus {
+    outline: 1px solid $ai;
+   // outline-color: $primary;
+    box-shadow: 2px 2px 8px 3px rgba(102, 102, 211, 0.6);
+  }
+  }
+
+  .dayToDay, .mustHave, .pluses {
+    width: 100%;
+    height: 97px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    white-space: pre-line;
+    overflow-y: auto;
+    overflow-x: auto;
+  
+    &:focus {
+      outline: 1px solid $ai;
+     // outline-color: $primary;
+      box-shadow: 2px 2px 8px 3px rgba(102, 102, 211, 0.6);
+    }
+    }
+
+.choice-buttons {
+  button {
+    font-size: smaller;
+    padding: 2px;
+    width: 150px;
+    height:41px;
+    overflow: hidden;
+    white-space: normal;
+    border-radius: 10px;
+  }
+
+  .active-option {
+    color: #fff;
+    box-shadow: 5px 3px 3px #7c7c7c;
+    background-color: $ai;
+    border-style: 2px solid $ai;
+    font-weight: 600;
+    transform: translateY(-2px);
+  }
+}
+
+.action-btns {
+  button {
+    border-radius: 20px;
+  }
+}
+
+.alignDayToDay {
+  margin-top: -23px !important;
+}
+
+
+.warning-icon {
+  color: crimson;
+}
+
+
+
+.blue-chip {
+  padding: 0 4px;
+  height: 15px;
+  
+  line-height: normal;
+  font-size: x-small;
+  border-radius: 25px;
+  background-color: #fff;
+  color: $ai;
+  border: 1px solid $ai;
+  /* top: -0.5rem; */
+  margin-left: -16px;
+  width: 35px;
+  }

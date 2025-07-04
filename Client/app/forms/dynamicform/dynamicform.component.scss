@@ -1,0 +1,66 @@
+/*.searchbar {
+  border: 1px solid #ddd;
+  background: #f2f2f2;
+  padding: 10px 15px;
+
+  .search-input {
+    border: 1px solid #f2f2f2;
+    padding: 1px 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: #ddd;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background: #fff;
+    }
+  }
+
+  &:hover {
+    .search-input {
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+  }
+}*/
+
+// Stacked Icons
+// -------------------------
+
+/*.fa-stack {
+  position: relative;
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  line-height: 0;
+  vertical-align: middle;
+}
+.fa-stack-span {
+  position: absolute;
+  right: 12px;
+  color: white;
+  font-size: small;
+  font-weight: bold;
+}
+.fa-stack-1x, .fa-stack-2x {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.fa-stack-1x {
+  line-height: inherit;
+}
+
+.fa-stack-2x {
+  font-size: 2em;
+}
+
+.fa-inverse {
+  color: #ff0000;
+  top:-4px;
+}*/

@@ -1,0 +1,46 @@
+.roles {
+  min-height: calc(100vh - 58px);
+  background: url(../../../wwwroot/assets/img/iStock-872756584.jpg) no-repeat center center;
+  background-size: cover;
+  position: relative;
+
+  &:before {
+    content: '';
+    background-color: rgba(#ebebeb,0.9);
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+  }
+
+  .rounded-circle {
+    color: #000;
+    width: 155px;
+    height: 155px;
+    background: #fff;
+    border: 3px solid #666;
+    -moz-box-shadow: 0 0 3px 3px rgba(128, 128, 128, 0.5);
+    -webkit-box-shadow: 0 0 3px 3px rgba(#000,0.5);
+    box-shadow: 0 0 3px 3px rgba(128, 128, 128, 0.5);
+    overflow: hidden;
+    margin: 30px auto 0;
+    padding: 15px;
+
+    svg, img {
+      width: auto;
+      height: 35%;
+    }
+
+    &:hover {
+      background: #000;
+      border: 3px solid #000;
+      color: #fff !important;
+    }
+  }
+}

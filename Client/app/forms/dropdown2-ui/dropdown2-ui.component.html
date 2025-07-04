@@ -1,0 +1,95 @@
+<div class="form-group" *ngIf="access == 'write'" [formGroup]="formGroup">
+  <div class="dd-blok">
+    <label class="" [for]="formGroup.controls[control_id]">
+      {{control.label}}
+      <sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+      <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+    </label>
+    <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+    <ss-multiselect-dropdown (focusout)="focusOut()" (focus)="focus($event)" formControlName={{control_id}} [options]="dropdownList" [settings]="{
+      'closeOnClickOutside': true,
+      'pullRight': control.pullRight,
+      'enableSearch': control.enablesearchfilter,
+      'searchRenderLimit': 0,
+      'searchRenderAfter': 1,
+      'searchMaxLimit': 0,
+      'searchMaxRenderedItems': 0,
+      'checkedStyle': 'fontawesome',
+      'buttonClasses': 'form-control text-left',
+      'containerClasses': 'multiy-select',
+      'selectionLimit': control.selectiontype == 'single' ? 1 : control.selectionLimit,
+      'minSelectionLimit': 0,
+      'closeOnSelect': control.closeOnSelect,
+      'autoUnselect': control.selectiontype == 'single' ? true : false,
+      'showCheckAll': control.showcheckall,
+      'showUncheckAll': control.showuncheckall,
+      'fixedTitle': false,
+      'dynamicTitleMaxItems': control.dynamictitlemaxitems,
+      'maxHeight': control.maxHeight,
+      'isLazyLoad': control.isLazyLoad,
+      'stopScrollPropagation': control.isLazyLoad ? true : false,
+      'loadViewDistance': 1,
+      'selectAddedValues': false,
+      'ignoreLabels': false,
+      'maintainSelectionOrderInTitle': false}" [(ngModel)]="selectedItems" [texts]="myTexts" (ngModelChange)="onChange($event)"
+                             (onLazyLoad)="SearchApiCall(null,$event)"
+                             [ngClass]="{'border-danger' :control.require && formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched && !isdefaultload}"></ss-multiselect-dropdown>
+  </div>
+  <small class="form-text text-danger" *ngIf="formGroup.controls[control_id]?.hasError('required') && formGroup.controls[control_id]?.touched && !isdefaultload">
+    {{'You must enter a ' + control.label + '.'}}
+  </small>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write' && access != 'filter'" class="form-group">
+  <div [ngBusy]="{busy: busy, message: '', backdrop: true, delay: 500, minDuration: 1000}"></div>
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0" *ngIf="control.selectiontype == 'single'">{{selectedNode.name}}</div>
+    <div *ngIf="control.selectiontype == 'multi'">
+      <div class="badge badge-success" *ngFor="let item of selectedNodeColl">
+        {{item.name}}
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div class="form-control border-0 p-0" *ngIf="control.selectiontype == 'single'">{{selectedNode.name}}</div>
+    <div *ngIf="control.selectiontype == 'multi'">
+      <div class="badge badge-success" *ngFor="let item of selectedNodeColl">
+        {{item.name}}
+      </div>
+    </div>
+  </ng-container>
+</div>
+<div class="form-group" *ngIf="access == 'filter'">
+  <div class="dd-blok">
+    <label class="">{{control.label}}</label>
+    <ss-multiselect-dropdown [options]="dropdownList" [settings]="{
+      'closeOnClickOutside': true,
+      'pullRight': control.pullRight,
+      'enableSearch': control.enablesearchfilter,
+      'searchRenderLimit': 0,
+      'searchRenderAfter': 1,
+      'searchMaxLimit': 0,
+      'searchMaxRenderedItems': 0,
+      'checkedStyle': 'fontawesome',
+      'buttonClasses': 'form-control text-left',
+      'containerClasses': 'multiy-select',
+      'selectionLimit': control.selectiontype == 'single' ? 1 : control.selectionLimit,
+      'minSelectionLimit': 0,
+      'closeOnSelect': control.closeOnSelect,
+      'autoUnselect': control.selectiontype == 'single' ? true : false,
+      'showCheckAll': control.showcheckall,
+      'showUncheckAll': control.showuncheckall,
+      'fixedTitle': false,
+      'dynamicTitleMaxItems': control.dynamictitlemaxitems,
+      'maxHeight': control.maxHeight,
+      'isLazyLoad': control.isLazyLoad,
+      'stopScrollPropagation': control.isLazyLoad ? true : false,
+      'loadViewDistance': 1,
+      'selectAddedValues': false,
+      'ignoreLabels': false,
+      'maintainSelectionOrderInTitle': false}" [(ngModel)]="selectedItems" [texts]="myTexts" (ngModelChange)="onChange($event)"
+      (onLazyLoad)="SearchApiCall(null,$event)"></ss-multiselect-dropdown>
+  </div>
+</div>

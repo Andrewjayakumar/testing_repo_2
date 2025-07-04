@@ -1,0 +1,171 @@
+//@import url("../../../../wwwroot/assets/bootstrap-4/scss/variables.scss");
+
+
+$orange-new: #F5A623 !default;
+$primary-blue: #3b81d3 !default;
+$gray-500: #adb5bd ;
+$background-gray: #ebebeb;
+
+.modal-header {
+  position: sticky !important;
+  top: 0;
+  opacity: 1;
+  z-index: 1090;
+  @extend .modal-header;
+
+  a {
+    font-variant-caps: all-small-caps;
+    font-size: medium;
+  }
+
+  input::placeholder {
+      color: #ced4da;
+    
+  }
+}
+
+.modal-open {
+  .modal {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  }
+}
+
+/**.modal.show {
+ 
+}**/
+.activity-search {
+  font-size: small;
+
+  td {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+  }
+
+  thead {
+    th {
+      padding: 5px;
+      padding-left: 12px;
+    }
+  }
+
+  .search-pane {
+    background-color: $background-gray;
+
+    .search-box {
+      border: 1px solid $gray-500;
+      margin-top: 0.25rem;
+    }
+
+    .days-dropdown {
+      border-bottom: 2px solid $primary-blue;
+      width: auto; //max-content
+    
+      }
+
+      .ng-dropdown-panel {
+        font-size:smaller !important;
+    
+      }
+    
+
+    .nav-item {
+      .dropdown-menu {
+        width: max-content;
+        left: -130px !important;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        max-height: 400px;
+      }
+
+      .nav-link {
+        padding: 0.5rem 0.5rem;
+      }
+    }
+
+    .grid1 {
+      columns: auto 1;
+    }
+
+    .grid2 {
+      columns: auto 2;
+    }
+
+    .grid3 {
+      columns: auto 3;
+    }
+
+    .primary-color {
+      color: $primary-blue;
+    }
+
+    ng-select {
+      width: 100px;
+    }
+  }
+
+  a {
+    cursor: pointer;
+  }
+
+  .nav-pills .nav-link.active {
+    background-color: ghostwhite !important;
+    color: $primary-blue;
+    border-bottom: 1px solid ghostwhite;
+  }
+}
+
+  .activity-timestamp {
+    color: $orange-new;
+    font-size: small;
+  }
+
+  .modal-dialog {
+    overflow-x: hidden !important;
+    max-height: calc(100% - 3.5rem);
+    overflow-y: auto !important;
+    overscroll-behavior: none;
+  }
+
+
+
+  .modal-body {
+    // width: 59vw !important;
+    overflow-x: hidden !important;
+    height: calc(95vh - 140px);
+    // max-height: calc(100% - 3.5rem);
+    overflow-y: auto;
+    overscroll-behavior: none;
+    padding-top: 0px;
+    padding-bottom: 15px;
+  }
+
+  .modal-body::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+  }
+
+  .modal-body::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+
+  .modal-body::-webkit-scrollbar-track-piece {
+    width: 6px;
+  }
+
+  .modal-body::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+
+
+  .activity-modal-footer {
+    // position: sticky;
+    bottom: 0;
+    overflow: hidden;
+    // background: #f9f9f9;
+    height: 36px;
+    padding-top: 5px;
+  }
+

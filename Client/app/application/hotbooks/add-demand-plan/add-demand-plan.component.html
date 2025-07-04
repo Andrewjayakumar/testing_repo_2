@@ -1,0 +1,137 @@
+<ng-container>
+  <div>
+    <div class="modal-header">
+      <h6 *ngIf="mode != 'edit'" class="modal-title heading">Add Demand Plan</h6>
+      <h6 *ngIf="mode == 'edit'" class="modal-title heading">Edit Demand Plan</h6>
+
+      <i class="fa fa-times fa-lg closeModal" (click)="modal.close()" aria-hidden="true"></i>
+    </div>
+
+    <div class="modal-body hotbook-body">
+      <div class="card-2 card-3 card-1">
+        <form name="demandForm" [formGroup]="demandForm"
+          (ngSubmit)="demandForm.valid && onClickSubmit(demandForm.value)">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="accordionExample" class="">
+                <div class="">
+                  <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample"
+                    class="collapse show">
+                    <div class="">
+                      <div class="form-row">
+                        <div class="form-group col-md-12">
+                          <label for="demandName" class="m-b label mandatory">Name</label>
+                          <input class="form-control" placeholder="Enter Name" formControlName="demandname"
+                                 name="demandName" id="Name" [(ngModel)]="demandNameClear" [readonly]="mode == 'edit'" required />
+                        </div>
+                      </div>
+                   
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label class="m-b label mandatory" for="candidates">No. of Candidates</label>
+                          <input type="number" class="form-control" placeholder="Enter the Number of Candidates"
+                                 formControlName="maxcount" name="maxcount" id="maxcount" [(ngModel)]="candidatesClear" required />
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label class="m-b label mandatory" for="endDate">End Date</label>
+                          <div class="input-group">
+                            <input class="form-control" placeholder="Choose Date" formControlName="demandenddate"
+                                   name="endDate" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker"
+                                   [minDate]="{year: 2000, month: 1, day: 1}" [maxDate]="{year: 2100, month: 12, day: 31}"
+                                   readonly required />
+                            <div class="input-group-append">
+                              <button class="btn" (click)="d.toggle()" type="button">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="region">Region</label>
+                          <ng-select [items]="region?.regions" [multiple]="false" [closeOnSelect]="true"
+                                     [searchable]="true" bindLabel="region" bindValue="id" formControlName="regionid"
+                                     placeholder="Choose Region" class="form-control" [(ngModel)]="regionClear"
+                                     [ngModelOptions]="{ standalone: true }">
+                          </ng-select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label class="m-b label" for="clientname">Client</label>
+                          <ng-select [items]="clientNameDetails | async" [multiple]="false" [closeOnSelect]="true"
+                                     [searchable]="true" bindLabel="clientname" bindValue="clientcode" [virtualScroll]="true"
+                                     formControlName="clientid" placeholder="Type to Search Client Name" class="form-control"
+                                     [(ngModel)]="clientClear" [ngModelOptions]="{ standalone: true }"
+                                     [typeahead]="clientdatainput$" [loading]="isClientLoading">
+                          </ng-select>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <label class="m-b label mandatory" for="skills">Skills</label>
+                          <ng-select [items]="skillsList | async" [multiple]="true" [closeOnSelect]="true"
+                                     [searchable]="true" bindLabel="skill" bindValue="skill" [virtualScroll]="true"
+                                     formControlName="primaryskills" placeholder="Type to Search Skills" class="form-control"
+                                     [(ngModel)]="skillsClear" [ngModelOptions]="{ standalone: true }" [typeahead]="skillinput$"
+                                     [loading]="isSkillLoading" required>
+                          </ng-select>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <label class="m-b label mandatory" for="recruiters">Recruiters</label>
+                          <ng-select [items]="recruitersList | async" [multiple]="true" [closeOnSelect]="true"
+                                     [searchable]="true" bindLabel="recruiter" bindValue="recruiter" [virtualScroll]="true"
+                                     formControlName="recruiters" placeholder="Type 3 letters to Search Recruiters"
+                                     class="form-control" [(ngModel)]="recruitersClear" [ngModelOptions]="{ standalone: true }"
+                                     [typeahead]="recruiterinput$" [loading]="isRecruiterLoading" required>
+                          </ng-select>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <label class="m-b label" for="description">Description</label>
+                          <input class="form-control" placeholder="Enter Description" formControlName="description"
+                                 name="description" id="description" [(ngModel)]="descriptionClear" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="finalMessages">
+            <ngb-alert #selfClosingAlert *ngIf="successMessage" type="success" (close)="successMessage = ''">
+              {{
+              successMessage
+              }}
+            </ngb-alert>
+
+            <ngb-alert #selfClosingAlert *ngIf="failureMessage" type="danger" (close)="failureMessage = ''">
+              {{
+              failureMessage
+              }}
+            </ngb-alert>
+
+            <div *ngIf="!(successMessage || failureMessage) && mode != 'edit'"  class="float-right">
+              <button type="reset" class="btn mr-2" (click)="resetform()">Reset</button>
+              <button type="submit" class="btn btn-primary float-right" id="apply"
+                      [disabled]="!demandForm.valid">
+                Add Demand Plan
+              </button>
+            </div>
+            <div  *ngIf="mode == 'edit'" class="float-right">
+              <button type="reset" class="btn mr-2" (click)="resetform()">Reset</button>
+              <button type="submit" class="btn btn-primary float-right" id="apply"
+                      [disabled]="!demandForm.valid">
+                Edit Demand Plan
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,63 @@
+
+<!-- <app-dropdown-ui *ngIf="control.type === 'dropdown'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata"></app-dropdown-ui> -->
+<app-checkbox-ui *ngIf="control.type === 'checkbox'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-checkbox-ui>
+<app-radiolist-ui *ngIf="control.type === 'radio'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata"></app-radiolist-ui>
+<app-grid-ui *ngIf="control.type=='grid'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [sidebar]="sidebar" [formdata]="formdata" [AuthService]="AuthService"></app-grid-ui>
+<app-tab-ui *ngIf="control.type=='tab'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-tab-ui>
+<app-form-wizard-ui *ngIf="control.type=='formwizard'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [formdata]="formdata" [AuthService]="AuthService"></app-form-wizard-ui>
+<app-panel-ui *ngIf="control.type=='panel'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata" [AuthService]="AuthService"></app-panel-ui>
+<app-fileupload-ui *ngIf="control.type=='Upload'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-fileupload-ui>
+<app-textbox-ui *ngIf="control.type === 'textbox'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata" (controlEvent)="controlClick()" [AuthService]="AuthService"></app-textbox-ui>
+<app-textarea-ui *ngIf="control.type === 'textarea'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-textarea-ui>
+<app-email-ui *ngIf="control.type === 'email'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-email-ui>
+<!-- <app-password-ui *ngIf="control.type === 'password'" [control]="control" [formGroup]="formGroup" [data]="data"></app-password-ui> -->
+<app-datepicker-ui *ngIf="control.type === 'date'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata"></app-datepicker-ui>
+<app-number-ui *ngIf="control.type === 'number'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata"></app-number-ui>
+<app-phonenumber-ui *ngIf="control.type === 'phonenumber'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-phonenumber-ui>
+<app-richtexteditor-ui *ngIf="control.type === 'editor'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-richtexteditor-ui>
+<app-autocomplete2-ui *ngIf="control.type === 'autocomplete'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata"></app-autocomplete2-ui>
+<!-- <app-search-ui *ngIf="control.type === 'search'" [control]="control" [formGroup]="formGroup" [data]="data"></app-search-ui> -->
+<!-- <app-drag-list-ui *ngIf="control.type === 'list'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-drag-list-ui> -->
+<!-- <app-sidebar-ui *ngIf="control.type=='sidebar'" [control]="control" [formGroup]="formGroup" [data]="data"></app-sidebar-ui> -->
+<app-chart-ui *ngIf="control.type === 'chart'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-chart-ui>
+<app-chart-options class="row" *ngIf="control.type === 'chartoption'" [control]="control" [formGroup]="formGroup" [data]="data"></app-chart-options>
+<!-- <app-chart-dashboard-ui *ngIf="control.type === 'dashboard'" [control]="control" [formGroup]="formGroup" [data]="data"></app-chart-dashboard-ui> -->
+<app-card-grid-ui *ngIf="control.type === 'cardgrid'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-card-grid-ui>
+<app-card-option-ui *ngIf="control.type === 'Previw'" [control]="control" [data]="data" [AuthService]="AuthService"></app-card-option-ui>
+<app-label-ui *ngIf="control.type === 'label'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-label-ui>
+<!-- <app-link-ui *ngIf="control.type === 'link'" [control]="control" [formGroup]="formGroup" [data]="data"></app-link-ui>
+<app-table-ui *ngIf="control.type === 'table'" [control]="control" [formGroup]="formGroup" [data]="data"></app-table-ui>
+<app-share-box-ui *ngIf="control.type === 'sharebox'" [control]="control" [formGroup]="formGroup" [data]="data"></app-share-box-ui>
+<app-redirect-option *ngIf="control.type === 'redirectOption'" [control]="control" [data]="data"></app-redirect-option>
+<app-carousel-ui *ngIf="control.type === 'carousel'" [control]="control" [formGroup]="formGroup" [data]="data"></app-carousel-ui> -->
+<app-multiselect-ui *ngIf="control.type === 'multiselect'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-multiselect-ui>
+<app-checkboxlist-ui *ngIf="control.type === 'checkboxlist'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata"></app-checkboxlist-ui>
+<app-google-places-ui *ngIf="control.type === 'googleplaces'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-google-places-ui>
+<app-number-format *ngIf="control.type === 'numberformat'" [control]="control" [data]="data"></app-number-format>
+<app-button-ui *ngIf="control.type === 'button'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-button-ui>
+<app-website-ui *ngIf="control.type === 'website'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-website-ui>
+<app-rating-ui *ngIf="control.type === 'rating'" [control]="control" [formGroup]="formGroup" [data]="data"></app-rating-ui>
+<app-calender-ui *ngIf="control.type === 'calender'" [control]="control" [data]="data" [AuthService]="AuthService"></app-calender-ui>
+<app-kanban-ui *ngIf="control.type === 'kanban'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-kanban-ui>
+<!-- <app-timeline-ui *ngIf="control.type === 'timeline'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-timeline-ui> -->
+<!-- <app-datetimepicker-ui *ngIf="control.type === 'datetime'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata"></app-datetimepicker-ui> -->
+<!-- <app-html-editor-ui *ngIf="control.type === 'htmleditor'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-html-editor-ui> -->
+<app-image-ui *ngIf="control.type === 'image'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-image-ui>
+<app-dropdown3-ui *ngIf="control.type === 'dropdown2'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-dropdown3-ui>
+<!-- <app-goggle-map-ui *ngIf="control.type === 'map'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-goggle-map-ui> -->
+<app-statistic-card-ui *ngIf="control.type === 'statisticcard'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-statistic-card-ui>
+<app-calculator-ui *ngIf="control.type === 'calculator'" [control]="control" [formGroup]="formGroup" [data]="data" [formdata]="formdata"></app-calculator-ui>
+<app-expression-calc-ui *ngIf="control.type === 'expression'" [control]="control" [formGroup]="formGroup" [data]="data"></app-expression-calc-ui>
+<app-group-calc-ui *ngIf="control.type === 'groupcalc'" [control]="control" [formGroup]="formGroup" [data]="data"></app-group-calc-ui>
+<!-- <app-import-ui *ngIf="control.type === 'import'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-import-ui> -->
+<app-advance-grid-ui *ngIf="control.type === 'advancegrid'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-advance-grid-ui>
+<app-rules *ngIf="control.type === 'rules'" [control]="control" [formGroup]="formGroup" [data]="data" [formdata]="formdata"></app-rules>
+<app-rules-container *ngIf="control.type === 'rulescontainer'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-rules-container>
+<!-- <app-typeform-ui *ngIf="control.type=='typeform'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [filterdata]="filterdata" [AuthService]="AuthService"></app-typeform-ui> -->
+<app-hidden-ui *ngIf="control.type=='hidden'" [control]="control" [formGroup]="formGroup" [data]="data" [AuthService]="AuthService"></app-hidden-ui>
+<app-bookmark *ngIf="control.type=='bookmark'" [control]="control" [data]="data" [AuthService]="AuthService"></app-bookmark>
+<!-- <app-dropdown3-ui *ngIf="control.type === 'dropdown3'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access"></app-dropdown3-ui> -->
+<app-progress-bar-ui *ngIf="control.type=='progressbar'" [control]="control" [data]="data"></app-progress-bar-ui>
+<app-nested-ui *ngIf="control.type=='nested'" [control]="control" [formGroup]="formGroup" [data]="data" [access]="access" [AuthService]="AuthService"></app-nested-ui>
+<app-iframe-ui *ngIf="control.type === 'iframe'" [control]="control" [data]="data"></app-iframe-ui>
+<!--<app-socialauth *ngIf="control.type === 'sociallogin'" [access]="access" [control]="control"  [data]="data"></app-socialauth>-->

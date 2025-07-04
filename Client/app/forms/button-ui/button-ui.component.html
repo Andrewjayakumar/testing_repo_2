@@ -1,0 +1,238 @@
+<ngb-alert *ngIf="successMessage && status=='sidebarwarning'" type="custom" (close)="successMessage = null">
+  <span class="d-flex align-items-center justify-content-center">
+    <i class="fa-3x {{control.sidebarmsgicon}} pr-3 text-warning"></i>
+    <span>
+      <span class="h5 d-block text-dark">{{control.sidebarclosewarningtitle}}</span>
+      <span>{{control.sidebarclosewarningmsg}}</span>
+    </span>
+  </span>
+  <!--{{ successMessage }}-->
+</ngb-alert>
+<ngb-alert *ngIf="successMessage && status!='error'  && status!='sidebarwarning'" type="custom"
+  (close)="successMessage = null">
+  <span class="d-flex align-items-center justify-content-center">
+    <i class="fa-3x {{IsNewEntry?control.successmsgicon:control.updatemsgicon}} pr-3 text-success"></i>
+    <span>
+      <span class="h5 d-block text-dark">{{IsNewEntry?control.successmsgtitle:control.updatemsgtitle}}</span>
+      <span>{{IsNewEntry?control.successmsgtext:control.updatemsgtext}}</span>
+    </span>
+  </span>
+  <!--{{ successMessage }}-->
+</ngb-alert>
+<ngb-alert *ngIf="errorMessage && status=='error'" type="custom" class="alert-backdrop" (close)="errorMessage = null">
+  <span class="d-flex align-items-center justify-content-center">
+    <i class="fa-3x {{control.errormsgicon}} pr-3 text-danger"></i>
+    <span>
+      <span class="h5 d-block text-dark">{{control.errormsgtitle}}</span>
+      <span>{{errorMessage}}</span>
+    </span>
+  </span>
+  <!--{{ successMessage }}-->
+</ngb-alert>
+
+<!-- <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div> -->
+<div *ngIf="isApiCalling" class="customloder d-flex justify-content-center align-items-center">
+  <div class="lds-spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<div *ngIf="control.actiontype=='dropdown'" class="btn-group" role="group">
+  <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+    placement="{{control.tooltipplacement}}" ngbTooltip="{{control.tooltip}}" [disabled]="buttonState()" type="button"
+    class="btn {{control.coutomClass}} btn-{{control.buttontype}} btn-{{control.size}}">
+    <i *ngIf="control.WebIcon" class="{{control.WebIcon}}" [ngClass]="{'mr-2' : control.label}"></i>
+    {{control.bindbuttonlabelwithdata ? data[control.label] : control.label}}
+  </button>
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+    <!-- <a class="dropdown-item" href="#">Dropdown link</a>
+    <a class="dropdown-item" href="#">Dropdown link</a> -->
+    <ng-container *ngFor="let ch of control.children">
+      <div *ngIf="ch.type=='button'" class="col-md-{{ch.width}} {{ch.colclass}}">
+        <app-dynamicformcontrolls [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data"
+          [access]="'write'"></app-dynamicformcontrolls>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div *ngIf="control.actiontype=='submit'">
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <button *ngIf="!control.submitpinneditems && access != 'edit' && control.actiontype=='submit'"
+    style="position: relative;z-index: 1" placement="{{control.tooltipplacement}}" ngbTooltip="{{control.tooltip}}"
+    [disabled]="buttonState()" type="button"
+    class="btn {{control.coutomClass}} btn-{{control.buttontype}} btn-{{control.size}} tooltip-w200px"
+    (click)="submitonconfirm(content,contentpopup, contentSubmitConfirm)"><i *ngIf="control.WebIcon"
+      class="{{control.WebIcon}}" [ngClass]="{'mr-2' : control.label}"></i>
+    {{control.bindbuttonlabelwithdata ? data[control.label] :control.label}}
+    <i *ngIf="control.enablevalidationsummary && failedItems.length>0" class="fa fa-exclamation-circle text-danger ml-2"
+      placement="right" [ngbTooltip]="validationsummary"></i>
+  </button>
+  <button
+    *ngIf="_controlService.dataModel.length > 0 && control.submitpinneditems && access == 'write' && control.actiontype=='submit'"
+    placement="{{control.tooltipplacement}}" ngbTooltip="{{control.tooltip}}" [disabled]="buttonState()" type="button"
+    class="btn {{control.coutomClass}} btn-{{control.buttontype}} btn-{{control.size}}"
+    (click)="submit(content,contentpopup)"><i *ngIf="control.WebIcon" class="{{control.WebIcon}}"
+      [ngClass]="{'mr-2' : control.label}"></i>{{control.bindbuttonlabelwithdata
+    ? data[control.label] : control.label}}</button>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<a id="scrolltotop"
+  *ngIf="(control.actiontype=='sidebar' && control.showinpopup) || control.actiontype=='redirect' || control.actiontype=='Scrolltotop' || control.actiontype=='Back' || control.actiontype=='copytoclipboard' || control.actiontype=='Print' || control.actiontype=='setter' || control.actiontype=='metalpopup'"
+  placement="{{control.tooltipplacement}}" ngbTooltip="{{control.tooltip}}"
+  class="btn {{control.coutomClass}} btn-{{control.buttontype}} btn-{{control.size}}"
+  (click)="customAction(contentpopup)">
+  <i *ngIf="control.WebIcon" class="{{control.WebIcon}}" [ngClass]="{'mr-2' : control.label}"></i>{{control.bindbuttonlabelwithdata
+  ? data[control.label] : control.label}}</a>
+<!-- <ng-container *ngIf="control.actiontype=='submit' && control.actiontype=='sidebar'">
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</ng-container> -->
+<div class="sidbar-outer sidbar75" *ngIf="control.actiontype=='sidebar' && !control.showinpopup">
+  <ng-sidebar-container>
+    <ng-sidebar [(opened)]="_opened" (onOpenStart)="_onEditSidebarStart()" (onClosed)="_onEditSidebarClosed()"
+      [position]="'right'" [mode]="'over'" [autoFocus]="false">
+      <div class="d-flex justify-content-between">
+        <h5 class="p-3 m-0">{{advanceSearchformJson?.Formname}}</h5>
+        <a class="p-3 ml-auto" (click)="closeSidebar(content)">
+          <i class="fa fa-close" aria-hidden="true"></i>
+        </a>
+      </div>
+      <div class="sidbar-body sidbar75 111">
+        <div class="container-fluid">
+          <div class="row" *ngIf="advanceSearchformJson && advanceSearchModelJson">
+            <ng-container *ngFor="let ctrl of advanceSearchformJson.controls">
+              <app-dynamicformcontrolls *ngIf="ctrl.filterresult!=true" [control]="ctrl" [formGroup]="form"
+                [data]="advanceSearchModelJson" [access]="'write'" [AuthService]="AuthService"
+                class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+              </app-dynamicformcontrolls>
+            </ng-container>
+          </div>
+          <div *ngIf="!advanceSearchformJson && !advanceSearchModelJson">
+            <b>{{errorMessage ? errorMessage : 'loading...'}}</b>
+          </div>
+        </div>
+      </div>
+    </ng-sidebar>
+    <div class="" ng-sidebar-content>
+      <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+      <button type="button" placement="{{control.tooltipplacement}}" ngbTooltip="{{control.tooltip}}"
+        class="btn {{control.coutomClass}} btn-{{control.buttontype}} btn-{{control.size}}"
+        (click)="InitializeSidebar()"><i *ngIf="control.WebIcon" class="{{control.WebIcon}}"
+          [ngClass]="{'mr-2' : control.label}"></i>{{control.bindbuttonlabelwithdata
+        ? data[control.label] : control.label}}</button>
+      <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+    </div>
+  </ng-sidebar-container>
+</div>
+<small class="form-text text-danger"
+  *ngIf="control.enableautovalidateonsubmit && !data[control.key] && formGroup.controls[control_id]  && formGroup.controls[control_id].touched">
+  {{control.validationmessage ? control.validationmessage : 'You must validate a ' + control.label + '.'}}
+</small>
+<!--<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">Alert!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="Submitconfirm='NO';d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    You have unsaved changes on this page. Are you sure want to close ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="Submitconfirm='YES';c('Close click')">Yes</button>
+    <button type="button" class="btn btn-outline-primary" (click)="Submitconfirm='NO';c('Close click')">No</button>
+  </div>
+</ng-template>-->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="custom-msg">
+    <div class="d-flex align-items-center justify-content-center">
+      <i class="fa fa-3x fa-exclamation-circle pr-3 text-danger"></i>
+      <div>
+        <h5 class="text-dark">
+          Oops. Are You Sure?
+        </h5>
+        <p class="mb-0 word-break">
+          Data you entered will not be saved.
+        </p>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-2" style="padding-left:12px">
+      <button type="button" class="btn btn-light mr-3" (click)="Submitconfirm='NO';c('Close click')">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="Submitconfirm='YES';c('Close click')">
+        Yes, close it!
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #contentSubmitConfirm let-c="close" let-d="dismiss">
+  <div class="custom-msg">
+    <div class="d-flex align-items-center justify-content-center">
+      <!-- <i class="fa fa-3x fa-exclamation-circle pr-3 text-danger"></i> -->
+      <div>
+        <!-- <h5 class="text-dark">
+          Oopsss. Are You Sure?
+        </h5> -->
+        <p class="mb-0 word-break" *ngIf="control.responsefieldfrommessage">
+          {{messagefromsubmit}}
+        </p>
+        <p class="mb-0 word-break" *ngIf="control.confirmmessage">
+          {{control.confirmmessage}}
+        </p>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-2" style="padding-left:12px">
+      <button *ngIf="!control.hidecancelbutton" type="button" class="btn btn-light mr-3"
+        (click)="Submitconfirm='NO';c('Close click');resetParaentWidnow()">{{control.cancelbuttontext}}</button>
+      <button type="button" class="btn btn-danger" (click)="Submitconfirm='YES';c('Close click');resetParaentWidnow()">
+        {{control.confirmbuttontext}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #contentpopup let-c="close" let-d="dismiss" size="lg">
+  <div class="modal-header">
+    <h4 *ngIf="advanceSearchformJson" class="modal-title" style="text-transform:capitalize">
+      {{advanceSearchformJson.Formname}}</h4>
+    <button type="button" class="close" aria-label="Close"
+      (click)="closeSidebar(contentpopup) ? d('Cross click') : false">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row" *ngIf="advanceSearchformJson && advanceSearchModelJson">
+      <ng-container *ngFor="let ctrl of advanceSearchformJson.controls">
+        <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="advanceSearchModelJson" [access]="'write'"
+          [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+        </app-dynamicformcontrolls>
+      </ng-container>
+    </div>
+    <div *ngIf="!advanceSearchformJson || !advanceSearchModelJson">
+      <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button> -->
+  </div>
+</ng-template>
+<ng-template #validationsummary>
+  <div class="text-white">
+    <div *ngFor="let ctrl of failedItems" class="d-flex">
+      <i class="fa fa-exclamation-triangle text-danger mr-2"></i>
+      <span>
+        <span *ngIf="ctrl.type=='upload'">{{ctrl.control.placeholder}} cannot be blank</span>
+        <span *ngIf="ctrl.type=='radio'">{{ctrl.control.placeholder}} cannot be blank</span>
+        <span *ngIf="ctrl.type!='radio' && ctrl.type!='upload'">{{ctrl.control.label}} cannot be
+          blank</span>
+      </span>
+    </div>
+  </div>
+</ng-template>

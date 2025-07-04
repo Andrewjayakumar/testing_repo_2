@@ -1,0 +1,686 @@
+<form #RecDetailForm="ngForm" novalidate>
+  <!--  -->
+  <div class="row m-2">
+    <div class="col-md-6 ui-control-block">
+      <label>
+        Requisition Name
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <input class="form-control" type="text" name="recname" #recname="ngModel" [(ngModel)]="model.name"
+        placeholder="Unique Name" required autocomplete="off" />
+      <small *ngIf="!model.name && (recname.dirty || recname.touched) || (!model.name && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+
+
+
+      <!-- </div> -->
+    </div>
+    <div class="col-md-5 ui-control-block pr-0">
+      <label>Requisition Status</label>
+      <ng-select [items]="status" name="statusid" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+        bindLabel="status" bindValue="id" placeholder="" [(ngModel)]="model.statusid" #statusid="ngModel"
+        (change)="onReqStatusChanged($event)">
+      </ng-select> <!-- [loading] = "status===null" -->
+    </div>
+
+    <div *ngIf="mode=='update' && (model.statusid==3 || model.statusid == 4 || model.statusid==9)"
+      class="col-md-5 ui-control-block mb-0 mr-0 pr-0">
+      <label>
+        Reason (on status change)
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select name="statusreasonid" [items]="reasonList" [multiple]="false" [closeOnSelect]="true"
+        [loading]="reasonList==null" [searchable]="false" bindLabel="name" bindValue="id"
+        placeholder="--Select Reason --" [(ngModel)]="model.statusreasonid" required #statusreasonid="ngModel">
+      </ng-select>
+      <small
+        *ngIf="!model.statusreasonid && (statusreasonid.dirty || statusreasonid.touched) || (!model.statusreasonid && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+  </div>
+
+  <div class="row m-2 bottom-separator">
+    <div class="col-md-3 ui-control-block mb-3 pr-0">
+      <label class="ui-control-label">
+        Requisition Type
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select [ngClass]="{'disabled-select': isGCCOpportunity}" name="rectypeid" [items]="reqTypeList"
+        [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="type" bindValue="id"
+        placeholder="--Select--" (change)="onRecTypeChanged($event,reqob,'selection')"
+        [(ngModel)]="model.requisitiontypeid" [disabled]="isGCCOpportunity" required #rectypeid="ngModel">
+      </ng-select>
+      <small
+        *ngIf="!model.requisitiontypeid && (rectypeid.dirty || rectypeid.touched) || (!model.requisitiontypeid && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+    </div>
+
+    <div
+      *ngIf="model.requisitiontypeid== 6 || model.requisitiontypeid == 9 || model.requisitiontypeid == 10 || model.requisitiontypeid == 5"
+      class="col-md-auto mr-1 mt-2 p-0">
+      <app-metal-switch [(state)]='model.gotowork' [uniqueid]="'gotoworkcheckbox'"
+        [labelname]="'Client Interview Required?'" (stateChange)="onGotoWorkToggled($event)">
+      </app-metal-switch>
+
+    </div>
+    <div
+      *ngIf="model.requisitiontypeid==6 || model.requisitiontypeid == 9 || model.requisitiontypeid == 10 || model.requisitiontypeid == 5"
+      class="col-md-auto mb-0 ml--3 mt-2 p-0">
+      <app-metal-switch [(state)]='model.exclusive' [uniqueid]="'exclusivecheckbox'" [labelname]="'Exclusive'"
+        (stateChange)="onExclusiveToggled($event)">
+      </app-metal-switch>
+
+    </div>
+
+    <div *ngIf="model.exclusive" class="ui-control-block col-md-2 mb-0 mr-0">
+      <label>
+        Exclusivity Days
+      </label>
+      <input type="number" [(ngModel)]="model.exclusivedays" value="model.exclusivedays" placeholder="" required
+        name="exclusivedays" #exclusivedays="ngModel" min="1" />
+    </div>
+    <div class="row">
+      <div class="col-md-3 ui-control-block mb-3 pr-0" *ngIf="model.requisitiontypeid == 5">
+        <label class="ui-control-label">
+          GCI ID
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+
+        <ng-select name="gciidid" [items]="gcidItems$ | async" [(ngModel)]="model.gciid" #gciId="ngModel"
+          [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="gciid" bindValue="gciid"
+          placeholder="Type at least 2 numbers" [typeahead]="gcidinput$" [typeToSearchText]="text" class="form-control"
+          (change)="getallgcidDetails($event)" (keydown)="allowOnlyNumbers($event)" required>
+        </ng-select>
+
+        <small *ngIf="(!model.gciid && (gciId.dirty || gciId.touched)) || (!model.gciid && nextClicked)"
+          class="font-size-small text-danger fa fa-exclamation">
+          This field is required
+        </small>
+      </div>
+
+      <div class="col-md-3 ui-control-block mb-3 pr-0" *ngIf="model.requisitiontypeid == 5">
+        <label class="ui-control-label">
+          Employee Full Name
+        </label>
+        <input name="fullnameid" class="form-control" readonly placeholder="Employee Full Name" id="empfullName" />
+      </div>
+    </div>
+
+    <div class="col-md-5 ui-control-block mb-3 pr-0">
+      <label class="ui-control-label">
+        Req Fulfillment Reason
+        <sup *ngIf="isreqFulfilmentReasonRquired" class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select [ngClass]="{'disabled-select': mode === 'update' && !allowredeploymenthire}"  name="reqfulfillmentreasonid" [items]="reqfulfillmentreasonlist"
+        [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="reqfulfillmentreason" bindValue="reqfulfillmentreasonid"
+        placeholder="--Select--" 
+        [(ngModel)]="model.reqfulfillmentreasonid"          
+        [disabled]="mode === 'update' && !allowredeploymenthire" (change)="reqfulfillmentreasonchange($event)"
+        [required]="isreqFulfilmentReasonRquired" #reqfulfillmentreasonid="ngModel">
+      </ng-select>
+      <small *ngIf="!model.reqfulfillmentreasonid && isreqFulfilmentReasonRquired && nextClicked" class="font-size-small text-danger fa fa-exclamation"> This
+        field is required</small></div>
+
+       
+        <div class="col-md-2 ui-control-block mb-3 pr-0" *ngIf="model.reqfulfillmentreasonid==2">
+          <label class="ui-control-label">
+            Redep Led By
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <ng-select  name="redepledbyid" [items]="redepledbylist"
+            [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="redepledby" bindValue="redepledbyid"
+            placeholder="--Select--" 
+            [(ngModel)]="model.redepledbyid"          
+            [disabled]="!allowredeploymenthire"
+            [required] 
+            #redepledbyid="ngModel">
+          </ng-select>
+          <small *ngIf="!model.redepledbyid && nextClicked" class="font-size-small text-danger fa fa-exclamation"> This
+            field is required</small></div>
+
+
+  </div>
+
+
+  <!-- <div *ngIf="model.requisitiontypeid== 6 || model.requisitiontypeid == 9 || model.requisitiontypeid == 10 || model.requisitiontypeid == 5"
+      class="col-md-auto mr-1 mt-2 p-0">
+      <app-metal-switch [(state)]='model.gotowork' [uniqueid]="'gotoworkcheckbox'"
+        [labelname]="'Client Interview Required?'" (stateChange)="onGotoWorkToggled($event)">
+      </app-metal-switch>
+
+    </div>
+    <div *ngIf="model.requisitiontypeid==6 || model.requisitiontypeid == 9 || model.requisitiontypeid == 10 || model.requisitiontypeid == 5"
+      class="col-md-auto mb-0 ml--3 mt-2 p-0">
+      <app-metal-switch [(state)]='model.exclusive' [uniqueid]="'exclusivecheckbox'" [labelname]="'Exclusive'"
+        (stateChange)="onExclusiveToggled($event)">
+      </app-metal-switch>
+
+    </div> -->
+
+  <div class="row m-2">
+    <div class="col-md-3 ui-control-block mr-0i ml-0i"
+      *ngIf="!(updatedpriority == 'Platinum' || updatedpriority == 'Diamond')">
+      <label class="ui-control-label">
+        Requsition Priority
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select [items]="prioritylist" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+        bindLabel="prioritytype" bindValue="priorityid" placeholder="--Select Type first--" name="requisitionpriorityid"
+        #requisitionpriorityid [loading]="prioritylist===null" [(ngModel)]="model.requisitionpriorityid" required>
+      </ng-select>
+      <small *ngIf="!model.requisitionpriorityid  && nextClicked"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required.</small>
+    </div>
+    <div class="col-md-3  mr-0i ml-0i" *ngIf="(updatedpriority == 'Platinum' || updatedpriority == 'Diamond')">
+      <label class="ui-control-label">
+        Requsition Priority
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <label>{{updatedpriority}}</label>
+    </div>
+
+    <div class="col-md-7 pr-0">
+      <div class="ui-control-block">
+        <label>
+          Qualification
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+      </div>
+      <div class="mt--1">
+        <span *ngFor="let option of qualifications" class="p-0 pt-1 ">
+          <input type="radio" name="qual" #qual="ngModel" required [attr.id]="'qual'+option.id" [value]="option.id"
+            [(ngModel)]="model.qualificationid">
+          <label [attr.for]="'qual'+option.id">{{option.qualification}}</label>
+        </span>
+        <div class="ml-4">
+          <small *ngIf="!model.qualificationid &&  nextClicked " class="font-size-small text-danger fa fa-exclamation ">
+            This field is required
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2 p-0 ">
+      <label class="ui-control-label">
+        Delivery Model
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select name="deliverymodelid" [ngClass]="{'disabled-select': isWorkflowInitiated }"
+        [items]="deliveryModelList" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+        bindLabel="deliverymodelname" bindValue="deliverymodelid" placeholder="--Select--"
+        [disabled]="isWorkflowInitiated" (change)="onDeliveryModelChange(deliverymodelid)"
+        [(ngModel)]="model.deliverymodelid" required #deliverymodelid="ngModel">
+      </ng-select>
+
+      <small *ngIf="!model.deliverymodelid && nextClicked" class="font-size-small text-danger fa fa-exclamation"> This
+        field is required</small>
+    </div>
+
+
+  </div>
+
+
+  <div class="row ml-2">
+
+    <div class="col-md-4 pr-0 ui-control-block">
+      <label class="ui-control-label">
+        Standard Job Title
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select name="standardjobtitle" [items]="standardJobTitleList" [multiple]="false" [closeOnSelect]="true"
+        [searchable]="true" bindLabel="jobtitle" bindValue="jobtitleid" placeholder="--Select--"
+        [(ngModel)]="model.standardjobtitleid" required #standardjobtitleid="ngModel" (change)="onstandardJobtitlleChange($event)">
+      </ng-select>
+   
+      <small *ngIf="(( !model.standardjobtitleid ) && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This
+        field is required.. </small>
+    </div>
+
+    <div class="col-md-4 pr-0 ui-control-block">
+      <label class="ui-control-label">
+        Descriptive Jobtitle
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select [items]="jobTitleItems$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+        [loading]="isJobTitleLoading" required bindLabel="jobtitle" bindValue="jobtitle"
+        placeholder="Type at least 2 characters" [typeahead]="jobTitleinput$" [typeToSearchText]="text"
+        [(ngModel)]="model.jobtitle" name="jobttl" #jobttl="ngModel">
+      </ng-select>
+      <small *ngIf="(( !model.jobtitle || model.jobtitle.toLowerCase() == 'not specified') && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required. </small>
+    </div>
+
+
+    <div class="col-md-2 pr-0 ui-control-block">
+      <label class="ui-control-label">
+        No. of Positions
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <input type="number" [(ngModel)]="model.numberofpositions" value="model.numberofpositions" placeholder="" required
+        name="noofpos" #noofpos="ngModel" min="1" max="999" (change)="positionsChanged(noofpos.value)" />
+      <small
+        *ngIf="!model.numberofpositions &&  (noofpos.dirty || noofpos.touched) || (!model.numberofpositions && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2">
+        This field is required.
+      </small>
+      <small *ngIf="(model.numberofpositions >1) || (model.numberofpositions >1 && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2">
+        Number of positions cannot be more than 1.
+      </small>
+    </div>
+    <!-- <div class="col-auto mt-2">
+
+      <app-metal-switch [(state)]='model.isbulk' [uniqueid]="'bulkcheckbox_addrec'" [labelname]="'Bulk Requirement'"
+                        [isdisable]="isvasbulk">
+      </app-metal-switch>
+    </div> -->
+    <div *ngIf="mode=='update'" class="col-md-3 ui-control-block">
+      <label>
+        Max. Submissions
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <input type="text" name="maxsub" [(ngModel)]="model.maxsubmissions" #maxsub="ngModel"
+        placeholder="Thrice the no of positions" required />
+      <small *ngIf="!model.maxsubmissions && (maxsub.dirty || maxsub.touched) && !RecDetailForm.form.valid"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+    </div>
+  </div>
+  <div class="row ml-2">
+    <div class="col-md-11 ui-control-block">
+      <label for="rolefamid" class="ui-control-label">
+        Skill Mapping<sup class="font-weight-bold text-danger">*</sup>
+      </label>
+      <ng-select [items]="standardskillmapping" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                 bindLabel="skills" bindValue="id" placeholder="--Select--"
+                 (change)="onSkillsMappingChange($event)" name="skillmapping" [(ngModel)]="model.skillmappingid" #skillmapping="ngModel"
+                 required>
+        <ng-template ng-option-tmp let-item="item">
+          <div title="{{item.skills}}">{{item.skills}}</div>
+        </ng-template>
+      </ng-select>
+   </div>
+  </div>
+  
+  <div class="row m-2">
+    <div class="col-md-4 ui-control-block">
+      <label for="circle" class="ui-control-label">Standard Job Title + Horizon <sup class="font-weight-bold text-danger">*</sup></label>
+      <ng-select [items]="standardroleHorizons" [multiple]="false"
+                 [closeOnSelect]="true" [searchable]="true" bindLabel="standardrolehorizon" bindValue="standardroleshorizonid" placeholder="--Select--"
+                 [(ngModel)]="model.standardroleshorizonid" (change)="onStandardjobTitleHorozonChange($event)" name="standard" #standard="ngModel"
+                 required title="{{standardroleshorizonid}}">
+     
+      </ng-select>
+      <small *ngIf="!model.standardroleshorizonid &&  nextClicked " class="font-size-small text-danger fa fa-exclamation ">
+        This field is required
+      </small>
+
+    </div>
+    <div class="col-md-4 ui-control-block">
+      <label for="circle" class="ui-control-label">Circle <sup class="font-weight-bold text-danger">*</sup></label>
+      <ng-select  [items]="circleList" [multiple]="false"
+                 [closeOnSelect]="true" [searchable]="false" bindLabel="circle" bindValue="id" placeholder="Select Circle"
+                 [(ngModel)]="model.circleid" (change)="onCirclelistChange($event)" name="circleid" #circleid="ngModel"
+                  required>
+      </ng-select>
+      <small *ngIf="!model.circleid &&  nextClicked " class="font-size-small text-danger fa fa-exclamation ">
+        This field is required
+      </small>
+
+    </div>
+    <div class="col-md-3 ui-control-block">
+      <label for="community" class="ui-control-label">
+        Community <sup class="font-weight-bold text-danger">*</sup>
+      </label>
+      <ng-select [items]="communityList" [multiple]="false" [closeOnSelect]="true" [loading]="isCommunityLoading"
+                 [searchable]="false" bindLabel="community" bindValue="id" placeholder="Select Community"
+                 [(ngModel)]="model.communityid" name="communityid" #communityid="ngModel" required>
+      </ng-select>
+      <small *ngIf="!model.communityid &&  nextClicked " class="font-size-small text-danger fa fa-exclamation ">
+        This field is required
+      </small>
+
+    </div>
+  </div>
+  <div class="row ml-2">
+    <div class="col-md-5 ui-control-block">
+      <label for="rolefamid" class="ui-control-label">Role Family<sup
+          class="font-weight-bold text-danger">*</sup></label>
+      <ng-select [items]="roleFamily" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+        bindLabel="rolefamily" bindValue="rolefamilyid" placeholder="Select Role Family"
+        (change)="onRoleFamChange($event)" name="rolefamid" [(ngModel)]="model.rolefamilyid" #rolesubfamid="ngModel"
+        required>
+      </ng-select>
+      <small *ngIf="!model.rolefamilyid &&  nextClicked " class="font-size-small text-danger fa fa-exclamation ">
+        This field is required
+      </small>
+
+    </div>
+    <div class="col-md-5 ui-control-block">
+      <label for="subrolesubfamid" class="ui-control-label">Sub-Role Family<sup
+          class="font-weight-bold text-danger">*</sup></label>
+      <ng-select [items]="subroleFamily" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+        bindLabel="subrolefamily" bindValue="subrolefamilyid" placeholder="Select sub Role-Family" 
+        name="subrolesubfamid" [(ngModel)]="model.subrolefamilyid" #subrolesubfamid="ngModel" required>
+      </ng-select>
+      <small *ngIf="!model?.subrolefamilyid &&  nextClicked " class="font-size-small text-danger fa fa-exclamation ">
+        This field is required
+      </small>
+
+    </div>
+  </div>
+
+
+  <div class="row m-2 mt-4">
+
+    <div class="col-md-9">
+      <label class="title">Primary Location</label>
+    </div>
+
+  </div>
+
+  <div class="col-md-9 ml-2 m-0 p-0 d-flex justify-content-start">
+
+    <div *ngIf="mandatoryFromDeliveryModel" class="col-md-4 ui-control-block m-0 pr-0">
+      <label>
+        Zipcode
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+
+      <ng-select [items]="zipcodeDataItems$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+        bindLabel="zipcode" bindValue="zipcode" placeholder="Type at least 2 digits to search"
+        (change)="onZipcodeChange(zip)" [loading]="zipcodeDataLoading" [typeahead]="zipcodeinput$"
+        [(ngModel)]="model.zipcode" name="zip" #zip="ngModel" required>
+      </ng-select>
+      <small *ngIf="!model.zipcode && (zip.dirty || zip.touched) || (!model.zipcode && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+    </div>
+
+    <div *ngIf="mandatoryFromDeliveryModel" class="col-md-4 ui-control-block m-0 pr-0">
+      <label class="ui-control-label">
+        City
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+
+      <ng-select [items]="citieslist" [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="city"
+        bindValue="city" placeholder="--Select--" [loading]="citieslist===null" [(ngModel)]="model.city"
+        (change)="onCityChanged($event)" name="city1" #city1="ngModel" required>
+      </ng-select>
+      <small *ngIf="!model.city && (city1.dirty || city1.touched) || (!model.city && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+    </div>
+
+
+    <div *ngIf="!mandatoryFromDeliveryModel" class="col-md-4 ui-control-block m-0 pr-0">
+      <label>
+        State
+      </label>
+
+      <ng-select [items]="stateItemsList$| async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+        bindLabel="state" placeholder="Type to Search" (change)="onStateChanged($event)" [loading]="isStateLoading"
+        [typeahead]="stateinput$" [(ngModel)]="model.state" name="state" #state="ngModel">
+      </ng-select>
+    </div>
+
+    <div *ngIf="!mandatoryFromDeliveryModel" class="col-md-4 ui-control-block m-0 pr-0">
+      <label class="ui-control-label">
+        City
+      </label>
+      <ng-select [items]="citieslist" [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="city"
+        placeholder="--Select--" [loading]="citieslist==null" [(ngModel)]="model.city" (change)="onCityChanged($event)"
+        name="cityofstate" #cityofstate="ngModel">
+      </ng-select>
+    </div>
+
+    <div class="col-md-4 ui-control-block m-0 pr-0">
+      <label class="ui-control-label">
+        Travel Type
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select [items]="traveltypelist" [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="type"
+        placeholder="--Select--" [loading]="traveltypelist==null" bindValue="id" [(ngModel)]="model.traveltype"
+        (change)="onTravelTypeChange($event)" name="traveltype" #traveltype="ngModel" required>
+      </ng-select>
+      <small *ngIf="!model.traveltype && (traveltype.dirty || traveltype.touched) || (!model.traveltype && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+    </div>
+  </div>
+
+  <div class="row mt-2 ml-2 w-100">
+    <div class="col-md-3 p-0">
+      <app-metal-switch [(state)]='model.isremote' [uniqueid]="'addrec_isremoteReq'" [labelname]="'Remote'"
+        [position]="'justify'">
+      </app-metal-switch>
+    </div>
+    <div class="col-md-9 secondaryLocations">
+
+      <label class="secLocationTitle">Secondary Locations</label>
+      <div class="form-check mr-2 secLocationDiv">
+        <input type="radio" name="remoteLocation" [value]=true class="mr-1 mt-1" id="Yes"
+          [(ngModel)]="model.issecondarylocation" />
+        <label class="form-check-label" for="Yes">Yes</label>
+      </div>
+      <div class="form-check mr-2 secLocationDiv">
+        <input type="radio" name="remoteLocation" [value]=false class="mr-1 mt-1" id="No"
+          [(ngModel)]="model.issecondarylocation" />
+        <label class="form-check-label" for="No">No</label>
+      </div>
+
+
+      <!--
+      <label>Remote Locations</label>
+
+      <a [hidden]="showRemoteLocation" class="btn btn-lg btn-link mt--1 p-0 pl-2 fa fa-caret-square-o-right"
+        role="button" (click)="showRemoteLocation=!showRemoteLocation"></a>
+      <a [hidden]="!showRemoteLocation" class="btn btn-lg btn-link mt--1 p-0 pl-2 fa fa-caret-square-o-down"
+        role="button" (click)="showRemoteLocation=!showRemoteLocation"></a> -->
+
+    </div>
+  </div>
+
+  <div *ngIf="model.issecondarylocation" class="row border-allsides pt-2 pb-2 col-md-8 pull-right mr-2 mt--3">
+    <div class="col-md-5 ui-control-block">
+      <label>Zipcode</label>
+
+      <ng-select [items]="zipcodeDataItems$| async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+        bindLabel="zipcode" bindValue="zipcode" placeholder="Type at least 2 digits to search"
+        (change)="onRemoteZipcodeChange(remotezip)" [loading]="zipcodeDataLoading" [typeahead]="zipcodeinput$"
+        [(ngModel)]="remotezipcode" name="remotezip" #remotezip="ngModel">
+      </ng-select>
+    </div>
+    <div class="col-md-5 ui-control-block">
+      <label>City </label>
+
+
+      <ng-select [items]="remotecitieslist" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+        bindLabel="city" bindValue="city" placeholder="--Select--" [loading]="remotecitieslist==null"
+        [(ngModel)]="remotecity" name="remotecityid" #remotecityid="ngModel">
+      </ng-select>
+    </div>
+    <button class="btn btn-primary text-white fa fa-plus mr-0 mt-4 mb-2 p-1"
+      (click)=addEntryToRemotelist($event)></button>
+  </div>
+
+
+  <div class="row col-md-12">
+    <span *ngFor="let entry of model.remotelocationdetails" class="label-chips">
+      <label class="text-primary">{{entry.remotezipcode}}, {{entry.remotecity}}</label>
+      <a role="button" class="btn" (click)="deleteFromRemoteList(entry.remotezipcode)">x</a>
+    </span>
+
+  </div>
+
+  <div class="ml-2 mr-2 mb-4">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 pr-0">
+          <label class="m-b label mandatory title">
+            Total Experience in years <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <span>
+            <input class="form-control minYearCSS" type="number" name="minYears" #minYears="ngModel"
+              [(ngModel)]="model.minexperience" placeholder="Min" required autocomplete="off" />
+            <input class="form-control maxYearCSS" type="number" name="maxYears" #maxYears="ngModel"
+              [(ngModel)]="model.maxexperience" placeholder="Max" required autocomplete="off" />
+
+            <small
+              *ngIf="(!(model.minexperience >= 0) && (minYears.dirty || minYears.touched) || ((model.minexperience == null) && nextClicked))
+              || (!(model.maxexperience >= 0) && (maxYears.dirty || maxYears.touched) || ((model.maxexperience == null) && nextClicked))"
+              class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required
+            </small>
+            <small *ngIf="((model.minexperience && touched) && (!(model.minexperience >
+              0))) &&
+              ((model.maxexperience && touched) && (!(model.maxexperience > 0)))"
+              class="font-size-small text-danger fa fa-exclamation ml-2"> Experience can't be lesser than 0
+            </small>
+            <small *ngIf="(model.maxexperience && touched) && (!(model.maxexperience > model.minexperience))"
+              class="font-size-small text-danger fa fa-exclamation ml-2"> Max exp can't be lesser than Min exp</small>
+
+          </span>
+        </div>
+        <div class="col-md-7">
+          <label class="title">Skills by Experience <sup class="text-danger font-weight-bold">*</sup></label>
+          <ng-select class="mt-0 inputSkill" [items]="skillItems$| async" [multiple]="false" [closeOnSelect]="true"
+            [searchable]="true" bindLabel="skill" bindValue="skill" placeholder="Type at least 2 characters"
+            [loading]="skillLoading" [typeahead]="skillinput$" [(ngModel)]="skill" name="skills" #skills="ngModel">
+          </ng-select>
+          <ng-select class="mt-0 inputExp" [items]="expList" [multiple]="false" [closeOnSelect]="true"
+            [searchable]="true" bindLabel="exp" bindValue="expValue" placeholder="Select" [(ngModel)]="expLevel"
+            name="experienceLevel" #experienceLevel="ngModel">
+          </ng-select>
+          <small *ngIf="(!(model.skills.length > 0) && !model.skill  && nextClicked)"
+            class="font-size-small text-danger fa fa-exclamation ml-2">This field is required</small>
+          <small *ngIf="model.skills.length >= 5"
+            class="font-size-small text-danger fa fa-exclamation ml-2 mt-2 mr-3 pull-right">
+            You can only add upto 5 skills
+          </small>
+        </div>
+        <div class="col-md-1 mt-2">
+          <button *ngIf="showAddButton" class="btn btn-primary text-white fa fa-plus mr-0 mt-4 mb-2 p-1 pull-right"
+            [disabled]="(!skill && !expLevel)" (click)=addEntryToSkillList()></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12" *ngIf="model.skills.length > 0">
+      <span *ngFor="let entry of model.skills" class="label-chips">
+        <label class="text-primary" title="{{entry.skill}} ({{entry.skilllevel}})">
+          {{entry.skill}}
+          ({{entry.skilllevel}})
+        </label>
+        <a role="button" class="btn delButton" (click)="deleteSkillsAndExperience(entry.skill, entry.skilllevel)">x</a>
+      </span>
+    </div>
+  </div>
+
+  <div class="ml-2 mr-2">
+    <div class="d-flex">
+      <div class="col-md-6 pr-0 ui-control-block" id="lblSingledescription">
+        <label>
+          Requisition Description
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+
+      </div>
+      <!--<div class="col-md-4 ml-2" *ngIf="showChatGPTButton">
+        <button class="btn btn-ai ai-btn pull-right font-size-small" (click)="launchAutoCleanPopup('description'); cleanupClicked = true">AI/ChatGPT Recommendations</button>
+
+      </div> -->
+
+      <div *ngIf="showVerifiedFlag" class="col-auto p-0 pb-2 mb--3 mt--1 pull-right">
+        <app-metal-switch [(state)]="model.isverified" [uniqueid]="'VerifiedCheckbox'" [labelname]="'Quality Verified'">
+        </app-metal-switch>
+
+      </div>
+
+      <div class="col-2 pull-right ">
+        <a role="button" class="btn btn-link "
+          href="https://collaberainc.sharepoint.com/sites/METAL/SitePages/Quality-Reqs.aspx" target="_blank">
+          Best Practices
+          <i class="fa fa-thumbs-up"></i>
+        </a>
+      </div>
+    </div>
+
+
+
+    <div class="col-md-12" 
+      id="txtSingleDescription">
+      <div contenteditable="true" tabindex="-1" class="editable" id="red_description"
+        (blur)="editorFocusOut($event, this); touched=true" #editor name="desc" [innerHtml]="model.description"
+        required>
+      </div>
+      <small *ngIf="(!model.description && nextClicked)" class="font-size-small text-danger fa fa-exclamation ml-2">
+        This field is required</small>
+      <small *ngIf="(model.description && touched) && (model.description.length < 500)"
+        class="font-size-small text-danger fa fa-exclamation ml-2">Please enter minimum of 500 characters..</small>
+      <small *ngIf="(!model.description || model.description.length < 500) && cleanupClicked"
+        class="font-size-small text-danger fa fa-exclamation ml-2">Please enter this field for accessing AI
+        Recommendation</small>
+
+    </div>
+
+    <!-- <div class="ml-3" id="Multidescription"
+      *ngIf="(empType === 2) && (model.requisitiontypeid === 9 || model.requisitiontypeid === 10)">
+      <div class="col-md-10 ui-control-block p-0 mb-0">
+        <label>
+          Day to Day
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+      </div>
+
+      <div contenteditable="true" class="col-md-12 multidesc form-control"
+        (blur)="onMultiDescFocusout($event, 'daytodayactivity')" #d2d name="daytoday"
+        [innerHtml]="model.daytodayactivity" required>
+
+
+      </div>
+      <small *ngIf="(!model.daytodayactivity && nextClicked)"
+        class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+      <small *ngIf="(model.daytodayactivity && model.daytodayactivity.length < 200 && nextClicked) || d2dLimiterror"
+        class="font-size-small text-danger fa fa-exclamation ml-2">Please enter minimum of 200 characters.</small>
+
+      <div class="col-md-10 ui-control-block p-0 mb-0">
+        <label>
+          Must Haves
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+      </div>
+       
+      <div contenteditable="true" class="col-md-12 multidesc" (blur)="onMultiDescFocusout($event, 'musthave')" #musthave
+        name="musthave" [innerHtml]="model.musthave" required>
+
+
+      </div>
+      <small *ngIf="(!model.musthave && nextClicked)" class="font-size-small text-danger fa fa-exclamation ml-2"> This
+        field is required</small>
+      <small *ngIf="(model.musthave && model.musthave.length < 150 && nextClicked) || mustHaveLimiterror"
+        class="font-size-small text-danger fa fa-exclamation ml-2">Please enter minimum of 150 characters..</small>
+
+      <div class="col-md-12 ui-control-block p-0 mb-0">
+        <label>
+          Pluses
+        </label>
+      </div>
+      <div contenteditable="true" class="multidesc" (blur)="onMultiDescFocusout($event, 'nicetohave')" #pluses
+        name="pluses" [innerHtml]="model.nicetohave">
+
+      </div>
+
+    </div> -->
+
+  </div>
+
+  <div class="row m-2">
+    <div class="col-md-4 ui-control-block">
+      <label for="req_additionalinfo">
+        Additional Information
+      </label>
+    </div>
+    <div class="col-md-12">
+      <div class="additionalinfoeditable" contenteditable="true" (blur)="onAdditionalInfoFocusOut($event, this)"
+        #additionalInfo id="req_additionalinfo" [innerHtml]="model.additionaldetails"></div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,140 @@
+<div class="modal-header">
+  <h6 class="modal-title summary-heading">Vendor Attestation</h6>
+  <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+</div>
+<div class="modal-body">
+     <form [formGroup]="vForm" (ngSubmit)="onSubmit()" #formGroupRef="ngForm">
+        <div class="row">
+            <div>
+                <app-metal-switch (stateChange)="onBypassValueChange($event)" [(state)]='model.isbypass' [uniqueid]="'bypass_attestation'" [labelname]="'Do You Wish to Bypass Candidate Attestation?&nbsp;&nbsp;'"></app-metal-switch>
+            </div>
+        </div>
+        <div *ngIf="model.isbypass == true">
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label for="bypassComment" class="col-form-label-sm label-color m-b">Comments</label>
+                    <sup class="text-danger font-weight-bold">*</sup>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control form-control-sm"
+                              (keyup.backspace)="onBackSpace($event)"
+                              (keyup)="maxLength($event)" formControlName="bypassComment">
+                    </textarea>
+                    <span>
+                        {{commentLengthRem}} character(s) remaining
+                    </span>
+                    <div>
+                        <small class="font-size-small text-danger fa fa-exclamation"
+                               *ngIf="vForm.get('bypassComment').hasError('required') && (vForm.get('bypassComment').touched || formGroupRef.submitted)">
+                            Comments is required
+                        </small>
+                        <small class="font-size-small text-danger fa fa-exclamation"
+                               *ngIf="vForm.get('bypassComment').hasError('maxlength') && (vForm.get('bypassComment').touched || formGroupRef.submitted)">
+                            Maximum 3000 characters in Comments
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+                <div *ngIf="displayMessage" class="alert alert-success">
+                  <strong>{{displayMessage}}</strong>
+                </div>
+                <div *ngIf="errorMessage" class="alert alert-danger">
+                  <strong>{{errorMessage}}</strong>
+                </div>
+              </div>
+              <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="m-3">
+                <button type="button" (click)="createBypassRequest()" [disabled]="vForm.get('bypassComment').hasError('required')" class="btn btn-success">
+                    <i class="fa fa-paper-plane"></i>
+                    &nbsp;&nbsp; Create Bypass Request
+                </button>
+              </div>
+              <div *ngIf="isUploading">
+                <button class="btn btn-success loader pull-right" type="button" disabled="">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+        </div>
+        <div *ngIf="model.isbypass == false">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="subtierName" class="col-form-label-sm label-color m-b">Subtier Name</label>
+                <sup class="text-danger font-weight-bold">*</sup>
+                <input type="text" class="form-control form-control-sm" formControlName="subtierName" placeholder=" " id="subtierName" name="subtierName">
+                <small class="font-size-small text-danger fa fa-exclamation"
+                *ngIf="vForm.get('subtierName').hasError('required') && (vForm.get('subtierName').touched || formGroupRef.submitted)">
+                    Subtier Name is required
+                </small>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="representative" class="col-form-label-sm label-color m-b">Authorized Representative</label>
+                <sup class="text-danger font-weight-bold">*</sup>
+                <input type="text" class="form-control form-control-sm" formControlName="representative"
+                placeholder=" " id="representative" name="representative">
+                <small class="font-size-small text-danger fa fa-exclamation"
+                *ngIf="vForm.get('representative').hasError('required') && (vForm.get('representative').touched || formGroupRef.submitted)">
+                    Authorized Representative is required
+                </small>
+            </div>
+        </div>
+         <div class="row">
+            <div class="form-group col-md-4">
+                <label for="federalId" class="col-form-label-sm label-color m-b">Federal Id</label>
+                <sup class="text-danger font-weight-bold">*</sup>
+                <input type="text" class="form-control form-control-sm" formControlName="federalId" placeholder=" "
+                id="federalId" name="federalId">
+                <small class="font-size-small text-danger fa fa-exclamation"
+                *ngIf="vForm.get('federalId').hasError('required') && (vForm.get('federalId').touched || formGroupRef.submitted)">
+                    Federal Id is required
+                </small>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="subtierEmail" class="col-form-label-sm label-color m-b">Subtier's Email</label>
+                <sup class="text-danger font-weight-bold">*</sup>
+                <div class="input-group">
+                    <div class="input-group-addon mailicondiv">
+	                    <i class="fa fa-envelope-o mailicon"></i> 
+                    </div>
+                    <input type="text" class="form-control form-control-sm" formControlName="subtierEmail"
+                    placeholder=" " id="subtierEmail" name="subtierEmail"/>
+                </div>
+                <small class="font-size-small text-danger fa fa-exclamation"
+                *ngIf="vForm.get('subtierEmail').hasError('required') && (vForm.get('subtierEmail').touched || formGroupRef.submitted)">
+                    Subtier's Email is required
+                </small>
+                <small class="font-size-small text-danger fa fa-exclamation"
+                *ngIf="vForm.get('subtierEmail').hasError('email') && !vForm.get('subtierEmail').hasError('required') && (vForm.get('subtierEmail').touched || formGroupRef.submitted)">
+                    Enter a valid email
+                </small>
+            </div>
+            <div class="form-group col-md-4">
+                <a class="btn btn-link dnldbtn" href="{{attestedResumeURL}}" target="_blank">
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                    Attested Resume
+                </a>
+            </div>
+        </div>
+         <div class="row">
+          <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+            <div *ngIf="displayMessage" class="alert alert-success">
+              <strong>{{displayMessage}}</strong>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              <strong>{{errorMessage}}</strong>
+            </div>
+          </div>
+          <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="col-md-6 pb-2">
+            <button class="btn btn-primary" type="submit" [disabled]="!(vForm.valid)">Submit</button>
+          </div>
+          <div *ngIf="isUploading" class="col-md-6">
+            <button class="btn btn-primary loader" type="button" disabled="">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+        </div>
+    </form>
+</div>

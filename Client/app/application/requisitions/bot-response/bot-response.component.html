@@ -1,0 +1,72 @@
+<ng-container>
+
+  <div class="modal-header">
+    <h6 class="modal-title summary-heading">Bot Responses</h6>
+    <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+  </div>
+  <div class="modal-body">
+
+    <div class="list-parent col-md-12">
+      <div class="">
+        <div class="m-top-sm" >
+
+          <div class="req-info-details req-info">
+            First Name
+          </div>
+          <div class="billrate req-info">
+            Last Name
+          </div>
+          <div class="billrate-type req-info">
+            Email
+          </div>
+
+
+      
+        </div>
+
+        <div class="b-all-light-border">
+
+          <div class="requisition-row" *ngFor="let botresponse of botResponseDetails">
+
+
+            <div class="firstDiv">
+              <div class="secDiv">
+
+                <div class="req-info-details text-primary">
+                  <a> {{botresponse.firstname}}</a>
+
+                </div>
+
+
+                <div class="billrate  orangeText">
+                  {{botresponse.lastname}}
+                </div>
+                <div class="billrate-type  orangeText">
+                  {{botresponse.emailid}}
+                </div>
+              
+
+            
+
+
+              </div>
+
+            </div>
+          </div>
+
+
+
+        </div>
+
+
+
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+</ng-container>

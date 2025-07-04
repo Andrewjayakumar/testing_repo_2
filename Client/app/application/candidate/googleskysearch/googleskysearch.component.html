@@ -1,0 +1,42 @@
+<div class="">
+  <app-actionitemcart [AuthService]="auth"></app-actionitemcart>
+  </div>
+<div class="container">
+  <form (ngSubmit)="onSubmit('submit')" [formGroup]="searchForm">
+    <div class="row pt-3">
+      <div class="form-row col-md-10">
+        <input type="text" class="form-control border-light-gray col-sm-10" name="name" placeholder="Enter key to search.." formControlName="search" id="name" />
+        <button type="submit" title="Please select at least one checkbox" [disabled]="SearchTypeArray?.length == 0" class="btn btn-primary ml-3">Search</button>
+      </div>
+
+    </div>
+    <div>Note:Boolean search using Google X-Ray's will display the top 100 matching results based on advanced search algorithms</div>
+    <div class="checkbox  pt-3">
+      <label *ngFor="let data of socialSelectList"> <!-- Check only linkedin by default hence when data value is 0, checked is true -->
+      <input type="checkbox" (change)="onChange(data.value,$event.target.checked)" [checked]="data.value==0"><span class="pl-1">{{data.name}}</span></label>
+     </div>
+  </form>
+  <div *ngIf="showLoader" class="text-center p-2">
+    <i class="fa fa-2x fa-spinner fa-spin"></i>
+  </div>
+  <div class="norecords">{{errorMessage}}</div>
+  <div *ngFor="let data of googleskyresults?.result" class="results bg-white d-flex">
+    
+    <div class="col-11">
+      <a href="{{data.link}}" target="_blank" class="name">{{data.candidatename}}</a>
+      <div>{{data.description}}</div>
+      <a href="{{data.link}}" target="_blank" class="resultlink">{{data.link}}</a>
+
+    </div>
+    <div class="col-1 pull-right mr-0 cursor-pointer">
+      <a title="Pin candidate" *ngIf="data?.candidateid" (click)='pinclicked($event, data, "candidate"); data["pinned"]=!data["pinned"]'>
+      <i *ngIf="!data.pinned" class="fa fa-2x fa-user-plus" aria-hidden="true"></i>
+      <i *ngIf="data.pinned" class="fa fa-2x fa-user-o" aria-hidden="true"></i></a>
+    </div>
+  </div>
+
+  <ngb-pagination *ngIf="totalResults > 0" class="d-flex justify-content-center" [collectionSize]="totalResults" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                  (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+</div>
+
+

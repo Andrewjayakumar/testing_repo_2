@@ -1,0 +1,32 @@
+
+<div class="modal-header">
+  <h6 class="modal-title summary-heading">Submit to Client</h6>
+  <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+</div>
+<div class="modal-body">
+  <form [formGroup]="vForm" (ngSubmit)="onSubmit()" #formGroupRef="ngForm">
+    <div class="row">
+      <div>
+        <app-metal-switch [(state)]="model.isSubmitToClient" (stateChange)="OnSubmitToClientToggled($event)" [uniqueid]="'candidateoffered'" name="candidateoffered" [labelname]="'Do you want to mark the candidate as submitted to client?'"></app-metal-switch>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+        <div *ngIf="displayMessage" class="alert alert-success">
+          <strong>{{displayMessage}}</strong>
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          <strong>{{errorMessage}}</strong>
+        </div>
+      </div>
+      <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="col-md-6 pb-2">
+        <button class="btn btn-primary" type="submit" [disabled]="!(vForm.valid)">Submit to Client</button>
+      </div>
+      <div *ngIf="isUploading" class="col-md-6">
+        <button class="btn btn-primary loader" type="button" disabled="">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,896 @@
+<div class="col-md-12">
+  <div class="card mb-2">
+    <div class="card-body p-0">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="sidbar-outer sidbar75">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card mb-2 border-0 ">
+                  <div class="card-body px-0 pb-0 collapse show" style="background: rgb(237, 237, 237); height: auto;">
+                    <div class="row" id="panel">
+
+                      <div class="col-md-6 ">
+
+
+                        <div class="card mb-2 box-shadow ">
+                          <div class="card-header d-flex align-items-center pointer  ">
+                            <div class="pr-2 mb-0">
+                              <span class="d-flex align-items-center">
+
+                                <span>
+                                  My Requisitions
+                                </span>
+                              </span>
+                            </div>
+
+
+                          </div>
+
+                          <div class="card-body px-3 pt-0 collapse show" style="height: auto;">
+
+                            <div class="row" id="myreqs">
+                              <div class="col-md-12 ">
+                                <div class="col-md-12 p-0 ">
+
+
+
+
+                                  <div class="card mb-2 pb-1 pt-1 mb-0i pr-0 px-0i border-0 ">
+                                    <div class="card-body text-black font-weight-bold pb-1 pt-1 mb-0i pr-0 collapse show" style="background: rgb(237, 237, 237); height: auto;">
+                                      <div class="row" id="headerpane">
+                                        <div class="col-md-4 ">
+
+
+
+
+                                          <div title="">
+
+                                            <div class="pl-0 pb-0 ml-0">Requisition</div>
+
+
+                                          </div>
+
+
+
+
+
+                                        </div><div class="col-md-3 ml--3 ">
+
+
+
+
+                                          <div title="">
+
+                                            <div class="p-0 ">Job Title</div>
+
+
+                                          </div>
+
+
+
+
+                                        </div><div class="col-md-3 ">
+
+
+
+
+
+                                          <div title="">
+
+                                            <div class="p-0 pb-0">Client</div>
+
+
+                                          </div>
+
+
+
+                                        </div><div class="col-md-2 pr-0i ">
+
+
+
+                                          <div title="">
+
+                                            <div class="text-wrap pl-2 pb-0i m-0 text-center">Positions</div>
+
+
+                                          </div>
+
+
+
+
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+
+
+                                </div>
+
+
+                              </div>
+                              <div class="col-md-12">
+                                <div *ngIf="allMyRequistions?.length == 0" class="d-flex justify-content-center text-center align-items-center align-content-center flex-column" style="min-height: 100px;">
+                                  <div class="mb-3">
+                                    <img class="img-fluid" src="https://socialheitdir.blob.core.windows.net/sheena/Story_cdd54395-6105-4bdc-bc8a-3e62c9976985/Screen%20Sh-8586683498944868350.png" style="width: 100px;">
+                                  </div>
+
+                                  <p class="m-0">No Data Available for you at this Moment</p>
+                                </div>
+                              </div>
+                         
+                              <div class="col-md-12" *ngIf="allMyRequistions?.length >= 1">
+                                <div class="row">
+                                  <div class="col">
+
+                                    <div class="h-100 position-relative d-flex flex-column">
+                                      <div class="row" *ngFor="let rec of allMyRequistions">
+
+
+                                        <div class="col-md-4  border border-left-0 border-top-0">
+
+
+                                          <div class="card mb-2 mb-0i h-100 border-0 ">
+                                            <div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+                                              <div class="row" id="Panel">
+                                                <div class="col-md-12 ">
+
+
+
+
+
+                                                  <a id="scrolltotop" class="btn pl-2 pr-2 white-space-inherit word-break text-left btn-link btn-md">
+                                                    {{rec.requisitionname}}
+
+                                                  </a>
+
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-3  border border-left-0 border-top-0">
+
+
+                                          <div class="card mb-2 mb-0i h-100 border-0 ">
+                                            <div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+                                              <div class="row" id="Panel">
+                                                <div class="col-md-12 ">
+
+
+
+
+                                                  <div></div>
+
+                                                  <div title="">
+                                                    <div class="pb-2 text-black pb-0i">
+                                                      <span class="d-flex">
+
+                                                        <span id="jobtitle">
+                                                          {{rec.jobtitle}}
+                                                        </span>
+
+                                                      </span>
+                                                    </div>
+                                                  </div>
+
+
+
+
+                                                </div>
+                                                <div class="col-md-12 ">
+
+
+
+                                                  <div title="">
+                                                    <div class="pb-2 text-dark">
+                                                      <span class="d-flex">
+
+                                                        <span id="joblocation"> {{rec.clientname}}</span>
+
+
+                                                      </span>
+                                                    </div>
+                                                  </div>
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-3  border border-left-0 border-top-0">
+
+                                          <div class="card mb-2 mb-0i h-100 border-0 ">
+
+                                            <div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div class="row" id="Panel">
+                                                <!----><div class="col-md-12 ">
+
+
+                                                  <div title="">
+                                                    <!---->
+                                                    <!----><div class="pb-2 text-black pb-0i">
+                                                      <span class="d-flex">
+
+                                                        <span id="hiringmanagername"></span>
+
+                                                        <!---->
+                                                        <!---->
+                                                      </span>
+                                                    </div>
+                                                    <!---->
+                                                  </div>
+
+                                                </div><div class="col-md-12 ">
+
+
+
+
+                                                  <div title="">
+                                                    <!---->
+                                                    <!----><div class="pb-2 text-dark">
+                                                      <span class="d-flex">
+                                                        <span id="clientname">
+                                                          {{rec.clientname}}
+                                                        </span>
+
+                                                        <!---->
+                                                        <!---->
+                                                      </span>
+                                                    </div>
+                                                    <!---->
+                                                  </div>
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-2  border border-left-0 border-top-0">
+
+                                          <div class="card mb-2 align-items-center border-0 ">
+
+                                            <div class="card-body pt-2 my-0 d-flex px-0 pb-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div class="row" id="Panel">
+                                                <!----><div class="col-md-12 ">
+
+
+
+
+                                                  <div title="">
+                                                    <!----><div class="pb-2 text-center text-dark pull-right">
+                                                      <span class="justify-content-center align-items-center d-flex">
+
+                                                        <span id="nofp">
+                                                          {{rec.numberofpositions}}
+                                                        </span>
+
+
+                                                      </span>
+                                                    </div>
+                                                  </div>
+
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+
+
+
+
+                                      </div>
+
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="card mb-2 box-shadow ">
+                          <div class="card-header d-flex align-items-center pointer  ">
+                            <div class="pr-2 mb-0">
+                              <span class="d-flex align-items-center">
+                                <span>My  LinkedIn InMail</span>
+                              </span>
+                            </div>
+
+                          </div>
+
+                          <div class="card-body px-3 overflow-x-hidden" style="overflow: auto; height: 360px;">
+
+                            <div class="row" id="linkedinPanel">
+                              <div class="col-md-12 ">
+                                <div class="col-md-12 mt--3 pt-0 pr-0">
+
+
+
+
+                                  <a id="scrolltotop" href="https://www.linkedin.com/recruiter/mailbox" class="btn position-sticky pull-right pt-0 pr-0 btn-link btn-md" target="_blank">
+                                    <i class="fa fa-sign-out mr-2"></i>View All InMail
+                                  </a>
+
+
+
+                                </div>
+
+                              </div>
+                              <div class="col-md-12 p-0 border-top ">
+
+
+                                <div class="d-flex justify-content-center text-center align-items-center align-content-center flex-column">
+
+                                  <p class="m-0">No new InMail for you at the moment !!</p>
+                                </div>
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="col-md-6 ">
+
+
+                        <div class="card mb-2 box-shadow ">
+                          <div class="card-header d-flex align-items-center pointer  ">
+                            <div class="pr-2 mb-0">
+                              <span class="d-flex align-items-center">
+
+                                <span>Performance status</span>
+                              </span>
+                            </div>
+
+
+                          </div>
+
+                          <div class="card-body pb-0i pt-2 collapse show" style="height: auto;">
+                            <div class="row" id="Panel1">
+                              <div class="col-md-12">
+
+
+
+
+                                <div class="row" id="Panel">
+
+
+
+                                  <div  class="card mb-2 border-0 ">
+                                    <div  class="card-body px-3 pb-0i pt-2 px-0 pb-0 collapse show" style="overflow: auto; height: 350px;">
+                                      <div  class="row" id="Panel">
+                                        <div  class="col-md-12 ">
+
+
+                                          <div  class="card mb-2 mb-0i border-0 ">
+                                            <div  class="card-body p-0 px-0 pb-0 collapse show" style="background: rgb(28, 170, 247); height: auto;">
+                                              <div  class="row" id="Panel">
+                                                <div  class="col-md-8 pr-0 ">
+
+
+                                                  <div  class="card mb-2 mb-0i border-0 ">
+                                                    <div  class="card-body p-0 px-0 pb-0 collapse show" style="background: rgb(170, 220, 247); height: auto;">
+                                                      <div  class="row" id="Panel">
+                                                        <div  class="col-md-12 ">
+
+
+                                                          <div  title="">
+                                                            <div  class="py-2 px-3 mb-0i">PVD SCORE</div>
+
+                                                          </div>
+
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                                </div><div  class="col-md-4 pl-0 ">
+
+
+                                                  <div  class="card mb-2 mb-0i bg-transparent border-0 ">
+                                                    <div  class="card-body p-0 text-center px-0 pb-0 collapse show" style="background: transparent; height: auto;">
+                                                      <div  class="row" id="Panel">
+                                                        <div  class="col-md-12 ">
+
+
+                                                          <div  title="">
+                                                            <div  class="pb-2 py-2 px-3 text-black font-weight-bold">
+                                                              <span >
+                                                        <span  id="pvdscore" class="">0</span>
+
+                                                              </span>
+                                                            </div>
+                                                          </div>
+
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div><div  class="col-md-4 border border-top-0 border-left-0 ">
+
+
+                                          <div  class="card mb-2 mb-0i border-0 ">
+                                            <!---->
+                                            <!---->
+                                            <div  class="card-body pb-0 px-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div  class="row" id="Panel">
+                                                <!----><div  class="col-md-12 ">
+
+                                                  <div  class="">
+                                                    <!---->
+                                                    <!----><!---->
+                                                    <!---->
+                                                    <!----><div  class="v-progresbar text-center">
+                                                      <div  class="line" style="height: 200px;">
+                                                        <span  class="bg-" style="background: rgb(154, 212, 255); height: 0%;"></span>
+                                                        <span  class="bar-data"><strong >0</strong> / 10</span>
+                                                      </div>
+                                                      <div  class="bartitle"></div>
+                                                      <div  class="barsubtitle"></div>
+                                                    </div>
+
+                                                    <!---->
+                                                  </div>
+
+                                                  <!---->
+                                                  <!---->
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div><div  class="col-md-4 border border-top-0 border-left-0 ">
+
+
+                                          <!----><div  class="card mb-2 mb-0i border-0 ">
+                                            <!---->
+                                            <!---->
+                                            <div  class="card-body pb-0 px-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div  class="row" id="Panel">
+                                                <!----><div  class="col-md-12 ">
+
+                                                  <div  class="">
+                                                    <!---->
+                                                    <!----><!---->
+                                                    <!---->
+                                                    <!----><div  class="v-progresbar text-center">
+                                                      <div  class="line" style="height: 200px;">
+                                                        <span  class="bg-" style="background: rgb(255, 154, 193); height: 0%;"></span>
+                                                        <span  class="bar-data"><strong >0</strong> / 10</span>
+                                                      </div>
+                                                      <div  class="bartitle"></div>
+                                                      <div  class="barsubtitle"></div>
+                                                    </div>
+
+                                                    <!---->
+                                                  </div>
+
+                                                  <!---->
+                                                  <!---->
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div><div  class="col-md-4 border-bottom ">
+
+
+                                          <!----><div  class="card mb-2 mb-0i border-0 ">
+                                            <!---->
+                                            <!---->
+                                            <div  class="card-body pb-0 px-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div  class="row" id="Panel">
+                                                <!----><div  class="col-md-12 ">
+
+                                                  <div  class="">
+                                                    <!---->
+                                                    <!----><!---->
+                                                    <!---->
+                                                    <!----><div  class="v-progresbar text-center">
+                                                      <div  class="line" style="height: 200px;">
+                                                        <span  class="bg-" style="height: 0%; background: rgb(176, 255, 154);"></span>
+                                                        <span  class="bar-data"><strong >0</strong> / 10000</span>
+                                                      </div>
+                                                      <div  class="bartitle"></div>
+                                                      <div  class="barsubtitle"></div>
+                                                    </div>
+
+                                                    <!---->
+                                                  </div>
+
+
+                                                  <!---->
+                                                  <!---->
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+
+                                        </div><div  class="col-md-4 ">
+
+                                          <!----><div  class="card mb-2 mb-0i border-0 ">
+                                            <!---->
+                                            <!---->
+                                            <div  class="card-body text-center px-0 pb-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div  class="row" id="Panel">
+                                                <!----><div  class="col-md-12 ">
+
+                                                  <div  title="">
+                                               
+                                                    <div  class="text-dark font-weight-bold">CO(s)</div>
+
+                                                  </div>
+
+
+                                                </div><div  class="col-md-12 ">
+
+
+
+                                                  <div  title="">
+
+                                                    <div  class="text-light-gray pb-0i"><p>Daily Target</p></div>
+
+
+                                                  </div>
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+
+                                        </div><div  class="col-md-4 ">
+
+                                          <!----><div  class="card mb-2 mb-0i border-0 ">
+                                            <!---->
+                                            <!---->
+                                            <div  class="card-body text-center px-0 pb-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div  class="row" id="Panel">
+                                                <!----><div  class="col-md-12 ">
+
+
+                                                  <div  title="">
+                                               
+                                                    <div  class="text-dark font-weight-bold">Submission(s)</div>
+
+
+                                                  </div>
+
+
+                                                </div><div  class="col-md-12 ">
+
+
+                                                  <div  title="">
+                                             
+                                                    <div  class="text-light-gray pb-0i">Weekly Target</div>
+
+
+                                                  </div>
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div><div  class="col-md-4 ">
+
+                                          <!----><div  class="card mb-2 mb-0i border-0 ">
+                                            <!---->
+                                            <!---->
+                                            <div  class="card-body text-center px-0 pb-0 collapse show" style="height: auto;">
+                                              <!---->
+                                              <div  class="row" id="Panel">
+                                                <!----><div  class="col-md-12 ">
+                                                  <div  title="">
+                                               
+                                                    <div  class="text-dark font-weight-bold">Spread</div>
+
+
+                                                  </div>
+                                                </div><div  class="col-md-12 ">
+
+                                                  <div  title="">
+                                              
+                                                    <div  class="text-light-gray pb-0i">Yearly Target</div>
+
+
+                                                  </div>
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+
+                                </div>
+
+
+
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+
+
+
+
+
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="card mb-2 box-shadow">
+
+                          <div class="card-header d-flex align-items-center pointer  ">
+                            <div class="pr-2 mb-0">
+                              <span class="d-flex align-items-center">
+
+                                <span>
+                                  Interviews
+                                </span>
+                              </span>
+                            </div>
+
+
+                          </div>
+                          <div  class="card-body py-0" style="overflow: auto; height: 360px;">
+                            <!---->
+                            <div  class="row" id="Panel">
+                              <!----><div  class="col-md-12 ">
+                       
+                            <div _ngcontent-c34="" class="d-flex justify-content-center text-center align-items-center align-content-center flex-column" style="min-height: 100px;">
+                                      <div _ngcontent-c34="" class="mb-3">
+                                        <img _ngcontent-c34="" class="img-fluid" src="https://socialheitdir.blob.core.windows.net/sheena/Story_3b36cc95-b31a-449e-befa-b1b1b4b6d435/1-8586398735360060050.png" style="width: 100px;">
+                                      </div>
+                                      <h3 _ngcontent-c34="" class="text-dark">No Interviews scheduled for Today!</h3>
+                                    </div>
+                                  
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="col-md-6">
+                        <div class="card mb-2 box-shadow">
+
+                          <div class="card-header d-flex align-items-center pointer  ">
+                            <div class="pr-2 mb-0">
+                              <span class="d-flex align-items-center">
+
+                                <span>
+                                  Top 5 Skills – Forecast
+                                </span>
+                              </span>
+                            </div>
+
+
+                          </div>
+                          <div class="card-body px-3 pt-0 collapse show" style="height: auto;">
+
+                            <div class="row" id="Panel" *ngFor="let row of alltopfiveskil">
+                              <div class="col-md-12 ">
+
+                                <div class="row">
+                                  <div class="col">
+                                    <div class="h-100 position-relative d-flex flex-column">
+                                      <div class="row ">
+
+                                        <div class=" col-md-2 border border-left-0 border-top-0">
+                                          <div class="card mb-2 border-0 ">
+
+
+                                            <div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+                                              <div class="row" id="Panel">
+                                                <div class="col-md-12 ">
+
+
+
+                                                  <img src="{{row.img}}" class="ml-2 pt-1" width="40" height="40">
+
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-10 border border-left-0 border-top-0 border-right-0">
+
+                                          <div class="card mb-2 border-0 ">
+
+
+                                            <div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+                                              <div class="row" id="Panel">
+                                                <div class="col-md-12 ">
+
+
+                                                  <div></div>
+
+
+                                                  <div title="">
+
+                                                    <div class="pb-2 text-secondary pb-0i mt-3">
+                                                      <span class="d-flex">
+
+                                                        <span id="kpi" class="">{{row.kpi}}</span>
+
+                                                      </span>
+                                                    </div>
+
+                                                  </div>
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+
+
+                                      </div>
+
+
+                                    </div>
+
+
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="col-md-6">
+                        <div class="card mb-2 box-shadow">
+
+                          <div class="card-header d-flex align-items-center pointer  ">
+                            <div class="pr-2 mb-0">
+                              <span class="d-flex align-items-center">
+
+                                <span>
+                                  Top 5 Job Titles – Forecast
+                                </span>
+                              </span>
+                            </div>
+
+
+                          </div>
+                          <div class="card-body px-3 pt-0 collapse show" style="height: auto;">
+
+                            <div class="row" id="Panel" *ngFor="let row of alltopjobtitles">
+                              <div class="col-md-12 ">
+
+                                <div class="row">
+                                  <div class="col">
+                                    <div class="h-100 position-relative d-flex flex-column">
+                                      <div class="row ">
+
+                                        <div class=" col-md-2 border border-left-0 border-top-0">
+                                          <div class="card mb-2 border-0 ">
+
+
+                                            <div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+                                              <div class="row" id="Panel">
+                                                <div class="col-md-12 ">
+
+
+
+                                                  <img src="{{row.img}}" class="ml-2 pt-1" width="40" height="40">
+
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-10 border border-left-0 border-top-0 border-right-0">
+
+                                          <div class="card mb-2 border-0 ">
+
+
+                                            <div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+                                              <div class="row" id="Panel">
+                                                <div class="col-md-12 ">
+
+
+                                                  <div></div>
+
+
+                                                  <div title="">
+
+                                                    <div class="pb-2 text-secondary pb-0i mt-3">
+                                                      <span class="d-flex">
+
+                                                        <span id="kpi" class="">{{row.kpi}}</span>
+
+                                                      </span>
+                                                    </div>
+
+                                                  </div>
+
+
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+
+
+                                      </div>
+
+
+                                    </div>
+
+
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

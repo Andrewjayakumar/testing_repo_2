@@ -1,0 +1,57 @@
+<div class="input-group mr-2">
+  <input [ngClass]="ngControl?.valid ? 'ng-valid' : 'ng-invalid'"
+         class="form-control"
+         placeholder="Select Date & Time"
+         (blur)="inputBlur($event)"
+         [ngModel]="dateString | date:'short'"
+         (change)="onInputChange($event)"
+         [disabled]="disabled"
+         readonly />
+
+  <div class="input-group-prepend">
+    <button class="btn btn-outline-primary fa fa-calendar"
+            [ngbPopover]="calendarContent"
+            (click)="Toggle()"
+            [disabled]="btndisabled"
+            type="button">
+    </button>
+
+
+  </div>
+</div>
+
+<ng-template #calendarContent>
+  <div>
+
+    <ngb-datepicker id="dp"
+                    #dp name="datepicker"
+                    [ngModel]="datetime"
+                    [minDate]="minDate"
+                    (ngModelChange)="onDateChange($event, dp)"
+                    autoClose="true">
+    </ngb-datepicker>
+    <div class="align">
+      <ngb-timepicker name="timepicker"
+                      [ngModel]="datetime"
+                      (ngModelChange)="onTimeChange($event)"
+                      [hourStep]="hourStep"
+                      [minuteStep]="minuteStep"
+                      [secondStep]="secondStep"
+                      meridian=true
+                      size="small">
+      </ngb-timepicker>
+    </div>
+
+
+
+    <div *ngIf="timePickerselected===false" class="invalid_msg">
+      * Please select time
+    </div>
+
+    <div class="buttoncls">
+      <button class=" btn btn-outline-primary btn-sm float-left" (click)="cancelToggle()">Cancel</button>
+
+      <button class="btn btn-primary btn-sm float-right" (click)="closePopup()">Set</button>
+    </div>
+  </div>
+</ng-template>

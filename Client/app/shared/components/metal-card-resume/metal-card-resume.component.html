@@ -1,0 +1,61 @@
+<ng-container>
+
+  <div class="modal-header p-heading">
+    <span>
+      <i class="fa-lg custom-icon-size fa fa-vcard-o pageheading"></i>
+      <span class="modal-title resume-heading">{{candidateResmDetails?.fullname}}</span>
+    </span>
+    <p class="only-show-on-hover m-bottom-0 text-small other-details">
+      <span class="text-capitalize  text-semibold">
+        <a class="pointer"><img src="../../../../../wwwroot/assets/img/svg/View Profile.svg" (click)='pinclicked(candidateResmDetails)' title="View Profile" alt="view" /></a>
+      </span>
+      <span class="spaceMargin h3">|</span>
+      <span class="m-bottom-0 text-small    text-capitalize  text-semibold  line-height-18" *ngIf="candidateResmDetails?.inhouse">
+        <a class="pointer"><img src="../../../../../wwwroot/assets/img/svg/InHouse.svg" title="InHouse" alt="Business" /></a>
+      </span>
+      <span class="spaceMargin h3" *ngIf="candidateResmDetails?.inhouse || candidateResmDetails?.reference">|</span>
+      <span class="m-bottom-0 text-small    text-capitalize  text-semibold  line-height-18" *ngIf="candidateResmDetails?.inhouse">
+        <a class="pointer"><img src="../../../../../wwwroot/assets/img/svg/Business Reference.svg" title="Business Reference" alt="Business" /></a>
+      </span>
+      <span class="spaceMargin h3" *ngIf="candidateResmDetails?.inhouse || candidateResmDetails?.reference">|</span>
+      <span class="m-bottom-0 text-small  track-clevertap  text-capitalize   track-search-click line-height-18"><label class="other-details-label">Submission&nbsp;</label>{{candidateResmDetails?.submission}}</span>
+      <span class="spaceMargin h3">|</span>
+      <span class="m-bottom-0 text-small   text-capitalize    line-height-18"><label class="other-details-label">Interview&nbsp;</label>{{candidateResmDetails?.interviews}}</span>
+      <span class="spaceMargin h3">|</span>
+      <span class="m-bottom-0 text-small   text-capitalize    line-height-18"><label class="other-details-label">Hires:&nbsp;</label>{{candidateResmDetails?.hires}}</span>
+    </p>
+    <i class="fa fa-times fa-lg close-resume" (click)="modal.close(true)" aria-hidden="true"></i>
+
+  </div>
+
+  <div class="modal-body resume-body pr-0" *ngIf="candidateresume">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9 candidateresume_border" id="candidateresume">
+          <div [innerHTML]="candidateresume  | highlight:(candidateResmDetails?.skills?.length > 0) ? candidateResmDetails?.skills: highlightskillsarray"></div>
+        </div>
+        <div class="col-md-3 p-0" *ngIf="isAIDrivenUser">
+
+          <div class="candidateresume_border" id="candidateresume" >
+            <h5 class="text-primary p-0">Pre Screening Questions</h5>
+
+            <div *ngIf="candidateResmDetails?.prescreening" [innerHTML]="candidateResmDetails?.prescreening" class="prescreening"></div>
+            <span class="text-center text-danger" *ngIf="candidateResmDetails?.prescreening == null">Pre screening Questions not found!</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div *ngIf="loadingMessage" class="p-1 modal-height">
+    <h6 class="resume-load-mesg">Please Wait...</h6>
+
+  </div>
+
+  <ngb-alert class="text-center p-5 modal-height" *ngIf="resumenotFound"
+             type="danger">
+    {{errorMessage}}
+  </ngb-alert>
+
+</ng-container>

@@ -1,0 +1,43 @@
+$primary: #1976d2;
+
+.interview-slots{
+    display: flex;
+    color:#2E86C1;
+}
+.interview-slot-icon {
+  position: relative;
+  left: 67%;
+  padding: 0;
+  margin-top: -10px;
+}
+hr.interview-separator { 
+    border-bottom: 1px solid #DCDCDC
+} 
+.action-buttons{
+    padding: 10px;
+}
+
+.remove_interview{
+   float: right;
+   padding-right: 10px;
+   cursor: pointer;
+}
+
+.manager-card {
+  background-color : antiquewhite;
+  margin: 0.5rem;
+}
+
+.candidate-card {
+  background-color: lavender;
+  margin: 0.5rem;
+}
+/**
+  .rec-label {
+  color: $primary;
+  font-size: smaller;
+  margin-bottom: 0px !important;
+  float: left;
+}
+*/
+

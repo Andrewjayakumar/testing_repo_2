@@ -1,0 +1,604 @@
+<div class="bookmark-outer">
+  <app-actionitemcart [AuthService]="_authservice"></app-actionitemcart>
+</div>
+<div class="container req-container">
+  <div class="row">
+    <div class="col-md-12">
+      <a (click)="bookMark(requisitionDetails?.name)"><i class="fa fa-bookmark rec-name-font"></i></a>
+      <h5 class="text-primary pt-1  m-0  d-inline-block">{{requisitionDetails?.name}}</h5>
+      <div class="col-auto mt-2 pull-right">
+        <button class="btn btn-sm btn-link pull-right pt-0" tabindex="0" title="Close and Back to Req Details page"
+          [routerLink]="['../../recoverview']" [queryParams]="{requisitionid: requisitionid }">
+          <i aria-hidden="true" class="fa fa-times x15"></i>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <nav class="all-ai-items">
+    <ul class="mb-0i">
+
+      <li>
+        {{requisitionDetails?.clientname}} <span class="spaceMargin h5 mr-2">|</span>
+      </li>
+      <li class="mr-2">
+        {{requisitionDetails?.region ? requisitionDetails?.region:'-'}}
+      </li>
+      <li class="mr-1">
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'gold'"><img class="mr-3"
+            src="../../../../../wwwroot/assets/img/svg/Gold.svg" alt="grid"></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'silver'"><img class="mr-3"
+            src="../../../../../wwwroot/assets/img/svg/Silver.svg" alt="silver" /></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'platinum'"><img class="mr-3"
+            src="../../../../../wwwroot/assets/img/svg/Platinum.svg" alt="platinum" /></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'bronze'"><img class="mr-3"
+            src="../../../../../wwwroot/assets/img/svg/bronze.svg" alt="bronze" /></a>
+        <a *ngIf="requisitionDetails?.requisitionpriority?.toLowerCase() == 'diamond'"><img class="mr-3"
+            src="../../../../../wwwroot/assets/img/svg/Diamond.svg" alt="diamond" /></a>
+
+      </li>
+      <li class="mr-1">
+        <img *ngIf="requisitionDetails?.isverified" alt="verified"
+          src="../../../../../wwwroot/assets/img/svg/ic_verified.svg" />
+      </li>
+    </ul>
+    <div>
+      <a title="disable notification" (click)="enableDisableNotification()" *ngIf="enabledisablenotification">
+        <img class="" src="../../../../../wwwroot/assets/img/svg/ic-automation2-active  (1).svg" alt="automation" width="14" />
+      </a>
+      <a title="enable notification" (click)="enableDisableNotification()" *ngIf="isdisable">
+        <img class="" src="../../../../../wwwroot/assets/img/svg/ic-automation2-disabled 1 (1).svg" width="14" alt="automation" />
+      </a>
+      <a (click)="openCloneReq()" title="Clone Requisition" *ngIf="showuallowreqfulfillreason">
+        <img src="../../../../../wwwroot/assets/img/svg/clone-svgrepo-com.svg" class="clone mr-2">
+      </a>
+      <a title="Edit Requisition" [routerLink]="['/apps/requisitionspage/addupdate']"
+         [queryParams]="{requisitionid: requisitionid,enableAutomation:isdisable?false:true }">
+        <img src="../../../../../wwwroot/assets/img/svg/edit.svg" class="ic_edit mr-2">
+
+      </a>
+      <a title="New Edit Requisition" [routerLink]="['/apps/requisitionspage/newaddupdate']"
+         [queryParams]="{requisitionid: requisitionid,enableAutomation:isdisable?false:true }">
+        <img src="../../../../../wwwroot/assets/img/svg/edit.svg" class="ic_edit mr-2">
+
+      </a>
+      <div class="d-inline-block dropdown" ngbDropdown #myDrop="ngbDropdown">
+        <a aria-expanded="false" aria-haspopup="true" ngbDropdownAnchor class="m-r-morebtn" data-toggle="dropdown"
+           id="btnGroupDrop1">
+          <img src="../../../../../wwwroot/assets/img/svg/ic-more.svg" class="ic_edit">
+        </a>
+        <div ngbDropdownMenu aria-labelledby="btnGroupDrop1" x-placement="bottom-end"
+             class="dropdown-menu dropdown-menu-right">
+
+          <a class="btn  btn- btn-sm" (click)="printPreview()">
+            <i class="fa fa-file-text mr-2"></i>Print Preview
+          </a>
+          <a class="btn  btn- btn-sm" (click)="publishJobPosting(requisitionDetails?.publishurl)">
+            <i class="fa fa-telegram mr-2"></i>Publish Job Posting
+          </a>
+          <a class="btn  btn- btn-sm" (click)="updateClientClicked()">
+            <i class="fa fa-eraser mr-2"></i>Update Client Name
+          </a>
+          <a *ngIf="projecttype==2" class="btn  btn- btn-sm" (click)="acaBtnClicked()">
+            <i class="fa fa-file-code-o mr-2"></i>Benefit Summaries
+          </a>
+          <a class="btn  btn- btn-sm" (click)="getRateCardDetails()">
+            <i class="fa fa-money mr-2"></i>Ratecard
+          </a>
+          <a class="btn  btn- btn-sm" (click)="getBotResponseDetails()">
+            <i class="fa fa-file-code-o mr-2"></i>BOT Responses
+          </a>
+          <a class="btn  btn- btn-sm" (click)="updateDurationClicked()" *ngIf="showupdateduration">
+            <i class="fa fa-file-code-o mr-2"></i>Update Duration
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </nav>
+  <!-- First Accordion -->
+  <div mdbSideNav #sidenav class="sidenav-right" >
+    <app-recdetails-new 
+      [allReqDetails]="requisitionDetails" 
+      [details]="reqDetail"
+      (close)="closeNav()"></app-recdetails-new>
+  </div>
+  <div class="overlay-sidenav-right" *ngIf="sidebarVisible"></div>
+
+
+  <div class="accordion" id="accordianParent">
+    <div id="reqdetailsAccordion" class="">
+      <div class="card card-sub">
+        <div id="headingOne" class="card-header bg-white  border-0 mt-1">
+          <h2 class="mb-0 accordion-background">
+            <div class="btn btn-link accordion-header font-weight-bold collapsiblee-link collapsed">
+              <span class="text-small">{{requisitionid}}</span>
+              <a class="pointer svg-gray float-right">
+                <img src="../../../../../wwwroot/assets/img/svg/View Profile.svg" (click)='openNav()'
+                  title="View Details" alt="view" />
+              </a>
+              <span class="text-small  mr-5 float-right">
+                <span class="track-clevertap  text-capitalize"><span class="text-primary">CREATED
+                    DATE:&nbsp;</span>{{requisitionDetails?.receiveddate}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small    text-capitalize"><span
+                    class="text-primary">STATUS:&nbsp;</span>&nbsp;{{requisitionDetails?.status}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small    text-capitalize "><span
+                    class="text-primary">TYPE:&nbsp;</span>&nbsp;{{requisitionDetails?.requisitiontype}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small    text-capitalize"><span
+                    class="text-primary">POSITIONS:&nbsp;</span>{{requisitionDetails?.numberofpositions}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small   text-capitalize"><span
+                    class="text-primary">SUBMISSION:&nbsp;</span>{{requisitionDetails?.submission}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="m-bottom-0 text-small   text-capitalize"><span
+                    class="text-primary">INTERVIEW:&nbsp;</span>{{requisitionDetails?.interview}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="track-clevertap  text-capitalize"><span
+                    class="text-primary">HIRED:&nbsp;</span>{{requisitionDetails?.hired}}</span>
+                <span class="spaceMargin h5">|</span>
+                <span class="track-clevertap  text-capitalize"><span class="text-primary">BAD
+                    DELIVERY:&nbsp;</span>{{requisitionDetails?.baddelivery}}</span>
+              </span>
+            </div>
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Accordion -->
+    <div id="reqDescriptionAccordion" class="">
+      <div class="card card-sub">
+        <div id="headingTwo" class="card-header bg-white  border-0 mt-1">
+
+          <h2 class="mb-0 accordion-background">
+
+            <button data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+              class="btn btn-link accordion-header font-weight-bold collapsible-link collapsed">
+              <span class="heading-left">REQUISITION DESCRIPTION</span>
+
+              <span class="heading-right">
+
+                <span class="req-job-title">JOB TITLE : &nbsp; </span>
+                <span class="job-title-value"> {{reqDetail?.jobtitle}}</span>
+                <button (click)="openHistory(); $event.stopPropagation();" class="history-button">
+                  <i class="fa fa-history history-name"></i>
+                  History
+                </button>
+
+              </span>
+
+            </button>
+          </h2>
+
+        </div>
+
+        <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionParent" class="collapse">
+          <div class="card-body reqBody">
+            <p class="req-descript">
+              <span [innerHTML]="reqDetail?.description"></span>
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <ng-container class="main-section">
+
+      <nav class="">
+        <ul #tablist role="tablist" class="nav nav-tabs justify-content-lg-start">
+
+          <li class="nav-item">
+            <a data-toggle="tab" role="tab" href="#jobboardRef" class="nav-link"
+              [ngClass]="{ 'active' : currentTab==='jobboard' }" (click)="currentTab='jobboard'">
+              Search Candidate
+            </a>
+          </li>
+          <li class="nav-item">
+            <a data-toggle="tab" role="tab" href="#pipelineRef" class="nav-link"
+              [ngClass]="{ 'active' : currentTab==='pipeline' }" (click)="currentTab='pipeline'">
+              Sourced Pipeline
+            </a>
+          </li>
+          <li class="nav-item">
+            <a data-toggle="tab" role="tab" href="#JournalRef" class="nav-link"
+              [ngClass]="{ 'active' : currentTab==='Journal' }" (click)="currentTab='Journal'">
+              Journal
+            </a>
+          </li>
+
+        </ul>
+
+      </nav>
+
+
+
+
+      <div class="tab-content">
+        <div id="jobboardRef" class="tab-pane fade" role="tabpanel" [ngClass]="{'show active': currentTab=='jobboard'}">
+          <!--<app-jobboard-parent *ngIf="currentTab=='jobboard'" [requisitionid]="requisitionid" [requisitionname]="requisitionName"></app-jobboard-parent>-->
+          <app-aidriven-jobboard *ngIf="currentTab=='jobboard'" [requisitionid]="requisitionid"></app-aidriven-jobboard>
+
+        </div>
+      </div>
+      <div class="tab-content">
+        <div id="pipelineRef" class="tab-pane fade show active" role="tabpanel"
+          [ngClass]="{'show active': currentTab=='pipeline'}">
+          <app-candidate-pipeline *ngIf="currentTab=='pipeline'"
+            [requisitionid]="requisitionid" [requisitionDetails]="requisitionDetails"></app-candidate-pipeline>
+
+        </div>
+      </div>
+      <div class="tab-content">
+        <div id="JournalRef" class="tab-pane fade" role="tabpanel" [ngClass]="{'show active': currentTab=='Journal'}">
+          <app-journaldetails-new *ngIf="currentTab=='Journal'" [journalDetails]="journalDetails" [totalrecords]="totalrecords"></app-journaldetails-new> 
+        </div>
+        </div>
+    </ng-container>
+
+
+  </div>
+</div>
+<!-- Requisition Details Popup -->
+<ng-template #requisitiondetails let-c="close" let-d="dismiss" size="sm">
+
+  <!-- Modal Header -->
+  <div class="modal-header ">
+    <h5>Requisition Details</h5>
+
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+
+  </div>
+  <!-- Loader Config -->
+  <div *ngIf="showLoader">
+    <div class="loading-indicator">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+
+
+  <!-- Modal Content -->
+  <div class="modal-body">
+
+    <div *ngIf="errorMessage" class="error">
+      {{errorMessage}}
+    </div>
+    <div *ngIf="!errorMessage">
+      <div class="row">
+        <div class="col-sm-6 ">
+          <div class="card">
+            <div class="card-body custom-body ">
+              <h5 class="card-title custom-card-title">REQUISITION ID | NAME</h5>
+              <p class="card-text custom-card-text">
+                <span *ngIf="reqDetail?.description">{{reqDetail?.requisitionid}}</span>
+                <img src="../../../../../wwwroot/assets/img/svg/dot_icon.svg"><span
+                  *ngIf="reqDetail?.description">{{reqDetail?.name}}</span>
+              </p>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 ">
+          <div class="card">
+            <div class="card-body custom-body">
+              <h5 class="card-title custom-card-title">REQUISITION STATUS</h5>
+              <p class="card-text custom-card-text"><span *ngIf="reqDetail?.description">{{reqDetail?.status}}</span>
+              </p>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 ">
+          <div class="card">
+            <div class="card-body custom-body">
+              <h5 class="card-title custom-card-title">JOB TITLE</h5>
+              <p class="card-text custom-card-text"><span *ngIf="reqDetail?.description">{{reqDetail?.jobtitle}}</span>
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body description-body">
+              <h5 class="card-title custom-card-title"> REQUISITION DESCRIPTION </h5>
+              <div class="card-text card-description">
+                <p class="card-text card-descriptionptag">
+                  <span *ngIf="reqDetail?.description" [innerHTML]="reqDetail?.description"></span>
+                </p>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+
+</ng-template>
+
+
+
+
+<!-- Req Description  History Test -->
+<ng-template #requisitionHistory let-c="close" let-d="dismiss" class="custom-modal-dialog-history">
+
+  <!-- Modal Header -->
+  <div class="modal-header ">
+    <h5>Requisition Description History</h5>
+
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+
+  </div>
+
+
+
+
+  <!-- Modal Content -->
+  <div class="modal-body history-modal">
+
+    <div class="historyCard">
+      <!-- Loader Config -->
+      <div *ngIf="showLoader">
+        <div class="loading-indicator">
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+
+      <div class="card ">
+        <div class="accordion " id="reqaccordion">
+          <div class="accordion-group" *ngFor="let history of currentPageData; let i = index">
+            <div class="margin-class">
+              <a class="accordion-toggle custom-anchor" (click)="toggleAccordion(i)" data-toggle="collapse"
+                data-parent="#reqaccordion" [attr.data-target]="'#collapseHistory' + i">
+                <div class="accordion-heading-content">
+                  <div class="content-container">
+                    <div class="line-container">
+
+
+                      <span class="accordion-heading-text" *ngIf="history?.description"
+                        [textContent]="removeFirstWhiteSpace(history?.description)"></span>
+
+                      <span class="updated-details">
+                        Updated On : {{ convertUtcToLocalDate(history?.createdDate) | date: 'short' }} | Updated By :
+                        {{history?.createdBy}}
+                      </span>
+
+
+                    </div>
+                    <div class="icon-section">
+
+                      <i class="fa fa-chevron-down"></i>
+
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+
+
+
+
+
+            <div [id]="'collapseHistory' + i" class="accordion-body collapse in">
+              <div class="accordion-inner">
+                <p class="history-reqbody">
+                  <span>
+                    <span *ngIf="history?.description" [innerHTML]="history?.description"></span>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="pageClass" *ngIf=" descriptionHistory && descriptionHistory.length > 7">
+
+      <ngb-pagination [collectionSize]="totalItems" [(page)]="currentPage" [pageSize]="pageSize" [maxSize]="maxSize"
+        [rotate]="true" [boundaryLinks]="true" (pageChange)="onPageChange($event)" size="sm"></ngb-pagination>
+
+    </div>
+  </div>
+
+
+
+</ng-template>
+
+<!--Clone Req Starts-->
+<ng-template #cloneRequisition let-c="close" let-d="dismiss">
+  <div [ngBusy]="{busy: busy, message: 'Loading ...', backdrop: true, delay: 200, minDuration: 1000}"></div>
+  <div class="modal-header">
+    <h5>
+      Clone Requisition
+    </h5>
+    <button class="close text-primary" type="button" (click)="d('cross')"><i class="fa fa-times"></i></button>
+
+  </div>
+  <div class="modal-body">
+    <div *ngIf="requisitionDetails?.iscloned" class="cloned-warning">This Requisition is already cloned! </div>
+    <form #cloneRequisitionForm="ngForm">
+      <div class="row">
+        <div class="col-md-6 ui-control-block">
+          <label for="requisitionname">Requisition Name <sup class="font-weight-bold text-danger">*</sup></label>
+          <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="cloneModel.requisitionname" #requisitionname="ngModel"
+                   name="requisitionname" placeholder="Enter Requisition Name" required>
+          </div>
+          <small *ngIf="!cloneModel.requisitionname && (requisitionname.dirty || requisitionname.touched) "
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="col-md-6 ui-control-block">
+          <label for="status">Requisition Status</label>
+          <ng-select class="form-control" [items]="requisitionStatusList" bindValue="id" bindLabel="status"
+                     [multiple]="false" [closeOnSelect]="true" [searchable]="false" [(ngModel)]="cloneModel.statusid"
+                     (change)="onStatusChange($event)" #status="ngModel" placeholder="Select Requisition Status"
+                     name="status"></ng-select>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 ui-control-block">
+          <label for="clientname">Client Name <sup class="font-weight-bold text-danger">*</sup> </label>
+          <ng-select class="form-control" [items]="clientNamedata$ |async" bindValue="clientname" bindLabel="clientname"
+                     [typeahead]="clientNameinput$" [loading]="ClientNameLoading" [multiple]="false" [closeOnselect]="true"
+                     [(ngModel)]="cloneModel.clientname" (change)="onClientChange($event)" #clientname="ngModel"
+                     name="clientname" placeholder="Type 2 Characters to search" required disabled>
+
+          </ng-select>
+          <small *ngIf="!cloneModel.clientname && (clientname.dirty || clientname.touched) "
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="col-md-6 ui-control-block">
+          <label for="clonecount">Clone Count <sup class="font-weight-bold text-danger">*</sup></label>
+          <div class="input-group">
+            <input type="number" name="clonecount" class="form-control" placeholder="Enter Number"
+                   [(ngModel)]="cloneModel.clonecount" #clonecount="ngModel" max="100" min="1" required>
+
+          </div>
+          <small *ngIf="!cloneModel.clonecount && (clonecount.dirty || clonecount.touched) "
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+          <small *ngIf="(cloneModel.clonecount && cloneModel.clonecount > 100) && (clonecount.dirty || clonecount.touched) "
+                 class="font-size-small text-danger fa fa-exclamation"> The count should be less than 100</small>
+
+          <small *ngIf="(cloneModel.clonecount && cloneModel.clonecount < 1)  && (clonecount.dirty || clonecount.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> The count should be atleast 1</small>
+
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 ui-control-block">
+          <label for="startdateField">Start Date <sup class="font-weight-bold text-danger">*</sup></label>
+
+          <div class="input-group  pr-0">
+            <input class="form-control" id="startdateField" [(ngModel)]="StartDate" (ngModelChange)="StartDateChanged()"
+                   [startDate]="currentDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="sd.toggle()"
+                   name="startdate" ngbDatepicker #sd="ngbDatepicker" required>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-calendar" (click)="sd.toggle()" type="button"></button>
+            </div>
+            <small *ngIf="(startDate && !startDate.day) && (sd.dirty || sd.touched) || (startDate && !startDate.day && nextClicked)"
+                   class="fa fa-exclamation text-danger figure-caption p-1">This field is required</small>
+
+          </div>
+        </div>
+
+        <div class="col-md-6 ui-control-block">
+          <label for="projectenddateField">End Date <sup class="font-weight-bold text-danger">*</sup></label>
+
+          <div class="input-group  pr-0">
+            <input class="form-control" id="projectenddateField" [(ngModel)]="endDate" (ngModelChange)="EndDateChanged()"
+                   [startDate]="currentDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="ed.toggle()" name="enddate"
+                   ngbDatepicker #ed="ngbDatepicker" required>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-calendar" (click)="ed.toggle()" type="button"></button>
+            </div>
+            <small *ngIf="(startDate && !startDate.day) && (ed.dirty || ed.touched) || (startDate && !startDate.day && nextClicked)"
+                   class="fa fa-exclamation text-danger figure-caption p-1">This field is required</small>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-6 ui-control-block" *ngIf="allowredeploymenthire === true">
+          <label for="reqfulfillmentreason">Req Fulfillment Reason <sup class="font-weight-bold text-danger">*</sup></label>
+          <ng-select [ngClass]="{'disabled-select': mode === 'clone' && !allowredeploymenthire}" class="form-control"
+                     [items]="fulfillmentReasons" bindValue="reqfulfillmentreasonid" bindLabel="reqfulfillmentreason"
+                     [multiple]="false" [closeOnSelect]="true" [searchable]="false" [(ngModel)]="cloneModel.reqfulfillmentreasonid"
+                     (change)="getSelectedFulfillmentReason($event)" #reqfulfillmentreason="ngModel" [required]="true"
+                     placeholder="Select Req Fulfillment Reason" name="reqfulfillmentreason" [disabled]="mode === 'clone' && !allowredeploymenthire">
+          </ng-select>
+          <small *ngIf="!cloneModel.reqfulfillmentreasonid && reqfulfillmentreason.touched"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+      </div>
+
+      <div class="row pull-right m-2">
+        <div class="success-message" *ngIf="cloneSuccessMessage">
+          <span>Cloning Request Sent!</span>
+        </div>
+        <div class="error-message" *ngIf="cloneErrorMessage">
+          <span>{{serverErrResp}}</span>
+        </div>
+
+        <div *ngIf="!cloneErrorMessage && !cloneSuccessMessage">
+
+          <button class="btn btn-primary"
+                  [disabled]="cloneRequisitionForm.invalid || cloneModel.clonecount > 100 || cloneModel.clonecount < 1 "
+                  (click)="onCloneSubmit()">
+            <span *ngIf="isCloneLoading" class="spinner-border spinner-border-sm" role="status"
+                  aria-hidden="true"></span>
+
+            Clone
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </form>
+  </div>
+
+</ng-template>
+<!-- End of clone Requisition  -->
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title"
+      [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-primary"
+      (click)="d('ok');enableEmailNtfication()">{{popupConfig.positivebtnText}}</button>
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+
+  </div>
+</ng-template>

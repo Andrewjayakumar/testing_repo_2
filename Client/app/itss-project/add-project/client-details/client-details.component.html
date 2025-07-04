@@ -1,0 +1,396 @@
+
+<form #clientdetailForm="ngForm" novalidate>
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="form-group ui-control-block col-md-3">
+        <div class="id-label">
+          <label for="clientname" class="clientname-label" >Client Name
+            <sup class="text-danger font-weight-bold">*</sup>        
+          </label>
+        
+          <label *ngIf="model.clientid" class="clientid-label" >ID: 
+            <span  class="clientid-data" >{{model.clientid}}</span>
+          </label>        
+        </div>
+        <ng-select [items]="clientdata$ | async"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="true"
+                   bindLabel="clientname"
+                   bindValue="clientname"
+                   [typeahead]="clientdatainput$"
+                   name="clientname"
+                   [(ngModel)]="model.clientname"
+                   #clientname="ngModel"
+                   [loading]="isClientLoading"
+                   placeholder="Type atleast 2 characters"
+                   (change)="OnClientChanged($event)"
+                   required class="form-control">
+        </ng-select>
+        <small *ngIf="!model.clientname && (clientname.dirty || clientname.touched) || (!model.clientname && saveButtonClicked)"
+        class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+      </div>
+
+      <div class="form-group ui-control-block col-md-3">
+        <label class="label_text_candidate" for="interviewfrom">
+          Current Location
+          <sup class="text-danger font-weight-bold">*</sup>
+
+        </label>
+        <div class="input-group">
+          <ng-select [items]="clientlocDetails?.states"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="state"
+                     bindValue="state"
+                     name="clientlocation"
+                     [(ngModel)]="model.clientlocation"
+                     #clientlocation="ngModel"
+                     placeholder="Select Location" class="form-control" required>
+          </ng-select>
+
+
+        </div>
+        <small *ngIf="!model.clientlocation && (clientlocation.dirty || clientlocation.touched) || (!model.clientlocation && saveButtonClicked) "
+        class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+      </div>
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Client LOB</label>
+        <div class="input-group">
+          <ng-select [items]="clientlobDetails?.lob"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="false"
+                     bindLabel="lob"
+                     bindValue="lob"
+                     name="lob"
+                     [(ngModel)]="model.lob"
+                     #lob="ngModel"
+                     placeholder="Select LOB" class="form-control">
+          </ng-select>
+
+        </div>
+      </div>
+      <div class="form-group col-md-2 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">
+          Client Region
+          <sup class="text-danger font-weight-bold">*</sup>
+
+        </label>
+        <div class="input-group">
+          <ng-select [items]="clientRegionDetails?.regions"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="region"
+                     bindValue="region"
+                     name="region"
+                     [(ngModel)]="model.region"
+                     #region="ngModel"
+                     placeholder="Select Region" class="form-control" required>
+          </ng-select>
+        </div>
+        <small *ngIf="!model.region && (region.dirty || region.touched) || (!model.region && saveButtonClicked)"
+        class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-3 ui-control-block">
+        <div class="id-label">
+          <label for="opportunity" class="opportunity-label" >Opportunity
+            <sup class="text-danger font-weight-bold">*</sup>        
+          </label>
+        
+          <label *ngIf="model.opportunityid" class="opportunity-id" >ID: 
+            <span   class="opportunity-data" >{{model.opportunityid}}</span>
+          </label>        
+        </div>
+       
+        <div class="input-group">
+          <ng-select [items]="opportunityList"
+                     bindValue="opportunityname"
+                     bindLabel="opportunityname"
+                     placeholder="Select Opportinty"
+                     [(ngModel)]="model.opportunityname"
+                     class="form-control"
+                     name="opportunityname"
+                     #opportunityname="ngModel"
+                     (change)="onOpportunity($event)"
+                     required>
+    
+          </ng-select>
+
+            </div>
+            <small *ngIf="!model.opportunityname && (opportunityname.dirty || opportunityname.touched) || (!model.opportunityname && saveButtonClicked)"
+            class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+  
+          
+      </div>
+
+      <div class="form-group ui-control-block col-md-3">
+        <label for="opportunityOwner">Opportunity Owner</label>
+        <sup class="text-danger font-weight-bold">*</sup>  
+        <div class="input-group">
+          <input type="text" 
+                 disabled 
+                 [(ngModel)]="model.opportunityowner" 
+                 class="form-control cursor-blocked" 
+                 name="opportunityOwner"
+                 placeholder="Opportunity Owner">
+        </div>
+       
+      </div>
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="projecttower">Practice Tower</label>
+        <sup class="text-danger font-weight-bold">*</sup>
+  
+        <div class="input-group">
+          <ng-select [items]="practiceTower"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="false"
+                     bindLabel="name"
+                     bindValue="value"
+                     [(ngModel)]="model.practicetype" #practicetype="ngModel"
+                     name="practicetype"
+                     placeholder="Select Practice Tower" class="form-control" 
+                     [disabled]="isPracticeTowerDisabled"
+                     required>
+          </ng-select>
+  
+        </div>
+        <small *ngIf="!model.practicetype && (practicetype.dirty || practicetype.touched) || (!model.practicetype && nextClicked)"
+               class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!internalAccount">
+
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Manager Name
+          <!-- <sup class="text-danger font-weight-bold">*</sup> -->
+        </label>
+        <ng-select [items]="hiringManagerName$ | async"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="true"
+                   bindLabel="hiringmanagername"
+                   bindValue="hiringmanagername"
+                   [typeahead]="hiringManagerNameinput$"
+                   name="managername"
+                   [(ngModel)]="model.managername"
+                   #managername="ngModel"
+                   [loading]="isClientNameLoading"
+                   placeholder="Type atleast 2 characters"
+                   (change)="OnMgrNameChanged($event)"
+                   class="form-control" 
+                   [disabled]="isHiringManagerDisabled"
+                   >
+        </ng-select>
+        <!-- <small *ngIf="!model.managername && (managername.dirty || managername.touched) || (!model.managername && saveButtonClicked)" -->
+            <!-- class="font-size-small text-danger fa fa-exclamation"> This field is required</small> -->
+         </div>
+
+      <!-- <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Manager Title</label>
+        <div class="input-group">
+        <input type="text" 
+               name="managertitle"
+               [(ngModel)]="model.managertitle" 
+               placeholder="Manager Title"
+               #managertitle="ngModel" 
+               class="form-control" 
+               id="managertitle" >
+        </div>
+      </div> -->
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Manager Email ID</label>
+        <div class="input-group">
+        <input type="text"    
+               placeholder="Manager Email ID" 
+               class="form-control cursor-blocked" 
+               id="hiringmanageremail" 
+               name="manageremail" 
+               [(ngModel)]="model.manageremail"
+               #manageremail="ngModel" 
+               disabled>
+        </div>
+
+      </div>
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Manager Phone</label>
+        <div class="input-group">
+        <input type="text" 
+               placeholder="Manager Phone"   
+               class="form-control cursor-blocked"  
+               id="hiringmanageremail" 
+               [(ngModel)]="model.managercontactno"
+               name="managercontactno" 
+               #managercontactno="ngModel" 
+               disabled>
+        </div>
+
+      </div>
+
+    </div>
+    <hr>
+
+    <div class="row">
+
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">MS Business Development Manager</label>
+        <ng-select [items]="getAlltheMgrDetails"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="true"
+                   bindLabel="employeeid"
+                   bindValue="employeeid"
+                   [(ngModel)]="model.msbusinessdevelopmentmanager"
+                   #msbusinessdevelopmentmanager="ngModel"
+                   name="msbusinessdevelopmentmanager"
+                   placeholder="Select Business Development Manager" class="form-control">
+        </ng-select>
+      </div>
+
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">MS Engagement Manager</label>
+        <div class="input-group">
+          <ng-select [items]="getAlltheMgrDetails"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="employeeid"
+                     bindValue="employeeid"
+                     [(ngModel)]="model.msengagementmanager"
+                     #msengagementmanager="ngModel"
+                     name="msengagementmanager"
+                     placeholder="Select MS Engagement Manager" class="form-control">
+          </ng-select>
+
+        </div>
+      </div>
+      <div class="form-group col-md-2 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Collabera Project Lead</label>
+        <div class="input-group">
+          <ng-select [items]="getAlltheMgrDetails"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="employeeid"
+                     bindValue="employeeid"
+                     [(ngModel)]="model.collaberaprojectlead"
+                     #collaberaprojectlead="ngModel"
+                     name="collaberaprojectlead"
+                     placeholder="Select Project Lead" class="form-control">
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="form-group ">
+        <label class="upload_sow" for="fileupload">Upload SOW</label>
+          <div class="input-group">
+            <!--
+              <input type="text" class="form-control file-upload-text"  placeholder="Select a file..."  />
+            -->
+            <span class="input-group-btn">
+              <input type="file" class="file-upload" (change)="fileChange($event)" name="myFile" accept=".doc,.docx,.pdf"/>
+              <button type="button" class="btn btn-primary file-upload-btn" >
+                Browse...
+              </button>
+          
+            </span>
+          </div>
+          <div class="filename-container">
+            <span *ngIf="model.sowfilename" class="sow-name"  >
+            
+              {{ model.sowfilename }} 
+            
+            </span>
+
+          </div>
+          
+          <span *ngIf="model.sowfilename" (click)="clearFile()" class="sow-remove" >
+           Remove File
+          </span>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="row">
+
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Account Manager</label>
+        <ng-select [items]="getAlltheMgrDetails"
+                   [multiple]="false"
+                   [closeOnSelect]="true"
+                   [searchable]="true"
+                   bindLabel="employeeid"
+                   bindValue="employeeid"
+                   [(ngModel)]="model.regionalam"
+                   #regionalam="ngModel"
+                   name="regionalam"
+                   placeholder="Select Account Manager" class="form-control">
+        </ng-select>
+      </div>
+
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">
+         
+
+          Assignment Region
+          <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+        <div class="input-group">
+          <ng-select [items]="clientRegionDetails?.regions"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="region"
+                     bindValue="id"
+                     [(ngModel)]="model.assignmentregionid"
+                     (change)="onAssignmentRegion($event)"
+                     #assignmentregion="ngModel"
+                     name="assignmentregion"
+                     placeholder="Select Assignment Region" class="form-control" required>
+          </ng-select>
+         
+        </div>
+        <small *ngIf="!model.assignmentregionid && (assignmentregion.dirty || assignmentregion.touched) || (!model.assignmentregionid && saveButtonClicked)  "
+        class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+
+      </div>
+      <div class="form-group col-md-3 ui-control-block">
+        <label class="label_text_candidate" for="interviewfrom">Delivery Manager</label>
+        <div class="input-group">
+          <ng-select [items]="getAlltheMgrDetails"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="employeeid"
+                     bindValue="employeeid"
+                     [(ngModel)]="model.deliverymanager"
+                     #deliverymanager="ngModel"
+                     name="deliverymanager"
+                     placeholder="Select Delevery Manager" class="form-control">
+          </ng-select>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="save-section">
+    <button type="button" [routerLink]="['/projects/search']" class="btn btn-outline-primary mr-3">Cancel</button>
+    <button type="button" class="btn btn-outline-primary mr-3" (click)="OnReset()">Reset</button>
+    <input class="btn btn-primary" type="button" *ngIf="mode =='add'" (click)="createProject()" value="Save">
+    <input class="btn btn-primary" type="button" *ngIf="mode =='update'" (click)="createProject()" value="Update">
+
+  </div>
+</form>

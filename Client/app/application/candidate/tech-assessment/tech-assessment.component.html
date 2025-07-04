@@ -1,0 +1,872 @@
+<ng-container>
+  <div>
+    <div class="modal-header">
+      <h6 class="modal-title summary-heading">
+        Tech Assessment Dashboard
+      </h6>
+      <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+    </div>
+    <div class="modal-body">
+      <section id="tabs" class="project-tab">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                  <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Create Tech Assessment</a>
+                  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Available Assessments</a>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                  <div class="row">
+
+
+                    <form>
+                      <div class="row">
+
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class="dd-blok">
+                              <label class="" for="[object Object]">
+                                Keyword Search
+
+                              </label>
+                              <div class="d-flex align-items-center">
+
+
+                              </div>
+                              <div class="d-flex align-items-center form-text">
+
+                                <div class="col-md-12">
+                                  <ng-select [items]="items"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             [addTag]="true"
+                                             addTagText="Create New"
+                                             [(ngModel)]="selectedItem"
+                                             [multiple]="true"
+                                             class="form-control"
+                                             (add)="onAddTag($event)" name="selectedItem">
+                                  </ng-select>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+
+                        <div class="col-md-12 ">
+
+
+                          <div  title="">
+
+                            <div  class="text-danger"><h6>*If you wish to create a customized test for your job description OR have any query in general, please write to us at techscreening@ascendion.com.</h6></div>
+                            
+                            
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      
+                      <div  class="mb-3 d-flex justify-content-between">
+                        <button type="submit" (click)="OnSubmitClicked()" class="btn btn-primary">Search</button>
+                        <button  class="btn btn-outline-primary ml-3">Clear</button>
+                        
+                      </div>
+                    </form>
+                    
+                    <span  class="d-flex h-auto justify-content-end pb-1">
+                      No. of Available Test : 54
+                    </span>
+
+                    <div  class="row ld-card-outer m-0 mb-3 border border-right-0 border-bottom-0">
+                      <div *ngFor="let data of searchedSkillset" class="ld-card col-md-4 col-lg-3 p-3 border border-left-0 border-top-0">
+                        
+                          <div  class="h-100 position-relative d-flex flex-column">
+                            <div  class="row ">
+                              <div   class="col-md-12 ng-untouched ng-pristine ng-valid">
+
+                          
+<div  class="card mb-2 mb-0i bg-transparent border-0 ng-untouched ng-pristine ng-valid">
+  
+  
+                                    <div  class="card-body p-0 px-0 pb-0 collapse show" style="height: auto;">
+    
+                                      <div  class="row" id="Panel">
+      <div  class="col-md-2 align-self-center pr-0 ng-untouched ng-pristine ng-valid">
+                            
+
+                             
+  <div _ngcontent-c29="" class="c-control c-checkbox mb-0" style="min-height:20px">
+    
+                                                <label _ngcontent-c29="">
+                                                  <input _ngcontent-c29="" class="c-control-input ng-untouched ng-pristine ng-valid" type="checkbox" id="2146ee77-96c9-a4bc-8198-4caa3acda000">
+                                                  <i _ngcontent-c29="" class="c-control-indicator fa fa-square c-control-indicator-2"></i>
+                                                  <span _ngcontent-c29="" class="c-control-description"></span>
+      
+                                                </label>
+    
+    
+                                              </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div><div  class="col-md- col pl-0 text-nowrap text-truncate align-self-center ng-untouched ng-pristine ng-valid">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           
+                                           
+                                              <div _ngcontent-c48="" title="JUMP - Java Bridge Course Assessment">
+    
+    <div _ngcontent-c48="" class="pb-2 text-dark pb-0i text-nowrap text-truncate">
+                                                  <span _ngcontent-c48="" class="d-flex">
+                                                   
+                                                    <span _ngcontent-c48="" id="partnertestname">{{data?.partnertestname}}</span>
+
+        
+        
+                                                  </span>
+                                                </div>
+    
+                                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+                              </div>
+
+
+<div   class="col-md-4 ng-untouched ng-pristine ng-valid">
+
+  
+  
+  
+  
+                           
+<!---->
+
+<div  class="card mb-2 mb-1 bg-transparent mt-1 border-0 ng-untouched ng-pristine ng-valid">
+  
+  
+                                    <div  class="card-body p-0 px-0 pb-0 collapse show" style="height: auto;">
+    
+                                      <div  class="row" id="Panel">
+      <div  class="col-md-auto pr-2 align-self-center ng-untouched ng-pristine ng-valid">
+                          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          
+                                              <div _ngcontent-c48="" title="">
+    
+    
+    <!---->
+    
+    <!---->
+                                                <div _ngcontent-c48="" class=""><i title="No. of Questions" class="fa fa-lg fa-hashtag text-dark"></i> </div>
+    
+
+
+                                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div><div  class="col-md- col pl-0 text-nowrap text-truncate align-self-center ng-untouched ng-pristine ng-valid">
+                                         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                         
+                                              <div _ngcontent-c48="" title="">
+    
+    <div _ngcontent-c48="" class="pb-2 text-dark pb-0i text-nowrap text-truncate">
+                                                  <span _ngcontent-c48="" class="d-flex">
+        
+        
+        
+        
+        <!---->
+        
+        <span _ngcontent-c48="" id="">{{data?.testquestioncount}}</span>
+
+        
+        
+                                                  </span>
+                                                </div>
+    
+                                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+                              </div>
+
+
+<div   class="col-md-6 ng-untouched ng-pristine ng-valid">
+
+  
+  
+  
+  
+  
+                          
+<!---->
+
+<div  class="card mb-2 mb-1 bg-transparent mt-1 border-0 ng-untouched ng-pristine ng-valid">
+  
+  
+                                    <div  class="card-body p-0 px-0 pb-0 collapse show" style="height: auto;">
+    
+                                      <div  class="row" id="Panel">
+      <div  class="col-md-auto pr-2 align-self-center ng-untouched ng-pristine ng-valid">
+                             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                         
+                                              <div _ngcontent-c48="" title="">
+    
+    
+    <!---->
+    
+    <!---->
+                                                <div _ngcontent-c48="" class=""><i title="Test Duration" class="fa fa-lg fa-clock-o text-dark"></i> </div>
+    
+
+
+                                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div><div  class="col-md- col pl-0 text-nowrap text-truncate align-self-center ng-untouched ng-pristine ng-valid">
+                           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            
+                                              <div _ngcontent-c48="" title="">
+    
+    <div _ngcontent-c48="" class="pb-2 text-dark text-nowrap text-truncate pb-0i">
+                                                  <span _ngcontent-c48="" class="d-flex">
+        
+        
+        
+        
+        <!---->
+        
+        <span _ngcontent-c48="" id="">{{data?.testduration}}</span>
+
+        
+        
+                                                  </span>
+                                                </div>
+    
+                                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+                              </div>
+
+
+<div   class="col-md-12 ng-untouched ng-pristine ng-valid">
+
+  
+  
+  
+  
+  
+                           
+<!---->
+
+<div  class="card mb-2 mb-0i bg-transparent border-0 ng-untouched ng-pristine ng-valid">
+  
+  
+                                    <div  class="card-body p-0 px-0 pb-0 collapse show" style="height: auto;">
+    
+                                      <div  class="row" id="Panel">
+      <div  class="col-md-12 ng-untouched ng-pristine ng-valid">
+                           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            
+                                              <div _ngcontent-c48="" title="">
+    
+    
+    <!---->
+    
+    <!---->
+                                                <div _ngcontent-c48="" class="pt-1 bg-primary"></div>
+    
+
+
+                                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div><div  class="col-md-12 align-self-center ng-untouched ng-pristine ng-valid">
+                           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             
+                                          
+                                              <div _ngcontent-c48="" title="">
+    
+    <div _ngcontent-c48="" class="pb-2 text-dark pb-0i white-space-inherit word-break text-left small mt-1">
+                                                  <span _ngcontent-c48="" class="d-flex">
+        
+        
+        
+        
+        <!---->
+        
+        <span _ngcontent-c48="" id="">{{data?.testdescription}}</span>
+
+        
+        
+                                                  </span>
+                                                </div>
+    
+                                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+                              </div>
+
+
+                            </div>
+                            <!---->
+                            <!---->
+                          </div>
+
+                      </div>
+
+                    </div>
+
+
+
+
+
+
+                  </div>
+
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </section>
+    </div>
+
+  </div>`
+</ng-container>
+
+

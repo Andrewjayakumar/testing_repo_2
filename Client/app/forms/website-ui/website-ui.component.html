@@ -1,0 +1,59 @@
+<div class="form-group" *ngIf="access == 'write'">
+  <label [for]="control.key">
+    {{control.label}}<sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+    <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+  </label>
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="fa fa-globe"></i></span>
+    </div>
+    <input type="text"
+           autocomplete="off"
+           [id]="control.key"
+           [placeholder]="control.placeholder"
+           [(ngModel)]="data[control.key]"
+           [formControl]="formGroup.controls[control_id]"
+           class="form-control"
+           [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}" (ngModelChange)="videoUrl=null;_controlService.getCssforMandatory(control,data[control.key])">
+  </div>
+  <small *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false"
+         class="form-text text-danger">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+  <small *ngIf="formGroup.controls[control_id] ? !formGroup.controls[control_id].hasError('required') && !formGroup.controls[control_id].valid && formGroup.controls[control_id].touched : false"
+         class="form-text text-danger">You must include a valid{{control.label}}.</small>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write'" class="form-group">
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div *ngIf="parseVideo(data[control.key])==null"><a href={{data[control.key]}} target="_blank">{{data[control.key]}}</a></div>
+    <div *ngIf="parseVideo(data[control.key])!=null">If you are experiencing video playback issues please <a href={{data[control.key]}} target="_blank"><strong>click here</strong></a></div>
+    <div *ngIf="isImagebyExt(data[control.key])">
+      <img class="" src={{data[control.key]}}  width="400" height="500" />
+    </div>
+    <div *ngIf="isVideobyExt(data[control.key])" class="card-block pt-0">
+      <video class="" src={{data[control.key]}} width="400" height="400"></video>
+    </div>
+    <div *ngIf="parseVideo(data[control.key])!=null">
+      <div class="embed-responsive embed-responsive-16by9" [innerHTML]="videoUrl.html">
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <div *ngIf="parseVideo(data[control.key])==null"><a href={{data[control.key]}} target="_blank">{{data[control.key]}}</a></div>
+    <h6 *ngIf="parseVideo(data[control.key])!=null">If you are experiencing video playback issues please <a href={{data[control.key]}} target="_blank"><strong>click here</strong></a></h6>
+    <div *ngIf="isImagebyExt(data[control.key])">
+      <img class="" src={{data[control.key]}}  width="400" height="500" />
+    </div>
+    <div *ngIf="isVideobyExt(data[control.key])">
+      <video class="" src={{data[control.key]}} width="400" height="400"></video>
+    </div>
+    <div *ngIf="parseVideo(data[control.key])!=null">
+      <div class="embed-responsive embed-responsive-16by9" [innerHTML]="videoUrl.html">
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,90 @@
+$primary: #1976d2;
+
+
+.container {
+  width: 98%;
+}
+
+.round {
+  padding: 1rem;
+  color: black;
+  font-size: large;
+  font-weight: bold;
+}
+
+.actionBtn {
+  text-align: right;
+  padding: 0rem;
+}
+
+button {
+  margin-left: 1rem;
+}
+
+.switch-primary {
+  size: 10px; 
+}
+
+
+
+.interviewlink {
+  width: 100%;
+  margin-left: 10px;
+}
+
+label {
+  color: $primary;
+  // font-size: smaller;
+  // margin-bottom: 0px !important;
+  // float: left;
+}
+
+.hr1 {
+  margin-top: -2rem;
+}
+
+.switch-primary {
+  padding: 40px;
+}
+
+.switch-primary1 {
+  padding: 40px;
+  margin-right: 40px;
+}
+
+.req_color {
+  color: #f55;
+  font-weight: bold;
+}
+
+.invalid_msg {
+  font-size: smaller;
+  color: #f55;
+}
+
+.all_invalid_msg {
+  font-size: small;
+  color: #f55;
+  text-align: center;
+}
+
+.roundErrorMsg {
+  text-align: center;
+  align-items: centr;
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.popup {
+  border: $primary;
+}
+
+.levelWarning{
+  text-align: left;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}

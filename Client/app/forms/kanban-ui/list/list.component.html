@@ -1,0 +1,17 @@
+<div class="table-responsive">
+  <table class="list" (dragover)="allowDrop($event)" (drop)="drop($event)">
+    <tr>
+      <td><p class="list__title"><strong>{{list.state}}</strong></p></td>
+    </tr>
+    <tr>
+      <td>
+        <div class="cards">
+          <ng-container *ngFor="let cardId of list.cards">
+            <app-card *ngIf="cardId" [groupid]="groupid" [list]="list" [cardStore]="cardStore" [cardId]="cardId"></app-card>
+          </ng-container>
+        </div>
+        <!--<span (click)="$event.preventDefault()"><a href="#" class="list__newcard" (click)="toggleDisplayAddCard();displayAddCard=false;">Add a card...</a></span>-->
+      </td>
+    </tr>
+  </table>
+</div>

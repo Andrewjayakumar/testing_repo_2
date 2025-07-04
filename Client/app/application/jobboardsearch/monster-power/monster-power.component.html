@@ -1,0 +1,437 @@
+
+  <div class="container">
+    <form #monsterPowerSearch="ngForm" novalidate (ngSubmit)="onSubmit('submit')">
+      <div class="row">
+        <!--<div class="col-md-10">
+    <label for="booleansearchmp">Keyword Search</label>
+    <input name="booleansearch" id="booleansearchmp" class="form-control" placeholder="Enter keyword or boolean query string"  [(ngModel)]="model.booleanquery" #jobtitle="ngModel"/>
+  </div>-->
+        <div class="col-md-12 p-0">
+          <label for="query">
+            Keyword Search
+            <sup class="text-danger">*</sup>
+            <sup>
+              <span *ngIf="showEditButton" class="edit-icon" (click)="onEditClick()">
+                <i class="fa fa-edit"></i>
+              </span>
+            </sup>
+
+
+          </label>
+          <span tabindex="0" data-toggle="tooltip" [title]="model.keywords" class="custom-tooltip">
+            <textarea class="form-control" placeholder="Search for Keywords/ Email/ Phone number" [(ngModel)]="model.booleanquery" name="query" required [disabled]="searchInputDisabled" (blur)="onKeywordSearchTyped()"></textarea>
+
+
+          </span>
+        </div>
+     
+      </div>
+      <div class="form-row">
+
+        <div class="col-md-3">
+          <label class="jobtitle" for="jobtitle">Job Title</label>
+          <input name="jobtitle" id="jobtitle" placeholder="Enter Job Title"
+                 class="form-control" [(ngModel)]="model.jobtitle" #jobtitle="ngModel" />
+        </div>
+        <div class=" col-md-5">
+          <label for="skills">Skills</label>
+
+          <ng-select [items]="RelatedSkillItems$ |async" [multiple]="true" [closeOnSelect]="true" [searchable]="true" [loading]="relatedskillsArray==null"
+                     bindLabel="skill" bindValue="skill" placeholder="Type to Search" [typeahead]="relatedskills$"
+                     name="skills" id="skills" class="form-control" [(ngModel)]="model.skill" #skills="ngModel">
+          </ng-select>
+        </div>
+        <div class="col-md-2">
+          <label for="searchbystate">Search By State</label>
+          <app-metal-switch [(state)]="searchByState" [labelname]="''" name="searchByState" (stateChange)="onSearchByStateChange($event)"></app-metal-switch>
+        </div>
+        <div class="col-2">
+          <label for="adv search">Advanced Search</label>
+
+          <app-metal-switch [(state)]="advancedsearch" (stateChange)="OnAdvancedSearchToggled($event)" [uniqueid]="'power_advancedbtn'" name="advance" [labelname]="''"></app-metal-switch>
+
+        </div>
+      </div>
+
+
+    <div class="form-row mb-2">
+      <div class="col-md-2">
+        <label class="m-b label" for="country">Country</label>
+        <ng-select [items]="countryList" [multiple]="false" [closeOnSelect]="true"
+                   placeholder="--select--" bindLabel="key" bindValue="value"
+                   class="form-control" (change)="loadStatesbyCountry()"
+                   [(ngModel)]="model.country" name="country">
+        </ng-select>
+      </div>
+      <div *ngIf="!searchByState" class="col-md-6">
+        <label for="location">Location</label>
+
+        <ng-select [items]="locationItems$ |async" [multiple]="true" [closeOnSelect]="true" [searchable]="true" [loading]="location==null"
+                   bindLabel="location" bindValue="citystatecode" placeholder="Type city, zipcode or state to search" [typeahead]="locations$"
+                   name="locations" id="location" class="form-control" [(ngModel)]="model.location" #locations="ngModel">
+        </ng-select>
+      </div>
+      <div *ngIf="searchByState" class="col-md-6">
+        <label for="state">State</label>
+
+        <ng-select [items]="statesbyCountry" [multiple]="true" [closeOnSelect]="true" [searchable]="true" [loading]="statesbyCountry==null"
+                   bindLabel="state" bindValue="state" placeholder="Type to search"
+                   name="statelist" id="state" class="form-control" [(ngModel)]="model.statelist" #statelist="ngModel">
+        </ng-select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="zipradius" for="zipradius">Zip Radius</label>
+
+        <ng-select [items]="zipRadius" [multiple]="false" [closeOnSelect]="true"
+                   bindLabel="name" bindValue="value" placeholder="-Default is within 30 miles-"
+                   name="zipradius" id="zipradius" class="form-control" [(ngModel)]="model.zipradius" #zipradius="ngModel">
+        </ng-select>
+      </div>
+
+
+
+      <div class="col-md-2">
+
+        <label for="maxmdate">Days Back</label>
+        <div class="d-flex align-items-center">
+          <ng-select class="form-control"
+                     [items]="maxmodifieddateSet"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     bindLabel="name" bindValue="value"
+                     placeholder="--select--"
+                     [(ngModel)]="model.maxmodifieddate" #maxmodified="ngModel"
+                     name="maxmodified">
+          </ng-select>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row" *ngIf="advancedsearch">
+      <div class="col-md-4">
+        <div class="card mb-3 border-0">
+          <div class="card-body px-0 pb-0">
+            <div class="row" id="panel1">
+              <div class="col-md-12">
+                <div class="card mb-3">
+                  <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                    <div class="pr-2 mb-0">
+                      <span class="d-flex align-items-center"><span>Employment Details</span></span>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label for="mrecentemp">
+                          Most Recent Employer
+                        </label>
+                        <input type="text" id="mrecentemp" name="mrecentemp" class="form-control" [(ngModel)]="model.companyname" #mrecentemp="ngModel" />
+                      </div>
+                      <div class="col-md-12">
+                        <label for="careerlevel">
+                          Career Level
+
+                        </label>
+                        <ng-select class="form-control"
+                                   [items]="careerLevel"
+                                   [multiple]="false"
+                                   [closeOnSelect]="true"
+                                   bindLabel="name" bindValue="value"
+                                   placeholder="--select--"
+                                   [(ngModel)]="model.careerlevelid" #clevel="ngModel"
+                                   name="clevel">
+                        </ng-select>
+                      </div>
+                      <div class="col-md-12">
+                        <label for="jobtenure">
+                          Job Tenure
+
+                        </label>
+                        <ng-select class="form-control"
+                                   [items]="jobTenure"
+                                   [multiple]="false"
+                                   [closeOnSelect]="true"
+                                   bindLabel="name" bindValue="value"
+                                   placeholder="--select--"
+                                   [(ngModel)]="model.jobtenure" #jtenure="ngModel"
+                                   name="jtenure">
+                        </ng-select>
+                      </div>
+
+                      <div class="col-md-12">
+                        <label for="jobtenure">
+                          Job Type
+
+                        </label>
+                        <ng-select class="form-control"
+                                   [items]="jobType"
+                                   [multiple]="false"
+                                   [closeOnSelect]="true"
+                                   bindLabel="name" bindValue="value"
+                                   placeholder="--select--"
+                                   [(ngModel)]="model.targetjobtypeid" #jtype="ngModel"
+                                   name="jtype">
+                        </ng-select>
+                      </div>
+                      <div class="col-md-12">
+                        <label for="yearsofexp">
+                          Years Of Experience
+                        </label>
+                        <input id="yearsexp" name="yearsexp" class="form-control" [(ngModel)]="model.yearsofexperience" #yearsexp="ngModel" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="card mb-3">
+                  <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                    <div class="pr-2 mb-0">
+                      <span class="d-flex align-items-center"><span>Location Details</span></span>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row" id="locationpanel">
+                      <div class="col-md-12">
+                        <label for="candidatewlngtravel">
+                          Candidate Willing to Travel
+
+                        </label>
+                        <ng-select class="form-control"
+                                   [items]="candidatewillingtoTravel"
+                                   [multiple]="false"
+                                   [closeOnSelect]="true"
+                                   bindLabel="name" bindValue="value"
+                                   placeholder="--select--"
+                                   [(ngModel)]="model.willingtotravel" #clevel="ngModel"
+                                   name="clevel">
+                        </ng-select>
+                      </div>
+                      <div class="col-md-12">
+
+                        <app-metal-switch [(state)]="model.Relocate" [uniqueid]="'relocating'" name="relocating" [labelname]="'Is Candidate willing to Relocate?'"></app-metal-switch>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-3 border-0">
+          <div class="card-body px-0 pb-0">
+            <div class="row" id="panel3">
+              <div class="col-md-12">
+                <div class="card mb-3">
+                  <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                    <div class="pr-2 mb-0">
+                      <span class="d-flex align-items-center"><span>Education Details</span></span>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row" id="educationdetails">
+                      <div class="col-md-12">
+                        <div class="dd-blok">
+                          <label for="educationlevel">Education Level</label>
+                          <div class="d-flex align-items-center">
+                            <ng-select class="form-control"
+                                       [items]="educationLevel"
+                                       [multiple]="false"
+                                       [closeOnSelect]="true"
+                                       bindLabel="name" bindValue="value"
+                                       placeholder="--select--"
+                                       [(ngModel)]="model.mineducationlevelid" #clevel="ngModel"
+                                       name="clevel">
+                            </ng-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <label for="edumajor">Education majors</label>
+                        <input id="edumajor" name="edumajor" class="form-control" [(ngModel)]="model.educationmajors" placeholder="For Example MBA." #edumajor="ngModel" />
+
+                      </div>
+                      <div class="col-md-12">
+                        <label for="university">University or Institution</label>
+                        <input id="edumajor" name="edumajor" class="form-control" [(ngModel)]="model.schoolname" #edumajor="ngModel" />
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="card mb-3">
+                  <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                    <div class="pr-2 mb-0">
+                      <span class="d-flex align-items-center"><span>Salary Range</span></span>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row" id="panel4">
+                      <div class="col-md-12">
+                        <div class="dd-blok">
+                          <label for="educationlevel">Min.Salary</label>
+                          <div class="d-flex align-items-center">
+                            <input id="minsalry" name="minsalry" class="form-control" [(ngModel)]="model.mintargetsalary" #minsalry="ngModel" placeholder="Should not be less than $30,000" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="dd-blok">
+                          <label for="educationlevel">Max.Salary</label>
+                          <div class="d-flex align-items-center">
+                            <input id="minsalry" name="minsalry" class="form-control" [(ngModel)]="model.maxtargetsalary" #minsalry="ngModel" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="dd-blok">
+                          <label for="educationlevel">Salary Currency</label>
+                          <div class="d-flex align-items-center">
+                            <ng-select class="form-control"
+                                       [items]="salaryCurrency"
+                                       [multiple]="false"
+                                       [closeOnSelect]="true"
+                                       bindLabel="name" bindValue="value"
+                                       placeholder="--select--"
+                                       [(ngModel)]="model.targetsalarycurrency" #salcurrency="ngModel"
+                                       name="salcurrency">
+                            </ng-select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-3 border-0">
+          <div class="card-body px-0 pb-0">
+            <div class="row" id="panel4">
+              <div class="col-md-12">
+                <div class="card mb-3">
+                  <div class="card-header d-flex align-items-center pointer bg-light text-primary card-header-padding">
+                    <div class="pr-2 mb-0">
+                      <span class="d-flex align-items-center"><span>Additional Info</span></span>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row" id="additionalinfo">
+                      <div class="col-md-12">
+                        <div class="dd-blok">
+                          <label for="candiname">Candidate Name</label>
+                          <div class="d-flex align-items-center">
+                            <input id="candiname" name="candiname" class="form-control" [(ngModel)]="model.candidatename" #candiname="ngModel" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="dd-blok">
+                          <label for="workauth">Work Authorization</label>
+                          <div class="d-flex align-items-center">
+                            <ng-select class="form-control"
+                                       [items]="workauthorization"
+                                       [multiple]="false"
+                                       [closeOnSelect]="true"
+                                       bindLabel="name" bindValue="value"
+                                       placeholder="--select--"
+                                       [(ngModel)]="model.workauthorization" #workautho="ngModel"
+                                       name="workautho">
+                            </ng-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="dd-blok">
+                          <label for="legalstat">Legal Status</label>
+                          <div class="d-flex align-items-center">
+                            <ng-select class="form-control"
+                                       [items]="legalStatus"
+                                       [multiple]="true"
+                                       [closeOnSelect]="true"
+                                       bindLabel="name" bindValue="value"
+                                       placeholder="--select--"
+                                       [(ngModel)]="model.legalstatus" #legalsattus="ngModel"
+                                       name="legalsattus">
+                            </ng-select>
+                          </div>
+                        </div>
+                      </div>
+                    
+                      <div class="col-md-12">
+
+                        <app-metal-switch [(state)]="model.veteran" [uniqueid]="'vetren'" name="vetren" [labelname]="'Is Candidate Veteran?'"></app-metal-switch>
+
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row float-right">
+      <div class="mr-3">
+        <button type="submit" id="sub" name="sub" class="btn btn-primary">Search</button>
+
+      </div>
+      <div>
+        <button id="clear" name="clear" type="reset" (click)="resetModel()" class="btn btn-outline-primary">Clear</button>
+
+      </div>
+
+    </div>
+
+
+
+    </form>
+    <div *ngIf="showloader" class="text-center p-2">
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    </div>
+    <div *ngIf="noresultsFound" class="text-center font-italic mt-5"> <h4>No results found!</h4></div>
+
+    <div class="col-md-12 p-0 mt-5">
+
+      <div *ngIf="monstersearchResults && monstersearchResults.length >0">
+        <label>No. of Resumes : {{totalprofilesfound}}</label>
+      </div>
+
+      <div class="row metal-card-row mt-5">
+        <div class="col-3 metal-card-col mb-1 pr-1 pl-1" *ngFor="let candidateObj of monstersearchResults">
+          <div class="d-block h-100">
+            <div class="card mb-0 h-100 custom-action-hover">
+              <app-candidate-card [candidate]="candidateObj" 
+                                  (actionClicked)="onActionClicked($event)"  [aigenerated] ="aigenerated"
+                                  [pagename]="'monster_power'" [requisitionid]="requisitionid" 
+                                  [priorPinAction]="powerDownloadDetails" [highlightskillsarray]="highlightskillsarray">
+              </app-candidate-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mt-3" *ngIf="monstersearchResults?.length > 0">
+      <ngb-pagination [collectionSize]="totalprofilesfound" [pageSize]="pagesize" [(page)]="pageindex"
+                      [maxSize]="4" (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+    </div>
+  </div>

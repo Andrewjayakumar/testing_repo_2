@@ -1,0 +1,14 @@
+<div class="bookmark-outer" *ngIf="page">
+  <app-actionitemcart [AuthService]="auth"></app-actionitemcart>
+</div>
+<div class="container">
+  <div *ngIf="page">
+    <div class="custo-row" *ngIf="page.Layout.Content">
+      <div *ngFor="let cn of page.Layout.Content" class="col-md-{{cn.width ? cn.width : 12}}">
+        <app-dynamicform-init [Content]="cn" [AuthService]="auth"></app-dynamicform-init>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Load ADD rec When floating button is clicked-->
+

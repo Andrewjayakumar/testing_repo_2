@@ -1,0 +1,132 @@
+<div class="box-shadow">
+  <div class="modal-header w-100 p-1 pl-3 pt-3">
+    <h5 class="text-primary">Source to REQ</h5>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modal.close(true);"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form #form="ngForm" (ngSubmit)="OnSubmitClicked()">
+    <div class="modal-body p-0 pb-1 pl-5">
+
+      <div class="row">
+        <div class="form-group ui-control-block col-md-12 pull-right pl-0 mt-3">
+          <!-- Switch to Search in all the REQs-->
+          <div
+            class="col-md-12 mb-3 pl-2 alignSwitchButton"
+            [ngClass]="{
+              'justify-content-between': position == 'justify',
+              'mr-5': position == 'justify'
+            }"
+          >
+            <label
+              [attr.for]="'allReqs'"
+              class="checkbox-label mt-1 mr-1 mb-1"
+              innerHTML="Search in all the REQs"
+              >Search in all the REQs</label
+            >
+            <div class="custom-switch">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                [attr.id]="'allReqs'"
+                [(ngModel)]="recChange"
+                (click)="onReqChange($event)"
+                [ngModelOptions]="{ standalone: true }"
+              />
+              <label
+                [attr.for]="'allReqs'"
+                class="custom-control-label"
+              ></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div *ngIf="!recChange"  class="col-md-10 form-group ui-control-block mb-4">
+          <ng-select
+            [items]="onlyReqList | async"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="requisitionName"
+            bindValue="requisitionid"
+            [virtualScroll]="true"
+            id="onlyReqSelected"
+            [(ngModel)]="onlyReq"
+            placeholder="Type to search"
+            class="form-control"
+            [ngModelOptions]="{ standalone: true }"
+            [typeahead]="onlyReqInput$"
+            [loading]="isOnlyReqLoading"
+            (change)="reqChanged($event)"
+          >
+          </ng-select>
+        </div>
+        <div *ngIf="recChange"  class="col-md-10 form-group ui-control-block mb-4">
+          <ng-select
+            [items]="fullReqList | async"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="requisitionName"
+            bindValue="requisitionid"
+            [virtualScroll]="true"
+            id="allReqSelected"
+            [(ngModel)]="fullReqs"
+            placeholder="Search REQ name here"
+            class="form-control"
+            [ngModelOptions]="{ standalone: true }"
+            [typeahead]="fullReqInput$"
+            [loading]="isFullReqLoading"
+            (change)="reqChanged($event)"
+          >
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="label mandatory title" for="distance">Job title</label>
+          <input class="form-control JBinput"
+                 type="text"
+                 name="JobTitle"
+                 [(ngModel)]="jobTitle"
+                 [ngModelOptions]="{ standalone: true }"
+                 autocomplete="off" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label mandatory title" for="distance">Skill</label>
+          <input class="form-control skillinput"
+                 type="text"
+                 name="Skill"
+                 [(ngModel)]="skill"
+                 [ngModelOptions]="{ standalone: true }"
+                 autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="errormessage" *ngIf="errorMessage">{{errorMessage}}</div>
+      <div class="message" *ngIf="displaymesg">{{displaymesg}}</div>
+
+    </div>
+
+    <div class="modal-footer">
+      <input
+        type="submit"
+        role="button"
+        class="btn btn-primary pull-right"
+        value="Source to REQ"
+      />
+    </div>
+  </form>
+</div>
+
+

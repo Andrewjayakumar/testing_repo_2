@@ -1,0 +1,546 @@
+<ng-container>
+  <!-- Reschedule Header -->
+
+  <div class="modal-header pb-1" *ngIf="isReSchedule">
+    <h5 id="modal-title"
+        class="text-primary">
+      Reschedule/Edit Interview
+    </h5>
+
+    <h5 class="close">
+      <i class="fa fa-times fa-lg close-summary"
+         (click)="modal.close(true)"
+         aria-hidden="true"> </i>
+    </h5>
+
+
+  </div>
+
+
+  <div class="container">
+
+    <div>
+
+
+      <!-- Alert When Interview Already Scheduled -->
+      <div *ngIf="pendingInterview && !isReSchedule">
+        <ngb-alert type="danger"
+                   [dismissible]="false"
+                   text-align="center">
+          An interview is still in progress, please mark it as completed to create a new interview round!
+        </ngb-alert>
+      </div>
+
+      <!-- Next Round Display -->
+      <div>
+        <h6 class="round " *ngIf="!isReSchedule && !pendingInterview && nextInterviewRound">
+          Round
+          {{nextInterviewRound}}
+        </h6>
+        <h6 class="round " *ngIf="isReSchedule ">
+          Round
+          {{currentInterviewRound}}
+        </h6>
+
+      </div>
+
+
+
+
+      <!-- Create & Reschedule Interview Form -->
+      <form [formGroup]="interviewForm">
+
+        <div class="row mb-0">
+          <div class="form-group col-md-3">
+            <label for="interviewType"> Interview Type <span class="req_color">*</span></label>
+
+            <ng-select [items]="interviewType"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       [(ngModel)]="objCreateInt.interviewtype"
+                       bindLabel="type"
+                       bindValue="id"
+                       name="interviewType"
+                       id="interviewType"
+                       formControlName="interviewType"
+                       placeholder="Select Interview Type"
+                       class="form-control"
+                       (ngModelChange)=onInterviewTypeChange($event)
+                       required>
+            </ng-select>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('interviewType').hasError('required') && interviewForm.get('interviewType').touched">
+                Please select interview type
+              </span>
+            </div>
+
+          </div>
+
+
+          <div *ngIf="interviewForm.controls.interviewType.value === 'Internal Screenings' && !hideLevel && !isReSchedule" class="form-group col-md-3">
+            <label for="interviewlevel"> Level <span class="req_color">*</span></label>
+
+            <ng-select [items]="interviewlevelDefault"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       [(ngModel)]="objCreateInt.interviewlevel"
+                       bindLabel="level"
+                       bindValue="id"
+                       name="interviewlevel"
+                       id="interviewlevel"
+                       formControlName="interviewLevel"
+                       placeholder="Select Interview Level"
+                       class="form-control"
+                       required>
+            </ng-select>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('interviewLevel').hasError('required') && interviewForm.get('interviewLevel').touched">
+                Please select interview level
+              </span>
+            </div>
+
+          </div>
+
+          <div *ngIf="isReSchedule" class="form-group col-md-3">
+            <label for="interviewlevel"> Level <span class="req_color">*</span></label>
+
+            <input class="form-check-input"
+                   type="text"
+                   name="interviewlevel"
+                   formControlName="interviewLevel"
+                   [(ngModel)]="objCreateInt.interviewlevel"
+                   placeholder="Select Interview Level"
+                   class="form-control"
+                   disabled
+                   required>
+
+          </div>
+
+
+          <div *ngIf="interviewForm.controls.interviewType.value === 'Internal Screenings'" class="form-group col-md-3">
+            <label for="executedby"> Executed By <span class="req_color">*</span></label>
+
+            <ng-select [items]="executedby"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       [(ngModel)]="objCreateInt.executedby"
+                       bindLabel="level"
+                       bindValue="level"
+                       name="executedby"
+                       id="executedby"
+                       formControlName="executedBy"
+                       placeholder="Select Executed By"
+                       class="form-control"
+                       required>
+            </ng-select>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('executedBy').hasError('required') && interviewForm.get('executedBy').touched">
+                Please select executed by
+              </span>
+            </div>
+
+          </div>
+          <div class="form-group col-sm-3">
+            <label for="interviewMode"> Interview Mode <span class="req_color">*</span></label>
+            <ng-select [items]="interMode"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       bindLabel="Type"
+                       bindValue="id"
+                       [(ngModel)]="objCreateInt.interviewmodeid"
+                       name="interviewMode"
+                       id="interviewMode"
+                       formControlName="interviewMode"
+                       placeholder="Select Interview mode"
+                       class="form-control"
+                       required>
+            </ng-select>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('interviewMode').hasError('required') && interviewForm.get('interviewMode').touched ">
+                Please select interview mode
+              </span>
+            </div>
+
+          </div>
+        </div>
+        <div class="row mb-0">
+
+          <div class="form-group col-sm-3">
+
+            <label for="dateAndTime">Interview Date and Time <span class="req_color">*</span></label>
+            <app-date-time-picker formControlName="dateAndTime"
+                                  name="dateAndTime"
+                                  placeholder="Select Date & Time"
+                                  [(ngModel)]="objCreateInt.interviewtime"
+                                  required>
+            </app-date-time-picker>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('dateAndTime').hasError('required') && interviewForm.get('dateAndTime').touched  ">
+                Please select interview date and time
+              </span>
+              <span *ngIf=" interviewForm.controls.dateAndTime.dirty && interviewForm.controls.dateAndTime.errors?.pastdate  ">
+                The selected data & time cannot be earlier than 30 days from the Interview created date
+              </span>
+            </div>
+          </div>
+
+
+
+          <div class="form-group  col-sm-3 ">
+            <label for="timeZone"> Timezone <span class="req_color">*</span> </label>
+
+            <ng-select [items]="timeZones"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       bindLabel="timezonecode"
+                       bindValue="timezonecode"
+                       [(ngModel)]="objCreateInt.timezonecode"
+                       name="timeZone"
+                       id="timeZone"
+                       formControlName="timeZone"
+                       placeholder="Select Timezone"
+                       class="form-control">
+            </ng-select>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('timeZone').hasError('required') && interviewForm.get('timeZone').touched ">
+                Please select timezone
+              </span>
+            </div>
+          </div>
+
+
+
+          <div class="form-group col-sm-3">
+            <label for="duration"> Duration <span class="req_color">*</span></label>
+            <ng-select [items]="intDuration"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       [(ngModel)]="objCreateInt.duration"
+                       bindLabel="duration"
+                       bindValue="id"
+                       name="duration"
+                       id="duration"
+                       formControlName="duration"
+                       placeholder="Select Duration"
+                       class="form-control"
+                       required>
+            </ng-select>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('duration').hasError('required') && interviewForm.get('duration').touched  ">
+                Please select interview duration
+              </span>
+            </div>
+
+          </div>
+          <div class="form-group  col-sm-3">
+
+
+            <label for=""> Final Round <span class="req_color">*</span></label>
+            <br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input"
+                     type="radio"
+                     name="finalRound"
+                     id="inlineRadio1"
+                     [value]="true"
+                     formControlName="finalRound"
+                     [(ngModel)]="objCreateInt.finalround">
+              <label class="form-check-label" for="inlineRadio1">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input"
+                     type="radio"
+                     name="finalRound"
+                     id="inlineRadio2"
+                     [value]="false"
+                     formControlName="finalRound"
+                     [(ngModel)]="objCreateInt.finalround">
+              <label class="form-check-label" for="inlineRadio2">No</label>
+            </div>
+
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('finalRound').hasError('required') && interviewForm.get('finalRound').touched ">
+                Please choose final round as Yes or No
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="row mb-0" *ngIf="objCreateInt.interviewmodeid==3">
+          <div class="interviewlink">
+            <label for="interviewlinklocation">Interviewe Link </label>
+            <input class="form-control"
+                   type="text"
+                   placeholder="Enter Interview Link"
+                   formControlName="interviewlinklocation"
+                   name="interviewlinklocation"
+                   [(ngModel)]="objCreateInt.interviewlinklocation"
+                   id="interviewlinklocation" />
+          </div>
+        </div>
+        <div class="row mb-0" *ngIf="objCreateInt.interviewmodeid==4||objCreateInt.interviewmodeid==7">
+          <div class="interviewlink">
+            <label for="interviewlinklocation">Interviewe Location </label>
+            <input class="form-control"
+                   type="text"
+                   placeholder="Enter Interview Location"
+                   formControlName="interviewlinklocation"
+                   name="interviewlinklocation"
+                   [(ngModel)]="objCreateInt.interviewlinklocation"
+                   id="interviewlinklocation" />
+          </div>
+        </div>
+
+        <div class="row mb-0 ">
+
+          <div class="form-group  col-sm-3">
+            <app-metal-switch [(state)]='objCreateInt.alertrequiredafterinterview' [uniqueid]="followUpId" class="switch-primary" [labelname]="'Interview Follow-Up'" (stateChange)="onSwitchFollowUp($event)"></app-metal-switch>
+          </div>
+
+          <div class="form-group col-sm-3">
+
+            <app-metal-switch [(state)]='objCreateInt.isreminderrequired' [uniqueid]="reminderId" class="switch-primary" [labelname]="'Set Reminder?'" (stateChange)="onSwitchreminder($event)"></app-metal-switch>
+
+
+          </div>
+          <div class="form-group col-sm-3">
+
+            <app-metal-switch [(state)]='objCreateInt.isnda' [uniqueid]="ndaID" class="switch-primary" [labelname]="'Send NDA'" (stateChange)="onSwitchNDA($event)"></app-metal-switch>
+
+
+          </div>
+
+          <div *ngIf="interviewForm.controls.reminder.value === true || ifRescheduleTrue=== true" class="form-group col-sm-3">
+
+            <label for="reminderinmins">Reminder Time<span class="req_color">*</span></label>
+            <ng-select [items]="reminder"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       bindLabel="id"
+                       bindValue="duration"
+                       [(ngModel)]="objCreateInt.interviewreminder"
+                       name="reminderinmins"
+                       id="reminderinmins"
+                       formControlName="reminderinmins"
+                       placeholder="Select Reminder"
+                       class="form-control"
+                       width="10"
+                       required>
+            </ng-select>
+            <div class="invalid_msg">
+              <span *ngIf=" interviewForm.get('reminderinmins').hasError('required') && interviewForm.get('reminderinmins').touched || interviewForm.controls.reminder.dirty ">
+                Please select Reminder time
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <hr class="hr1" />
+
+        <div class="row mb-0 ">
+
+          <div class="form-group  col-sm-4">
+
+            <label for="interviewerName">Interviewer Name </label>
+            <input class="form-control"
+                   type="text"
+                   placeholder="Enter Interviewer Name"
+                   formControlName="interviewerName"
+                   name="interviewerName"
+                   [(ngModel)]="objCreateInt.interviewername"
+                   id="interviewerName" />
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('interviewerName').hasError('pattern') && interviewForm.get('interviewerName').touched ">
+                Please enter valid name
+              </span>
+            </div>
+
+          </div>
+
+          <div class="form-group  col-sm-4">
+
+            <label for="interviewerEmail">Send Reminder To </label>
+            <ng-select [items]="recruiterList$| async"
+                       [typeahead]="recruiterinput$"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="true"
+                       bindLabel="recruiter"
+                       bindValue="recruiter"
+                       [(ngModel)]="objCreateInt.intervieweremail"
+                       name="interviewerEmail"
+                       formControlName="interviewerEmail"
+                       placeholder="Search Ascendion Alias"
+                       class="form-control"
+                       id="interviewerEmail">
+            </ng-select>
+
+          </div>
+          <div class="form-group  col-sm-4">
+
+
+
+            <label for="ccMail">CC Reminder To</label>
+            <ng-select [items]="recruiterList$| async"
+                       [typeahead]="recruiterinput$"
+                       [loading]="isLoading"
+                       [multiple]="true"
+                       [closeOnSelect]="true"
+                       [searchable]="true"
+                       bindLabel="recruiter"
+                       bindValue="recruiter"
+                       [(ngModel)]="recruiters"
+                       name="ccMail"
+                       (change)="ccemailtoString()"
+                       formControlName="ccMail"
+                       placeholder="Search Ascendion Alias"
+                       class="form-control"
+                       id="ccMail">
+            </ng-select>
+
+
+
+
+          </div>
+
+        </div>
+
+
+        <!-- <hr   /> -->
+
+
+        <div class="row mb-0">
+          <div class="form-group  col-sm-12">
+            <label for="notes">Interview Notes </label>
+            <textarea placeholder="Interview Notes"
+                      formControlName="notes"
+                      class="form-control"
+                      [(ngModel)]="objCreateInt.notes"
+                      rows="3"
+                      maxlength="3000"></textarea>
+            <p>Maximum of 3000 Characters</p>
+            <div class="invalid_msg">
+              <span *ngIf="interviewForm.get('notes').hasError('maxlength') && interviewForm.get('notes').touched ">
+                Maximum allowed characters is 3000
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+        <div class="form-group ">
+          <div class="actionBtn">
+            <div *ngIf="!isReSchedule">
+              <button class="btn btn-outline-primary" (click)="onReset()">Reset</button>
+              <button class="btn btn-primary" (click)="onSubmit(success)" [disabled]="pendingInterview">Create Interview</button>
+            </div>
+            <div *ngIf="isReSchedule">
+              <button class="btn btn-primary" (click)="onreScheduleSubmit(success)">Reschedule</button>
+            </div>
+
+          </div>
+          <div class="all_invalid_msg">
+            <span *ngIf="inValidForm">
+              <span class="req_color">*</span> Please fill all the mandatory fields
+            </span>
+          </div>
+        </div>
+
+
+
+
+
+      </form>
+
+
+    </div>
+
+
+
+
+    <ng-template #success let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title text-primary" id="modal-basic-title">Success!</h4>
+
+      </div>
+      <div class="modal-body ">
+        <h5 *ngIf="!isReSchedule">Interview Created Successfully!!</h5>
+        <h5 *ngIf="isReSchedule">Interview Rescheduled Successfully!!</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="c('Saveclick')">Close</button>
+      </div>
+    </ng-template>
+
+
+
+  </div>
+  <app-submit-to-client 
+        *ngIf="loadSTCPopup" 
+        [showSubmitToClientPopup]="showSubmitToClientPopup"
+        [showSTCwarning]="showSTCwarning"
+        (closeSubmitToClientPopup)="closeSubmitToClientPopupHandler()"
+        (closeSTCwarningPopup)="closeSTCwarningPopupHandler()"
+        (submitToClientSuccess)="submitToClientSuccess()">
+  </app-submit-to-client>
+
+  <ng-template #content let-c="close" let-d="dismiss" size="sm">
+    <div class="modal-header" >
+      <b class="modal-title"
+        [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+        {{popupConfig.title}}
+      </b>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body " *ngIf=" candidateOtherReqDetails && candidateOtherReqDetails?.interviewlevel">
+      <div class="levelWarning">
+        <div>
+        This candidate is already scheduled for <span class="font-weight-bold"> L1 </span>interview by <span class="font-weight-bold"> {{candidateOtherReqDetails?.createdby}}</span> for 
+        <span class="font-weight-bold">{{candidateOtherReqDetails?.requisitionname}}</span>
+        on <span class="font-weight-bold"> {{candidateOtherReqDetails?.interviewtime | date:'medium'}} {{candidateOtherReqDetails?.interviewtimezone}}</span> . Are you sure you want to proceed? 
+      </div>
+      </div>
+    </div>
+    <div class="modal-body " *ngIf="!candidateOtherReqDetails && !candidateOtherReqDetails?.interviewlevel">
+      <div class="levelWarning">
+        <div>
+          Something Went Wrong, Please try Later!
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer p-1" *ngIf="candidateOtherReqDetails && candidateOtherReqDetails?.interviewlevel">
+        <button type="button" class="btn btn-primary" (click)="createInterview(success); d('Cross')">Yes</button>
+        <button type="button" class="btn btn-outline-primary" (click)="d('Cross')">No</button>
+    </div>
+  
+    
+   
+  </ng-template>
+</ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,93 @@
+<fieldset *ngIf="!control.ShowOverallScore" class="rating-custom">
+  <ng-container *ngFor="let num of Noofstar">
+    <input type="radio" [id]="control.id + num" [name]="control.id" (ngModelChange)="data[control.key]=$event;"
+      [value]="num" [checked]="num <= data[control.key]" [(ngModel)]="data[control.key]" />
+    <label [ngClass]="{'full':!isFloat(num), 'half':isFloat(num), 'fill':num <= data[control.key]}"
+      [ngStyle]="{'font-size':control.fontsize ? control.fontsize : '1.95em'}" for="{{control.id + num}}"
+      [title]="num"></label>
+  </ng-container>
+</fieldset>
+<fieldset *ngIf="control.ShowOverallScore">
+  <rating [(ngModel)]="data[control.key]" [max]="control.Noofstar" [readonly]="control.readonly" [disabled]="false"
+    [required]="false" [float]="control.float"
+    [titles]="control.titles ? control.titles : []">
+  </rating>
+</fieldset>
+<!-- <div *ngIf="data[control.key].Review.Detailreview.length>0" class="row">
+  <div class="col-md-12 mb-3" *ngFor="let item of control.ratingdata;let i=index;">
+    <h5 class="text-center">
+        <span>{{data[this.control.key].Review.Detailreview[i].Title}}  <i *ngIf="item.helptext" title={{item.helptext}} class="fa fa-question-circle" aria-hidden="true"></i></span>
+        <small>{{data[this.control.key].Review.Detailreview[i].Value}} / {{control.Noofstar}}</small>
+    </h5>
+    <div class="d-flex justify-content-center">
+        <rating [(ngModel)]="data[control.key].Review.Detailreview[i].Value" (ngModelChange)="calculateScore()"
+                [max]="control.Noofstar"
+                [readonly]="isReadOnly"
+                [disabled]="false"
+                [required]="true"
+                [float]="true"
+                [titles]="['1 out of 10', '2 out of 10', '3 out of 10', '4 out of 10', '5 out of 10','6 out of 10','7 out of 10','8 out of 10','9 out of 10','10 out of 10']">
+        </rating>
+      </div>
+      <div class="form-group mb-0 comments-textarea" *ngIf="item.allowcomment==true">
+          <label [for]="Comment">Comments : </label>
+          <textarea mdbActive type="text" [id]="Comment" maxlength="1000" class="form-control" [(ngModel)]="data[control.key].Review.Detailreview[i].Comment" *ngIf="!isReadOnly"></textarea>
+          <div class="d-inline-block" *ngIf="isReadOnly">{{data[control.key].Review.Detailreview[i].Comment}}</div>
+      </div>
+  </div>
+  <div class="col-md-12 mb-3" *ngIf="control.ShowOverallScore==true">
+    <div class="text-center">
+      <h5 class=" m-0">
+        <span>{{data[control.key].Review.Overallreview.Title}}  <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+        <strong>{{data[this.control.key].Review.Overallreview.Value}} / {{data[control.key].Review.Overallreview.Weightage}}</strong>
+      </h5>
+      <p class="mb-0  mt-1">Calculated automatically when all the scores in Section I through Section VI are provided.</p>
+    </div>
+    <div class="d-flex justify-content-center">
+      <rating [(ngModel)]="data[control.key].Review.Overallreview.Value"
+              [max]="control.Noofstar"
+              [readonly]="true"
+              [disabled]="false"
+              [required]="false"
+              [float]="true"
+              [titles]="['Overall rating is calcuated automatically when all of the above individual scores are provided.', 'Overall rating is calcuated automatically when all of the above individual scores are provided.', 'Overall rating is calcuated automatically when all of the above individual scores are provided.', 'Overall rating is calcuated automatically when all of the above individual scores are provided.', 'Overall rating is calcuated automatically when all of the above individual scores are provided.','Overall rating is calcuated automatically when all of the above individual scores are provided.','Overall rating is calcuated automatically when all of the above individual scores are provided.','Overall rating is calcuated automatically when all of the above individual scores are provided.','Overall rating is calcuated automatically when all of the above individual scores are provided.','Overall rating is calcuated automatically when all of the above individual scores are provided.']">
+      </rating>
+      </div>
+    <div style="max-width:600px; margin:0 auto">
+      <p class="mat-text-warn" *ngIf="data[control.key].Review.Overallreview.Value > 0 && data[control.key].Review.Overallreview.Value < control.thresholdlimit">
+        alert:<br />
+        Score is lower than the threshold limit which may indicate high risk.
+      </p>
+      <div class="form-group mb-0 comments-textarea">
+        <label [for]="OverallComment">Overall Comment : </label>
+        <textarea mdbActive type="text" [id]="OverallComment" maxlength="1000" *ngIf="!isReadOnly"
+                  class="form-control"
+                  [(ngModel)]="data[control.key].Review.Overallreview.Comment"></textarea>
+        <small *ngIf="isReadOnly">{{data[control.key].Review.Overallreview.Comment}}</small>
+      </div>
+    </div>
+  </div>
+  <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+  <div class="col-md-12" *ngIf="!isReadOnly">
+    <button *ngIf="control.saveapi != ''" type="button" ngClass="btn btn-default waves-effect waves-light" (click)="save()">Save</button>
+    <button *ngIf="control.submitapi != ''" [disabled]="buttonState()" type="button" ngClass="btn btn-default waves-effect waves-light" (click)="submit(content)" title="Your rating score in all the sections (I through VI) is required before clicking on the Submit Rating button.">Submit</button>
+  </div>
+
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">Alert!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="Submitconfirm='NO';d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">Important: You will not be able to change the rating once submitted.</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default waves-effect waves-light" (click)="Submitconfirm='YES';c('Close click')">OK,Proceed</button>
+    <button type="button" class="btn btn-default waves-effect waves-light" (click)="Submitconfirm='NO';c('Close click')">NO,Cancel</button>
+  </div>
+</ng-template> -->

@@ -1,0 +1,6 @@
+<h3 class="text-center ml-4">
+ Loading....
+</h3>
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<h5 *ngIf="message">{{message}}</h5>
+<!--<pre>{{tokendetail|json}}</pre>-->

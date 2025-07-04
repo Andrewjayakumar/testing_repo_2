@@ -1,0 +1,124 @@
+$primary: #1976d2;
+$red-dark: #b84d49;
+
+.ui-control-block {
+  display: inline-block;
+  // margin-left:5px;
+  margin: 7px;
+
+  input {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background: none;
+    border: 1px solid #999;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: 0;
+    cursor: default;
+    border-radius: 4px;
+    padding: 5px;
+    padding-top: 7px;
+    // padding-bottom:10px;
+    display: block;
+    width: 100%;
+
+    &:focus {
+      border: 1px solid #007eff;
+      // outline-color: $primary;
+      box-shadow: 0px 1px 8px 1px rgba(59, 129, 211, 0.5);
+    }
+  }
+
+  .ng-select {
+    border: 1px solid #999 !important;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 19px;
+
+    .ng-select-single .ng-select-container {
+      border: 1px solid #999 !important;
+      padding: 5px;
+      margin-top: 19px;
+    }
+
+    .ng-select-focused {
+      margin-top: 15px !important;
+    }
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+  }
+
+  > label {
+    color: $primary;
+    //  font-size: smaller;
+    margin-bottom: 0px !important;
+    float: left;
+  }
+}
+.message {
+  color: green;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.errormessage {
+  color: red;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+.req_color {
+  color: #f55;
+  font-weight: bold;
+}
+.source-padding{
+    padding:10px;
+}
+.error_msg {
+  font-size: 0.7rem;
+  color: #f55;
+}
+.my-drop-zone {
+  color: #1976d2;
+  text-align: center;
+}
+
+.nv-file-over {
+  border: dotted 3px red;
+}
+
+.base-drop-zone {
+  text-align: center;
+  border: dashed 3px gray;
+  background: lightgray;
+  padding: 10px 20px;
+  display: inline-block;
+}
+.attachmentsBox {
+  max-width: 19rem;
+  top: 1rem;
+  position: relative;
+  border: 1px solid #ced4da;
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+.attachedFile {
+  opacity: 0 !important;
+}
+.text_attached {
+  text-align: center;
+  top: 1rem;
+  position: relative;
+}
+label {
+  color: #1976d2;
+}
+.resume_file_name{
+    display:block;
+    text-align:center;
+}

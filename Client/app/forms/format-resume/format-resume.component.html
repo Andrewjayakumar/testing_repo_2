@@ -1,0 +1,152 @@
+<div class="box-shadow">
+  <div class="modal-header w-100 p-1 pl-2i" *ngIf="radioSelectedval == '1' || radioSelectedval == '2'">
+    <div class="pl-3i">
+      <h5 class="font-weight-bold" *ngIf="radioSelectedval == '1'">
+        Original Resume
+      </h5>
+
+    </div>
+    <div class="p-1 pl-3i">
+      <h5 class="font-weight-bold" *ngIf="radioSelectedval == '2'">
+        Formatted Resume
+      </h5>
+
+    </div>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.dismiss('user click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="header-bottom  p-1 pl-2i" *ngIf="radioSelectedval == '3'">
+    <div class="row">
+      <div class="pl-3i original-resume col-md-6">
+        <h5 class="font-weight-bold">
+          Original Resume
+        </h5>
+
+      </div>
+      <div class="p-1 pl-3i">
+        <h5 class="font-weight-bold">
+          Formatted Resume
+        </h5>
+
+      </div>
+      <div class="close-btn-width col-md-4">
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('user click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+
+
+  </div>
+
+  <form>
+    <div class="modal-body p-0 pb-1  modal-window">
+      <div class="container-fluid other-actions pl-1 pt-0" *ngIf="candidateresume || formattedResume">
+        <div class="d-flex">
+          <div class="" [ngClass]="{'candidateresume_whole': radioSelectedval === '1'}" *ngIf="radioSelectedval == '1'">
+
+
+
+            <div class="h_iframe" id="originalresume">
+              <!--<iframe [srcdoc]="candidateresume" width="600" height="450"></iframe>-->
+              <div id="formattedresume" [innerHTML]="candidateresume"></div>
+
+            </div>
+
+
+
+
+
+          </div>
+          <div class="" [ngClass]="{'formatted-resume_whole': radioSelectedval === '2'}" *ngIf="radioSelectedval == '2'">
+
+            <div *ngIf="formattedResume" id="formattedresume" [innerHTML]="formattedResume"></div>
+            <div *ngIf="!formattedResume" class="text-center">{{frmtRsmErroMsg}}</div>
+
+
+          </div>
+        </div>
+        <div class="d-flex" *ngIf="radioSelectedval == '3'">
+          <div class="candidateresume">
+            <!--<div class="p-1 pl-2i">
+              <h5 class="font-weight-bold">
+                Original Resume
+              </h5>
+
+            </div>-->
+
+
+            <div class="h_iframe" id="originalresume" *ngIf="candidateresume">
+              <iframe [srcdoc]="candidateresume" width="600" height="450"></iframe>
+
+            </div>
+
+          </div>
+          <div class="formatted-resume">
+            <!--<div class="p-1 pl-2i">
+    <h5 class="font-weight-bold">
+      Formatted Resume
+    </h5>
+
+  </div>-->
+            <div id="formattedresume" *ngIf="formattedResume" [innerHTML]="formattedResume"></div>
+            <div *ngIf="!formattedResume" class="text-center">{{frmtRsmErroMsg}}</div>
+
+
+          </div>
+        </div>
+
+
+      </div>
+      <div class="row pt-1 pb-0">
+        <div class="col-md-6 ml-3">
+          <label class="font-weight-bold">View:</label>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="1" (change)="onradioBtnChanged($event)" name="radiosearchType">Original
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="2" name="radiosearchType" (change)="onradioBtnChanged($event)">Formatted
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="3" checked name="radiosearchType" (change)="onradioBtnChanged($event)">Both
+            </label>
+          </div>
+        </div>
+        <div class="col-md-5 other-action-buttons" *ngIf="candidateresume || newformattedResume">
+          <button class="btn btn-primary" (click)="downloadresume()">Send Resume to me</button>
+        </div>
+
+
+      </div>
+
+
+    </div>
+  </form>
+
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-primary" (click)="d('ok')">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>

@@ -1,0 +1,254 @@
+<h6 class="text-primary text-uppercase">Submission Checklist</h6>
+<form #ChecklistForm="ngForm" tabindex="0" novalidate>
+  <div *ngIf="isSubmitClicked && pageerrors" class="col-11 row errorpane">
+    <i class="fa fa-exclamation-triangle mr-2 "></i> 
+    <div class="col-10 mt-2" innerHTML="{{pageerrors}}"></div>
+  </div>
+
+  <div class="col-12 mr-1 mt-2 ">
+    <app-metal-switch [(state)]='datamodel.drugtestcomplaince' [uniqueid]="'sc_drugtestcomplaince'" [position]="'justify'"
+                      [labelname]="'As Per Compliance, Ascendion will Conduct a drug test and background check on you.<br> Are you Comfortable with that ?'"></app-metal-switch>
+
+    <app-metal-switch [(state)]='datamodel.collaberabenefits' [uniqueid]="'sc_collaberabenefits'" [position]="'justify'"
+                      [labelname]="'Have we discussed about Ascendion benefits?'"></app-metal-switch>
+
+    <app-metal-switch [(state)]='datamodel.accomodationneeded' [uniqueid]="'st_accomodationneeded'" [labelname]="'Accommodation Needed ?'" [position]="'justify'"></app-metal-switch>
+
+    <app-metal-switch [(state)]="datamodel.isw3submission" [uniqueid]="'st_w3submission'" [labelname]="'Is W3 Submission ? '" [position]="'justify'"></app-metal-switch>
+  </div>
+
+
+  <h6 class="text-primary text-uppercase mt-2">Submission Type</h6>
+
+<!-- shadow candidate -->
+  <div class="row m-2 justify-content-between alignShadowButton" [ngClass]="{'justify-content-between': position == 'justify', 'mr-5': position =='justify'}">
+    <label [attr.for]="'IsShadowCandidate'" class="checkbox-label m-2" innerHTML="Shadow Candidate">Shadow Candidate</label>
+    <div class="custom-control custom-switch ml-2">
+      <input type="checkbox" class="custom-control-input" [attr.id]="'IsShadowCandidate'" [(ngModel)]="datamodel.IsShadowCandidate" [disabled]="isdisable"
+        (click)="onStateChanged($event)" [ngModelOptions]="{standalone: true}">
+      <label [attr.for]="'IsShadowCandidate'" class="custom-control-label" ></label>
+    </div>
+  </div>
+
+    <!-- Office Employee -->
+    <div class="row m-2 justify-content-between alignShadowButton" [ngClass]="{'justify-content-between': position == 'justify', 'mr-5': position =='justify'}">
+      <label [attr.for]="'IsOfficeEmployee'" class="checkbox-label m-2" innerHTML="Office Employee">Office Employee</label>
+      <div class="custom-control custom-switch ml-2">
+        <input type="checkbox" class="custom-control-input" [attr.id]="'IsOfficeEmployee'" [(ngModel)]="datamodel.isofficeemployee"
+          (click)="onChange($event)" [ngModelOptions]="{standalone: true}">
+        <label [attr.for]="'IsOfficeEmployee'" class="custom-control-label" ></label>
+      </div>
+    </div>
+
+  <div class="col-12 row m-0 p-0 w-100">
+    <div class="col-md-3 pl-0 mr-1 mt-2 ui-control-block">
+      <label>
+        Sourcing Information
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select name="sourceid" [items]="sourcelist" [multiple]="false" [closeOnSelect]="true" tabindex="3"
+                 [searchable]="false" bindLabel="source" bindValue="sourceid" placeholder="--Select--"
+                 [(ngModel)]="datamodel.sourceid" #sourceid="ngModel" required>
+      </ng-select>
+      <small *ngIf="(!datamodel.sourceid && (sourceid.dirty || sourceid.touched)) || (!datamodel.sourceid && isSubmitClicked) "
+             class="font-size-small text-danger fa fa-exclamation"> This field is required.</small>
+    </div>
+
+    <div class="col-md-3 mr-1 mt-2 p-0 ui-control-block">
+      <label>
+        Employee Type
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select name="employeejobtypeid" [items]="employeetypelist" [multiple]="false" [closeOnSelect]="true" tabindex="4"
+                 [searchable]="false" bindLabel="employeejobtype" bindValue="employeejobtypeid" placeholder="--Select--"
+                 [(ngModel)]="datamodel.employeejobtypeid" required #employeejobtypeid="ngModel" (change)="OnEmployeeTypeChanged($event)">
+      </ng-select>
+      <small *ngIf="(!datamodel.employeejobtypeid && (employeejobtypeid.dirty || employeejobtypeid.touched)) || (!datamodel.employeejobtypeid && isSubmitClicked) "
+             class="font-size-small text-danger fa fa-exclamation"> This field is required.</small>
+    </div>
+
+    <div class="col-md-3 mr-1 pr-0 ui-control-block">
+      <label>
+        Employee Category
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <ng-select name="employeecategory" [items]="categorylist" [multiple]="false" [closeOnSelect]="true" tabindex="5"
+                 [searchable]="false" bindLabel="employeecategory" bindValue="employeecategoryid" placeholder="--Select--" required
+                 [(ngModel)]="datamodel.employeecategoryid" #employeecategory="ngModel" (change)="datamodel.employeecategory = $event.employeecategory">
+      </ng-select>
+      <small *ngIf="(!datamodel.employeecategoryid && (employeecategory.dirty || employeecategory.touched)) || (!datamodel.employeecategoryid && isSubmitClicked) "
+             class="font-size-small text-danger fa fa-exclamation"> This field is required.</small>
+    </div>
+
+    <div class="col-12 row ml--3 p-0 d-flex mt-2" >
+      <div class="col-md-4 pr-0 ui-control-block" *ngIf="datamodel.employeejobtypeid == 3">
+        <label>One Man Company</label> <sup class="text-danger font-weight-bold">*</sup>
+        <input type="text" name="omc" [(ngModel)]="datamodel.omc" required #omc="ngModel" tabindex="6"
+               placeholder="company name" />
+        <small *ngIf="!datamodel.omc && (omc.touched) || (!datamodel.omc && isSubmitClicked)" class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required. </small>
+
+      </div>
+      <div class="col-md-4 pr-0 ui-control-block" *ngIf="datamodel.employeejobtypeid == 1">
+        <label>Select Subtier
+        <sup class="text-danger font-weight-bold">*</sup>
+        </label>
+        <ng-select [items]="subtierItemsList$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true" [loading]="isSubtierLoading" tabindex="6"
+                   bindLabel="linktosubteir" bindValue="subtierid" placeholder="Type at least 2 characters" [typeahead]="subtierinput$" [typeToSearchText]="vendorName"
+                   [(ngModel)]="datamodel.subtierid" name="subtierid" #subtierid="ngModel" (change)="OnSubTierVendorChanged($event)" required>
+        </ng-select>
+        <!--<small class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required. </small> -->
+        <small *ngIf="(!datamodel.subtierid && (subtierid.dirty || subtierid.touched)) || (!datamodel.subtierid && isSubmitClicked) "
+        class="font-size-small text-danger fa fa-exclamation"> This field is required.</small>
+      </div>
+      <div class="col-md-3 d-inline-grid" *ngIf="datamodel.employeejobtypeid == 1">
+        <label class="label-only mt-1">Subtier Name</label>
+        <input class="subtierCSS" type="text" name="datamodel.linktosubteir" title="{{datamodel.linktosubteir}}" [(ngModel)]="datamodel.linktosubteir" readonly />
+        <!-- <div class="d-block mb-0 text-truncate" title="{{datamodel.linktosubteir}}">{{datamodel.linktosubteir}}</div> -->
+
+      </div>
+      <div class="col-md-3 d-inline-grid " *ngIf="datamodel.employeejobtypeid == 1">
+        <label class="label-only mt-1">Subtier Federal ID</label>
+        <input class="subtierCSS" type="text" name="datamodel.subtierfederalid" [(ngModel)]="datamodel.subtierfederalid" readonly />
+         <!-- <div class="d-block">{{datamodel.subtierfederalid}}</div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 row mt-2 p-0">
+    <div class="col-md-3 mr-1 pr-0 ui-control-block alignPayRateType">
+      <label>
+        Pay Rate Type
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+
+      <ng-select name="payrateunittypeid" [items]="payratelist" [multiple]="false" [closeOnSelect]="true" tabindex="7"
+                 [searchable]="false" bindLabel="payrateunittype" bindValue="payrateunittypeid" placeholder="--Select--"
+                 [(ngModel)]="datamodel.payrateunittypeid" required #payrateunittypeid="ngModel" (change)="OnPayRateUnitTypeChanged($event, payrateunittype)">
+      </ng-select>
+      <small *ngIf="!datamodel.payrateunittypeid && (payrateunittypeid.touched) || (!datamodel.payrateunittypeid && isSubmitClicked)" class="font-size-small text-danger fa fa-exclamation"> This field is required. </small>
+    </div>
+
+  <div *ngIf="!(datamodel.IsShadowCandidate)" class="col-md-8 pl-0 mr-1 mt-2 ui-control-block">
+    <div *ngIf="datamodel.payrateunittypeid !=3" class="col-md-4 pl-0 mr-1 mt-2 ui-control-block">
+      <label>Pay Rate Offered ($)</label> <sup class="text-danger font-weight-bold">*</sup>
+      <input type="number" name="payrateoffered" [(ngModel)]="datamodel.payrateoffered" required #payrateoffered="ngModel" max="999.99" min="0" tabindex="8"
+             placeholder="e.g  : 333.33" (blur)="ValidatePayRate($event, 'hourly', payrateoffered)" />
+      <small *ngIf="(!datamodel.payrateoffered && !datamodel.IsShadowCandidate && (payrateoffered.dirty || payrateoffered.touched) || (payrateoffered.invalid && isSubmitClicked ))"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required. </small>
+      <small *ngIf="payrateinvalidMsg && (payrateoffered.dirty || payrateoffered.touched) "
+             class="font-size-small mt-1 text-danger fa fa-exclamation"> {{payrateinvalidMsg}}</small>
+    </div>
+
+    <div *ngIf="datamodel.payrateunittypeid ==3" class="col-md-4 pl-0 mr-1 mt-2 ui-control-block">
+      <label>Pay Rate Offered ($)</label> <sup class="text-danger font-weight-bold">*</sup>
+      <input type="number" name="payrateoffered" [(ngModel)]="datamodel.payrateoffered" required #payrateoffered="ngModel" min="999.00" max="99999.99" tabindex="8"
+             placeholder="e.g : 20000.00" (blur)="ValidatePayRate($event, 'yearly', payrateoffered)" />
+      <small *ngIf="(!datamodel.payrateoffered && !datamodel.IsShadowCandidate && (payrateoffered.dirty || payrateoffered.touched) || (payrateoffered.invalid && isSubmitClicked )) "
+             class="font-size-small text-danger fa fa-exclamation"> This field is required.</small>
+      <small *ngIf="payrateinvalidMsg && (payrateoffered.dirty || payrateoffered.touched) "
+             class="font-size-small mt-1 text-danger fa fa-exclamation"> {{payrateinvalidMsg}}</small>
+    </div>
+
+    <div class="col-md-3 pl-0 mr-1 mt-2 ui-control-block">
+      <label>Bill Rate (Hourly)</label> <sup *ngIf="!isbillrateskip" class="text-danger font-weight-bold">*</sup>
+      <input type="number" name="billrate" max="1000" min="0" [(ngModel)]="datamodel.billrate" [required]="!isbillrateskip" #billrate="ngModel" tabindex="10"
+             placeholder="e.g  : 333.33" (blur)="ValidateBillRate($event, billrate)" />
+      <small *ngIf="(!datamodel.billrate && !datamodel.IsShadowCandidate && (billrate.dirty || billrate.touched) || (billrate.invalid && isSubmitClicked))"
+             class="font-size-small text-danger fa fa-exclamation"> This field is required.</small>
+      <small *ngIf="billrateinvalidMsg && (billrate.dirty || billrate.touched)"
+             class="font-size-small mt-1 text-danger fa fa-exclamation"> {{billrateinvalidMsg}}</small>
+    </div>
+  </div>
+
+  <div *ngIf="datamodel.IsShadowCandidate" class="col-md-8 pl-0 mr-1 mt-2 ui-control-block">
+    <div *ngIf="datamodel.payrateunittypeid !=3" class="col-md-4 pl-0 mr-1 mt-2 ui-control-block">
+      <label>Pay Rate Offered ($)</label>
+      <input class="blurDisabled" type="number" name="payrateoffered" tabindex="8" value="NA" disabled="disabled" />
+
+    </div>
+
+    <div *ngIf="datamodel.payrateunittypeid ==3" class="col-md-4 pl-0 mr-1 mt-2 ui-control-block">
+      <label>Pay Rate Offered ($)</label>
+      <input class="blurDisabled" type="number" name="payrateoffered" tabindex="8" value="NA" disabled="disabled" />
+
+    </div>
+
+    <div class="col-md-3 pl-0 mr-1 mt-2 ui-control-block">
+      <label>Bill Rate (Hourly)</label>
+      <input type="number" name="billrate" max="1000" min="0" [(ngModel)]="datamodel.billrate" required #billrate="ngModel" tabindex="10"
+             placeholder="e.g  : 333.33" (blur)="ValidateBillRate($event, billrate)" />
+
+      <small *ngIf="billrateinvalidMsg"
+             class="font-size-small mt-1 text-danger fa fa-exclamation"> {{billrateinvalidMsg}}</small>
+    </div>
+
+  </div>
+  </div>
+
+
+  <div class="col-12 mb-3 row p-0">
+    <div class="col-md-2 ui-control-block">
+      <label>Per Diem/Day</label>
+      <input type="number" name="diem" [(ngModel)]="datamodel.perdiem" #diem="ngModel" tabindex="11" (blur)="CalculateGPGPMMarkup($event)" />
+    </div>
+
+    <div class="col-md-2 ui-control-block p-0i">
+      <label>Subtier Referral/Hr</label>
+      <input type="number" name="subtier" [(ngModel)]="datamodel.subtierreferral" #subtier="ngModel" tabindex="12" (blur)="CalculateGPGPMMarkup($event)" />
+    </div>
+
+    <div class="col-md-2 ui-control-block ml-3">
+      <label>Free Billing Hour</label>
+      <input type="number" name="freebillinghr" [(ngModel)]="datamodel.freebillinghours" #freebillinghr="ngModel" tabindex="13" (blur)="CalculateGPGPMMarkup($event)" />
+    </div>
+
+    <div class="col-md-2 ui-control-block  p-0i">
+      <label>Other Discount (%)</label>
+      <input type="number" name="discount" [(ngModel)]="datamodel.otherdiscounts" #discount="ngModel" tabindex="14" (blur)="CalculateGPGPMMarkup($event)" />
+    </div>
+
+  </div>
+
+  <div class="col-12 m-0 p-0 mb-2i">
+    <!--Auto Generated fields-->
+    <div class="col-md-1 d-inline-flex p-0 mr-2">
+      <label class=" label-only pr-1">GP</label><label>{{datamodel.minimumgp| currency: 'USD' :'symbol'}}</label>
+    </div>
+    <div class="col-md-1 d-inline-flex p-0 mr-2">
+      <label class=" label-only pr-1">GPM</label><label>{{datamodel.minimumgpm}}&nbsp;%</label>
+    </div>
+    <div class="col-auto d-inline-flex ">
+      <label class=" label-only pr-1">Mark up?</label><label class="font-size-small mt-1 mb-0">{{datamodel.markup}}</label>
+    </div>
+    <div class="col-auto d-inline-flex p-0">
+      <label class=" label-only pr-1">Actual Markup</label>
+      <label>{{datamodel.actualmarkup}}&nbsp;%</label>
+      <label *ngIf="!datamodel.actualmarkup">-</label>
+    </div>
+    <div *ngIf="datamodel.markup" class="col-auto d-inline-flex">
+      <label class=" label-only pr-1">Client Markup</label><label>{{datamodel.maximummarkup| currency: 'USD':'symbol'}}</label>
+    </div>
+    <div class="col-md-3 d-inline-flex ml-2 p-0">
+      <label class=" label-only pr-1">Weekly Spread</label><label>{{datamodel.weeklyspread| currency: 'USD': 'symbol'}}</label>
+    </div>
+  </div>
+
+  <!-- <div class="col-12 mt-3 border-top">
+    <h6 class="text-primary text-uppercase">Attachments</h6>
+
+    <label class="label-only" for="submission_resume">Resume</label><sup class="text-danger font-weight-bold">*</sup>
+    <div class="col-md-3">
+      <input type="file" id="submission_resume" name="submission_resume" #submission_resume (change)="uploadSubmissionResume(submission_resume.files)" placeholder="Upload" required style="display:none;" />
+      <button type="button" class="btn btn-primary pointer ml--3 mt-1" (click)="submission_resume.click()">Upload Resume</button>
+
+    </div>
+    <small *ngIf="(fileslist.length ==0 && isSubmitClicked) || (submission_resume.touched && submission_resume.invalid) || (!datamodel.resumeurl && isSubmitClicked)" class="text-danger">Please upload a resume file of PDF or MS Word document format</small>
+    <span class="col-md-3 mt-2" *ngIf="fileslist.length == 1">{{fileslist[0].name}}</span>
+    <span *ngIf="!uploadComplete && fileslist.length!=0" class="col-md-1 mt-2">
+      <i id="blockSpinner" class="fa fa-circle-o-notch fa-1x fa-spin"></i>
+    </span>
+  </div> -->
+
+
+
+</form>

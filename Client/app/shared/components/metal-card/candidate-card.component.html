@@ -1,0 +1,235 @@
+
+
+  <div class="card-header ">
+    <div class="proactive-status text-muted" *ngIf="candidate.proactivestatus">
+      Proactive Status
+      <span class="text-danger">
+        {{candidate?.proactivestatus}}
+
+      </span>
+    </div>
+
+    <div class="card-tag" *ngIf="candidate?.isredeployable">
+      <span>
+        Redeployable
+      </span>
+    </div>
+    <div class="daxtrarelevance text-success"
+         *ngIf="candidate?.daxtrarelevance && !isCandidateDashboardSearch">
+      <a  class="btn-link" (click)="onMatchScoreClicked(candidate)">{{candidate?.daxtrarelevance}}</a>
+    </div>
+    <div class="d-flex align-items-center" title="{{candidate?.fullname}}">
+      <span class="pr-2" *ngIf="showCheckbox &&  !isCandidateDashboardSearch">
+        <input type="checkbox" class="card-checkbox-action" (change)="onCandidateSelected(candidate.candidateid,$event.target.checked)">
+
+      </span>
+
+      <div class="font-weight-bold text-truncate">
+        {{candidate?.fullname ? candidate?.fullname : '-'}}
+      </div>
+    </div>
+    <div class="row my-1">
+      <div class="col-12">
+        <div class="text-truncate" title="{{candidate?.emailid}}">
+          <a class="text-white" href="mailto:{{candidate?.emailid}}">
+
+            {{candidate?.emailid ? candidate?.emailid : '-'}}
+          </a>
+        </div>
+      </div>
+      <!--<div class="col-1" *ngIf="categorycolor">
+        <div title="{{categoryhint}}"><i class="fa fa-star fa-2x" [ngStyle]="{'color': categorycolor}"></i></div>
+      </div>-->
+    </div>
+
+    <div class="row">
+
+      <div class="col-7">
+        <div class="text-truncate small text-left" title="{{candidate?.location}}">
+
+          {{candidate?.location ? candidate?.location : '-'}}
+        </div>
+      </div>
+      <div class="col-5 social-icons">
+        <div *ngFor="let socialdata of candidate.websitelist">
+          <div class="social-icons-inner"
+               title="" *ngIf="socialdata.websitetype == 'Linkedin'">
+            <a class="linked" href="{{socialdata.weburl}}" target="_blank"><i class="fa fa-linkedin social-icons-inner"></i></a>
+          </div>
+          <div class="social-icons-inner"
+               title="" *ngIf="socialdata.websitetype == 'Github'">
+            <a class="linked" href="{{socialdata.weburl}}" target="_blank"><i class="fa fa-github"></i></a>
+          </div>
+          <div class="social-icons-inner"
+               title="" *ngIf="socialdata.websitetype == 'StackOverflow'">
+            <a class="linked" href="{{socialdata.weburl}}" target="_blank"><i class="fa fa-stack-overflow"></i></a>
+          </div>
+          <div class="social-icons-inner"
+               title="" *ngIf="socialdata.websitetype == 'Twitter'">
+            <a class="linked" href="{{socialdata.weburl}}" target="_blank"><i class="fa fa-twitter"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+    <div class="card-body p-0">
+      <div class="row mx-0">
+        <div class="col-6 py-2 border-right border-bottom text-center ehris">
+          <div class="text-muted small">eHRIS</div>
+          <div class="font-weight-bold text-truncate ehris-inner" title="{{candidate?.employeestatus}}">
+            {{candidate?.employeestatus ? candidate?.employeestatus: '-'}}
+          </div>
+        </div>
+        <div class="col-6 py-2 border-bottom text-center ehris">
+          <i class="fa-lg custom-icon-size fa fa-vcard-o resumeupdateddate"></i>
+          <div class="font-weight-bold text-truncate ehris-inner" title="Latest resume date">
+            {{candidate?.latestresumedate ? candidate?.latestresumedate : '-' }}
+          </div>
+        </div>
+
+        <div class="col-12 py-2 d-flex border-bottom">
+
+          <img src="../../../../../wwwroot/assets/img/svg/Skills_Icon.svg" title="Skills">
+          <div class="pl-2 pr-0 text-dark text-truncate-skills skills-font" title="{{candidate?.skills}}">
+            {{candidate?.skills ? candidate?.skills : '-'}}
+          </div>
+        </div>
+        <div class="col-12 py-2 border-bottom ">
+          <div class="text-muted small">
+            <span class="icon-image-card"><img src="../../../../../wwwroot/assets/img/svg/Contacted.svg" title="contacted"></span>
+            <span class="last-contancted-text">
+              {{candidate?.lastcontactedon ? (candidate?.lastcontactedon | utctimeage) : '-'}}
+
+            </span>
+            <div class="text-dark text-truncate float-right pt-0" title="{{candidate?.lastcontactedby}}">
+              {{candidate?.lastcontactedby ? candidate?.lastcontactedby : '-'}}
+
+            </div>
+                <div [ngClass]="candidate?.candidatejournal ? 'candidate-journal' : ''"
+            class="text-truncate" title="{{candidate?.candidatejournal ? candidate?.candidatejournal : ''}}"><span [ngClass]="candidate?.candidatejournal ? '' : 'float-right'">
+                  {{candidate?.candidatejournal ? candidate?.candidatejournal : '-'}}</span></div>
+          </div>
+      
+
+
+        </div>
+
+
+
+
+        <div *ngIf="!showAppliedData" class="col-12 py-2 border-bottom">
+          <div class="text-muted small text-truncate">
+
+            <span class="icon-image-card"><img src="../../../../../wwwroot/assets/img/svg/REQ_Icon.svg" title="last submitted"></span>
+            <span class="last-contancted-text">
+              {{candidate?.lastsubmitteddate ? candidate?.lastsubmitteddate : '-'}}
+            </span>
+            <span class="pl-1 pr-0 float-right pt-0" title="{{candidate?.lastsubmittedby}}">{{candidate?.lastsubmittedby}}</span>
+          </div>
+          <div class="text-dark text-truncate lastsubmitted-text" title="{{candidate?.lastsubmittedon}}">
+            {{candidate?.lastsubmittedon ? candidate?.lastsubmittedon : '-'}}
+          </div>
+
+        </div>
+
+        <div *ngIf="showAppliedData" class="col-6 py-2 border-right border-bottom text-center">
+          <div class="text-muted small">Applied On</div>
+          <div class="font-weight-bold text-truncate jobtitle" title="{{candidate?.applieddate}}">
+            {{candidate?.applieddate ? candidate?.applieddate : '-'}}
+          </div>
+        </div>
+        
+        <div *ngIf="showAppliedData" class="col-6 py-2   border-bottom text-center">
+          <div class="text-muted small">Applied Source</div>
+          <div class="font-weight-bold text-truncate jobtitle" title="{{candidate?.appliedfrom}}">
+            {{candidate?.appliedfrom ? candidate?.appliedfrom : '-'}}
+          </div>
+        </div>
+
+        <div class="col-6 py-2 border-right border-bottom text-center">
+          <div class="text-muted small">Work Authorisation</div>
+          <div class="font-weight-bold text-truncate jobtitle" title="{{candidate?.workauthtype}}">
+            {{candidate?.workauthtype ? candidate?.workauthtype : '-'}}
+          </div>
+        </div>
+
+        <div class="col-6 py-2   border-bottom text-center">
+          <div class="text-muted small">Job Title</div>
+          <div class="font-weight-bold text-truncate jobtitle" title="{{candidate?.jobtitle}}">
+            {{candidate?.jobtitle ? candidate?.jobtitle : '-'}}
+          </div>
+        </div>
+
+        <div class="col-6 py-2  border-right text-center submissiontype pl-3">
+          <div class="text-muted small">Submission</div>
+          <div class="font-weight-bold text-truncate submissiontype-inner" title="{{candidate?.submissiontype}}">
+            {{candidate?.submissiontype ? candidate?.submissiontype : '-'}}
+          </div>
+        </div>
+        <div class="col-6 py-2  text-center submissiontype">
+          <div class="text-muted small">Sector</div>
+          <div class="font-weight-bold text-truncate submissiontype-inner text-purple" title="{{candidate?.sector}}">
+            {{candidate?.sector ?  candidate?.sector : '-'}}
+          </div>
+        </div>
+
+
+      </div>
+      <div class="custom-hover-btn">
+        <div class="d-flex pt-1 justify-content-around	 align-items-center">
+
+          <a (click)='pinclicked(candidate)' class="btn pointer btn-link d-flex flex-column justify-content-center my-2" title="Pin Profile">
+            <i *ngIf="!candidate['pinned']" class="fa-lg fa fa-user-plus">
+            </i>
+            <i *ngIf="candidate['pinned']" class="fa-lg fa fa-user-o">
+            </i>
+             
+            
+          </a>
+
+          <a class="btn pointer btn-link d-flex flex-column justify-content-center" (click)="viewCandidateResume(candidate.candidateid)" title="Quick View">
+
+            <i class="fa-lg custom-icon-size fa fa-vcard-o"></i>
+          </a>
+
+          <a class="btn pointer btn-link d-flex flex-column justify-content-center" (click)="viewCandidateNotes(candidate.candidateid,candidate.fullname)" title="Notes">
+            <span *ngIf="candidate.isnotes == true"  class="notification-icon"></span>
+
+            <i class="fa-lg custom-icon-size fa fa-file-text"></i>
+          </a>
+
+
+        </div>
+
+
+        <div>
+        </div>
+
+      </div>
+    </div>
+  
+    <ng-template #content let-c="close" let-d="dismiss" size="sm">
+      <div class="modal-header" style="background-color:#ebebeb">
+        <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+          {{popupConfig.title}}
+        </b>
+        <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row m-2">
+          {{popupConfig.message}}
+        </div>
+
+      </div>
+      <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+        <button type="button" class="btn btn-primary" (click)="d('ok')">{{popupConfig.positivebtnText}}</button>
+      </div>
+    </ng-template>
+
+  
+
+

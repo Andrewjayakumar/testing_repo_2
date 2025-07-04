@@ -1,0 +1,220 @@
+<div class="modal-header">
+  <h6 class="modal-title summary-heading">Create Candidate Attestation</h6>
+  <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+</div>
+<div class="modal-body">
+     <form [formGroup]="vForm" (ngSubmit)="onSubmit()" #formGroupRef="ngForm">
+        <div class="row">
+            <div>
+                <app-metal-switch (stateChange)="onBypassValueChange($event)" [(state)]='model.isbypass' [uniqueid]="'bypass_attestation'" [labelname]="'Do You Wish to Bypass Candidate Attestation?&nbsp;&nbsp;'"></app-metal-switch>
+            </div>
+        </div>
+        <div *ngIf="model.isbypass == true">
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label for="bypassComment" class="col-form-label-sm label-color m-b">Comments</label>
+                    <sup class="text-danger font-weight-bold">*</sup>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control form-control-sm"
+                              (keyup.backspace)="onBackSpace($event)"
+                              (keyup)="maxLength($event)" formControlName="bypassComment">
+                    </textarea>
+                    <span>
+                        {{commentLengthRem}} character(s) remaining
+                    </span>
+                    <div>
+                        <small class="font-size-small text-danger fa fa-exclamation"
+                               *ngIf="vForm.get('bypassComment').hasError('required') && (vForm.get('bypassComment').touched || formGroupRef.submitted)">
+                            Comments is required
+                        </small>
+                        <small class="font-size-small text-danger fa fa-exclamation"
+                               *ngIf="vForm.get('bypassComment').hasError('maxlength') && (vForm.get('bypassComment').touched || formGroupRef.submitted)">
+                            Maximum 4000 characters in Comments
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+                <div *ngIf="displayMessage" class="alert alert-success">
+                  <strong>{{displayMessage}}</strong>
+                </div>
+                <div *ngIf="errorMessage" class="alert alert-danger">
+                  <strong>{{errorMessage}}</strong>
+                </div>
+              </div>
+              <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="m-3">
+                <button type="button" (click)="createBypassRequest()" [disabled]="vForm.get('bypassComment').hasError('required')" class="btn btn-success">
+                    <i class="fa fa-paper-plane"></i>
+                    &nbsp;&nbsp; Create Bypass Request
+                </button>
+              </div>
+              <div *ngIf="isUploading">
+                <button class="btn btn-success loader pull-right" type="button" disabled="">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="model.isbypass == false">
+            <div>
+              <label class="col-form-label-sm label-color m-b">Email Id</label>
+              <label class="col-form-label-sm m-b">{{candidateReqObj.emailid}}</label>
+            </div>
+          <div class="row">
+              <div class="form-group col-md-4">
+                  <label for="firstName" class="col-form-label-sm label-color m-b">Legal First Name</label>
+                  <sup class="text-danger font-weight-bold">*</sup>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="candidateReqObj.firstname" formControlName="firstName" placeholder=" " id="firstName" name="firstName">
+                  <small class="font-size-small text-danger fa fa-exclamation"
+                  *ngIf="vForm.get('firstName').hasError('required') && (vForm.get('firstName').touched || formGroupRef.submitted)">
+                      Legal First Name is required
+                  </small>
+              </div>
+              <div class="form-group col-md-4">
+                  <label for="middleName" class="col-form-label-sm label-color m-b">Legal Middle Name</label>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="candidateReqObj.middlename" formControlName="middleName" placeholder=" " id="middleName" name="middleName">
+              </div>
+              <div class="form-group col-md-4">
+                  <label for="lastName" class="col-form-label-sm label-color m-b">Legal Last Name</label>
+                  <sup class="text-danger font-weight-bold">*</sup>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="candidateReqObj.lastname" formControlName="lastName" placeholder=" " id="lastName" name="lastName">
+                  <small class="font-size-small text-danger fa fa-exclamation"
+                  *ngIf="vForm.get('lastName').hasError('required') && (vForm.get('lastName').touched || formGroupRef.submitted)">
+                      Legal Last Name is required
+                  </small>
+              </div>
+          </div>
+         <div class="row">
+           <div class="form-group col-md-4">
+              <label for="reqNameId" class="col-form-label-sm label-color m-b">REC Name/ID</label>
+              <sup class="text-danger font-weight-bold">*</sup>
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="candidateReqObj.recname" formControlName="reqNameId" placeholder=" " id="reqNameId" name="reqNameId">
+              <small class="font-size-small text-danger fa fa-exclamation"
+              *ngIf="vForm.get('reqNameId').hasError('required') && (vForm.get('reqNameId').touched || formGroupRef.submitted)">
+                  REC Name/ID is required
+              </small>
+          </div>
+          <div class="form-group col-md-4">
+              <label for="jobTitle" class="col-form-label-sm label-color m-b">Job Title</label>
+              <sup class="text-danger font-weight-bold">*</sup>
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="candidateReqObj.jobtitle" formControlName="jobTitle" placeholder=" " id="jobTitle" name="jobTitle">
+              <small class="font-size-small text-danger fa fa-exclamation"
+              *ngIf="vForm.get('jobTitle').hasError('required') && (vForm.get('jobTitle').touched || formGroupRef.submitted)">
+                  Job Title is required
+              </small>
+          </div>
+          <div class="form-group col-md-4">
+              <label for="clientName" class="col-form-label-sm label-color m-b">Client Name</label>
+              <sup class="text-danger font-weight-bold">*</sup>
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="candidateReqObj.clientname" formControlName="clientName" placeholder=" " id="clientName" name="clientName">
+              <small class="font-size-small text-danger fa fa-exclamation"
+              *ngIf="vForm.get('clientName').hasError('required') && (vForm.get('clientName').touched || formGroupRef.submitted)">
+                  Client Name is required
+              </small>
+          </div>
+        </div>
+        <div class="row">
+           <div class="form-group col-md-4">
+            <label for="payRateOffered" class="col-form-label-sm label-color m-b">Pay Rate Offered</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="candidateReqObj.billrate" formControlName="payRateOffered" placeholder=" " id="payRateOffered" name="payRateOffered">
+          </div>
+          <div class="form-group col-md-4">
+            <label class="col-form-label-sm label-color m-b" for="payRateUnit">Pay Rate Unit</label>
+            <ng-select [items]="payRateUnits"
+                      [multiple]="false"
+                      [closeOnSelect]="true"
+                      [searchable]="false"
+                      [(ngModel)]="payRateUnitType"
+                      bindLabel="payrateunittype"
+                      bindValue="payrateunittype"
+                      name="payRateUnit"
+                      id="payRateUnit"
+                      formControlName="payRateUnit"
+                      placeholder="Select Pay Rate Unit"
+                      class="form-control form-control-sm"
+                      (ngModelChange)=onPayrateUnitChange($event)
+                      >
+            </ng-select>
+          </div>
+          <div class="form-group col-md-4">
+            <label class="col-form-label-sm label-color m-b" for="zipcode">Zipcode</label>
+             <ng-select [items]="zipcodeList$| async"
+                       [typeahead]="zipcodeinput$"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="true"
+                       bindLabel="zipcode"
+                       bindValue="zipcode"
+                       [(ngModel)]="candidateReqObj.zipcode"
+                       name="zipcode"
+                       formControlName="zipcode"
+                       placeholder="Search Zipcode"
+                       class="form-control form-control-sm"
+                       id="zipcode"
+                       (ngModelChange)=onZipcodeChange($event)
+                       >
+            </ng-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label class="col-form-label-sm label-color m-b" for="city">City</label>
+            <ng-select [items]="cityList"
+                      [multiple]="false"
+                      [closeOnSelect]="true"
+                      [searchable]="false"
+                      [(ngModel)]="candidateReqObj.city"
+                      bindLabel="type"
+                      bindValue="id"
+                      name="city"
+                      id="city"
+                      formControlName="city"
+                      placeholder="Select city"
+                      class="form-control form-control-sm"
+                      (ngModelChange)=onCityChange($event)
+                      >
+            </ng-select>
+          </div>
+          <div class="form-group col-md-4">
+            <label class="col-form-label-sm label-color m-b" for="state">State</label>
+            <ng-select [items]="state"
+                      [multiple]="false"
+                      [closeOnSelect]="true"
+                      [searchable]="false"
+                      [(ngModel)]="candidateReqObj.state"
+                      bindLabel="type"
+                      bindValue="id"
+                      name="state"
+                      id="state"
+                      formControlName="state"
+                      placeholder="Select state"
+                      class="form-control form-control-sm"
+                      (ngModelChange)=onStateChange($event)
+                      >
+            </ng-select>
+          </div>
+        </div>
+        <div class="row">
+          <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+            <div *ngIf="displayMessage" class="alert alert-success">
+              <strong>{{displayMessage}}</strong>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              <strong>{{errorMessage}}</strong>
+            </div>
+          </div>
+          <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="col-md-6 pb-2">
+            <button class="btn btn-primary" type="submit" [disabled]="!(vForm.valid)">Send Attestation</button>
+          </div>
+          <div *ngIf="isUploading" class="col-md-6">
+            <button class="btn btn-primary loader" type="button" disabled="">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+</div>

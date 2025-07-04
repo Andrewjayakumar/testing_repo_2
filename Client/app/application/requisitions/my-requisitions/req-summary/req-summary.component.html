@@ -1,0 +1,150 @@
+<ng-container>
+  <div id="printdata">
+    <div class="modal-header">
+      <h6 class="modal-title summary-heading">Requisition Summary Quick View</h6>
+      <i class="fa fa-times fa-lg close-summary" (click)="modal.close(true)" aria-hidden="true"></i>
+
+    </div>
+
+    <div class="modal-body sumamry-body">
+      <div *ngIf="showLoading" class="text-center p-2">
+        <i class="fa fa-2x fa-spinner fa-spin"></i>
+      </div>
+      <div *ngIf="!summary && !showLoading">
+        <div class="summary-not-found">Requisition Summary not found!</div>
+      </div>
+
+      <div *ngIf="summary">
+        <div class="form-row">
+
+          <div class="row col-md-6">
+            <label class="rec-label pl-3">Skills by Experience</label>
+
+            <span *ngFor="let entry of summary?.skills" class="label-chips">
+              <label class="text-primary" title="{{entry.skill}} ({{entry.skilllevel}})">
+                {{entry.skill ? entry.skill : '-'}}
+                ({{entry.skilllevel ? entry.skilllevel : ''}})
+              </label>
+            </span>
+            <span *ngIf="summary?.skills?.length == 0" class="pl-2">
+              -
+            </span>
+          </div>
+          <div class="first-deparator">
+
+          </div>
+          <div class="col-md-6">
+            <label class="rec-label">Min.Experience</label>
+            <span class="pl-4">{{summary.minexperience ? summary.minexperience : '-' }}</span>
+            <label class="rec-label pl-3">Max.Experience</label>
+            <span class="pl-4">{{summary.maxexperience ? summary.maxexperience:'-'}}</span>
+
+
+          </div>
+          <div class="second-separator">
+
+          </div>
+        </div>
+
+        <div class="form-row">
+
+          <div class="col-md">
+            <label class="rec-label">Category</label>
+            <p>{{summary.category}}</p>
+            <label class="rec-label">Type</label>
+            <p>{{summary.projecttype ? summary.projecttype:'-'}}</p>
+            <label class="rec-label">Sales Representative</label>
+            <p>{{summary.salesrepid ? summary.salesrepid:'-'}}</p>
+            <label class="rec-label">Job title</label>
+            <p>{{summary.jobtitle}}</p>
+            <label class="rec-label">Positions</label>
+            <p>{{summary.numberofpositions}}</p>
+          </div>
+
+          <div class="first-deparator">
+
+          </div>
+          <div class="col-md-3">
+            <label class="rec-label">Status</label>
+            <p>{{summary.status}}</p>
+
+            <label class="rec-label">Client Name</label>
+            <p>{{summary.clientname}}</p>
+            <label class="rec-label">TCU</label>
+            <p>{{summary.tcu}}</p>
+            <label class="rec-label">Location</label>
+            <p>{{summary.city}}</p>
+          </div>
+          <div class="first-deparator">
+
+          </div>
+          <div class="col-md-3">
+            <label class="summary-heading" for="interviewtype">EXPECTED DETAILS</label>
+            <p></p>
+            <p></p>
+            <label class="rec-label">Start Date</label>
+            <p>{{summary.startdate?.split('T')[0] ? summary.startdate?.split('T')[0] : '-'}}</p>
+            <label class="rec-label">End Date</label>
+            <p>{{summary.projectenddate?.split('T')[0] ? summary.projectenddate?.split('T')[0] : '-'}}</p>
+            <label class="rec-label">Bill Rate $</label>
+            <p>{{summary.billrate}}</p>
+          </div>
+          <div class="first-deparator">
+
+          </div>
+          <div class="col-md-3">
+            <label class="summary-heading">MANAGER DETAILS</label>
+            <p></p>
+            <p></p>
+            <label class="rec-label">Name</label>
+            <p>{{summary.hiringmanagername ? summary.hiringmanagername: '-'}}</p>
+            <label class="rec-label" for="emailId">Email</label>
+            <p title="{{summary.hiringmanageremail}}" class="email-truncate">{{summary.hiringmanageremail ? summary.hiringmanageremail: '-'}}</p>
+            <label class="rec-label" for="phonenum">Phone</label>
+            <p>{{summary.hiringmanagerphone ? summary.hiringmanagerphone: '-'}}</p>
+            <label class="rec-label" for="deliverymgr">Delivery Manager</label>
+            <p>{{summary.deliverymanagerdetails ? summary.deliverymanagerdetails: '-'}}</p>
+          </div>
+        </div>
+
+        <div class="col-md-12 p-0">
+          <label class="rec-label mb-0">Recruiter</label>
+          <div>
+            <label class="mb-0">{{summary.recruitername}}&nbsp;</label>
+          </div>
+        </div>
+        <div class="second-separator">
+
+        </div>
+
+
+
+        <div class="form-row">
+
+          <div class="col-md-12">
+            <label class="rec-label">Requisition Description</label>
+
+            <p [innerHTML]="summary.description"></p>
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="summary?.additionaldetails">
+
+          <div class="col-md-12">
+            <label class="rec-label">Additional Information</label>
+
+            <div [innerHTML]="summary.additionaldetails"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="text-center mb-3" *ngIf="this.currentURL[0] == '/apps/requisitionspage/overview'">
+    <a id="printview" class="btn  btn-primary btn-md" (click)="printView()">
+
+      <i class="fa fa-print mr-2"></i>Print
+    </a>
+  </div>
+
+</ng-container>

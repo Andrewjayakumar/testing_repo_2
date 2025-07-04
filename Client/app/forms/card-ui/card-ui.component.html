@@ -1,0 +1,71 @@
+<div class="card">
+  <div class="card-header d-flex align-items-center">
+    <img class="rounded-circle mr-2" width="40" *ngIf="data[control.ProfilePhotoUrl] && data[control.ProfilePhotoUrl] != null && data[control.ProfilePhotoUrl]!=''" src={{data[control.ProfilePhotoUrl]}} />
+    <a href={{data[control.RedirectUrl]}} class="text-d-n">
+      <h5 class="m-0 text-dark">{{data[control.Name]}} {{data[control.Follower] ? (data[control.Follower]) : ''}}</h5>
+      <span class="text-dark">{{data[control.UserId]}}</span>
+    </a>
+  </div>
+  <div class="card-body">
+    <!--{{data[control.PictureUrl]}}-->
+   
+    <div class="cardImgCover" *ngIf="data[control.PictureUrl] && data[control.PictureUrl] != null && data[control.PictureUrl] != ''" [style.background-image]="getBackground(data[control.PictureUrl])" ></div>
+    <h6 class="card-title m-0 mt-1" *ngIf="data[control.Title]">{{data[control.Title]}}</h6>
+    <p class="card-text m-0 mt-1" *ngIf="data[control.Text]">{{data[control.Text]}}</p>
+    <p class="card-text m-0 mt-1" *ngIf="data[control.comments]" [innerHTML]="safehtml(data[control.comments])"></p>
+  </div>
+  <div class="card-footer d-flex justify-content-end align-items-center">
+    <!--<span><i class="fa fa-twitter" aria-hidden="true"></i></span>-->
+    <!--<span class="cardDate">{{data[control.Time] | date: 'dd/MM/yyyy'}}</span>-->
+      <a class="ml-2" *ngIf="buttons.Add" (click)="Addrow(data)">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </a>
+      <a class="ml-2" *ngIf="buttons.Edit" (click)="Editrow(data)">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+      </a>
+      <a class="ml-2" *ngIf="buttons.Up" (click)="Moveuprow(data)">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+      </a>
+      <a class="ml-2" *ngIf="buttons.Down" (click)="Movedownrow(data)">
+        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+      </a>
+      <a class="ml-2" *ngIf="buttons.Delete" (click)="Deleterow(data)">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+      </a>
+  </div>
+  <!--<div class="CardData">
+    <div class="CardBlock">
+      <img src={{data[control.ProfilePhotoUrl]}} class="ProfilePhoto" />
+      <a class="TitleBlock" href={{data[control.RedirectUrl]}}>
+        <h4 class="card-title">{{data[control.Name]}} {{data[control.Follower] ? (data[control.Follower]) : ''}}</h4>
+        <p class="card-title">{{data[control.UserId]}}</p>
+      </a>
+    </div>
+    
+    <img class="CardImg" src={{data[control.PictureUrl]}} alt={{data[control.Title]}}>
+    <div class="CardBlock">
+      <h6 class="card-title">{{data[control.Title]}}</h6>
+      <p class="card-text">{{data[control.Text]}}</p>
+    </div>
+  </div>
+  <div class="CardInfo">
+    {{data[control.Time] | date: 'dd/MM/yyyy'}}
+    <span class="right">
+      <a class="btn btn-primary" *ngIf="buttons.Add" (click)="Addrow(data)">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </a>
+      <a class="btn btn-primary" *ngIf="buttons.Edit" (click)="Editrow(data)">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+      </a>
+      <a class="btn btn-primary" *ngIf="buttons.Up" (click)="Moveuprow(data)">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+      </a>
+      <a class="btn btn-primary" *ngIf="buttons.Down" (click)="Movedownrow(data)">
+        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+      </a>     
+      <a class="btn btn-primary" *ngIf="buttons.Delete" (click)="Deleterow(data)">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+      </a>
+    </span>
+  </div>-->
+</div>

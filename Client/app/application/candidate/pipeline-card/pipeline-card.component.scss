@@ -1,0 +1,105 @@
+
+.card-border {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.selected-card {
+  border: 2px solid rgba(0, 141, 255, 0.5);
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 141, 255, 0.3);
+}
+
+.card-icon {
+    font-size: medium;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+.color-green {
+    color: limegreen;
+    border-color: limegreen;
+}
+
+.color-blue {
+  color: rgb(0, 141, 255);
+  border-color: rgb(0, 141, 255);
+}
+
+.color-red {
+  color: rgb(199, 26, 26);
+  border-color: rgb(199, 26, 26);
+}
+
+.color-gray {
+  color: grey;
+  border-color: grey;
+}
+
+.colored-box-blue {
+  width: 15px;
+  height: 15px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  line-height: 15px;
+  border-radius: 2px;
+}
+
+.pl-rcb {
+  padding-left: 1.25rem !important;
+}
+
+.hr-interview-card {
+  border-color: lightgray;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.dot-icon {
+  font-size: 4px;
+  position: absolute;
+  top: 55%;
+  left: 37%;
+  transform: translate(-50%, -50%);
+}
+
+.rel {
+    position: relative;
+}
+
+.text-orange {
+  color: #ff9800;
+}
+
+.text-green {
+  color: rgba(46,183,131,255)
+}
+
+.pr-value {
+    padding-right: 0.75rem !important;
+}
+
+.status-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.lh-1i{
+    line-height: 1.25 !important;
+}
+
+.pt-rr{
+    padding-top: 0.1rem !important;
+}
+
+.pl-pu{
+    padding-left: 0.15rem !important;
+}
+
+.fs-s {
+  font-size: small;
+}

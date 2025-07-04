@@ -1,0 +1,193 @@
+$theme-blue: #fff ;
+$dark-blue:#B2B2B2;
+$primary: #000;
+$grey-ascendion: #5a656f;
+
+.magnify-logo {
+  transform: scale(1.35);
+  margin-left: 16px;
+}
+
+.history {
+  float: left;
+  overflow: hidden;
+
+  .history-content {
+    display: block;
+    position: fixed;
+    right: 0px;
+    background-color: #f9f9f9;
+    height: 94vh;
+    width: 300px;
+    box-shadow: 0px 4px 11px 0px rgba(0,0,0,0.2);
+    z-index: 3;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: none;
+    transition: all 0.5s;
+
+
+    .history-content-header {
+      color: #f9f9f9;
+      overscroll-behavior: none;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      position: sticky;
+      top: 0;
+      display: inline-flex;
+      /* flex-direction: column; */
+      width: 100%;
+      z-index: 3;
+    }
+  }
+
+  .history-content::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+  }
+
+  .history-content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+
+  .history-content::-webkit-scrollbar-track-piece {
+    width: 6px;
+  }
+
+  .history-content::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+
+  a {
+    -webkit-appearance: menulist-button;
+    background: none;
+    border: none;
+    color: $theme-blue !important;
+    line-height: 16px !important;
+    transform: scale(1.5);
+    font-weight: lighter;
+    /* height: 15px; */
+    padding: 10px;
+
+    &:hover {
+      color: $dark-blue !important;
+    }
+  }
+}
+
+
+//  New Dashboard changes by Vishnu
+.dark-bg {
+  background-color: #000000;
+}
+
+
+.dashbord-bg {
+  background-color: #F5F7FA;
+}
+
+.sidebar-bg {
+  background-color: $grey-ascendion;
+  color:  #fff;
+  height: 100%;
+  padding-top: 56px;
+}
+
+.sidebar-menu {
+  background-color: white;
+  position: absolute;
+  padding: 0px;
+}
+
+.nav-sidebar .aside-sidebar {
+  position: fixed;
+  height: calc(100vh - 50px);
+  overflow: auto;
+  top: 44px;
+  left: 14px;
+  border-radius:10px;
+}
+
+.user-heading {
+  color: #000;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+
+
+.roles-dp {
+  color: darkgray;
+  font-size: 11px;
+  border-color: aliceblue;
+}
+
+.metal-icon {
+  position: relative;
+  display:block;
+}
+
+.metal-icon img {
+  position: absolute;
+  top: -70px;
+  left: 51px;
+}
+.rolename {
+  color: darkgray;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+  width: 110px !important;
+  display: inline-block;
+  white-space: nowrap;
+  float: right;
+}
+
+.icon-blue {
+ 
+    -webkit-appearance: menulist-button;
+    background: none;
+    border: none;
+    color: $theme-blue !important;
+    font-weight: lighter;
+
+    &:hover {
+      color: $dark-blue !important;
+    }
+  
+}
+
+
+.nav-item {
+  margin-bottom: 0;
+
+  .nav-link {
+    color: $theme-blue; //$gray-200;
+    border: none;
+    position: relative;
+   
+
+    &:hover {
+      background-color: $primary;
+      color: $dark-blue;
+    }
+ }
+  }
+
+.nav-sidebar {
+  padding-left: 0px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  background-color: #F5F7FA;
+}
+
+.navbar {
+  padding: 0px !important;
+  height: 40px;
+}

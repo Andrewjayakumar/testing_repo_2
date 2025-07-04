@@ -1,0 +1,100 @@
+
+<div class="form-group">
+  <label [for]="control.key">{{control.label}}<sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup></label>
+  <div class="input-group dropdown-outer">
+    <input autocomplete="off" id="control.id" [placeholder]="control.placeholder" type="text" class="form-control" [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}" [(ngModel)]="searchtext" (keyup)=filter()>
+    <div class="dropdown-option" *ngIf="filteredList.length > 0">
+      <ul class="list-group">
+        <li *ngIf="searchtext!=='' && AutoSearchList.length > 0" (click)="select(null)" class="list-group-item list-group-item-action">
+          <span>
+            {{searchtext}}
+          </span>
+        </li>
+        <li *ngFor="let item of AutoSearchList" (click)="select(item)" class="list-group-item list-group-item-action pointer">
+          
+          <!--<span>
+           
+          </span>-->
+          <span>
+            <!--<img src="{{item['Image']}}" />-->
+            {{item[this.control.textfield]}}
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="input-group-append pointer" (click)="Search() ? c('Close click') : false">
+      <span class="input-group-text"><i class="fa fa-search"></i></span>
+    </div>
+  </div>
+</div>
+<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+<!--<div class="d-flex justify-content-center">
+  <div class="input-field w-100">
+    <div class="form-group">
+      <label [for]="control.key" [class.active]="data[control.key] && data[control.key].length > 0">{{control.label}}</label>
+      <input mdbActive id="control.id" placeholder={{control.placeholder}} type="text" class="form-control validate filter-input" [(ngModel)]="searchtext" (keyup)=filter()>
+      <div class="suggestions" *ngIf="filteredList.length > 0">
+        <ul class="list-group results dropdown-ui">
+          <li (click)="select(null)" class="list-group-item grey lighten-3" type="button" *ngIf="searchtext!==''  && AutoSearchList.length>0">
+            <span>
+              {{searchtext}}
+            </span>
+          </li>
+          <li *ngFor="let item of AutoSearchList" (click)="select(item)" class="list-group-item grey lighten-3" type="button">
+            <span>
+              {{item[this.control.textfield]}}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-icon" (click)="Search() ? c('Close click') : false"><i class="fa fa-search"></i></button>
+</div>-->
+  
+
+    
+      <div *ngIf="control.ResultViewType == 'card'">
+        <div class="card-columns">
+          <div *ngFor="let col of resultList" class="mb-1">
+            <app-card-ui [data]="col" [control]="DisplayField" (add)="Add($event)"
+                         (edit)="Edit($event)"
+                         (delete)="Delete($event)"
+                         (moveup)="Moveup($event)"
+                         (movedown)="Movedown($event)"
+                         [buttons]="control"></app-card-ui>
+          </div>
+        </div>
+       <div class="row">
+         <div class="col-sm-12 text-center">
+           <a *ngIf="showloadmore == true" class="btn btn-outline-primary" (click)="GetResultView()">Load more</a>
+         </div>
+       </div>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="control.ResultViewType == 'grid'" class="table table-hover">
+          <thead class="thead-default">
+            <tr>
+              <!--<th *ngFor="let col of control.ResultDisplayField;let show=col.Show"  ngIf="show">
+          {{col.DisplayName}}
+        </th>-->
+              <ng-container *ngFor="let col of control.ResultDisplayField">
+                <th *ngIf="col.Show">{{col?.DisplayName}}</th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of resultList | paginate: { itemsPerPage: 10, currentPage: page }">
+              <!--<th *ngFor="let col of control.ResultDisplayField" ngIf="col.Show==true">
+          {{row[col.BindingField]}}
+        </th>-->
+              <ng-container *ngFor="let col of control.ResultDisplayField">
+                <td *ngIf="col.Show">
+                  {{row[col?.BindingField]}}
+                </td>
+              </ng-container>
+            </tr>
+            <pagination-controls (pageChange)="page = $event"></pagination-controls>
+          </tbody>
+        </table>
+      </div>

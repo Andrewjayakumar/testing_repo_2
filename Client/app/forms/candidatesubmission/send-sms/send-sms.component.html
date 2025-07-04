@@ -1,0 +1,59 @@
+<div class="box-shadow">
+  <div class="modal-header w-100 p-1 pl-3 pt-3">
+    <h5 class="text-primary">Send SMS</h5>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modal.close(true);"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form #form="ngForm" (ngSubmit)="OnSubmitClicked()">
+    <div class="modal-body p-0 pb-1 pl-5">
+
+      <div class="row mb-3">
+
+        <div class="col-md-12 pl-0 ui-control-block">
+          <label> Your previous sent Messages: </label>
+          <div *ngFor="let msg of msgSent">
+            <div class="col-md-12 sentMsg">{{ msg.message }}</div>
+          </div>
+        </div>
+
+
+        <div class="col-md-10 form-group ui-control-block">
+          <div class="col-md-12 pl-0 ui-control-block">
+            <label>
+              Enter your text message here
+              <sup class="text-danger font-weight-bold">*</sup>
+            </label>
+          </div>
+          <div>
+            <textarea class="form-control" 
+            id="textMsg" name="textMsg" rows="5" cols="10" [(ngModel)]="msgToSend"
+             [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="errormessage" *ngIf="errorMessage">{{errorMessage}}</div>
+      <div class="message" *ngIf="displaymesg">{{displaymesg}}</div>
+
+    </div>
+
+    <div class="modal-footer">
+      <input
+        type="submit"
+        role="button"
+        class="btn btn-primary pull-right"
+        [disabled]="!(msgToSend)"
+        value="Send SMS"
+      />
+    </div>
+  </form>
+</div>
+
+

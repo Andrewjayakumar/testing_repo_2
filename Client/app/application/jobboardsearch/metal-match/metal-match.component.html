@@ -1,0 +1,119 @@
+<div class="d-flex mt--4 ">
+
+  <div class="col-md-9 justify-content-around">
+    <div class="form-check d-inline mr-2">
+      <input type="radio" name="weightlevelid" [(ngModel)]="apiParam.weightlevelid" id="topMatch" [value]="7" (click)="onSkillRangeSelected()" checked>
+      <label class="form-check-label" for="topMatch">Top matches</label>
+    </div>
+    <div class="form-check d-inline mr-2">
+      <input type="radio" name="weightlevelid" [(ngModel)]="apiParam.weightlevelid" id="skillJT" [value]="1" (click)="onSkillRangeSelected()">
+      <label class="form-check-label" for="skillJT">Skills 70% | Job Title 30%</label>
+    </div>
+    <div class="form-check d-inline mr-2">
+      <input type="radio" name="weightlevelid" [(ngModel)]="apiParam.weightlevelid" id="jobtitleSkill" [value]="4" (click)="onSkillRangeSelected()">
+      <label class="form-check-label" for="jobtitleSkill">Job Title 70% | Skills 30%</label>
+    </div>
+    <div class="form-check d-inline mr-2">
+      <input type="radio" name="weightlevelid" [(ngModel)]="apiParam.weightlevelid" id="skillsRadio" [value]="5" (click)="onSkillRangeSelected()">
+      <label class="form-check-label" for="skillsRadio">Skills 100%</label>
+    </div>
+    <div class="form-check d-inline mr-2">
+      <input type="radio" name="weightlevelid" [(ngModel)]="apiParam.weightlevelid" id="jobtitleRadio" [value]="6" (click)="onSkillRangeSelected()">
+      <label class="form-check-label" for="jobtitleRadio">Job Title 100%</label>
+    </div>
+
+  </div>
+  <div class="col-2 m-0">
+    <div class="col-md-12">
+      <label class="filtersicon">Filters:</label>
+
+      <a class="dropdown-item filterButton btn btn-link text-dark filters" (click)="openFilters()">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-filter"></i>
+          <i *ngIf="showNotifyBadge" class="fa fa-circle fa-stack-1x notifyBadge text-danger"></i>
+        </span>
+      </a>
+    </div>
+
+  </div>
+  <div class="col-1 ">
+    <div class="col-md-12">
+      <button (click)="OnSearchClicked()" class="btn btn-primary">
+        Search
+      </button>
+
+    </div>
+  </div>
+</div>
+<div *ngIf="showLoader" class="text-center p-2">
+  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+</div>
+
+<div *ngIf="matchingCandidates?.length ==0 && !candidateResponse && !showLoader" class="text-center font-italic">
+  {{reqMessage}}
+</div>
+<ngb-alert *ngIf="sourceCandidatesResp"
+           type="danger">
+  {{sourceCandidatesResp}}
+</ngb-alert>
+
+<div class="col-md-12 p-0 mt-3">
+  <div class="container" id="candidatecard">
+    <!-- cards -->
+    <div class="row metal-card-row mt-2">
+      <div class="col-3 metal-card-col p-1" *ngFor="let candidateObj of matchingCandidates">
+        <div class="d-block h-100">
+          <div class="card mb-0 h-100 custom-action-hover">
+            <app-candidate-card [candidate]="candidateObj" [pagename]="'MetalMatching'" [showCheckbox]="true"
+                                [requisitionid]="data.requisitionid" (actionchecked)="actionchecked($event)"
+                                (matchScoreClicked)="launchMatchReasonPopup($event)"
+                                [isCandidateDashboardSearch]="isCandidateDashboard"
+                                [aigenerated]="aigenerated"
+                                ></app-candidate-card>
+            <!--<i class="fa fa-ellipsis-h"> Unfavorite</i>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" *ngIf="candidateidArray?.length > 0" class="
+        btn
+        position-fixed
+        btn-custom-circle
+        right
+        bottom-3
+        mb-3
+        mr-3
+        btn-xl btn-info btn-lg
+      " (click)="sourceCandidates()">
+      Source
+    </button>
+    <!-- pagination -->
+    <div *ngIf="matchingCandidates?.length > 0" class="d-flex justify-content-center mt-3">
+      <ngb-pagination [collectionSize]="totalrecords" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                      (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">Ok</button>
+  </div>
+</ng-template>

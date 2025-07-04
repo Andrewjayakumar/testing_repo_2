@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript">
+    var url = window.location.href;
+    var arr = url.split("/");
+    var result = arr[0] + "//" + arr[2];
+    this.tenantid = "d7758e8f-1df3-489f-86b5-a2254f55f9cc";
+    this.client_id = "0bd0630c-47a2-4e82-8862-452852ae4fb2";
+    this.redirect_uri = result + "/auth-callback";
+    var url = "https://login.microsoftonline.com/common" + "/oauth2/authorize?client_id=" + this.client_id + "&response_type=id_token+code&redirect_uri=" + this.redirect_uri + "&response_mode=fragment&scope=openid+profile+offline_access+Mail.Read+Mail.Send&state=12345&nonce=678910";
+    window.location.href = url;
+  </script>
+  <!--<meta http-equiv="refresh" content="2;url=https://login.microsoftonline.com/common/oauth2/authorize?client_id=0bd0630c-47a2-4e82-8862-452852ae4fb2&response_type=id_token+code&redirect_uri=https://10.128.49.8/auth-callback&response_mode=fragment&scope=openid+profile+offline_access+Mail.Read+Mail.Send&state=12345&nonce=678910" />-->
+  <meta charset="utf-8" />
+  <title>Metal</title>
+</head>
+<body>
+
+</body>
+</html>

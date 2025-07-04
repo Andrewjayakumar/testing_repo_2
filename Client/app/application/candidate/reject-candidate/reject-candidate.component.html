@@ -1,0 +1,133 @@
+
+<div class="modal-header">
+  <h6 class="modal-title summary-heading">{{ title }}</h6>
+  <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+</div>
+<div class="modal-body">
+  <form [formGroup]="vForm" (ngSubmit)="onSubmit()" #formGroupRef="ngForm">
+    <div *ngIf="typeid == 1 || typeid == 2" class="row">
+      <div>
+        <app-metal-switch [(state)]="model.isRejected" (stateChange)="OnrejectedToggled($event)" [uniqueid]="'candidaterejected'" name="candidaterejected" [labelname]="'Do You wish to Reject this Candidate?'"></app-metal-switch>
+      </div>
+    </div>
+    <div *ngIf="isIWLoading" class="col-md-6">
+      <button class="btn btn-primary loader" type="button" disabled="">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div *ngIf="typeid == 3 && !isIWLoading" class="row">
+      <div class="form-check col-md-3 ml-3i">
+        <input type="radio" name="badDeliveryType" [value]="1" class="form-check-input" id="client"
+           formControlName="badDeliveryType" (change)="onRadioSelected($event)"/>
+        <label class="form-check-label col-form-label-sm label-color m-b" for="client">Client</label>
+      </div>
+      <div class="form-check col-md-3">
+        <input type="radio" name="badDeliveryType" [value]="2" class="form-check-input" id="ascendion"
+           formControlName="badDeliveryType" (change)="onRadioSelected($event)"/>
+        <label class="form-check-label col-form-label-sm label-color m-b" for="ascendion">Ascendion</label>
+      </div>
+      <div *ngIf="!hideIncorrectWorkflow" class="form-check col-md-3">
+        <input type="radio" name="badDeliveryType" [value]="3" class="form-check-input" id="incorrectworkflow"
+           formControlName="badDeliveryType" (change)="onRadioSelected($event)"/>
+        <label class="form-check-label col-form-label-sm label-color m-b" for="incorrectworkflow">Incorrect Workflow</label>
+      </div>
+    </div>
+    <div *ngIf="model.isRejected || vForm.get('badDeliveryType').value">
+      <div class="row">
+        <div *ngIf="typeid != 3 || vForm.get('badDeliveryType').value == 2" class="form-group col-md-8">
+          <label for="rejectedcategory" class="col-form-label-sm label-color m-b">
+            Reject Category
+          </label>
+          <sup class="text-danger font-weight-bold">*</sup>
+          <ng-select class="form-control form-control-sm"
+                      [items]="rejectcategory"
+                      [multiple]="false"
+                      [closeOnSelect]="true"
+                      bindLabel="category"
+                      bindValue="category"
+                      placeholder="--select--"
+                      name="rejectedcategory"
+                      (change)="getCategoryID($event)"
+                      [searchable]="false"
+                      [(ngModel)]="rejectedCategory"
+                      id="rejectedcategory"
+                      formControlName="rejectedcategory"
+          >
+          </ng-select>
+          <small class="font-size-small text-danger fa fa-exclamation"
+                  *ngIf="vForm.get('rejectedcategory').hasError('required') && (vForm.get('rejectedcategory').touched || formGroupRef.submitted)">
+              Please select rejected category!
+          </small>
+        </div>
+        <div *ngIf="typeid != 3 || vForm.get('badDeliveryType').value == 1 || vForm.get('badDeliveryType').value == 2" class="form-group col-md-8">
+          <label for="rejectedreason" class="col-form-label-sm label-color m-b">
+            Reject Reason
+          </label>
+          <sup class="text-danger font-weight-bold">*</sup>
+          <ng-select class="form-control form-control-sm"
+                      [items]="rejectedReasons"
+                      [multiple]="false"
+                      [closeOnSelect]="true"
+                      bindLabel="reason"
+                      bindValue="id"
+                      placeholder="--select--"
+                      name="rejectedreason"
+                      [searchable]="false"
+                      [(ngModel)]="rejectedReason"
+                      id="rejectedreason"
+                      formControlName="rejectedreason"
+          >
+          </ng-select>
+          <small class="font-size-small text-danger fa fa-exclamation"
+                  *ngIf="vForm.get('rejectedreason').hasError('required') && (vForm.get('rejectedreason').touched || formGroupRef.submitted)">
+              Please select rejected reason!
+          </small>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-8">
+          <label for="comments" class="col-form-label-sm label-color m-b">Leave Comments Here</label>
+          <sup class="text-danger font-weight-bold">*</sup>
+        </div>
+        <div class="col-md-8">
+          <textarea class="form-control form-control-sm"
+                    (keyup.backspace)="onBackSpace($event)"
+                    (keyup)="maxLength($event)" formControlName="comments">
+          </textarea>
+          <span>
+              {{commentLengthRem}} character(s) remaining
+          </span>
+          <div>
+              <small class="font-size-small text-danger fa fa-exclamation"
+                      *ngIf="vForm.get('comments').hasError('required') && (vForm.get('comments').touched || formGroupRef.submitted)">
+                  Comments is required
+              </small>
+              <small class="font-size-small text-danger fa fa-exclamation"
+                      *ngIf="vForm.get('comments').hasError('maxlength') && (vForm.get('comments').touched || formGroupRef.submitted)">
+                  Maximum 4000 characters in Comments
+              </small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+      <div *ngIf="(displayMessage || errorMessage)" class="col-md-12 mb-4">
+        <div *ngIf="displayMessage" class="alert alert-success">
+          <strong>{{displayMessage}}</strong>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          <strong>{{errorMessage}}</strong>
+        </div>
+      </div>
+      <div *ngIf="!(isUploading || displayMessage || errorMessage)" class="col-md-6 pb-2">
+        <button class="btn btn-primary" type="submit" [disabled]="!(vForm.valid)">Reject Candidate</button>
+      </div>
+      <div *ngIf="isUploading" class="col-md-6">
+        <button class="btn btn-primary loader" type="button" disabled="">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+    </div>
+  </form>
+</div>

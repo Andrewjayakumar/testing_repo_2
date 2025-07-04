@@ -1,0 +1,441 @@
+<form>
+  <ngb-alert *ngIf="successMessage" type="custom" (close)="successMessage = null">
+    <span class="d-flex align-items-center justify-content-center">
+      <i class="fa-3x {{successMessage.icon}} pr-3 text-success"></i>
+      <span>
+        <span class="h5 d-block text-dark">{{successMessage.title}}</span>
+        <span>{{successMessage.text}}</span>
+      </span> 
+    </span>
+    <!--{{ successMessage }}-->
+  </ngb-alert>
+  <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+  <div class="sidbar-outer sidbar75" *ngIf="!formdata">
+    <ng-sidebar-container>
+      <ng-sidebar [(opened)]="_controlService._opened && !loading" (onOpenStart)="_onOpenStart()" (onClosed)="_onClosed()" [position]="'right'"
+        [mode]="'over'" [autoFocus]="false">
+        <div class="d-flex justify-content-between">
+          <h5 class="p-3 m-0">Edit</h5>
+          <a class="p-3 ml-auto" (click)="_controlService._toggleSidebar()">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="sidbar-body sidbar75 111">
+          <div class="container-fluid" *ngIf="SidebarEditModel">
+            <div class="row">
+              <app-dynamicformcontrolls *ngFor="let ctrl of SidebarControls" [control]="ctrl" [formGroup]="form" [data]="SidebarEditModel"
+                [access]="'write'" [sidebar]="true" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <app-dynamicformcontrolls *ngFor="let ctrl of SaveBtnControlforEditMode" [control]="ctrl" [formGroup]="form" [data]="SidebarEditModel" [AuthService]="AuthService"></app-dynamicformcontrolls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-sidebar>
+      <ng-sidebar [(opened)]="_openedExport" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+        <div class="d-flex justify-content-between">
+          <h5 class="p-3">
+            {{getImportTitle()}}
+          </h5>
+
+          <a class="p-3 ml-auto" (click)="_openedExport=!_openedExport">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="sidbar-body 222">
+          <div class="container">
+            <div class="row">
+              <ng-container *ngFor="let ctrl of FormUI?.controls">
+                <app-dynamicformcontrolls *ngIf="ctrl.filterresult==true && ctrl.type=='import'" [control]="ctrl" [formGroup]="form" [data]="datamodel"
+                  [access]="'write'"  [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                </app-dynamicformcontrolls>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-sidebar>
+      <ng-sidebar [(opened)]="_openedImportHistory" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+        <div class="d-flex justify-content-between">
+          <h5 class="p-3">
+            Import Status
+          </h5>
+          <a class="p-3 ml-auto" (click)="_openedImportHistory=!_openedImportHistory">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="sidbar-body 222">
+          <div class="container-fluid">
+            <div class="row">
+              <ng-container *ngFor="let ctrl of ImportStatusFrom?.controls">
+                <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="ImportStatusFrom.ModelJson" [AuthService]="AuthService"
+                                          [access]="'write'" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                </app-dynamicformcontrolls>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-sidebar>
+      <ng-sidebar [(opened)]="_opened" [position]="'right'" [mode]="'over'" (onOpenStart)="_onAddSidebarStart()" (onClosed)="_onAddSidebarClosed()"  [autoFocus]="false" [ngClass]="{'sidbar500' :filterbar==true}">
+        <div class="d-flex justify-content-between">
+          <a class="p-3" (click)="Redirect('','')" *ngIf="_step==2">
+            <i class="fa fa-chevron-left" aria-hidden="true">
+              <span> {{_stepName}}</span>
+            </i>
+          </a>
+          <div  *ngIf="filterbar==false && AddFormJsonUI" class="d-flex justify-content-between">
+              <h5 class="p-3 m-0">{{AddFormJsonUI?.Formname}}</h5>
+              <a *ngIf="AuthService.currentUser.roles.indexOf('Tenant Admin') > -1" class="pl-2 pt-3"
+                  [routerLink]="['../../forms/Edit', AddFormJsonUI.Id]">
+                    <i class="fa-lg fa fa-cog"></i>
+              </a>
+          </div>
+          <a *ngIf="filterbar!=false" class="p-3" (click)="clearFilter();">
+            Clear Filter
+            <span class="bubble-outer">
+              <i class="fa fa-filter"></i>
+              <span *ngIf="filterApplied>0" class="bubble {{FormUI.FilterUIJson?.filterBubble}}">{{filterApplied}}</span>
+            </span>
+          </a>
+          <a *ngIf="filterbar!=false && FormUI?.FilterUIJson?.CustomFilter && CustomFilterFormUI && AuthService.currentUser.roles.indexOf('Tenant Admin') > -1"  class="pl-2 pt-3"
+              [routerLink]="['../../forms/Edit', CustomFilterFormUI.Id]">
+                <i class="fa-lg fa fa-cog"></i>
+          </a>
+          <a class="p-3 ml-auto" (click)="closeAddSidebar(content);">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="sidbar-body 222" *ngIf="_controlService._openedEditForm==false">
+          <div *ngIf="filterbar!=false" class="container-fluid">
+            <ng-container *ngIf="!FormUI?.FilterUIJson?.CustomFilter">
+              <div *ngFor="let ctrl of FormUI?.FilterUIJson?.controls">
+                <div class="card mb-2" *ngIf="ctrl.type !='textbox'">
+                  <div *ngIf="ctrl.type !='textbox'" class="card-header d-flex justify-content-between border-bottom pointer" [hidden]="!_step1(ctrl)"
+                    (click)="panelChange(ctrl?.id, ctrl?.filterheader)">
+                    <span>
+                      {{ctrl?.filterheader}}
+                    </span>
+                    <i class="fa fa-angle-down align-self-center" aria-hidden="true"></i>
+                  </div>
+                  <div class="card-body py-0 border-bottom" *ngIf="ctrl.filterresult != true && ctrl.addinfilter== true" [hidden]="activePanelIndex[ctrl?.id]!=ctrl?.filterheader">
+                    <div class="row">
+                      <app-dynamicformcontrolls [control]="ctrl" [formGroup]="formFilter" [data]="datamodel" [filterdata]="filterdata" [access]="access"
+                      [AuthService]="AuthService"  class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <div class="row" *ngIf="FormUI?.FilterUIJson?.CustomFilter && CustomFilterFormUI">
+              <app-dynamicformcontrolls *ngFor="let ctrl of CustomFilterFormUI.controls" [control]="ctrl" [formGroup]="CustomFilterFormGroup"
+                [data]="CustomFilterFormModel" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+            </div>
+            <button class="btn {{FormUI?.FilterUIJson?.applyFilterBtnClass ? FormUI?.FilterUIJson?.applyFilterBtnClass : 'btn-outline-primary'}}"
+              (click)="FormUI?.FilterUIJson?.CustomFilter ? customSearch() : Search()">
+              <i class="{{FormUI?.FilterUIJson?.applyFilterBtnIcon}} mr-2" *ngIf="FormUI?.FilterUIJson?.applyFilterBtnIcon != 'none'"></i>{{FormUI?.FilterUIJson?.applyFilterBtnText ? FormUI?.FilterUIJson?.applyFilterBtnText : 'Apply Filter'}}
+            </button>
+          </div>
+          <div *ngIf="filterbar==false" class="container">
+            <div class="row" *ngIf="AddFormJsonUI && AddFormJsonUI?.ModelJson">
+              <ng-container *ngFor="let ctrl of AddFormJsonUI.controls">
+                <app-dynamicformcontrolls *ngIf="ctrl.filterresult != true" [control]="ctrl" [formGroup]="AddFormGroup" [data]="AddFormJsonUI.ModelJson"
+                [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+              </ng-container>
+            </div>
+            <div *ngIf="!AddFormJsonUI">
+              loading...
+            </div>
+          </div>
+        </div>
+      </ng-sidebar>
+      <ng-sidebar [(opened)]="_controlService._openedEditForm" (onOpenStart)="_onEditSidebarStart()" (onClosed)="_onEditSidebarClosed()"
+        [position]="'right'" [mode]="'over'" [autoFocus]="false">
+        <div *ngIf="_opened==false">
+          <ng-sidebar-container>
+            <ng-sidebar [(opened)]="_controlService._opened" (onOpenStart)="_onOpenStart()" (onClosed)="_onClosed()" [autoFocus]=false
+              [trapFocus]=false [position]="'right'" [mode]="'over'">
+              <div class="d-flex justify-content-between">
+                <h5 class="p-3 m-0">{{_controlService.filterEditformJson?.Formname}}
+                </h5>
+                <a *ngIf="AuthService.currentUser.roles.indexOf('Tenant Admin') > -1 && _controlService.filterEditformJson"  class="pl-2 pt-3"
+                      [routerLink]="['../../forms/Edit', _controlService.filterEditformJson.Id]">
+                        <i class="fa-lg fa fa-cog"></i>
+                  </a>
+                <a class="p-3 ml-auto" (click)="_controlService._toggleSidebar()">
+                  <i class="fa fa-close" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div class="sidbar-body sidbar75 111">
+                <div class="container-fluid" *ngIf="_controlService.filterEditformJson?.ModelJson">
+                  <div class="row">
+                    <app-dynamicformcontrolls *ngFor="let ctrl of SidebarControls" [control]="ctrl" [formGroup]="form" [data]="_controlService.filterEditformJson.ModelJson"
+                      [access]="'write'" [sidebar]="true" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <app-dynamicformcontrolls *ngFor="let ctrl of SaveBtnControlforEditMode" [control]="ctrl" [formGroup]="form" [data]="_controlService.filterEditformJson.ModelJson" [AuthService]="AuthService"></app-dynamicformcontrolls>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-sidebar>
+            <div class="" ng-sidebar-content>
+              <div class="d-flex justify-content-between" style="cursor:default !important">
+                <h4 class="p-3 m-0 123">{{_controlService?.filterEditformJson?.Formname}}
+                </h4>
+                <a *ngIf="AuthService.currentUser.roles.indexOf('Tenant Admin') > -1 && _controlService.filterEditformJson"  class="pl-2 pt-3"
+                    [routerLink]="['../../forms/Edit', _controlService.filterEditformJson.Id]">
+                      <i class="fa-lg fa fa-cog"></i>
+                </a>
+                <a class="p-3 ml-auto" (click)="_controlService._openedEditForm=!_controlService._openedEditForm;">
+                  <i class="fa fa-close" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div class="sidbar-body" style="cursor:default !important">
+                <div class="container-fluid">
+                  <div class="row" *ngIf="_controlService.filterEditformJson && _controlService.filterEditformJson.ModelJson">
+                    <ng-container *ngFor="let ctrl of _controlService.filterEditformJson.controls">
+                      <app-dynamicformcontrolls *ngIf="ctrl.filterresult != true" [control]="ctrl" [formGroup]="_controlService.formFilter" [data]="_controlService.filterEditformJson.ModelJson"
+                        [access]="_controlService.ActionMode" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+                    </ng-container>
+                  </div>
+                  <div *ngIf="!_controlService.filterEditformJson || !_controlService.filterEditformJson.ModelJson">
+                    <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-sidebar-container>
+        </div>
+
+      </ng-sidebar>
+      <div ng-sidebar-content>
+
+        <div class="row" *ngIf="access != 'edit' &&  access!='mandatory' &&  access!='filter'">
+          <ng-container *ngFor="let ctrl of controls">
+            <app-dynamicformcontrolls *ngIf="ctrl.filterresult != true" [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="access"
+              [formdata]="formdata" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+          </ng-container>
+        </div>
+
+        <div class="row" *ngIf="access=='edit' || access=='mandatory'">
+          <div class="col-md-12">
+            <div class="row">
+              <ng-container *ngFor="let ctrl of controls">
+                <app-dynamicformcontrolls *ngIf="ctrl.filterresult != true" [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="access"
+                [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="access=='filter' && FormUI">
+          <div class="col-md-12 sidbar-outer" [ngClass]="{'sidbar500':filterbar!=false,'sidbar75':filterbar==false}">
+            <div class="searchbar mb-3">
+              <div class="row justify-content-end">
+                <div class="col col-auto pr-0 mr-auto">
+                  <!-- <h5 class="m-0">{{FormUI.FormName}}</h5> -->
+                </div>
+                <!--<div class="col col-auto ml-auto"  *ngIf="FilterCount()==0"> <a class="waves-effect waves-light" (click)="_controlService._toggleSidebar()"><i class="fa fa-filter"></i> Filter</a></div>-->
+                <div class="col-auto">
+                  <div class="search-hover d-flex">
+                    <ng-container *ngFor="let ctrl of FormUI.FilterUIJson?.controls">
+                      <div class="" *ngIf="ctrl.type=='textbox'">
+                        <div class="row">
+                          <app-dynamicformcontrolls [control]="ctrl" [formGroup]="formFilter" [data]="datamodel" [filterdata]="filterdata" [access]="access"
+                            (controlEvent)="Search()" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <button *ngIf="!FormUI?.FilterUIJson?.CustomFilter" class="btn {{FormUI.FilterUIJson?.searchBtnClass ? FormUI.FilterUIJson?.searchBtnClass : 'btn-outline-secondary'}}"
+                      (click)="filterbar=true;Search(true)">
+                      <i class="{{FormUI.FilterUIJson.searchBtnIcon ? FormUI.FilterUIJson.searchBtnIcon : 'fa fa-search' }}"></i>
+                    </button>
+                    <button class="btn {{FormUI.FilterUIJson?.filterBtnClass ? FormUI.FilterUIJson?.filterBtnClass : 'btn-outline-secondary ml-2'}}"
+                      (click)="clickFilter()">
+                      <span class="bubble-outer">
+                        <i class="{{FormUI.FilterUIJson?.filterBtnIcon ? FormUI.FilterUIJson?.filterBtnIcon : 'fa fa-filter'}}"></i>
+                        <span *ngIf="filterApplied>0" class="bubble {{FormUI.FilterUIJson?.filterBubble}}">{{filterApplied}}</span>
+                      </span>
+                    </button>
+                    <button class="btn {{FormUI.FilterUIJson?.addBtnClass ? FormUI.FilterUIJson?.addBtnClass : 'ml-2 btn-outline-primary btn-round'}}"
+                      (click)="_controlService.filterEditformJson=null;filterbar = false; _opened = !_opened;InitializeAddForm();"
+                      title="Add New" *ngIf="FormUI.FilterUIJson?.ShowAddform">
+                      <i class="{{FormUI.FilterUIJson?.addBtnIcon ? FormUI.FilterUIJson?.addBtnIcon : 'fa fa-plus'}} pr-md-1"></i>
+                      <span class="d-none d-md-inline">{{FormUI.FilterUIJson?.addBtnText ? FormUI.FilterUIJson?.addBtnText : 'Add New'}}</span>
+                    </button>
+                    <button class="btn {{FormUI.FilterUIJson?.exportBtnClass ? FormUI.FilterUIJson?.exportBtnClass : 'ml-2 btn-outline-primary btn-round'}}"
+                      (click)="exportToCSV()" title="Export" *ngIf="FormUI.FilterUIJson?.ShowExport">
+                      <i class="{{FormUI.FilterUIJson?.exportBtnIcon ? FormUI.FilterUIJson?.exportBtnIcon : 'fa fa-file-excel-o'}} pr-md-1"></i>
+                      <span class="d-none d-md-inline">{{FormUI.FilterUIJson?.exportBtnText ? FormUI.FilterUIJson?.exportBtnText : 'Export'}}</span>
+                    </button>
+                    <button class="btn {{FormUI.FilterUIJson?.importBtnClass ? FormUI.FilterUIJson?.importBtnClass : 'ml-2 btn-outline-primary btn-round'}}"
+                      (click)="_openedExport=!_openedExport;filterbar = false;" title="Import" *ngIf="FormUI.FilterUIJson?.ShowImport">
+                      <i class="{{FormUI.FilterUIJson?.importBtnIcon ? FormUI.FilterUIJson?.importBtnIcon : 'fa fa-cloud-upload'}} pr-md-1"></i>
+                      <span class="d-none d-md-inline">{{FormUI.FilterUIJson?.importBtnText ? FormUI.FilterUIJson?.importBtnText : 'Import'}}</span>
+                    </button>
+                    <button class="ml-2 btn btn-link text-dark pointer p-0" (click)="GetImportStatusForm();filterbar = false;" title="Import" *ngIf="FormUI.FilterUIJson?.ShowImport">
+                      <i class="fa fa-history"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="">
+              <div class="row" *ngIf="FormUI.FilterUIJson?.filtertype == 'List'">
+                <ng-container *ngFor="let ctrl of FormUI.controls">
+                  <app-dynamicformcontrolls *ngIf="ctrl.filterresult==true && ctrl.type=='table' && datamodel[ctrl.key]" [control]="ctrl" [formGroup]="form"
+                    [data]="datamodel" [AuthService]="AuthService" [access]="'write'" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                  </app-dynamicformcontrolls>
+                </ng-container>
+              </div>
+              <div class="row" *ngIf="FormUI.FilterUIJson?.filtertype == 'List'">
+                <ng-container *ngFor="let ctrl of FormUI.controls">
+                  <app-dynamicformcontrolls *ngIf="ctrl.filterresult==true && ctrl.type=='advancegrid' && datamodel[ctrl.key]" [control]="ctrl"
+                    [formGroup]="form" [AuthService]="AuthService" [data]="datamodel" [access]="'write'" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                  </app-dynamicformcontrolls>
+                </ng-container>
+              </div>
+              <div class="row" *ngIf="FormUI.FilterUIJson?.filtertype == 'Grid'">
+                <ng-container *ngFor="let ctrl of FormUI.controls">
+                  <app-dynamicformcontrolls *ngIf="ctrl.filterresult==true && ctrl.type=='cardgrid' && datamodel[ctrl.key]" [control]="ctrl"
+                    [formGroup]="form" [AuthService]="AuthService" [data]="datamodel" [access]="'write'" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                  </app-dynamicformcontrolls>
+                </ng-container>
+              </div>
+              <div class="row" *ngIf="FormUI.FilterUIJson?.filtertype == 'Calender'">
+                <ng-container *ngFor="let ctrl of FormUI.controls">
+
+                  <app-dynamicformcontrolls *ngIf="ctrl.filterresult==true && ctrl.type=='calender' && datamodel[ctrl.key]" [control]="ctrl"
+                    [formGroup]="form" [AuthService]="AuthService" [data]="datamodel" [access]="'write'" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                  </app-dynamicformcontrolls>
+                </ng-container>
+              </div>
+              <div class="row" *ngIf="FormUI.FilterUIJson?.filtertype == 'KanBan'">
+                <!--<h4>KanBan</h4>-->
+                <ng-container *ngFor="let ctrl of FormUI.controls">
+                  <app-dynamicformcontrolls *ngIf="ctrl.filterresult==true && ctrl.type=='kanban' && datamodel[ctrl.key]" [control]="ctrl"
+                    [formGroup]="form" [AuthService]="AuthService" [data]="datamodel" [access]="'write'" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                  </app-dynamicformcontrolls>
+                </ng-container>
+              </div>
+              <div class="row" *ngIf="FormUI.FilterUIJson?.filtertype == 'Map'">
+                <!--<h4>KanBan</h4>-->
+                <ng-container *ngFor="let ctrl of FormUI.controls">
+                  <app-dynamicformcontrolls *ngIf="ctrl.filterresult==true && ctrl.type=='map' && datamodel[ctrl.key]" [control]="ctrl" [formGroup]="form"
+                    [data]="datamodel" [AuthService]="AuthService" [access]="'write'" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                  </app-dynamicformcontrolls>
+                </ng-container>
+              </div>
+              <div class="tab-filter" *ngIf="FormUI.FilterUIJson?.filtertype == 'All' || FormUI.FilterUIJson?.filtertype.indexOf(',') > -1">
+                <ngb-tabset class="tab-filter-icon">
+                  <ng-container *ngFor="let ctrl of FilterView">
+                    <ngb-tab id="List" *ngIf="ctrl.filterresult==true && ctrl.type=='table'">
+                      <ng-template ngbTabTitle>
+                        <i class="fa fa-list"></i>
+                      </ng-template>
+                      <ng-template ngbTabContent>
+                        <div class="row">
+                          <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                          </app-dynamicformcontrolls>
+                        </div>
+                      </ng-template>
+                    </ngb-tab>
+
+                    <ngb-tab id="advancegrid" *ngIf="ctrl.filterresult==true && ctrl.type=='advancegrid'">
+                      <ng-template ngbTabTitle>
+                        <i class="fa fa-list"></i>
+                      </ng-template>
+                      <ng-template ngbTabContent>
+                        <div class="row">
+                          <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="'write'"  [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                          </app-dynamicformcontrolls>
+                        </div>
+                      </ng-template>
+                    </ngb-tab>
+
+                    <ngb-tab id="Grid" *ngIf="ctrl.filterresult==true && ctrl.type=='cardgrid'">
+                      <ng-template ngbTabTitle>
+                        <i class="fa fa-th-large"></i>
+                      </ng-template>
+                      <ng-template ngbTabContent>
+                        <div class="row">
+                          <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                          </app-dynamicformcontrolls>
+                        </div>
+                      </ng-template>
+                    </ngb-tab>
+
+                    <ngb-tab id="Calender" *ngIf="ctrl.filterresult==true && ctrl.type=='calender'">
+                      <ng-template ngbTabTitle>
+                        <i class="fa fa-calendar"></i>
+                      </ng-template>
+                      <ng-template ngbTabContent>
+                        <div class="row">
+                          <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                          </app-dynamicformcontrolls>
+                        </div>
+                      </ng-template>
+                    </ngb-tab>
+
+                    <ngb-tab id="KanBan" *ngIf="ctrl.filterresult==true && ctrl.type=='kanban'">
+                      <ng-template ngbTabTitle>
+                        <i class="fa fa-table"></i>
+                      </ng-template>
+                      <ng-template ngbTabContent>
+                        <div class="row">
+                          <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                          </app-dynamicformcontrolls>
+                        </div>
+                      </ng-template>
+                    </ngb-tab>
+
+                    <ngb-tab id="map" *ngIf="ctrl.filterresult==true && ctrl.type=='map'">
+                      <ng-template ngbTabTitle>
+                        <i class="fa fa-sitemap"></i>
+                      </ng-template>
+                      <ng-template ngbTabContent>
+                        <div class="row">
+                          <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="'write'" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                          </app-dynamicformcontrolls>
+                        </div>
+                      </ng-template>
+                    </ngb-tab>
+                  </ng-container>
+                </ngb-tabset>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-sidebar-container>
+  </div>
+  <div class="row" *ngIf="access == 'write' && formdata">
+    <ng-container *ngFor="let ctrl of controls">
+      <app-dynamicformcontrolls *ngIf="ctrl.filterresult != true" [control]="ctrl" [formGroup]="form" [data]="datamodel" [access]="access"
+        [formdata]="formdata" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}"></app-dynamicformcontrolls>
+    </ng-container>
+  </div>
+</form>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="custom-msg">
+    <div class="d-flex align-items-center justify-content-center">
+      <i class="fa fa-3x fa-exclamation-circle pr-3 text-danger"></i>
+      <div>
+        <h5 class="text-dark">
+          Oops. Are You Sure!
+        </h5>
+        <p class="mb-0 word-break">
+          You want to close this page?
+        </p>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-2" style="padding-left:12px">
+      <button type="button" class="btn btn-light mr-3" (click)="closeConfirm='NO';c('Close click')">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="closeConfirm='YES';c('Close click')">
+        Yes, close it!
+      </button>
+    </div>
+  </div>
+</ng-template>

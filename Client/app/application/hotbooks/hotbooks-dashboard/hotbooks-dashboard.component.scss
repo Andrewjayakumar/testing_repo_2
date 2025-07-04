@@ -1,0 +1,13 @@
+$orange: #f5a623 !default;
+$primary: #1976d2;
+
+.pageheading {
+  color: $primary;
+  font-size: medium; //14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding-left: 0;
+  padding-top: 5px;
+  font-variant-caps: small-caps;
+}

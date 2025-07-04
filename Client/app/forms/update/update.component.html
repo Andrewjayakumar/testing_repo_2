@@ -1,0 +1,102 @@
+<ngb-tabset #tasbset="ngbTabset">
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      Forms
+    </ng-template>
+    <ng-template ngbTabContent>
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="m-0">Form List</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Form Name</th>
+                    <th>Model Name</th>
+                    <th>Created Date</th>
+                    <th>Update Date</th>
+                    <!--<th>Active</th>-->
+                    <th width="120" class="text-center">Action</th>
+                    <!--<th  width="10%">Activate</th>-->
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="form-control" [(ngModel)]="filter.formname" placeholder="Filter by Form Name"
+                      /></td>
+                    <td><input type="text" class="form-control" [(ngModel)]="filter.modalname" placeholder="Filter by Model Name"
+                      /></td>
+                    <td></td>
+                    <td></td>
+                    <!--<th>Active</th>-->
+                    <td class="text-center"></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of getformList() | paginate: { itemsPerPage: 10, currentPage: page }">
+                    <td>{{item.Formname}}</td>
+                    <td>{{item.ModelName}}</td>
+                    <td>{{item.CreateDate | date : 'MM/dd/yyyy'}}</td>
+                    <td>{{item.UpdateDate | date : 'MM/dd/yyyy'}}</td>
+                    <!--<td>{{item.Isactive=="0" ? 'Yes' : 'No'}}</td>-->
+                    <!--<td><a (click)=Active(item)></a></td>-->
+                    <td class="text-center">
+                      <a class="btn btn-sm btn-outline-secondary" [routerLink]="['./Edit', item.Id]"><i class="fa fa-pencil"
+                          aria-hidden="true"></i></a>
+                      <button class="btn btn-sm btn-outline-secondary" (click)=Delete(item,content)><i class="fa fa-trash"
+                          aria-hidden="true"></i></button>
+                    </td>
+                    <!--<td><a (click)=Activate(item)>{{item.Isactive=="0" ? 'Activate' : ''}}</a></td>-->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center" *ngIf="formList.length > 10">
+              <pagination-controls (pageChange)="page = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-floating btn-lg mr-3 mb-3 btn-primary rounded-circle fixed-bottom"  [routerLink]="['./Edit']"><i class="fa fa-plus"
+            aria-hidden="true"></i></button>
+
+        <!--<div class="card-header stylish-color white-text">
+          <div class="row">
+            <div class="col-md-10">
+              <h4 class="card-title inline-control">Form List </h4>
+            </div>
+            <div class="col-md-2"> </div>
+          </div>
+        </div>-->
+
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      Settings
+    </ng-template>
+    <ng-template ngbTabContent>
+      <app-setting [AuthService]="_controlService.AuthService"></app-setting>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
+
+
+<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">Alert!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="deleteconfirm='NO';d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">Are you sure want to delete?</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="deleteconfirm='YES';c('Close click')">Yes</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="deleteconfirm='NO';c('Close click')">No</button>
+  </div>
+</ng-template>

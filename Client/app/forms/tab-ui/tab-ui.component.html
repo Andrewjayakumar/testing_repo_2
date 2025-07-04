@@ -1,0 +1,299 @@
+
+<ngb-alert *ngIf="successMessage" type="custom" (close)="successMessage = null">
+  <span class="d-flex align-items-center justify-content-center">
+    <i class="fa-3x {{successMessage.icon}} pr-3 text-success"></i>
+    <span>
+      <span class="h5 d-block text-dark">{{successMessage.title}}</span>
+      <span>{{successMessage.text}}</span>
+    </span>
+  </span>
+  <!--{{ successMessage }}-->
+</ngb-alert>
+<div class="tab-card" [ngClass]="{'border-0': control.hideborder, 'bg-transparent': control.bgtransparent}" *ngIf="!control.IsButtonView && !control.IsImageButtonView && access=='write' && !control.IsExternalFormLoad">
+  <ngb-tabset #tasbset="ngbTabset" [formGroup]="formGroup" *ngIf="!control.IsButtonView && !control.IsImageButtonView && access=='write'">
+    <ngb-tab *ngFor="let tab of control.children let i=index let l = count" [id]="i">
+      <ng-template ngbTabTitle>
+        <i class="{{tab.tabicon}}" *ngIf="tab.tabicon" [ngClass]="{'mr-2': tab.Header}"></i>{{tab.Header}}
+      </ng-template>
+      <ng-template ngbTabContent>
+        <!-- ArunYadav[!control.IsButtonView && !control.IsImageButtonView && access=='write' && !control.IsExternalFormLoad] {{tab.children | json}} -->
+        <div class="row">
+          <app-dynamicformcontrolls *ngFor="let ch of tab.children" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access"
+                                    [AuthService]="AuthService" class="col-md-{{ch.width}} {{ch.colclass}}"></app-dynamicformcontrolls>
+          <div class="col-12" *ngIf="control.showoptionabutton && i+1 != l">
+            <div class="form-group text-right">
+              <button class="btn btn-outline-primary btn-sm" (click)="tasbset.select(i+1)">{{control.optionabuttonText}}</button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+<div *ngIf="!control.IsButtonView && !control.IsImageButtonView && access != 'write'  && control.hideonedit!=true && !control.IsExternalFormLoad">
+  <ng-container *ngFor="let tab of control.children; let i=index">
+    <div class="card">
+      <div class="card-header d-flex align-items-center pointer" (click)="panelChange(i,tab)">
+        <div>{{tab.Header}}</div>
+        <span class="ml-auto" *ngIf="activePanelIndex[i]!=tab">
+          <i class="fa fa-angle-down" aria-hidden="true"></i>
+        </span>
+        <span class="ml-auto" *ngIf="activePanelIndex[i]==tab">
+          <i class="fa fa-angle-up" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="card-body" [ngbCollapse]="activePanelIndex[i]!=tab">
+        <div class="row">
+          <app-dynamicformcontrolls *ngFor="let ch of tab.children" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access"
+                                    [AuthService]="AuthService" class="col-md-{{ch.width}} {{ch.colclass}}"></app-dynamicformcontrolls>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<div *ngIf="control.IsButtonView && !control.IsImageButtonView && !control.IsExternalFormLoad">
+  <div class="form-group" *ngIf="access == 'write'">
+    <label *ngIf="control.label.length > 0">
+      <i class="text-primary fa fa-check-circle-o fa-lg pr-2" *ngIf="data[control.key] && data[control.key]!=''"></i>
+      {{control.label}}
+    </label>
+    <div class="d-flex">
+      <div class="btn btn-circle" [ngClass]="{'btn-secondary': data[control.key] == opt.label, 'btn-outline-secondary': data[control.key] != opt.label}"
+           *ngFor="let opt of control.children">
+        <label class="btn-circle-inner mb-0">
+          <input type="radio" [name]="control.key" [(ngModel)]="data[control.key]" (ngModelChange)="ResetChildren(content,opt)" [value]="opt.label"
+                 class="">
+          <span>{{opt.Header}}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="access != 'write' && control.hideonedit!=true" class="form-group">
+    <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+      <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+        {{control.label}}
+        <i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i>
+      </label>
+      <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+    </ng-container>
+    <ng-container *ngIf="access!='mandatory'">
+      <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+        {{control.label}}
+        <i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i>
+      </label>
+      <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+    </ng-container>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form role="form">
+        <div class="tab-content">
+          <div *ngIf="selectedTab">
+            <!-- ArunYadav[control.IsButtonView && !control.IsImageButtonView && !control.IsExternalFormLoad] {{selectedTab.children | json}} -->
+            <div *ngIf="access=='write' ? (selectedTab.label==ConfirmedText) : (selectedTab.label==data[control.key])">
+              <div class="row">
+                <app-dynamicformcontrolls *ngFor="let ch of selectedTab.children" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access"
+                                          [AuthService]="AuthService" class="col-md-{{ch.width}} {{ch.colclass}}"></app-dynamicformcontrolls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="wizard" *ngIf="control.IsImageButtonView && !control.IsExternalFormLoad">
+  <div class="wizard-inner-top pt-10" *ngIf="access == 'write'">
+    <div class="form-group">
+      <h6 class="d-block pb-10" *ngIf="control.label.length > 0">
+        <i class="secondary-text fa fa-check-square-o pr-2" *ngIf="data[control.key] && data[control.key]!=''"></i>
+        {{control.label}}
+      </h6>
+      <div class="row check-img-outer">
+        <div class="col col-{{control.imageboxwidth}}" *ngFor="let opt of control.children">
+          <div class="check-img">
+            <label class="check-img-control">
+              <input type="radio" [name]="control.key" [(ngModel)]="data[control.key]" (ngModelChange)="ResetChildren(content,opt)" [value]="opt.label"
+                     class="check-img-input">
+              <span [ngStyle]="{ 'background-image': 'url(' + opt.imageUrl + ')', 'background-size': control.backgroundsize, 'padding-top': control.imageheight}" class="check-img-img"></span>
+              <span class="check-img-description">{{opt.Header}}</span>
+              <span class="tic-mark">
+                <i class="fa fa-2x fa-check"></i>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="access != 'write'  && control.hideonedit!=true" class="form-group">
+    <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+      <span class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+        {{control.label}}
+        <i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i>
+      </span>
+      <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+    </ng-container>
+    <ng-container *ngIf="access!='mandatory'">
+      <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">
+        {{control.label}}
+        <i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i>
+      </label>
+      <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+    </ng-container>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form role="form">
+        <div class="tab-content">
+          <div *ngIf="selectedTab">
+            <!-- ArunYadav[control.IsImageButtonView && !control.IsExternalFormLoad] {{selectedTab.children | json}} -->
+            <div class="row" *ngIf="access=='write' ? (selectedTab.label==ConfirmedText) : (selectedTab.label==data[control.key])">
+              <div class="col-md-12">
+
+                <div class="row">
+                  <app-dynamicformcontrolls *ngFor="let ch of selectedTab.children" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access"
+                                            [AuthService]="AuthService" class="col-md-{{ch.width}} {{ch.colclass}}"></app-dynamicformcontrolls>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="clearfix"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="tab-card" *ngIf="control.IsExternalFormLoad && !control.IsImageButtonView">
+  <form role="form">
+    <ngb-tabset #tasbset="ngbTabset" (tabChange)="tabChange($event)" [formGroup]="formGroup" [activeId]="defaulttabindex">
+      <ng-container *ngFor="let tab of control.children;let i = index">
+        <ng-container *ngIf="((actionType(tab)=='hide' || actionType(tab)=='show') && ruleCheck(tab)) || actionType(tab)=='disable' || actionType(tab)=='enable' || actionType(tab)==''">
+          <ngb-tab [id]="tab.formid" [disabled]="(actionType(tab)=='disable' || actionType(tab)=='enable') ? ruleCheck(tab) : false">
+            <ng-template ngbTabTitle>
+              <i class="{{tab.tabicon}}" *ngIf="tab.tabicon" [ngClass]="{'mr-2': tab.Header}"></i>{{tab.Header}} <span *ngIf="tab.bindlabelwithmodel">{{data[tab.label] ? ('[' + data[tab.label] + ']') : ''}}</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="row" *ngIf="advanceSearchformJson && advanceSearchModelJson">
+                <!--<app-dynamicform [FormUI]="advanceSearchformJson" [controls]="advanceSearchformJson.controls" [datamodel]="advanceSearchformJson.ModelJson" [access]="tab.formactiontype">
+                </app-dynamicform>-->
+                <ng-container *ngFor="let ctrl of advanceSearchformJson.controls">
+                  <ng-container *ngIf="tab.formactiontype!='filter'">
+                    <app-dynamicformcontrolls *ngIf="!ctrl.filterresult" [control]="ctrl" [formGroup]="form" [data]="advanceSearchModelJson"
+                                              [AuthService]="AuthService" [access]="tab.formactiontype" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                    </app-dynamicformcontrolls>
+                  </ng-container>
+                  <ng-container *ngIf="tab.formactiontype=='filter'">
+                    <app-dynamicformcontrolls *ngIf="ctrl.filterresult" [control]="ctrl" [formGroup]="form" [data]="advanceSearchModelJson" [access]="tab.formactiontype"
+                                              [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                    </app-dynamicformcontrolls>
+                  </ng-container>
+                </ng-container>
+              </div>
+              <div *ngIf="!advanceSearchformJson || !advanceSearchModelJson">
+                <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+              </div>
+              <div *ngIf="control.showoptionabutton" class="pt-3">
+                <div class="d-flex justify-content-end mb-3" *ngIf="i == 0">
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="tasbset.select(control.children[i+1]?.formid)">
+                    <i class="fa fa-arrow-right pl-2"></i>{{control.children[i+1]?.Header}}
+                  </button>
+                </div>
+                <div class="d-flex mb-3" *ngIf="i > 0 && i < control.children.length-1">
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="tasbset.select(control.children[i-1]?.formid)">
+                    <i class="fa fa-arrow-left pr-2"></i>{{control.children[i-1]?.Header}}
+                  </button>
+                  <button type="button" (click)="tasbset.select(control.children[i+1]?.formid)" class="btn btn-outline-primary btn-sm ml-auto">
+                    {{control.children[i+1]?.Header}}<i class="fa fa-arrow-right pl-2"></i>
+                  </button>
+                </div>
+                <div class="d-flex mb-3" *ngIf="i == control.children.length-1">
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="tasbset.select(control.children[i-1]?.formid)">
+                    <i class="fa fa-arrow-left pr-2"></i>{{control.children[i-1]?.Header}}
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ng-container>
+      </ng-container>
+    </ngb-tabset>
+  </form>
+
+</div>
+<div class="wizard" *ngIf="control.IsImageButtonView && control.IsExternalFormLoad">
+  <div class="wizard-inner-top pt-10" *ngIf="access == 'write'">
+    <div class="form-group">
+      <h6 class="d-block pb-10" *ngIf="control.label.length > 0">
+        <i class="secondary-text fa fa-check-square-o pr-2" *ngIf="data[control.key] && data[control.key]!=''"></i>
+        {{control.label}}
+      </h6>
+      <div class="row check-img-outer">
+        <div class="col col-{{control.imageboxwidth}}" *ngFor="let opt of control.children">
+          <div class="check-img">
+            <label class="check-img-control">
+              <input type="radio" [name]="control.key" [(ngModel)]="data[control.key]" (ngModelChange)="ResetChildren(content,opt)" [value]="opt.label"
+                     class="check-img-input">
+              <span [ngStyle]="{ 'background-image': 'url(' + opt.imageUrl + ')', 'background-size': control.backgroundsize, 'padding-top': control.imageheight}" class="check-img-img"></span>
+              <span class="check-img-description">{{opt.Header}}</span>
+              <span class="tic-mark">
+                <i class="fa fa-2x fa-check"></i>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form role="form">
+        <div class="tab-content">
+          <div *ngIf="selectedTab">
+            <ng-container *ngIf="access=='write' ? (selectedTab.label==ConfirmedText) : (selectedTab.label==data[control.key])">
+              <div class="row" *ngIf="advanceSearchformJson && advanceSearchModelJson">
+                <!--<app-dynamicform [FormUI]="advanceSearchformJson" [controls]="advanceSearchformJson.controls" [datamodel]="advanceSearchformJson.ModelJson" [access]="tab.formactiontype">
+                </app-dynamicform>-->
+                <ng-container *ngFor="let ctrl of advanceSearchformJson.controls">
+                  <ng-container *ngIf="selectedTab.formactiontype!='filter'">
+                    <app-dynamicformcontrolls *ngIf="!ctrl.filterresult" [control]="ctrl" [formGroup]="form" [data]="advanceSearchModelJson"
+                                              [access]="selectedTab.formactiontype" class="col-md-{{ctrl.width}} {{ctrl.colclass}}" [AuthService]="AuthService">
+                    </app-dynamicformcontrolls>
+                  </ng-container>
+                  <ng-container *ngIf="selectedTab.formactiontype=='filter'">
+                    <app-dynamicformcontrolls *ngIf="ctrl.filterresult" [control]="ctrl" [formGroup]="form" [data]="advanceSearchModelJson" [access]="selectedTab.formactiontype"
+                                              class="col-md-{{ctrl.width}} {{ctrl.colclass}}" [AuthService]="AuthService">
+                    </app-dynamicformcontrolls>
+                  </ng-container>
+                </ng-container>
+              </div>
+              <div *ngIf="!advanceSearchformJson || !advanceSearchModelJson">
+                <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+              </div>
+            </ng-container>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <!-- <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">Alert!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="Submitconfirm='Cancel';d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> -->
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">{{SubmitMessage}}</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default waves-effect waves-light" (click)="Submitconfirm='OK';c('Close click')">OK Proceed</button>
+    <button type="button" class="btn btn-default waves-effect waves-light" (click)="Submitconfirm='Cancel';c('Close click')">Cancel</button>
+  </div>
+</ng-template>

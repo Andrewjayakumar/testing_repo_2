@@ -1,0 +1,980 @@
+
+<div class="new-requisition-wrapper">
+  <h1 class="new-requisition-header" *ngIf="mode=='add'">Add Requisition</h1>
+  <h1 class="new-requisition-header" *ngIf="mode=='update'">Update Requisition</h1>
+  <div class="metal-requisition-form">
+
+
+
+    <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+
+    <form class="metal-form-grid" #RecDetailForm="ngForm" novalidate>
+      <!-- Section 1: Basic Requisition Info -->
+      <div class="metal-form-section">
+        <div class="metal-form-group" *ngIf="mode=='add'">
+          <label>
+            Client Name
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+
+          <ng-select class="custom-ngselect metal-select" [items]="clientdata$ | async"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="clientname"
+                     bindValue="clientcode"
+                     [(ngModel)]="model.clientid"
+                     [typeahead]="clientdatainput$"
+                     #client="ngModel"
+                     name="client"
+                     [loading]="isClientLoading"
+                     placeholder="Type atleast 2 characters"
+                     (change)="OnClientChanged($event)"
+                     required>
+          </ng-select>
+          <small *ngIf="!model.clientid && (client.dirty || client.touched)"
+                 class="form-text text-danger fa fa-exclamation ml-2"> This field is required</small>
+        </div>
+        <div class="metal-form-group" *ngIf="isAllowedClient()">
+          <label>
+            LOB/Project
+            <sup class="text-danger font-weight-bold">*</sup>  <!-- *ngIf="mode=='add' && 'update'" -->
+
+          </label>
+          <ng-select class="custom-ngselect metal-select" name="projectlobid" [items]="projectloblist"
+                     [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="projectlobname" bindValue="projectlobid"
+                     placeholder="--Select--" [(ngModel)]="model.projectlobid" #projectlobid="ngModel">
+          </ng-select>
+          <small *ngIf="!model.projectlobid && (projectlobid?.dirty || projectlobid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+        <div class="metal-form-group" *ngIf="mode=='update' || projectmode">
+          <label>Client Name    Code : <span *ngIf="model.clientid" class="id-input">{{model.clientid}}</span></label>
+
+          <input type="text"
+                 name="clientname"
+                 [(ngModel)]="model.clientname"
+                 class="cursor-blocked metal-input"
+                 disabled readonly>
+        </div>
+        <div class="metal-form-group">
+          <label>
+            Supermerged
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <input type="text" class="metal-input" [(ngModel)]="model.supermerged" name="supermergdid" placeholder="supermerged" required  disabled/>
+          <small *ngIf="!model.supermerged && (supermergdid?.dirty || supermergdid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group metal-full-width">
+          <label>
+            Requisition Name
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <input class="form-control metal-input" type="text" name="recname" #recname="ngModel" [(ngModel)]="model.name"
+                 placeholder="Unique Name" required autocomplete="off" />
+          <small *ngIf="!model.name && (recname?.dirty || recname?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>Requisition Status</label>
+          <ng-select class="metal-select" [items]="status" name="statusid" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+                     bindLabel="status" bindValue="id" placeholder="" [(ngModel)]="model.statusid" #statusid="ngModel"
+                     (change)="onReqStatusChanged($event)">
+          </ng-select>
+        </div>
+
+          <div *ngIf="mode=='update' && (model.statusid==3 || model.statusid == 4 || model.statusid==9)"
+               class="metal-form-group">
+            <label>
+              Reason (on status change)
+              <sup class="text-danger font-weight-bold">*</sup>
+            </label>
+            <ng-select name="statusreasonid" [items]="reasonList" [multiple]="false" [closeOnSelect]="true"
+                       [loading]="reasonList==null" [searchable]="false" bindLabel="name" bindValue="id"
+                       placeholder="--Select Reason --" [(ngModel)]="model.statusreasonid" required #statusreasonid="ngModel" class="metal-select" >
+            </ng-select>
+            <small *ngIf="!model.statusreasonid && (statusreasonid?.dirty || statusreasonid?.touched)"
+                   class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+          </div>
+          <div class="metal-form-group">
+            <label>
+              Requisition Type
+              <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select class="metal-select" [ngClass]="{'disabled-select': isGCCOpportunity}" name="rectypeid" [items]="reqTypeList"
+                     [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="type" bindValue="id"
+                     placeholder="--Select--" (change)="onRecTypeChanged($event,reqob,'selection')"
+                     [(ngModel)]="model.requisitiontypeid" [disabled]="isGCCOpportunity" required #rectypeid="ngModel">
+          </ng-select>
+          <small *ngIf="!model.requisitiontypeid && (rectypeid?.dirty || rectypeid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group" *ngIf="model.requisitiontypeid == 5">
+          <label>
+            GCI ID<sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select name="gciidid" [items]="gcidItems$ | async" [(ngModel)]="model.gciid" #gciId="ngModel"
+                     [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="gciid" bindValue="gciid"
+                     placeholder="Type at least 2 numbers" [typeahead]="gcidinput$" [typeToSearchText]="text" class="form-control metal-select"
+                     (change)="getallgcidDetails($event)" (keydown)="allowOnlyNumbers($event)" required>
+          </ng-select>
+          <small *ngIf="(!model.gciid && (gciId.dirty || gciId.touched))"
+                 class="font-size-small text-danger fa fa-exclamation">
+            This field is required
+          </small>
+        </div>
+
+        <div class="metal-form-group" *ngIf="model.requisitiontypeid == 5">
+          <label>Employee Full Name</label>
+          <input class="form-control metal-input" type="text" name="recname"
+                 placeholder="Unique Name" required autocomplete="off" />
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Req Fulfillment Reason
+            <sup *ngIf="isreqFulfilmentReasonRquired" class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [ngClass]="{'disabled-select': mode === 'update' && !allowredeploymenthire}" name="reqfulfillmentreasonid" [items]="reqfulfillmentreasonlist" class="metal-select"
+                     [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="reqfulfillmentreason" bindValue="reqfulfillmentreasonid"
+                     placeholder="--Select--"
+                     [(ngModel)]="model.reqfulfillmentreasonid"
+                     [disabled]="mode === 'update' && !allowredeploymenthire" (change)="reqfulfillmentreasonchange($event)"
+                     [required]="isreqFulfilmentReasonRquired" #reqfulfillmentreasonid="ngModel">
+          </ng-select>
+          <small *ngIf="!model.reqfulfillmentreasonid && (reqfulfillmentreasonid?.dirty || reqfulfillmentreasonid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+        <div class="metal-form-group" *ngIf="model.reqfulfillmentreasonid==2">
+          <label>
+            Redep Led By
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <ng-select name="redepledbyid" [items]="redepledbylist"
+                     [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="redepledby" bindValue="redepledbyid"
+                     placeholder="--Select--"
+                     [(ngModel)]="model.redepledbyid"
+                     [disabled]="!allowredeploymenthire"
+                     [required]
+                     #redepledbyid="ngModel" class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.redepledbyid && (redepledbyid?.dirty || redepledbyid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+
+
+
+        <div class="metal-form-group" *ngIf="model.requisitiontypeid== 6 || model.requisitiontypeid == 9 || model.requisitiontypeid == 10 || model.requisitiontypeid == 5">
+          <app-metal-switch [(state)]='model.gotowork' [uniqueid]="'gotoworkcheckbox'"
+                            [labelname]="'Client Interview Required?'" (stateChange)="onGotoWorkToggled($event)">
+          </app-metal-switch>
+        </div>
+
+        <div class="metal-form-group" *ngIf="model.requisitiontypeid== 6 || model.requisitiontypeid == 9 || model.requisitiontypeid == 10 || model.requisitiontypeid == 5">
+          <app-metal-switch [(state)]='model.exclusive' [uniqueid]="'exclusivecheckbox'" [labelname]="'Exclusive'"
+                            (stateChange)="onExclusiveToggled($event)">
+          </app-metal-switch>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Standard Job Title
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select name="standardjobtitle" [items]="standardJobTitleList" [multiple]="false" [closeOnSelect]="true"
+                     [searchable]="true" bindLabel="jobtitle" bindValue="jobtitleid" placeholder="--Select--"
+                     [(ngModel)]="model.standardjobtitleid" required #standardjobtitleid="ngModel" (change)="onstandardJobtitlleChange($event)" class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.standardjobtitleid && (standardjobtitle?.dirty || standardjobtitle?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>  Descriptive Jobtitle</label>
+          <ng-select [items]="jobTitleItems$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                     [loading]="isJobTitleLoading" required bindLabel="jobtitle" bindValue="jobtitle"
+                     placeholder="Type at least 2 characters" [typeahead]="jobTitleinput$" [typeToSearchText]="text"
+                     [(ngModel)]="model.jobtitle" name="jobttl" #jobttl="ngModel" class="metal-select">
+          </ng-select>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Circle
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select class="metal-select" [ngClass]="{'disabled-select': isMsProject}" [items]="circleList" [multiple]="false"
+                     [closeOnSelect]="true" [searchable]="false" bindLabel="circle" bindValue="id" placeholder="Select Circle"
+                     [(ngModel)]="model.circleid" (change)="onCirclelistChange($event)" name="circleid" #circleid="ngModel"
+                     [disabled]="isMsProject" required>
+          </ng-select>
+          <small *ngIf="!model.circleid && (circleid?.dirty || circleid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Community
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="communityList" class="metal-select" [multiple]="false" [closeOnSelect]="true" [loading]="isCommunityLoading"
+                     [searchable]="false" bindLabel="community" bindValue="id" placeholder="Select Community"
+                     [(ngModel)]="model.communityid" name="communityid" #communityid="ngModel" required>
+          </ng-select>
+          <small *ngIf="!model.communityid && (communityid?.dirty || communityid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group metal-full-width-skill-mapping ">
+          <label>
+            Skills Mapping
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="standardskillmapping" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+                     bindLabel="skills" bindValue="id" placeholder="--Select--"
+                     (change)="onSkillsMappingChange($event)" name="skillmapping" [(ngModel)]="model.skillmappingid" #skillmapping="ngModel"
+                     required class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.skillmappingid && (skillmapping?.dirty || skillmapping?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+        <div class="metal-form-group">
+          <label>
+            Standard Job Title + Horizon
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <ng-select [items]="standardroleHorizons" [multiple]="false"
+                     [closeOnSelect]="true" [searchable]="false" bindLabel="standardrolehorizon" bindValue="standardroleshorizonid" placeholder="--Select--"
+                     [(ngModel)]="model.standardroleshorizonid" (change)="onStandardjobTitleHorozonChange($event)" name="standard" #standard="ngModel"
+                     required class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.standardroleshorizonid && (standard?.dirty || standard?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Experience Level
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="expLevelDetails"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="false"
+                     bindLabel="experiencelevel"
+                     bindValue="experiencelevel"
+                     name="expLevel"
+                     [loading]="isProjectNameLoading"
+                     placeholder="Select Experience Level Title"
+                     class="form-control"
+                     (change)="onExpLevelDetailsChange($event)"
+                     required>
+          </ng-select>
+
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Band Level
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="bandlevelDetailsFilter"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="false"
+                     bindLabel="brandlevel"
+                     bindValue="brandlevelid"
+                     [(ngModel)]="model.brandlevelid"
+                     #bandlevel="ngModel"
+                     name="bandlevel"
+                     [loading]="isProjectNameLoading"
+                     placeholder="Select Band Level Title"
+                     class="form-control"
+                     required>
+          </ng-select>
+          <small *ngIf="!model.brandlevelid && (bandlevel?.dirty || bandlevel?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+
+
+        <div class="metal-form-group">
+          <label>
+            Role Family
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="roleFamily" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+                     bindLabel="rolefamily" bindValue="rolefamilyid" placeholder="Select Role Family"
+                     (change)="onRoleFamChange($event)" name="rolefamid" [(ngModel)]="model.rolefamilyid" #rolesubfamid="ngModel"
+                     required class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.rolefamilyid && (rolefamid?.dirty || rolefamid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Sub-Role Family
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="subroleFamily" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+                     bindLabel="subrolefamily" bindValue="subrolefamilyid" placeholder="Select sub Role-Family"
+                     name="subrolesubfamid" [(ngModel)]="model.subrolefamilyid" #subrolesubfamid="ngModel" required class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.subrolefamilyid && (subrolesubfamid?.dirty || subrolesubfamid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Delivery Model
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select name="deliverymodelid" [ngClass]="{'disabled-select': isWorkflowInitiated }"
+                     [items]="deliveryModelList" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+                     bindLabel="deliverymodelname" bindValue="deliverymodelid" placeholder="--Select--"
+                     [disabled]="isWorkflowInitiated" (change)="onDeliveryModelChange(deliverymodelid)"
+                     [(ngModel)]="model.deliverymodelid" required #deliverymodelid="ngModel" class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.deliverymodelid && (deliverymodelid?.dirty || deliverymodelid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group" *ngIf="mandatoryFromDeliveryModel">
+          <label>
+            Zip Code
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="zipcodeDataItems$ | async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                     bindLabel="zipcode" bindValue="zipcode" placeholder="Type at least 2 digits to search"
+                     (change)="onZipcodeChange(zip)" [loading]="zipcodeDataLoading" [typeahead]="zipcodeinput$"
+                     [(ngModel)]="model.zipcode" name="zip" #zip="ngModel" required class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.zipcode && (zip.dirty || zip.touched)"
+                 class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group" *ngIf="mandatoryFromDeliveryModel">
+          <label>
+            City
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="citieslist" [multiple]="false" [closeOnSelect]="true" [searchable]="false" bindLabel="city"
+                     bindValue="city" placeholder="--Select--" [loading]="citieslist===null" [(ngModel)]="model.city"
+                     (change)="onCityChanged($event)" name="city1" #city1="ngModel" required class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.city && (city1.dirty || city1.touched)"
+                 class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+        </div>
+        <div class="metal-form-group" *ngIf="!mandatoryFromDeliveryModel">
+          <label>
+            State          <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="stateItemsList$| async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                     bindLabel="state" placeholder="Type to Search" (change)="onStateChanged($event)" [loading]="isStateLoading"
+                     [typeahead]="stateinput$" [(ngModel)]="model.state" class="metal-select" name="state" #state="ngModel" required>
+          </ng-select>
+          <small *ngIf="!model.state && (state.dirty || state.touched)"
+                 class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group" *ngIf="!mandatoryFromDeliveryModel">
+          <label>
+            City
+            <sup class="text-danger font-weight-bold">*</sup>
+
+            </label>
+            <ng-select [items]="citieslist" [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="city"
+                       placeholder="--Select--" [loading]="citieslist==null" [(ngModel)]="model.city" (change)="onCityChanged($event)"
+                       name="cityofstate" #cityofstate="ngModel" required class="metal-select">
+            </ng-select>
+            <small *ngIf="!model.city && (cityofstate.dirty || cityofstate.touched)"
+                   class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required</small>
+          </div>
+
+        <div class="metal-form-group">
+          <label>
+            Travel Type
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select [items]="traveltypelist" [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="type"
+                     placeholder="--Select--" [loading]="traveltypelist==null" bindValue="id" [(ngModel)]="model.traveltype"
+                     (change)="onTravelTypeChange($event)" name="traveltype" #traveltype="ngModel" class="metal-select" required>
+          </ng-select>
+          <small *ngIf="!model.traveltype && (traveltype?.dirty || traveltype?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <app-metal-switch [(state)]='model.isremote' [uniqueid]="'addrec_isremoteReq'" [labelname]="'Remote'"
+                            [position]="'justify'">
+          </app-metal-switch>
+        </div>
+
+        <div class="metal-form-group metal-full-width-skill-mapping">
+          <label>Secondary Location</label>
+          <div class="metal-radio-group">
+            <label>
+              <input type="radio" name="remoteLocation" [value]=true class="mr-1 mt-1" id="Yes"
+                     [(ngModel)]="model.issecondarylocation" /> Yes
+            </label>
+            <label>
+              <input type="radio" name="remoteLocation" [value]=false class="mr-1 mt-1" id="No"
+                     [(ngModel)]="model.issecondarylocation" />No
+            </label>
+          </div>
+
+        </div>
+        <div class="metal-form-group" *ngIf="model.issecondarylocation">
+          <label>Zip Code</label>
+          <ng-select [items]="zipcodeDataItems$| async" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                     bindLabel="zipcode" bindValue="zipcode" placeholder="Type at least 2 digits to search"
+                     (change)="onRemoteZipcodeChange(remotezip)" [loading]="zipcodeDataLoading" [typeahead]="zipcodeinput$"
+                     [(ngModel)]="remotezipcode" name="remotezip" #remotezip="ngModel" class="metal-select">
+          </ng-select>
+
+        </div>
+        <div class="metal-form-group" *ngIf="model.issecondarylocation">
+          <label>City</label>
+          <div class="metal-flex-row">
+
+            <ng-select [items]="remotecitieslist" [multiple]="false" [closeOnSelect]="true" [searchable]="false"
+                       bindLabel="city" bindValue="city" placeholder="--Select--" [loading]="remotecitieslist==null"
+                       [(ngModel)]="remotecity" name="remotecityid" #remotecityid="ngModel" class="metal-select">
+            </ng-select>
+            <button class="btn btn-primary text-white fa fa-plus mr-0 mt-4 mb-2 p-1 metal-icon-button"
+                    (click)=addEntryToRemotelist($event)></button>
+          </div>
+        </div>
+        <div class="metal-form-group" *ngIf="model.issecondarylocation">
+          <span *ngFor="let entry of model.remotelocationdetails" class="label-chips">
+            <label class="text-primary">{{entry.remotezipcode}}, {{entry.remotecity}}</label>
+            <a role="button" class="btn" (click)="deleteFromRemoteList(entry.remotezipcode)">x</a>
+          </span>
+
+        </div>
+
+        <div class="metal-form-group metal-width-one">
+          <label>
+            Total Experience in Years
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <div class="metal-flex">
+
+            <input class="form-control minYearCSS metal-input" type="number" name="minYears" #minYears="ngModel"
+                   [(ngModel)]="model.minexperience" placeholder="Min" required autocomplete="off" />
+            <input class="form-control maxYearCSS metal-input" type="number" name="maxYears" #maxYears="ngModel"
+                   [(ngModel)]="model.maxexperience" placeholder="Max" required autocomplete="off" />
+
+
+            <small *ngIf="(model.maxexperience && touched) && (!(model.maxexperience > model.minexperience))"
+                   class="font-size-small text-danger fa fa-exclamation ml-2"> Max exp can't be lesser than Min exp</small>
+          </div>
+        </div>
+
+        <div class="metal-form-group metal-full-width">
+          <label>
+            Skills By Experience
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select class="mt-0 inputSkill metal-select" [items]="skillItems$| async" [multiple]="false" [closeOnSelect]="true"
+                     [searchable]="true" bindLabel="skill" bindValue="skill" placeholder="Type at least 2 characters"
+                     [loading]="skillLoading" [typeahead]="skillinput$" [(ngModel)]="skill" name="skills" #skills="ngModel">
+          </ng-select>
+
+
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Experience Level
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <div class="metal-flex-row">
+            <ng-select class="mt-0 inputExp metal-select" [items]="expList" [multiple]="false" [closeOnSelect]="true"
+                       [searchable]="true" bindLabel="exp" bindValue="expValue" placeholder="Select" [(ngModel)]="expLevel"
+                       name="experienceLevel" #experienceLevel="ngModel">
+            </ng-select>
+            <button *ngIf="showAddButton" class="btn btn-primary text-white fa fa-plus mr-0 mt-4 mb-1 p-1  metal-icon-button"
+                    [disabled]="(!skill && !expLevel)" (click)=addEntryToSkillList()></button>
+          </div>
+        
+          <small *ngIf="model.skills?.length >= 5"
+                 class="font-size-small text-danger fa fa-exclamation ml-2 mt-2 mr-3 pull-right">
+            You can only add upto 5 skills
+          </small>
+          <small *ngIf="!model.skills && (experienceLevel?.dirty || experienceLevel?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+          <div class="metal-form-group" *ngIf="model.skills?.length > 0">
+            <div class="metal-flex-skills">
+              <span *ngFor="let entry of model.skills" class="label-chips">
+                  {{entry.skill}}
+                  ({{entry.skilllevel}})
+                <a role="button" class="btn delButton" (click)="deleteSkillsAndExperience(entry.skill, entry.skilllevel)">x</a>
+              </span>
+            </div>
+          </div>
+        </div>
+
+      <!-- Section 2: Requisition Description -->
+      <div class="metal-form-group-full">
+        <label>
+          Requisition Description
+          <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <div contenteditable="true" tabindex="-1" class="editable" id="red_description"
+               (blur)="editorFocusOut($event, this); touched=true" #editor name="desc" [innerHtml]="model.description"
+               required>
+          </div>
+          <small *ngIf="!model.description && (desc?.dirty || desc?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+          <small *ngIf="(model.description && touched) && (model.description.length < 500)"
+                 class="font-size-small text-danger fa fa-exclamation ml-2">Please enter minimum of 500 characters..</small>
+       
+        </div>
+
+      <!-- Section 3: Financials -->
+      <div class="metal-form-section">
+        <div class="metal-form-group">
+          <label>
+            Employment Type
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select class="mt-0 inputExp metal-select" [items]="projectTypeList" [multiple]="false" [closeOnSelect]="true"
+                     [searchable]="false" bindLabel="projecttype" bindValue="id" placeholder="Select" [(ngModel)]="model.projecttypeid"
+                     name="emptype" #emptype="ngModel" (change)="onEmpTypeChanged($event, option)" required>
+          </ng-select>
+          <small *ngIf="!model.projecttypeid && (emptype?.dirty || emptype?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+
+        </div>
+
+
+
+        <div class="metal-form-group">
+          <label>Bill Rate Type</label>
+          <ng-select [items]="billRate" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                     bindLabel="label" bindValue="value" placeholder="--Select Bill rate type--"
+                     [(ngModel)]="model.billratetype" name="billratetype" #billratetype="ngModel" class="metal-select">
+          </ng-select>
+        </div>
+
+        <div class="metal-form-group">
+          <label>Bill Rate <sup *ngIf="mode=='update'" class="text-danger font-weight-bold">*</sup></label>
+          <input *ngIf="model.projecttypeid==1" type="number" min="0.01" step="0.01" name="rate" [(ngModel)]="model.billrate" #rate="ngModel" [required]="mode==='update'" class="metal-input">
+          <input *ngIf="model.projecttypeid==2 || model.projecttypeid==3" type="number" min="0.01" step="0.01" (blur)="validateBillRateDecimal()" name="rate" [(ngModel)]="model.billrate" #rate="ngModel" [required]="mode==='update'" class="metal-input">
+          <small *ngIf="((mode == 'update') && !model.billrate && (rate?.dirty || rate?.touched))"
+                 class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required.</small>
+          <small *ngIf="(model.projecttypeid==2 || model.projecttypeid==3) && model.billrate && billrateInvalidMsg"
+                 class="font-size-small text-danger"> {{billrateInvalidMsg}}</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>Currency</label>
+          <div class="metal-radio-group">
+            <label><input type="radio" name="currency" [value]="1" [(ngModel)]="model.currencyid" /> USD</label>
+            <label><input type="radio" name="currency" [value]="2" [(ngModel)]="model.currencyid" /> CAD</label>
+          </div>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Start Date
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <div class="input-group">
+            <input class="form-control" id="startdateField" [(ngModel)]="startDate" (ngModelChange)="StartDateChanged()"
+                   [startDate]="currentDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="sd.toggle()"
+                   name="startdate" ngbDatepicker #sd="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-calendar" (click)="sd.toggle()" type="button"></button>
+            </div>
+            <small *ngIf="(startDate && !startDate.day) && (sd.dirty || sd.touched)" class="fa fa-exclamation text-danger figure-caption p-1">This field is required</small>
+
+          </div>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            End Date
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <div class="input-group ">
+            <input  class="form-control" id="enddatefeild" [(ngModel)]="endDate" (ngModelChange)="EndDateChanged()"
+                   [minDate]="startDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="ed.toggle()"
+                   name="endDate" ngbDatepicker #ed="ngbDatepicker" readonly>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-calendar" (click)="ed.toggle()" type="button"></button>
+            </div>
+            <small *ngIf="(endDate && !endDate.day) && (ed.dirty || ed.touched)" class="fa fa-exclamation text-danger figure-caption p-1" [hidden]="ed.valid">This field is required</small>
+
+          </div>
+        </div>
+
+        <div class="metal-form-group" *ngIf="mode == 'update' && startDate">
+          <label>Revised Date</label>
+          <div class="input-group">
+            <input class="form-control" id="reviseddatefiels" (ngModelChange)="StartDateChanged()"
+                   [startDate]="currentDate" placeholder="yyyy-mm-dd" required (focus)="rd.toggle()"
+                   name="startdate" ngbDatepicker #rd="ngbDatepicker" disabled [(ngModel)]="startDate">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-calendar" (click)="rd.toggle()" type="button"></button>
+            </div>
+
+
+          </div>
+        </div>
+
+          <div class="metal-form-group duration-group" *ngIf="(model.projecttypeid == 2 || model.projecttypeid == 3) && durationDiffWeeks">
+            <label>Duration</label>
+            <span class="">
+              <label>{{durationDiffWeeks}} weeks and {{durationDiffDays}} days</label>
+              <a class="pl-2" (click)="acaBtnClicked()">Benefit Summaries</a>
+
+            </span>
+          </div>
+        </div>
+
+      <!-- Section 4: Opportunity & Manager -->
+      <div class="metal-form-section">
+        <div class="metal-form-group">
+          <label>
+            Opportunity
+            <sup *ngIf="mode=='update'" class="text-danger font-weight-bold">*</sup>
+          </label>
+
+          <ng-select [items]="linkedOpportunityList"
+                     [closeOnSelect]="true"
+                     [(ngModel)]="model.opportunityname"
+                     bindLabel="opportunityname"
+                     bindValue="opportunityname"
+                     [searchable]="true"
+                     #opportunity="ngModel"
+                     placeholder="Select"
+                     name="opportunity"
+                     class="custom-ngselect metal-select"
+                     (change)="getOpportunityID($event)"
+                     required>
+
+          </ng-select>
+          <small *ngIf="!model.opportunityname && (opportunity?.dirty || opportunity?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>Hiring Manager Name</label>
+          <sup *ngIf="(mode ==='update' && isHiringMangerMandatory) || (mode ==='add' && isHiringMangerMandatory)" class="text-danger font-weight-bold">*</sup>
+          <ng-select [items]="hiringmanagerlist$ | async"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="hiringmanagername"
+                     bindValue="hiringmanagername"
+                     [typeahead]="hiringmanagerinput$"
+                     [(ngModel)]="model.hiringmanagername"
+                     (change)="SetManagerDetails('hiring', $event)"
+                     #hmname="ngModel"
+                     name="hmname"
+                     [loading]="isHiringManagerLoading"
+                     [required]="isHiringMangerMandatory"
+                     placeholder="Type atleast 3 characters"
+                     class="form-control"
+                     [disabled]="isHiringManagerDisabled">
+          </ng-select>
+          <small *ngIf="!model.hiringmanagername && (hmname?.dirty || hmname?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>Hiring Manager Phone</label>
+          <input type="text"
+                 autocomplete="off"
+                 [textMask]="{mask: mask}"
+                 [placeholder]="'xxx - xxx -xxxx'"
+                 [(ngModel)]="model.hiringmanagerphone"
+                 #hrmPhone="ngModel"
+                 class="form-control cursor-blocked"
+                 name="hrmPhone"
+                 readonly>
+        </div>
+
+        <div class="metal-form-group">
+          <label>Hiring Manager Email</label>
+
+          <input type="email"
+                 autocomplete="off"
+                 [(ngModel)]="model.hiringmanageremail"
+                 placeholder="hiring_manager@email.com"
+                 #hrmEmail="ngModel"
+                 class="form-control cursor-blocked"
+                 name="hrmEmail"
+                 (blur)="checkEmail=true"
+                 readonly>
+        </div>
+
+        <div class="metal-form-group" *ngIf="!model.msprojectid">
+          <label>
+            Engagement Type
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+
+          <ng-select [items]="engagementtypelist"
+                     [closeOnSelect]="true"
+                     [(ngModel)]="model.engagementtype"
+                     bindLabel="name"
+                     bindValue="value"
+                     [searchable]="false"
+                     #engagementtype="ngModel"
+                     placeholder="Select"
+                     name="engagementtype"
+                     class="form-control metal-select"
+                     [disabled]="isEngangementTypeDisabled"
+                     required>
+
+          </ng-select>
+          <small *ngIf="!model.engagementtype && (engagementtype?.dirty || engagementtype?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group" *ngIf="model.msprojectid">
+          <label>
+            Engagement Type
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+
+          <div class="input-group">
+            <input type="text"
+                   [(ngModel)]="model.engagementtype"
+                   #opportunity="ngModel"
+                   placeholder="Select"
+                   name="engagementtype"
+                   class="form-control cursor-blocked"
+                   readonly
+                   required>
+
+          </div>
+          <small *ngIf="!model.engagementtype && (engagementtype?.dirty || engagementtype?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+        <div class="metal-form-group">
+          <app-metal-switch [(state)]='model.jump' [uniqueid]="'jumpcheckbox'" [labelname]="'JUMP'" [position]="'justify'"
+                            name="jump"></app-metal-switch>
+        </div>
+
+        <div class="metal-form-group">
+          <app-metal-switch [(state)]='model.sow' [uniqueid]="'sowcheckbox'" [labelname]="'SOW'" [position]="'justify'" [isdisable]="true"
+                            name="sow"></app-metal-switch>
+        </div>
+
+        <div class="metal-form-group" *ngIf="model.itss==true">
+          <label>
+            SOW/Project Name
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <ng-select [items]="msprojectslist$ | async"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="msprojectname"
+                     bindValue="msprojectid"
+                     [(ngModel)]="model.msprojectid"
+                     [typeahead]="projectinput$"
+                     #msprojectid="ngModel"
+                     name="msprojectid"
+                     (change)="OnITSSProjectSelected($event)"
+                     (focus)="OnITSSProjectNameFocused($event)"
+                     [loading]="isProjectNameLoading"
+                     placeholder="Type to Search"
+                     class="form-control"
+                     required>
+          </ng-select>
+          <small *ngIf="!model.msprojectid && (msprojectid?.dirty || msprojectid?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Talent Specialist
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <ng-select [items]="recruiterList$| async"
+                     [typeahead]="recruiterinput$"
+                     [multiple]="true"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="recruiter"
+                     bindValue="recruiter"
+                     [(ngModel)]="model.recruitername"
+                     name="recruitername"
+                     #recruitername="ngModel"
+                     [loading]="isRecruiterNameLoading"
+                     placeholder="Type atleast 2 characters"
+                     class="form-control metal-select"
+                     required
+                     [disabled]="isRequisitionCancelled">
+          </ng-select>
+          <small *ngIf="isRequisitionCancelled"
+                 class="form-text text-danger fa fa-exclamation mt-0">Cannot modify Assignee for Cancelled/Closed Requisition</small>
+          <small *ngIf="!model.recruitername && (recruitername?.dirty || recruitername?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            Client PoC
+            <sup class="text-danger font-weight-bold">*</sup>
+          </label>
+          <ng-select [items]="salesRepList$ | async"
+                     [typeahead]="salesRepinput$"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="salesrep"
+                     bindValue="salesrep"
+                     [(ngModel)]="model.salesrepid"
+                     name="salesrep"
+                     #salesrep="ngModel"
+                     placeholder="Type atleast 2 characters"
+                     class="form-control"
+                     [loading]="isSalesRepLoading"
+                     [required]="true" required>
+          </ng-select>
+          <small *ngIf="!model.salesrepid && (salesrep?.dirty || salesrep?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+        <div class="metal-form-group">
+          <label>
+            VMO
+          </label>
+
+          <ng-select [items]="insidesalesVmoList$ | async"
+                     [typeahead]="insidesalesVmoinput$"
+                     [multiple]="false"
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                     bindLabel="userid"
+                     bindValue="userid"
+                     [(ngModel)]="model.vmo"
+                     [virtualScroll]="true"
+                     name="vmoname"
+                     #vmoname="ngModel"
+                     placeholder="Type atleast 2 characters"
+                     class="form-control metal-select">
+          </ng-select>
+
+        </div>
+      </div>
+
+      <!-- Section 5: Candidate Info -->
+      <div class="metal-form-section">
+        <div class="metal-form-group">
+          <label>
+            Hired Candidate - Job Title + Horizon
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <ng-select name="hiredcandidatestandardjobtitlehorizon" [items]="standardroleHorizons" [multiple]="false" [closeOnSelect]="true"
+                     [searchable]="true" bindLabel="standardrolehorizon" bindValue="standardroleshorizonid" placeholder="--Select--"
+                     [(ngModel)]="model.hiredcandidatestandardjobtitlehorizonid" required #hiredcandidatestandardjobtitlehorizonid="ngModel" class="metal-select">
+          </ng-select>
+          <small *ngIf="!model.hiredcandidatestandardjobtitlehorizonid && (hiredcandidatestandardjobtitlehorizon?.dirty || hiredcandidatestandardjobtitlehorizon?.touched)"
+                 class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+        </div>
+
+          <div class="metal-form-group">
+            <label>
+              Hired Candidate - Experience Level
+              <sup class="text-danger font-weight-bold">*</sup>
+            </label>
+            <ng-select [items]="experienceLevelList"
+                       [multiple]="false"
+                       [closeOnSelect]="true"
+                       [searchable]="false"
+                       bindLabel="experiencelevel"
+                       bindValue="experiencelevelid"
+                       [(ngModel)]="model.hiredcandidateexperiencelevelid"
+                       name="expLevel"
+                       placeholder="Select Experience Level Title"
+                       class="form-control metal-select"
+                       required>
+            </ng-select>
+            <small *ngIf="!model.expLevel && (expLevel?.dirty || expLevel?.touched)"
+                   class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+          </div>
+        </div>
+
+      <!-- Form Footer -->
+      <div class="metal-form-footer mr-5">
+        <button type="button" class="metal-btn-cancel" (click)="cancelButtonClicked()">Cancel</button>
+        <button type="submit" *ngIf="mode=='add'" class="metal-btn-submit" [ngClass]="{'cursor-not-allowed': form?.form?.invalid}" [disabled]="form?.form?.invalid" (click)="postRequisitionforCreate()">Add</button>
+        <button type="submit" class="metal-btn-submit" *ngIf="mode=='update'" [disabled]="form?.form?.invalid" (click)="      postRequisitionforUpdate()" [ngClass]="{'cursor-not-allowed': form?.form?.invalid}">Update</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title"
+       [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">Ok</button>
+  </div>
+</ng-template>
+
+<ngb-alert *ngIf="popupConfig.title == 'Success!'" type="custom" (close)="popupConfig.message = null">
+  <div class="d-flex align-items-center justify-content-center">
+    <!-- <i class="fa-3x {{successMessage.icon}} pr-3 text-success"></i> -->
+    <div class="h5 d-block text-success" style="background-color:#ebebeb">{{popupConfig.title}}</div>
+
+    <span>{{successMessage.message}}</span>
+  </div>
+
+
+</ngb-alert>

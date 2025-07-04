@@ -1,0 +1,291 @@
+
+<div class="candidate-container">
+
+  <div class="">
+    <div class="card mb-2 mt--3 pt-0 border-0">
+      <div class="collapse m-0 pb-0 show" style="background: rgb(237, 237, 237); height: 40px;">
+        <div class="row" id="QuickActions">
+          <div class="col-md-3 px-4 p-2 font-weight-bold text-capitalize">
+            <span class="d-flex justify-content-start">
+              <ng-container>
+                <span id="nameLabel">{{candidateData?.candidatename}}</span>
+              </ng-container>
+            </span>
+          </div>
+
+          <div class="col-md-auto p-0">
+            <a id="scrolltotop"
+               placement="bottom" ngbTooltip="Upload resume"
+               class="btn btn-custom-circle btn-info btn-md m-0 p-0"
+               (click)="customAction('updateresumepopup')">
+              <i class="fa fa-upload"></i>
+            </a>
+          </div>
+
+          <div class="col-md-auto">
+            <div class="card mb-2 mb-0i bg-transparent m-0 border-0">
+              <div class="card-body p-0 m-0 px-0 pb-0 collapse show" style="height: auto;">
+                <div class="row" id="fav">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-auto">
+                        <a id="scrolltotop" class="btn btn-custom-circle p-0 m-0 btn- btn-sm" placement="bottom" ngbTooltip="Add to Hotbook" (click)="customAction('addtohotbookpopup')">
+                          <i class="fa fa-heart"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-auto">
+            <div class="card mb-2 mb-0i bg-transparent border-0 ">
+              <div class="card-body p-0 m-0 mr--3 px-0 pb-0 collapse show" style="height: auto;">
+                <div class="row" id="dnc">
+                  <div class="col-md-12 ">
+                    <div class="row">
+                      <a id="scrolltotop" class="btn btn-custom-circle  p-0 m-0 btn-warning btn-sm" placement="bottom" ngbTooltip="Activate DNC" (click)="customAction('dncpopup')">
+                        DNC
+                      </a>
+                    </div>
+                  </div><div class="col-md-12 ">
+                    <div class="row">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-auto">
+            <a id="scrolltotop" class="btn btn-custom-circle small btn-primary btn-sm" placement="bottom" ngbTooltip="Source To REQ" (click)="customAction('pintoreqpopup')">
+              <i _ngcontent-c54="" class="fa fa-thumb-tack"></i>
+            </a>
+          </div>
+
+          <div class="col-md-auto small ">
+            <a id="scrolltotop" class="btn btn-custom-circle btn-success btn-sm" placement="bottom" ngbTooltip="Share Profile" (click)="customAction('sharedinpopup')">
+              <i class="fa fa-share-alt"></i>
+            </a>
+          </div>
+
+          <div class="col-md-auto text-small ">
+            <a id="scrolltotop" class="btn btn-custom-circle m-0 p-0 btn-purple btn-sm" placement="bottom" ngbTooltip="Send SMS" (click)="customAction('sendSMS')">
+              <i class="fa fa-comments-o"></i>
+            </a>
+          </div>
+
+          <div class="col-md-auto small">
+            <a id="scrolltotop" class="btn btn-custom-circle m-0 p-0 btn-primary btn-sm" placement="bottom" ngbTooltip="Tech Assessment" (click)="customAction('techassessment')">
+              <i class="fa fa-tasks"></i>
+            </a>
+          </div>
+
+          <!--<div class="col-md-auto small">
+            <a id="scrolltotop" class="btn btn-custom-circle m-0 p-0 btn-primary btn-sm" placement="bottom" ngbTooltip="Video Resume">
+              <i class="fa fa-video-camera"></i>
+            </a>
+          </div>-->
+
+          <div class="col-md-auto small">
+            <a id="scrolltotop" class="btn btn-custom-circle m-0 p-0 btn-primary btn-sm" placement="bottom" ngbTooltip="Sent Bot" (click)="customAction('candidatebotresponse')">
+              <i class="fa fa-lightbulb-o"></i>
+            </a>
+          </div>
+
+          <div class="col-md-auto small">
+            <a id="scrolltotop" class="btn btn-custom-circle m-0 p-0 btn-success btn-sm" placement="bottom" ngbTooltip="Candidate Outline and Journnal" (click)="customAction('coPopup')">
+              CO
+            </a>
+          </div>
+
+          <div class="col-md-auto ">
+            <a id="scrolltotop" class="btn btn-custom-circle p-0 m-0 btn-info btn-sm" placement="bottom" ngbTooltip="Show Notes for this Candidate" (click)="customAction('notesinpopup')">
+              <i class="fa fa-file-text"></i>
+            </a>
+          </div>
+
+          <div class="col-md-auto">
+            <div class="">
+              <div style="position: relative;" class="col-md-12">
+                <div style="position: absolute;
+height: 100%;
+width: 100%;
+z-index: 2;
+opacity: 0.3;
+cursor: not-allowed" hidden=""></div>
+                <div class="row">
+                  <div class="btn-group" role="group">
+                    <button aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" id="btnGroupDrop1" type="button" class="btn btn-custom-circle m-0 p-0 btn-purple btn-sm">
+                      STS
+                    </button>
+                    <div aria-labelledby="btnGroupDrop1" class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-125px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+                      <div class="col-md-12 ">
+                        <a id="scrolltotop" class="btn dropdown-item btn-link btn-sm" (click)="customAction('STSSendLinkRedirect')">
+                          Fill here
+                        </a>
+                      </div>
+                      <div class="col-md-12 ">
+                        <a id="scrolltotop" class="btn dropdown-item btn-link btn-sm" (click)="customAction('STSSendLinkRedirect')">
+                          Send Link
+                        </a>
+                      </div>
+                      <div class="col-md-12 ">
+                        <a id="scrolltotop" class="btn dropdown-item btn-link btn-sm" (click)="customAction('STSSendLinkRedirect')">
+                          View Link
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-auto small ">
+              <a id="scrolltotop" class="btn candidatematch m-0 p-0 btn- btn-" placement="bottom" ngbTooltip="Matching Requitisions for this Candidate" (click)="redirectToMatchingReqs()">
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-fluid px-4 row">
+    <!--Left Panel-->
+    <div class="left-panel" style="height: 825px;">
+      <h2 class="title text-black" style="text-align:center">CANDIDATE DETAILS</h2>
+      <span class="">
+        <i title="Email id" class="fa fa-md fa-envelope text-dark"></i>
+        <span class="text-red-600 text-sm" *ngIf="candidateData?.linkedin">
+          <a [href]="candidateData.linkedin">
+            {{ candidateData?.emailid }}
+          </a>
+        </span>
+      </span>
+
+      <div class="mb-1">
+        <i class="fa fa-linkedin"></i>
+        <span class="text-red-600 text-sm">
+          <a [href]="'mailto:' + candidateData?.emailid">
+            {{ candidateData?.linkedin }}
+          </a>
+        </span>
+      </div>
+
+      <div class="d-flex">
+        <span class="mb-2">
+          <i title="Email id" class="fa fa-md fa-cogs text-dark"></i>
+        </span>
+        <p class="flex justify-end ml-2" style="color: blue">{{candidateData?.skills}}</p>
+      </div>
+
+      <div class="dashboard-cards">
+        <div class="card d-flex justify-content-center">
+          <div class=""><strong>{{candidateData?.submissions}}</strong></div>
+          <div class="small text-sm-center p-0i m-0i">Submissions</div>
+        </div>
+
+        <div class="card d-flex justify-content-center">
+          <div class=""><strong>{{candidateData?.interviews}}</strong></div>
+          <div class="small text-sm-center p-0i m-0i">Interviews</div>
+        </div>
+
+        <div class="card d-flex justify-content-center">
+          <div class=""><strong>{{candidateData?.hires}}</strong></div>
+          <div class="small text-sm-center p-0i m-0i">Hires</div>
+        </div>
+        <div class="card d-flex justify-content-center">
+          <div class=""><strong>{{candidateData?.baddelivery}}</strong></div>
+          <div class="small text-sm-center p-0i m-0i">Bad Delivery</div>
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <p><strong>Labels :</strong>  <label id=""></label></p>
+        <p><strong>TAG Recruiter:</strong><label id=""></label></p>
+        <div class="meta ">
+          <p class="flex justify-end text-black"><strong>Latest Journal Entry</strong></p>
+          <div>
+            <p class="d-flex justify-content-between text-black"><strong>Contact - Candidate Outline </strong><label><i class="fa fa-calendar mr-2"></i>{{candidateData?.lastjournaldate}}</label></p>
+            <p>{{candidateData?.journalcreatedby}}</p>
+          </div>
+          <div>
+
+            <p class="d-flex justify-content-between text-black"><strong>Availability Date </strong> <label><i class="fa fa-calendar mr-2"></i> {{candidateData?.availabilitydate}}</label></p>
+          </div>
+        </div>
+      </div>
+      <div class="mb-2">
+        <strong class="text-black">Last Submission Details</strong>
+        <div class=" meta">
+          <strong>Requisition Name: -</strong>  <span>{{candidateData?.Requisition }}</span><br />
+          <strong>Client: -</strong><span>{{candidateData?.clientname }}</span><br />
+          <strong>SubmissionType: -</strong><span>{{candidateData?.submissiontype}}</span>
+          <div class="d-flex justify-content-between">
+            <strong>Bill Rate: -</strong><label>{{candidateData?.billrate}}</label>
+            <strong>Pay Rate: -</strong>   <label>{{candidateData?.payrate}}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <div class="">
+          <p class="text-black">
+            <strong>Referral Details</strong>
+          </p>
+        </div>
+
+        <div class=" meta">
+          <p><strong class="">Referee Name:-</strong>  <label>{{candidateData?.refereename}}</label></p>
+          <p><strong class="">Referee Designation:-</strong> <label>{{candidateData?.refereedesignation}}</label></p>
+          <div class="d-flex justify-content-between">
+            <p>
+              <strong class="">Referred In:-</strong> <label id="">{{candidateData?.referredin}}</label>
+            </p>
+            <p>
+              <a class="" href="#">Referral</a>
+            </p><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Right Panel-->
+    <div class="right-panel">
+      <p class="meta-title">METal</p>
+      <div class="resume-summary" style="height: 741px;overflow: auto;">
+        <div class="rendered-html" [innerHTML]="candidateResume"></div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="custom-msg">
+    <div class="d-flex align-items-center justify-content-center">
+      <i class="fa fa-3x fa-exclamation-circle pr-3 text-danger"></i>
+      <div>
+        <h5 class="text-dark">
+          Oops. Are You Sure?
+        </h5>
+        <p class="mb-0 word-break">
+          Data you entered will not be saved.
+        </p>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-2" style="padding-left:12px">
+      <button type="button" class="btn btn-light mr-3" (click)="Submitconfirm='NO';c('Close click')">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="Submitconfirm='YES';c('Close click')">
+        Yes, close it!
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+

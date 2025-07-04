@@ -1,0 +1,242 @@
+<div class="formbar py-2 px-3">
+  <div class="row align-items-center">
+    <div class="col">
+      <h3 class="mb-0 text-light">Menu Setting</h3>
+    </div>
+    <div class="col col-auto ml-auto">
+      <div class="d-flex align-items-center">
+        <a class="p-1 text-white pr-3" (click)="_openedSetting=!_openedSetting">
+          <i class="fa fa-2x fa-cog"></i>
+        </a>
+        <select class="form-control mr-3" style="max-width:150px" [(ngModel)]="nodes.Type">
+          <option value="Top">Top</option>
+          <option value="Side">Side</option>
+        </select>
+        <button class="btn btn-outline-light" (click)="Save()">Publish</button>
+        <button *ngIf="SelectedNode" class="btn btn-outline-light ml-3" (click)="Addlayout('formcontent')">
+          <i class="fa fa-plus mr-2" aria-hidden="true"></i>Add Layout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+  <ngb-alert class="successMsg" *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage
+    }}</ngb-alert>
+
+  <div class="sidbar-outer sidbar75">
+    <ng-sidebar-container>
+      <ng-sidebar [(opened)]="_openedSetting" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+        <div class="d-flex justify-content-between">
+          <h5 class="p-3 m-0">Application Settings</h5>
+          <a class="p-3 pointer" (click)="_openedSetting=!_openedSetting">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="sidbar-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6">
+                <label>Timezone
+                  <i class="fa fa-question-circle ml-2 help-text" placement="right" ngbTooltip="Work for UTC input format, enter 'local' for system time."></i>
+                </label>
+                <input type="text" [placeholder]="'America/New_York'" class="form-control" [(ngModel)]="nodes.timezone">
+              </div>
+              <div class="col-md-6">
+                <label>Date Format</label>
+                <input type="text" [placeholder]="'MM/dd/yyyy hh:mm a'" class="form-control" [(ngModel)]="nodes.dateformat">
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-sidebar>
+      <ng-sidebar [(opened)]="_opened" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+        <div class="d-flex justify-content-between">
+          <h5 class="p-3 m-0">Menu</h5>
+          <a class="p-3 pointer" (click)="closeSidebar(tree)">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="sidbar-body">
+          <div class="container-fluid">
+            <div class="row" *ngIf="sidebarType == 'content'">
+              <app-dynamicform [AuthService]="AuthService" [controls]="MenuPropertiy" [datamodel]="MenuNode" [formdata]="MenuNode"
+                [access]="'write'" class="col-md-12"></app-dynamicform>
+              <div class="row">
+                <div class="col-md-12">
+                  <button class="btn btn-outline-dark float-right" (click)="closeSidebar(tree)"><i class="fa fa-plus mr-2"
+                      aria-hidden="true"></i>Confirm</button>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="sidebarType == 'formcontent'">
+              <app-dynamicform [AuthService]="AuthService" [controls]="ContentForm" [datamodel]="ContentData"
+                [formdata]="ContentData" [access]="'write'" class="col-md-12"></app-dynamicform>
+            </div>
+
+          </div>
+        </div>
+      </ng-sidebar>
+      <ng-sidebar [(opened)]="_openedAddMenuSidebar" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+        <div class="d-flex justify-content-between">
+          <h5 class="p-3 m-0">Add Menu</h5>
+          <a class="p-3 pointer" (click)="_openedAddMenuSidebar=false">
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="sidbar-body">
+          <div class="container-fluid">
+            <div class="row">
+              <app-dynamicform [AuthService]="AuthService" [controls]="MenuPropertiy" [datamodel]="MenuNode" [formdata]="MenuNode"
+                [access]="'write'" class="col-md-12"></app-dynamicform>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn-outline-dark float-right" (click)="closeAddMenuSidebar(tree)"><i class="fa fa-plus mr-2"
+                    aria-hidden="true"></i>Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-sidebar>
+      <div ng-sidebar-content>
+        <div class="row mt-3">
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <tree-root #tree [nodes]="nodes.Nav" [options]="customTemplateStringOptions" [focused]="true">
+                  <ng-template #treeNodeTemplate let-node>
+                    <div class="d-flex justify-content-start">
+                      <div class="align-self-center p-1">
+                        <input type="text" [id]="node.data.uuid" class="form-control" [(ngModel)]="node.data.Title">
+                      </div>
+                      <div class="align-self-center p-1">
+                        <a (click)="SelectMenu(node)">
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                      <div class="align-self-center p-1">
+                        <a (click)="EditMenu(node,tree,'content')">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                        <!--<a (click)="EditMenu(node,tree,content)">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>-->
+                      </div>
+                      <div class="align-self-center p-1">
+                        <a (click)="Setorder(node,tree,node.index,'down')">
+                          <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                      <div class="align-self-center p-1" *ngIf="node.index > 0">
+                        <a (click)="Setorder(node,tree,node.index,'up')">
+                          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                      <div class="align-self-center p-1">
+
+                        <a (click)="Addchild(node)">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                      <div class="align-self-center p-1">
+                        <a (click)="DeleteControl(node,tree)">
+                          <i class="fa fa-window-close-o" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-start flex-wrap">
+                      <div class="align-self-center p-1" *ngFor="let cnt of node.data.Layout.Content">
+                        <i class="{{cnt.WebIcon}}"></i>{{cnt.Title}}
+                      </div>
+
+                    </div>
+                  </ng-template>
+                  <ng-template #loadingTemplate>Loading, please hold....</ng-template>
+                </tree-root>
+              </div>
+              <div class="text-right card-footer">
+                <button class="btn btn-sm btn-outline-dark" (click)="AddMenu()"><i class="fa fa-plus mr-2" aria-hidden="true"></i>Add
+                  Menu</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <ng-container *ngIf="SelectedNode">
+              <div class="row" *ngIf="SelectedNode.Layout.Content">
+                <div *ngFor="let cn of SelectedNode.Layout.Content; let i = index" class="col-md-{{cn.width}}">
+                  <div class="has-hover-btn">
+                    <div class="hover-btn btn-group">
+                      <button (click)="Editlayout('formcontent',tree,cn)" class="btn btn-dark">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                      </button>
+                      <button (click)="Deletelayout(i,tree)" class="btn btn-dark">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                    <app-dynamicform-init [AuthService]="AuthService" [Content]="cn"></app-dynamicform-init>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="SelectedNode">
+
+            </ng-container>
+
+            <!--<div class="row">
+              <div class="col-auto">
+                <button class="btn btn-outline-primary" (click)="_toggleSidebar()">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="col-auto" *ngIf="SelectedNode">
+                <button class="btn btn-outline-primary" (click)="Addlayout(formcontent)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+
+              </div>
+            </div>-->
+
+          </div>
+        </div>
+      </div>
+    </ng-sidebar-container>
+  </div>
+</div>
+
+
+<ng-template #content let-c="close" let-d="dismiss" size="lg" style="width:80% !important">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize"> Property</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <app-dynamicform [AuthService]="AuthService" [controls]="MenuPropertiy" [datamodel]="MenuNode" [formdata]="MenuNode"
+        [access]="'write'" class="col-md-12"></app-dynamicform>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default waves-effect waves-light" (click)="c('Close click')">Save</button>
+  </div>
+</ng-template>
+<ng-template #formcontent let-c="close" let-d="dismiss" size="lg" style="width:80% !important">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize"> Property</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+      </div>
+      <app-dynamicform [AuthService]="AuthService" [controls]="ContentForm" [datamodel]="ContentData" [formdata]="ContentData"
+        [access]="'write'" class="col-md-12"></app-dynamicform>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default waves-effect waves-light" (click)="c('Close click')">Save</button>
+  </div>
+</ng-template>

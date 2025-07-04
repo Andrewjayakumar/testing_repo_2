@@ -1,0 +1,46 @@
+.results {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.name{
+    font-size:15px;
+    text-decoration:underline !important;
+    font-weight:bold;
+}
+
+.resultlink{
+    font-size:12px;
+}
+
+.norecords {
+  text-align: center;
+  color: red;
+  font-size: 15px;
+}
+
+.submit button{
+    padding-left:20px;
+}
+
+.linkedInlabel {
+  padding-left: 7px;
+  color: #757575;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.checkbox {
+  input[type="checkbox"] {
+    height: 15px;
+    width: 15px;
+    padding-right: 1rem;
+  }
+
+  label {
+    padding-left: 0.5rem !important;
+    color: #757575;
+    font-size: 15px;
+    font-weight: bold;
+  }
+}

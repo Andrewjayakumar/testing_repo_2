@@ -1,0 +1,49 @@
+<div class="box-shadow">
+  <div class="modal-header w-100 p-1 pl-2i">
+    <h5 class="text-primary">
+      CANDIDATE OUTLINE FOR PROFILE
+    </h5>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.dismiss('user click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="parentForm">
+    <div class="modal-body p-0 pb-1 overflow-auto">
+
+      <div class="d-inline-flex w-100">
+        <div class="col-md-4 cosection pr-0">
+          <app-candidateoutline-for-popup #coref [isCoPopup]="isCoPopup" [candidateid]="candidateid" [requisitionid]="requisitionid" [countryid]="countryid" (COfillChange)="updatePercentage($event)"></app-candidateoutline-for-popup>  <!---->
+        </div>
+        <div class="col-md-1 p-0 saveAlignment">
+          <input type="submit" role="button" class="btn btn-primary pull-left save" (click)="OnSubmitClicked(event)" value="Save"/>
+        </div>
+        <div class="col-md-8 pl-0 resumes">
+          <app-resumes-journals [candidateid]="candidateid" [requisitionid]="requisitionid" [pageerrors]="ErrorMessage"></app-resumes-journals>
+        </div>
+      </div>
+
+
+    </div>
+  </form>
+
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-primary" (click)="d('ok')">OK</button>
+  </div>
+</ng-template>

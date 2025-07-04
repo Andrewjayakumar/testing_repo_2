@@ -1,0 +1,94 @@
+<div [formGroup]="formGroup" *ngIf="access == 'write'">
+  <div class="form-group" *ngIf="!control.isPanel">
+    <label [for]="formGroup.controls[control_id]">
+      <span [innerHTML]="safehtml(control.label)"></span>
+      <sup class="text-danger font-weight-bold" *ngIf="control.label && control.require">*</sup>
+      <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+    </label>
+    <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+    <textarea autocomplete="off"
+              [id]="formGroup.controls[control_id]"
+              [placeholder]="control.placeholder"
+              class="form-control"
+              [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}"
+              [formControl]="formGroup.controls[control_id]"
+              [(ngModel)]="data[control.key]"
+              [required]="control.require"
+              [maxlength]="control.Textlimit"
+              (ngModelChange)="_controlService.getCssforMandatory(control,data[control.key]);onTextChange($event)"
+              [ngStyle]="{'height.px': control.height}"
+              (keydown)="preventHTML($event)"></textarea>
+    <span class="form-text secondary-text">{{textRemaining}} character(s) Remaining</span>
+    <span class="form-text secondary-text" *ngIf="textRemaining<0">Maximum ammount of Character(s) allowed: {{control.Textlimit}} ,</span>
+    <span class="form-text secondary-text" *ngIf="textRemaining<0">remove {{textRemaining}} Character(s)</span>
+    <small class="form-text text-danger" *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false">
+      {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+    </small>
+    <small class="form-text text-danger" *ngIf="formGroup.controls[control_id] ? !IsSpace && formGroup.controls[control_id].touched : false">
+      No space allowed.
+    </small>
+    <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+  </div>
+  <div class="card form-group" *ngIf="control.isPanel">
+    <div class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+      <div class="m-0">
+        <span class="d-flex align-items-center">
+          <i *ngIf="data[control.key] && data[control.key].length > 0" class="secondary-text fa fa-check-square-o pr-1"></i>
+          <span>
+            <span [innerHTML]="safehtml(control.label)"></span>
+            <sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+            <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+          </span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div class="card-body" [ngbCollapse]="!hide">
+      <div [formGroup]="formGroup">
+        <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+        <textarea autocomplete="off"
+                  [ngStyle]="{'height.px': control.height}"
+                  [id]="formGroup.controls[control_id]"
+                  [placeholder]="control.placeholder"
+                  class="form-control"
+                  [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}"
+                  [formControl]="formGroup.controls[control_id]"
+                  [(ngModel)]="data[control.key]"
+                  [required]="control.require"
+                  [maxlength]="control.Textlimit"
+                  (ngModelChange)="_controlService.getCssforMandatory(control,data[control.key]);onTextChange($event)"></textarea>
+        <span class="form-text secondary-text">{{textRemaining}} character(s) Remaining</span>
+        <span class="form-text secondary-text" *ngIf="textRemaining<0">Maximum ammount of Character(s) allowed: {{control.Textlimit}} ,</span>
+        <span class="form-text secondary-text" *ngIf="textRemaining<0">remove {{textRemaining}} Character(s)</span>
+        <small class="form-text text-danger" *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false">
+          {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+        </small>
+        <small class="form-text text-danger" *ngIf="formGroup.controls[control_id] ? !IsSpace && formGroup.controls[control_id].touched : false">
+          No space allowed.
+        </small>
+        <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="access != 'write'" class="form-group">
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+      <label class="editebl-input"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.label)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></label>
+      <div class="form-control border-0 p-0" [innerHTML]="safehtml(data[control.key])"></div>    
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <!--<div class="card-header d-flex pointer" (click)="hide = !hide">
+      <p class="m-0 grey-text">
+        <span class="d-flex">
+          <i *ngIf="data[control.key] && data[control.key].length > 0" class="secondary-text fa fa-check-square-o pr-1"></i>
+          <span class="editebl-input"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.label)"></span><i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></span>
+        </span>
+      </p>
+      <span class="ml-auto align-self-center" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto align-self-center" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>-->
+      <label class="editebl-input"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.label)"></span><i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></label>
+      <div class="form-control border-0 p-0" [innerHTML]="safehtml(data[control.key])"></div>      
+   </ng-container>
+</div>

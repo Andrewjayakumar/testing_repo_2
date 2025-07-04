@@ -1,0 +1,442 @@
+<div>
+
+    <div [ngBusy]="{busy: busy, message: 'Loading ...', backdrop: true, delay: 200, minDuration: 1000}"></div>
+
+    <div class="card-2 card-3 card-1">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-sub ">
+
+                    <div id="headingOne" class="card-header ">
+                        <h2 class="accordion-heading">
+                            <button type="button" data-toggle="collapse" data-target="#collapseMain"
+                                aria-expanded="true" aria-controls="collapseOne"
+                                class="btn btn-link accordion-header font-weight-bold">{{projectDetails?.projectname}}</button>
+                        </h2>
+                    </div>
+
+                </div>
+
+                <div class="col-12 button-section">
+                    <button class="btn btn-primary pull-right" [routerLink]="['/projects/search']">
+                        <i class="fa fa-arrow-left"></i> Back
+                    </button>
+                    <button *ngIf="(projectDetails?.projecttype === 'Bulk Staffing') || (projectDetails?.projecttype !== 'Bulk Staffing' && activeRole === 10) " class="btn btn-primary pull-right" [routerLink]="['/projects/addupdate']"
+                        [queryParams]="{projectid:projectid}">
+                        <i class="fa  fa-pencil-square-o"></i> Edit
+                    </button>
+                    <button class="btn btn-primary pull-right" [routerLink]="['/apps/requisitionspage/addupdate']"
+                        [queryParams]="{projectid:projectid}" *ngIf="showreqButton">
+                        <i class="fa fa-plus"></i> New Requisition
+                    </button>
+                </div>
+
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav" role="tablist" #tablist>
+
+                            <li class="nav-item">
+                                <a data-toggle="tab" role="tab" href="#summaryTab"
+                                    [ngStyle]="{ 'border-bottom' : currentTab==='summaryTab' ? '1.5px solid rgb(50, 135, 239)': 'none'}"
+                                    (click)="currentTab='summaryTab'; getProjectDetails()">
+
+                                    Project Summary
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="tab" role="tab" href="#reqTab"
+                                    [ngStyle]="{ 'border-bottom' : currentTab==='reqTab' ? '1.5px solid rgb(50, 135, 239)': 'none'}"
+                                    (click)="currentTab='reqTab'; getReqLists();">
+                                    List of Requisitions
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <!-- Project Details -->
+                <div class="tab-content" [ngSwitch]="currentTab">
+                    <div *ngSwitchCase="'summaryTab'">
+                        <div id="summaryTab" class="tab-pane fade show active"
+                            [ngClass]="(currentTab ==='summaryTab') ? 'show active' : 'fade'" role="tabpanel">
+                            <div id="summaryAccordion">
+
+                                <!-- Project Details Accordion   -->
+                                <div class="card card-sub">
+                                    <div id="headingOne" class="card-header ">
+                                        <h2 class="accordion-heading">
+                                            <button type="button" data-toggle="collapse" data-target="#collapseOne"
+                                                aria-expanded="true" aria-controls="collapseOne"
+                                                class="btn btn-link  collapsed accordion-header  collapsible-link">Project
+                                                Details</button>
+                                        </h2>
+
+                                    </div>
+                                    <div id="collapseOne" aria-labelledby="headingOne" data-parent="#summaryAccordion"
+                                        class="collapse show">
+                                        <div class="card-body">
+
+                                            <div class="row">
+                                                <div class="col-md-12 pb-3">
+                                                    
+                                                        <span class="projectname-label">Project Name:</span>
+                                                        <span class="project-data">{{projectDetails?.projectname}}</span>
+                                                    
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Project Status:</li>
+                                                        <li class="project-data">{{projectDetails?.projectstatus}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Project Type:</li>
+                                                        <li class="project-data">{{projectDetails?.projecttype}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Total Contract Value(in$):</li>
+                                                        <li class="project-data">{{projectDetails?.totalcontractnumber}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Expenses Budget(in $):</li>
+                                                        <li class="project-data">{{projectDetails?.expensesbudget}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Practice Tower:</li>
+                                                        <li class="project-data">{{projectDetails?.practicetype}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Billing Type:</li>
+                                                        <li class="project-data">{{projectDetails?.msprojecttype}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Billing Status:</li>
+                                                        <li class="project-data">{{projectDetails?.billingstatus}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">No. of Positions:</li>
+                                                        <li class="project-data">{{projectDetails?.noofpositions}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Delivery Model:</li>
+                                                        <li class="project-data">{{projectDetails?.location}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Recieved Date:</li>
+                                                        <li class="project-data">{{projectDetails?.receiveddate | date:'shortDate' }}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Start Date:</li>
+                                                        <li class="project-data">{{projectDetails?.startdate | date:'shortDate' }}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">End Date:</li>
+                                                        <li class="project-data">{{projectDetails?.enddate | date:'shortDate' }}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Project Duration <br> (in months):</li>
+                                                        <li class="project-data">{{projectDetails?.projectdurationmonths}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Project Duration <br> (in weeks):</li>
+                                                        <li class="project-data">{{projectDetails?.projectdurationweeks}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Lead Source:</li>
+                                                        <li class="project-data">{{projectDetails?.leadsource}}</li>
+                                                    </ul>
+                                               
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4" *ngIf="projectDetails?.projecttype === 'Managed Service' || projectDetails?.projecttype === 'Managed Capacity'">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Technology Category:</li>
+                                                        <li class="project-data">{{projectDetails?.techcategory}}</li>
+                                                    </ul>
+                                                   
+                                                </div>
+                                            </div>
+                                   
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    
+                                                        <div class="label-content">Project Description:</div>
+                                                        <div class="projectdescription-data" [innerHTML]="projectDetails?.projectdescription"></div>
+                                                    
+                                                </div>
+                                               
+                                            </div>
+                     
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Client Details Accordion   -->
+                                <div class="card card-sub">
+                                    <div id="headingTwo" class="card-header ">
+                                        <h2 class="accordion-heading">
+                                            <button type="button" data-toggle="collapse" data-target="#collapseTwo"
+                                                aria-expanded="true" aria-controls="collapseTwo"
+                                                class="btn btn-link collapsed accordion-header collapsible-link">Client
+                                                Details</button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#summaryAccordion"
+                                        class="collapse show">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Client Name:</li>
+                                                        <li class="project-data">{{projectDetails?.clientname}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Client Location:</li>
+                                                        <li class="project-data">{{projectDetails?.clientlocation}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Client Region:</li>
+                                                        <li class="project-data">{{projectDetails?.region}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Opportunity:</li>
+                                                        <li class="project-data">{{projectDetails?.opportunityname}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Opportunity Owner:</li>
+                                                        <li class="project-data">{{projectDetails?.opportunityowner}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Manager Name:</li>
+                                                        <li class="project-data">{{projectDetails?.managername}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Manager Email:</li>
+                                                        <li class="project-data">{{projectDetails?.manageremail}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Manager Phone:</li>
+                                                        <li class="project-data">{{projectDetails?.managercontactno}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Assignment Details Accordion -->
+                                <div class="card card-sub">
+                                    <div id="headingTwo" class="card-header ">
+                                        <h2 class="accordion-heading">
+                                            <button type="button" data-toggle="collapse" data-target="#collapseThree"
+                                                aria-expanded="true" aria-controls="collapseThree"
+                                                class="btn btn-link collapsed accordion-header collapsible-link">Assignment
+                                                Details</button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseThree" aria-labelledby="headingTwo" data-parent="#summaryAccordion"
+                                        class="collapse show">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">MS Business Development Manager:</li>
+                                                        <li class="project-data"> {{projectDetails?.msbusinessdevelopmentmanager}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">MS Engagement Manager:</li>
+                                                        <li class="project-data"> {{projectDetails?.msengagementmanager}}</li>
+                                                    </ul>
+                                                </div>
+                                               
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Collabera Project Lead:</li>
+                                                        <li class="project-data"> {{projectDetails?.collaberaprojectlead}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Account Manager:</li>
+                                                        <li class="project-data"> {{projectDetails?.regionalam}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Assignment Region:</li>
+                                                        <li class="project-data"> {{projectDetails?.assignmentregion}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul class="two-column-list">
+                                                        <li class="label-content">Delivery Manager:</li>
+                                                        <li class="project-data"> {{projectDetails?.deliverymanager}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                            
+                                            
+                                                <div class="col-md-12 pb-3">
+                                            
+                                                    <span class="sow-label">SOW File:</span>
+                                                    <a href="{{projectDetails?.sowfilepath}}" target="_blank"><span class="project-data">
+                                                            {{projectDetails?.sowfilepath}}</span></a>
+                                            
+                                                </div>
+                                            
+                                            
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <!-- Req Details  -->
+                    <div *ngSwitchCase="'reqTab'">
+                        <div id="reqTab" class="tab-pane fade"
+                            [ngClass]=" (currentTab ==='reqTab') ? 'show active' : 'fade'" role="tabpanel">
+                            <div class="list-container">
+                                <div *ngIf="totalReqLists > 0">
+                                <table class="req-table">
+                                    <tr>
+                                      <th class="project-name">Requisition Name</th>
+                                     
+                                    </tr>
+                                    <tr *ngFor="let list of currentPageList ">
+                                      <td class="list-td"> <a (click)="showAlert(list)" class="list-name">{{list.requisitionname}}</a></td>
+                                    </tr>
+                                  </table>
+                                </div>
+
+                                  <!-- NO Result part -->
+                                <div *ngIf="totalReqLists == 0">
+                                    <div class="no-data">
+                                        
+                                            <img class="image-class" src="../../../../../Metal/wwwroot/assets/img/Recruitment.png" alt="recruitment">
+                                       
+                                
+                                    </div>
+                                    <div class="no-data-message">
+                                        <h4>
+                                            No Requisitions available under this Project
+                                        </h4>
+                                        <div>
+                                            Click on New Requisition to initiate the Process
+                                        </div>
+
+                                    </div>
+                                    
+                                </div>
+
+                                  
+                                  <div *ngIf="reqLists && reqLists.length > 0" class="page-container">
+                                    
+                                  <ngb-pagination [collectionSize]="totalReqLists" [(page)]="currentPage" [pageSize]="pageSize" [maxSize]="maxSize"
+                                  [rotate]="true" [boundaryLinks]="true" (pageChange)="onPageChange($event)" size="sm"></ngb-pagination>
+
+    
+                                  </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+              
+        
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+
+</div>

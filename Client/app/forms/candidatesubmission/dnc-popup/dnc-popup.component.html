@@ -1,0 +1,106 @@
+<div class="box-shadow">
+  <div class="modal-header w-100 p-1 pl-3 pt-3">
+    <h5 class="text-primary">DNC Activation</h5>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modal.close(true);"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form #form="ngForm" (ngSubmit)="OnSubmitClicked()">
+    <div class="modal-body p-0 pb-1 pl-5">
+
+      <div class="row">
+        <div class="form-group ui-control-block col-md-12 pull-right pl-0 mt-3">
+          <!-- Switch to Search in all the REQs-->
+          <div
+            class="col-md-12 mb-3 pl-2 alignSwitchButton"
+            [ngClass]="{
+              'justify-content-between': position == 'justify',
+              'mr-5': position == 'justify'
+            }"
+          >
+            <label
+              [attr.for]="'dncID'"
+              class="checkbox-label mt-1 mr-1 mb-1"
+              innerHTML="Search in all the REQs"
+              >Do you want to mark this candidate as DNC?</label
+            >
+            <div class="custom-switch">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                [attr.id]="'dncID'"
+                [(ngModel)]="markDNC"
+                (click)="markAsDNC($event)"
+                [ngModelOptions]="{ standalone: true }"
+              />
+              <label
+                [attr.for]="'dncID'"
+                class="custom-control-label"
+              ></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div *ngIf="markDNC" class="row mb-3">
+
+        <div class="col-md-12 form-group ui-control-block">
+          <div class="row m-2">
+            <div class=" col-md-10 pl-0 ui-control-block">
+              <label>
+                Till Date
+                <sup class="text-danger font-weight-bold">*</sup>
+              </label>
+            </div>
+            <div class="input-group alignDate col-md-5 pl-0">
+              <input class="form-control" id="tilldate" [(ngModel)]="tilldate" (ngModelChange)="tillDateChanged()"
+                     [minDate]="currentDate" placeholder="yyyy-mm-dd" (focus)="td.toggle()"
+                     name="tilldate" ngbDatepicker #td="ngbDatepicker" [ngModelOptions]="{standalone: true}" readonly>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary fa fa-calendar" (click)="td.toggle()" type="button"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-10 form-group ui-control-block">
+          <div class=" col-md-12 pl-0 ui-control-block">
+            <label>
+              Enter Justification (Justification will be saved in journal)
+              <sup class="text-danger font-weight-bold">*</sup>
+            </label>
+          </div>
+          <div>
+            <textarea class="form-control" 
+            id="justification" name="justification" rows="5" cols="10" [(ngModel)]="justificationDesc"
+             [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="errormessage" *ngIf="errorMessage">{{errorMessage}}</div>
+      <div class="message" *ngIf="displaymesg">{{displaymesg}}</div>
+
+    </div>
+
+    <div class="modal-footer">
+      <input
+        type="submit"
+        role="button"
+        class="btn btn-primary pull-right"
+        [disabled]="!(tilldate && justificationDesc)"
+        value="Active DNC"
+      />
+    </div>
+  </form>
+</div>
+
+

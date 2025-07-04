@@ -1,0 +1,62 @@
+
+  <div>
+    <div class="modal-header w-100 p-1">
+
+      <h5 class="text-dark">
+        Are you sure ?
+      </h5>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modal.dismiss('cancelled');controlBacktoParentPopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <form [formGroup]="cancellationForm" (ngSubmit)="OnSubmitClicked()">
+      <div class="modal-body pt-2 pb-1 pr-5 pl-5">
+        <div class="row ui-control-block col-md-12">
+          <label class="form-check-label" for="cancelReason"> Select a Reason </label>  <sup class="text-danger">*</sup>
+          <ng-select formControlName="cancelReasonId" name="cancelReason"
+                     [items]="reasons"
+                     bindLabel="cancelreason"
+                     bindValue="cancelreasonid"
+                     class="form-control"
+                     placeholder="-- Select Reason for Rejection --"
+                     required>
+
+          </ng-select>
+          <div class="text-danger">
+            <span *ngIf="((cancellationForm.controls['cancelReasonId'].touched) && (cancellationForm.get('cancelReasonId').hasError('required')) )">
+              Please select a reason for not accepting AI Recommendation
+            </span>
+          </div>
+        </div>
+
+
+        <div *ngIf="cancellationForm.controls.cancelReasonId.value === 4" class="form-group ui-control-block col-md-12">
+          <label for="comments" class="">Comments <sup class="text-danger">*</sup></label>
+          <textarea id="ho" formControlName="comments" name="comments" placeholder="Comments " class="form-control" required></textarea>
+
+        
+        <div class="text-danger  figure-caption">
+          <span *ngIf="((cancellationForm.controls['comments'].touched) && (cancellationForm.get('comments').hasError('required') ))">
+           Please enter Other reasons here
+          </span>
+        </div>
+
+        </div>
+        <div *ngIf="cancellationForm.controls.cancelReasonId.value !== 4" class="form-group ui-control-block col-md-12">
+          <label for="comments">
+            Comments
+
+          </label>
+          <textarea id="ho" formControlName="comments" name="comments" placeholder="Comments " class="form-control"></textarea>
+
+        </div>
+
+      </div>
+      <div class="modal-footer ">
+        <input type="submit" [disabled]="!cancellationForm.valid" role="button" class="btn btn-ai pull-right" value="Send" />
+
+      </div>
+
+    </form>
+  </div>

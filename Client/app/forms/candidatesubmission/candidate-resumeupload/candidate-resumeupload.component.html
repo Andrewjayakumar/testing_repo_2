@@ -1,0 +1,188 @@
+
+<div class="box-shadow">
+
+  <div class="modal-header w-100 p-1 pl-5">
+
+    <h5 class="text-primary">
+      METAL Resume Update
+    </h5>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.close(true);resetParaentWidnow()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="uploadForm" (ngSubmit)="OnSubmitClicked()">
+    <div class="modal-body p-0 pb-1 pl-5">
+      <div class="d-inline-flex mt-2 pl-2" *ngFor="let candidate of candidateDetails">
+        <label class="col-form-label-sm label-color text-primary">Candidate Name: </label> &nbsp;&nbsp; <h6 class="mt-1">{{candidate.fullname}}</h6>
+      </div>
+      <div class="row">
+        <div class="form-group ui-control-block col-md-5">
+          <label for="candidateemail" class="col-form-label-sm label-color m-b">
+            Email
+            <sup class="text-danger font-weight-bold">*</sup>
+
+          </label>
+          <input id="candidateemail" formControlName="emailid" name="candidateemail" placeholder="Email" type="text" class="form-control" required />
+
+        </div>
+        <div class="form-group ui-control-block col-md-5">
+          <label for="mobilephone" class="col-form-label-sm label-color m-b">Mobile Phone</label>
+          <input id="mobilephone" formControlName="mobilephone" value=""  name="mobilephone" placeholder="Mobile Phone" type="text" class="form-control" />
+
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="form-group ui-control-block col-md-5">
+          <label for="homephone" class="col-form-label-sm label-color m-b">Home Phone</label>
+          <input id="homephone" formControlName="homephone" value="" name="homephone" placeholder="Home phone" type="text" class="form-control" />
+
+        </div>
+        <div class="col-md-5 form-group ui-control-block source-padding">
+          <label class="form-check-label" for="source"> Source <span class="req_color">*</span></label>
+          <ng-select formControlName="SourceId" name="source"
+                     [items]="sourcelist"
+                     [searchable]="true"
+                     bindLabel="source"
+                     bindValue="sourceid"
+                     class="form-control"
+                     placeholder="-- Select Source --"
+                     required>
+
+          </ng-select>
+          <div class="error_msg">
+            <span *ngIf="(uploadForm.get('SourceId').hasError('required') && isSubmitClicked)">
+              Please select a source
+            </span>
+          </div>
+
+        </div>
+        <div class="col-md-4">
+          <label for="labels" class="form-check-label">
+            Labels
+          </label>
+
+          <ng-select name="labels"
+                     id="labelid"
+                     [items]="labelsList"
+                     [multiple]="true"
+                     [closeOnSelect]="true"
+                     [searchable]="false"
+                     bindLabel="label"
+                     bindValue="labelid"
+                     placeholder="--Select--"
+                     formControlName="labels"
+                     class='form-control'>
+          </ng-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-11">
+          <label for="resume">Resume upload <span class="req_color"></span></label>
+
+          <!--<div class="col-md-3">
+      <input type="file" id="candidate_resume" name="candidate_resume" #candidate_resume (change)="uploadSubmissionResume(candidate_resume.files)" placeholder="Upload" required style="display:none;" />
+      <button type="button" class="btn btn-primary pointer ml--3 mt-1" (click)="candidate_resume.click()">Upload Resume</button>
+
+    </div>-->
+          <!--<small *ngIf="(fileslist.length == 0 && resumeuploaded) || (candidate_resume.touched && candidate_resume.invalid)" class="text-danger">Please upload a resume file of PDF or MS Word document format</small>
+    <span class="col-md-3 mt-2 p-0" *ngIf="fileslist.length == 1">{{fileslist[0].name}}</span>
+    <span *ngIf="isUploading" class="col-md-1 mt-2">
+      <i id="blockSpinner" class="fa fa-circle-o-notch fa-1x fa-spin"></i>
+    </span>-->
+          <div class="fileAttach selectbox cust attachement_jump t-1">
+            <div class="attachmentsWrap">
+              <div class="form-control fileBox">
+                <input type="file" class="file-upload-input w-16 attachedFile" id="jrnFile" name="resumeFile" #candidate_resume
+                       placeholder="Select file" (change)="uploadSubmissionResume(candidate_resume.files)" accept=".doc,.docx,.pdf" />
+                <label for="jrnFile" class="resume_file_name">Click to select Resume</label>
+                <span class="crm-file-plus crm-icon right-icon"></span>
+                <span class="d-flex justify-content-center">Or</span>
+                <div ng2FileDrop
+                     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                     (fileOver)="fileOverBase($event)"
+                     [uploader]="uploader"
+                     (onFileDrop)="onFileDrop($event)"
+                     class="well my-drop-zone">
+                  Drop your resume here
+                </div>
+
+              </div>
+
+              <div *ngIf="attachments?.length != 0" class="form-group attachmentsBox">
+                <div *ngFor="let file of attachments" class="file-name">
+                  <div class="attachment-label" *ngIf="file.useradd">
+                    {{file.file.name}}
+                    <span type="button" class="close" (click)="clearResume()">
+                      <span aria-hidden="true">&times;</span>
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <small *ngIf="(fileslist?.length == 0 && !datafromDragndrop) && isSubmitClicked && !isResetClicked" class="error_msg">Please upload a resume file.</small>
+
+      <span class="chip filename" *ngIf="fileName">
+
+        <span>{{fileName}}</span>
+        <span class="px-1">|</span>
+        <a class="p-1 icon-link" (click)="removeFile()">
+          <i aria-hidden="true" class="fa fa-trash-o"></i>
+        </a>
+
+      </span>
+      <span *ngIf="isUploading" class="col-md-1 mt-2">
+        <i id="blockSpinner" class="fa fa-circle-o-notch fa-1x fa-spin"></i>
+      </span>
+      <span class="chip filename" *ngIf="datafromDragndrop">
+
+        <span>{{uploader?.queue[0]?.file?.name}}</span>
+        <span class="px-1">|</span>
+        <a class="p-1 icon-link" (click)="removeFile()">
+          <i aria-hidden="true" class="fa fa-trash-o"></i>
+        </a>
+
+      </span>
+      <div>
+        <small *ngIf="(fileslist.length == 0 && resumeWrongFormat) || (candidate_resume.touched && candidate_resume.invalid)" class="error_msg">Please upload a resume file of PDF or MS Word document format</small>
+      </div>
+      <div class="errormessage" *ngIf="errorMessage">{{errorMessage}}</div>
+      <div class="message" *ngIf="displaymesg">{{displaymesg}}</div>
+      <div><i>The Candidate Resume was updated more than 90 days back. Please upload the latest resume.</i></div>
+
+
+    </div>
+    <div class="modal-footer ">
+      <input type="submit" [disabled]="!uploadForm.valid" role="button" class="btn btn-primary pull-right" value="Update" />
+
+    </div>
+
+  </form>
+
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok');clearResume()">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>

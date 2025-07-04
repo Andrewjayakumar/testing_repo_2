@@ -1,0 +1,92 @@
+<ng-container>
+ <div>
+    <div class="modal-header">
+      <h6 class="modal-title summary-heading">Requisition Assignment</h6>
+      <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+    </div>
+    <div class="modal-body">
+      <section id="tabs" class="project-tab">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                  <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Recruiter</a>
+                  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Current Assignee</a>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                  <form [formGroup]="recAssignForm">
+
+                    <div class="form-row">
+                      <div class="form-group col-md-10">
+                        <label class="label_text_candidate rec-label" for="submittedBy">Assignee Name</label>
+
+                        <ng-select [items]="recruiterdata$ | async"
+                                   [multiple]="true"
+                                   [closeOnSelect]="true"
+                                   [searchable]="true"
+                                   bindLabel="recruiter"
+                                   bindValue="recruiter"
+                                   [typeahead]="recruiterdatainput$"
+                                   name="recruiter"
+                                   [loading]="isRecruiterisLoading"
+                                   placeholder="Type atleast 2 characters"
+                                   (change)="selectedItem($event)"
+                                   formControlName="recruiter"
+                                   class="form-control"
+                                   required>
+                        </ng-select>
+
+
+                      </div>
+
+                      <span class="submit-assignment">
+                        <button (click)="recruiterAssignment()" class="btn btn-primary export-excel" type="submit">Submit</button>
+                      </span>
+
+
+                    </div>
+                  </form>
+
+
+                </div>
+                  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <table class="table" cellspacing="0" cellpadding="0">
+                      <thead>
+                        <tr>
+                          <th>Recruiter Name</th>
+                          <th>Assign Time/Date</th>
+                          <th>Assigned By</th>
+
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let data of reqAssignment | slice: (pageindex-1) * pagesize : (pageindex-1) * pagesize + pagesize">
+                          <td><a>{{data.recruiterid}}</a></td>
+                          <td>{{data.assigncreatedon | dateTz}}</td>
+                          <td>{{data.assigncreatedby}}</td>
+                     
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="paginator">
+                      <ngb-pagination [collectionSize]="totalrecords" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                                      [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </section>
+    </div>
+
+  </div>`
+</ng-container>

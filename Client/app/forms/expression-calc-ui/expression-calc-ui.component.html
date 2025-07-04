@@ -1,0 +1,5 @@
+<div [hidden]="control.hidden"  class="form-group">
+  <label>{{control.label}}<sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup></label>
+  <div [innerHTML]="gethtml()"></div>
+</div>
+

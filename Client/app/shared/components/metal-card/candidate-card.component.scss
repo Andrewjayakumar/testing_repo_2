@@ -1,0 +1,245 @@
+$danger: #e33f03 !default;
+$info: #FFA500;
+$teal : #008567;
+
+.metal-card-row {
+  margin: 0 -10px;
+}
+
+.metal-card-row {
+  padding: 1px;
+}
+
+.metal-card-col {
+  padding: 1px;
+}
+.card {
+  margin: 0;
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid #ebebeb;
+  border-radius: 0;
+}
+
+
+.card-header {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #000;
+  border-bottom: 1px solid #ebebeb;
+  color: #ebebeb !important;
+  padding: 15px 15px 8px 15px !important;
+  font-weight: normal !important;
+}
+
+.text-truncate-skills {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 15px;
+  height: 31px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+
+.ehris {
+  display: flex;
+}
+
+.text-truncate, .multiy-select .dropdown-toggle, .multiy-select .custom-dropdown .custom-dropdown-toggle, .custom-dropdown .multiy-select .custom-dropdown-toggle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+small, .small {
+  font-size: 80%;
+  font-weight: 400;
+}
+
+.ehris-inner {
+  padding-left: 10px;
+  margin-top: -1px;
+  font-size: 11px;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.text-white {
+  color: #ebebeb !important;
+}
+
+.matal-card-row .matal-card-col .card {
+  margin: 0;
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+.candidate-journal {
+  font-size: 10px;
+  background: $info;
+  color: black;
+  font-weight: bold;
+  width: 73%;
+  text-align: center;
+  margin-left: 5rem;
+  margin-top: 1px;
+}
+
+
+.matal-card-row .matal-card-col .custom-action-hover .custom-hover-btn {
+  left: 0;
+  right: 0;
+}
+
+
+
+.custom-action-hover:hover .custom-hover-btn a {
+  color: #fff;
+}
+
+.custom-action-hover:hover .custom-hover-btn {
+  bottom: -1rem;
+  visibility: visible;
+  opacity: 1;
+}
+
+.matal-card-row .matal-card-col .custom-action-hover:hover .custom-hover-btn {
+  bottom: 0;
+}
+
+.custom-hover-btn {
+  margin-bottom: 17px;
+  position: absolute;
+  left: 0 !important;
+  bottom: -50px;
+  right: 0 !important;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 300ms linear;
+}
+
+.lastsubmitted-text{
+    font-size:12px;
+    font-weight:600;
+    padding-left:2.2rem;
+}
+
+.jobtitle{
+    font-size:12px;
+}
+
+.proactive-status {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0 5px;
+  font-size: 10px;
+  background-color: #fff;
+  border-radius: 0 0 5px 0;
+}
+
+.card-tag {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0 5px;
+  font-size: 11px;
+  background-color: #fff;
+  color: #e33f03;
+  border-radius: 0 0 0 5px;
+}
+
+.social-icons-inner {
+  padding-right: 4px;
+  font-size: 13px;
+  margin-bottom: -10px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+a.linked {
+  color: white;
+}
+
+.skills-font{
+    font-size:10px;
+}
+
+.submissiontype {
+  display: flex;
+}
+
+.submissiontype-inner {
+  padding-left: 10px;
+  font-size: 11px;
+}
+
+.icon-image-card {
+  position: absolute;
+  left: 16px;
+  right: 0px;
+  bottom: 14px;
+}
+ .last-contancted-text {
+     padding-left:2rem;
+ }
+
+.card-checkbox-action {
+  zoom: 1.15;
+  vertical-align: middle;
+  accent-color: #ebebeb;
+  
+}
+
+.daxtrarelevance {
+  position: absolute;
+  right: 0;
+  top: -2px;
+  padding: 0 5px;
+  background-color: #fff;
+  color: $danger;
+  border-radius: 5px 0 0 5px;
+}
+.notification-icon {
+  background-color: #e33f03;
+  margin-left: 1rem;
+  margin-top: -1.75rem;
+  height: 13px;
+  width: 13px;
+  position: absolute;
+  border-radius: 50% !important;
+ }
+
+.resumeupdateddate {
+    color:#3b81d3;
+}
+
+.jump-chip {
+  font-size: x-small;
+  background-color: aliceblue;
+  border-radius: 8px;
+  color: black;
+  padding: 1px 2px;
+}

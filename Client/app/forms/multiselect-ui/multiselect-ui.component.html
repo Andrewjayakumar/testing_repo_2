@@ -1,0 +1,97 @@
+<div [ngClass]="{'card mb-3':control.showheader==true}" [formGroup]="formGroup" *ngIf="access == 'write'" #container>
+  <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+    <div class="m-0">
+      <span class="d-flex align-items-center">
+        <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+        <span class="editebl-input">
+          <span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.Panelheader)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i>
+        </span>
+      </span>
+    </div>
+    <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+    <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+  </div>
+  <div [ngClass]="{'card-body pb-1':control.showheader==true}" [ngbCollapse]="!hide">
+    <form (keydown)="keyDownFunction($event)">
+      <div class="form-group">
+        <label [for]="control.key">
+          {{control.label}}<sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+          <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+        </label>
+        <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+        <div *ngIf="data[control.key]">
+          <span *ngFor="let item of data[control.key]" class="badge badge-lg badge-success mb-1 mr-1">{{item}} <i (click)="remove(item)" class="fa fa-times-circle ml-1" aria-hidden="true"></i></span>
+        </div>
+        <div class="dropdown-outer">
+          <div class="input-group">
+            <!--<input autocomplete="off" [id]="control.key" type="text" [value]="addtext" [formControl]="formGroup.controls[control_id]" [placeholder]="control.placeholder" class="form-control"  [ngClass]="{'border-danger' : formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false}" (click)="toggleSelect()" />-->
+            <input autocomplete="off" [id]="formGroup.controls[control_id]" type="text" [value]="addtext" [formControl]="formGroup.controls[control_id]"
+            (focusout)="updatePageVarible()" [ngClass]="{'border-danger' : control.require && data[control.key] && data[control.key].length==0  && formGroup.controls[control_id]?.touched}" [placeholder]="control.placeholder" class="form-control" (click)="toggleSelect()" />
+            <label [for]="control.key" class="input-group-append mb-0">
+              <span class="input-group-text"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+            </label>
+
+
+          </div>
+          <small class="form-text text-danger" *ngIf="control.require && data[control.key] && data[control.key].length==0  && formGroup.controls[control_id]?.touched">
+            {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+          </small>
+          <span class="form-text text-danger" *ngIf="data[control.key] && data[control.key].length < control.minimumselect &&  data[control.key].length > 0">Select minimum {{control.minimumselect}} {{control.label}}</span>
+          <span class="form-text text-danger" *ngIf="showMaxmessage">Maximum {{control.maximumselect}} selection allowed</span>
+          <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+          <div class="dropdown-option">
+            <ul class="list-group" [ngStyle]="{display:isOpen ? 'block' : 'none'}" style="display:block;">
+              <li *ngFor="let item of getItems()" class="list-group-item list-group-item-action" (click)="select(item)" [ngClass]="{'d-none': item.checked}">
+                {{item[control.textfield]}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="access != 'write'" class="form-group">
+  <div [ngClass]="{'card mb-3':control.showheader==true}" *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+      <label class="mb-0">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+          <span class="editebl-input text-primary">
+            <span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.Panelheader)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i>
+          </span>
+        </span>
+      </label>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body':control.showheader==true}" [ngbCollapse]="!hide">
+      <label *ngIf="control.label.length > 0"><span class="editebl-input text-primary"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.label)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></span></label>
+      <div class="badge badge-success" *ngFor="let item of data[control.key]">
+          {{item}}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="access!='mandatory'" [ngClass]="{'card mb-3':control.showheader==true}">
+    <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+      <label class="m-0">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+          <span class="editebl-input">
+            <span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.Panelheader)"></span><i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i>
+          </span>
+        </span>
+      </label>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body':control.showheader==true}" [ngbCollapse]="!hide">
+      <div *ngIf="control.label.length > 0">
+        <label class="editebl-input"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.label)"></span><i *ngIf="access == 'edit'" class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></label></div>
+        <div class="badge badge-success" *ngFor="let item of data[control.key]">
+            {{item}}
+        </div>
+    </div>
+  </div>
+</div>

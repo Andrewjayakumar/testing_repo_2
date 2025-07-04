@@ -1,0 +1,418 @@
+<div class="col-md-12">
+<div class="card mb-2">
+	<div class="card-body p-0 collapse show">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="sidbar-outer sidbar75">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card mb-2 border-0 ">
+								<div class="card-body px-0 pb-0 collapse show" style="background: rgb(237, 237, 237); height: auto;">
+									<div class="row" id="panel">
+										<div class="col-md-6">
+											<div class="card mb-2 box-shadow ">
+												<div class="card-header d-flex align-items-center pointer  ">
+													<div class="pr-2 mb-0">
+														<span class="d-flex align-items-center">
+															<span>TOP 5 SKILLS – FORECAST</span>
+														</span>
+													</div>
+													<span class="ml-auto">
+														<i aria-hidden="true" class="fa fa-angle-up"></i>
+													</span>
+												</div>
+
+												<div class="card-body px-3 pt-0 collapse show" style="height: auto;">
+
+													<div class="row" id="Panel" *ngFor="let row of alltopfiveskil">
+														<div class="col-md-12 ">
+
+															<div class="row">
+																<div class="col">
+																	<div class="h-100 position-relative d-flex flex-column">
+																		<div class="row ">
+
+																			<div class=" col-md-2 border border-left-0 border-top-0">
+																				<div class="card mb-2 border-0 ">
+
+
+									<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+
+
+																								<img src="{{row.img}}" class="ml-2 pt-1" width="40" height="40">
+
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-md-10 border border-left-0 border-top-0 border-right-0">
+
+																				<div class="card mb-2 border-0 ">
+
+
+																					<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+
+																								<div></div>
+
+
+																								<div title="">
+
+																									<div class="pb-2 text-secondary pb-0i mt-3">
+																										<span class="d-flex">
+
+																											<span id="kpi" class="">{{row.kpi}}</span>
+
+																										</span>
+																									</div>
+
+																								</div>
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+
+
+																		</div>
+
+
+																	</div>
+
+
+																</div>
+															</div>
+												
+														</div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+										<div class="col-md-6 ">
+
+
+											<div class="card mb-2 box-shadow ">
+												<div class="card-header d-flex align-items-center pointer  ">
+													<div class="pr-2 mb-0">
+														<span class="d-flex align-items-center">
+
+															<span>TOP 5 JOB TITLE – FORECAST</span>
+														</span>
+													</div>
+
+													<span class="ml-auto">
+														<i aria-hidden="true" class="fa fa-angle-up"></i>
+													</span>
+												</div>
+
+												<div class="card-body px-3 pt-0 collapse show" style="height: auto;">
+
+													<div class="row" id="Panel" *ngFor="let row of alltopjobtitles">
+														<div class="col-md-12 ">
+
+															<div class="row">
+																<div class="col">
+
+																	<div class="h-100 position-relative d-flex flex-column">
+																		<div class="row ">
+
+																			<div class=" col-md-2 border border-left-0 border-top-0">
+
+																				<div class="card mb-2 border-0 ">
+
+
+																					<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+
+
+																								<img src="{{row.img}}" class="ml-2 pt-1" width="40" height="40">
+
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-md-10 border border-left-0 border-top-0">
+
+																				<div class="card mb-2 border-0 ">
+
+
+																					<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+
+																								<div></div>
+
+
+																								<div title="">
+
+																									<div class="pb-2 text-secondary pb-0i mt-3">
+																										<span class="d-flex">
+																											<span id="kpi" class="">{{row.kpi}}</span>
+																										</span>
+																									</div>
+
+																								</div>
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				</div>
+
+
+
+																			</div>
+
+
+																		</div>
+
+
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+
+
+
+										</div>
+
+										<div class="col-md-6 ">
+
+
+											<div class="card mb-2 box-shadow ">
+												<div class="card-header d-flex align-items-center pointer  ">
+													<div class="pr-2 mb-0">
+														<span class="d-flex align-items-center">
+
+															<span>TOP 5 CLIENTS – FORECAST</span>
+														</span>
+													</div>
+
+													<span class="ml-auto">
+														<i aria-hidden="true" class="fa fa-angle-up"></i>
+													</span>
+												</div>
+
+												<div class="card-body px-3 pt-0 collapse show" style="height: auto;">
+
+													<div class="row" id="Panel" *ngFor="let row of alltopclients">
+														<div class="col-md-12 ">
+
+															<div class="row">
+																<div class="col">
+																	<div class="h-100 position-relative d-flex flex-column">
+																		<div class="row ">
+
+																			<div class="col-md-2 border border-left-0 border-top-0">
+
+																				<div class="card mb-2 border-0 ">
+
+
+																					<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+
+
+																								<img src="{{row.img}}" class="ml-2 pt-1" width="40" height="40">
+
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-md-10 border border-left-0 border-top-0">
+
+																				<div class="card mb-2 border-0 ">
+
+
+																					<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+
+																								<div></div>
+
+
+																								<div title="">
+
+																									<div class="pb-2 text-secondary pb-0i mt-3">
+																										<span class="d-flex">
+
+
+
+
+
+																											<span id="kpi" class="">{{row.kpi}}</span>
+
+
+
+																										</span>
+																									</div>
+
+																								</div>
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				</div>
+
+
+
+																			</div>
+
+
+																		</div>
+
+
+																</div>
+															</div>
+													
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+										</div>
+
+										<div class="col-md-6 ">
+
+
+											<div class="card mb-2 box-shadow ">
+												<div class="card-header d-flex align-items-center pointer  ">
+													<div class="pr-2 mb-0">
+														<span class="d-flex align-items-center">
+
+															<span>TOP 5 LOCATIONS – FORECAST</span>
+														</span>
+													</div>
+
+													<span class="ml-auto">
+														<i aria-hidden="true" class="fa fa-angle-up"></i>
+													</span>
+												</div>
+
+												<div class="card-body px-3 pt-0 collapse show" style="height: auto;">
+
+													<div class="row" id="Panel" *ngFor="let row of alltopjoblocations">
+														<div class="col-md-12 ">
+
+															<div class="row">
+																<div class="col">
+																	<div class="h-100 position-relative d-flex flex-column">
+																		<div class="row ">
+
+																			<div class="col-md-2 border border-left-0 border-top-0">
+
+																				<div class="card mb-2 border-0 ">
+
+
+																					<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+
+
+																								<img src="{{row.img}}" class="ml-2 pt-1" width="40" height="40">
+
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-md-10 border border-left-0 border-top-0">
+
+																				<div class="card mb-2 border-0 ">
+
+
+																					<div class="card-body pt-2 my-0 d-flex align-items-center px-0 pb-0 collapse show" style="height: auto;">
+
+																						<div class="row" id="Panel">
+																							<div class="col-md-12 ">
+
+																								<div title="">
+
+																									<div class="pb-2 text-secondary pb-0i mt-3">
+																										<span class="d-flex">
+
+																											<span id="kpi" class="">{{row.kpi}}</span>
+
+
+
+																										</span>
+																									</div>
+
+																								</div>
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				</div>
+
+
+
+																			</div>
+
+
+																		</div>
+
+
+																</div>
+															</div>
+												
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

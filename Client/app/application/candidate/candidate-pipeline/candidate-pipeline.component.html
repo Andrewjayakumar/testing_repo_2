@@ -1,0 +1,115 @@
+<div class="card mb-2">
+  <div class="card-body">
+    <div class="col-md-12">
+      <section name="silos">
+
+        <div id="actionbuttons">
+          <div class="row d-flex">
+            <div class="col" style="min-height: 300px;width: 20%;">
+              <h6 class="vertical-center kanban-label css-arrow-right p-1 fw-600">
+                <div class="row">
+                  <div class="col-md-2 pl-3i ml-2i">
+                    <img src="../../../../../wwwroot/assets/img/svg/ic-sourced-1.svg" width="22" height="22" />
+                  </div>
+                  <div class="col-md-7 pr-0i d-flex align-items-center">
+                    <span>Sourced</span>
+                  </div>
+                  <div class="col-md-2 pr-0i pl-1i d-flex align-items-center">
+                    <span>{{sourcedCandidates?.length}}</span>
+                  </div>
+                </div>
+              </h6>
+              <app-pipeline-card *ngFor="let card of sourcedCandidates" class="col-12 p-0" [candidate]="card"
+              [requisitionDetails]="requisitionDetails" (refreshCandList)="refreshCAndidateList()">
+                
+              </app-pipeline-card>
+            </div>
+
+            <div class="col" style="min-height: 300px;width: 20%;">
+                <h6 class="vertical-center kanban-label css-arrow-right p-1 fw-600">
+                  <div class="row">
+                    <div class="col-md-2 pl-3i ml-2i">
+                      <img src="../../../../../wwwroot/assets/img/svg/ic-submissions.svg" width="20" height="20" />
+                    </div>
+                    <div class="col-md-7 pr-0i d-flex align-items-center">
+                      <span>Submitted</span>
+                    </div>
+                    <div class="col-md-2 pr-0i pl-1i d-flex align-items-center">
+                      <span>{{submitCandidates?.length}}</span>
+                    </div>
+                  </div>
+                </h6>
+              <app-pipeline-card *ngFor="let card of submitCandidates" class="col-12 p-0" [candidate]="card"
+              [requisitionDetails]="requisitionDetails" (refreshCandList)="refreshCAndidateList()">
+
+              </app-pipeline-card>
+            </div>
+            <div class="col" style="min-height: 300px; width: 20%;">
+                <h6 class="vertical-center kanban-label css-arrow-right p-1 fw-600">
+                  <div class="row">
+                    <div class="col-md-2 pl-3i ml-2i">
+                      <img src="../../../../../wwwroot/assets/img/svg/ic-interview-1.svg" width="20" height="20" />
+                    </div>
+                    <div class="col-md-7 pr-0i d-flex align-items-center">
+                      <span>Interview</span>
+                    </div>
+                    <div class="col-md-2 pr-0i pl-1i d-flex align-items-center">
+                      <span>{{interviewCandidates?.length}}</span>
+                    </div>
+                  </div>
+                </h6>
+              <app-pipeline-card *ngFor="let card of interviewCandidates" class="col-12 p-0" [candidate]="card"
+              [requisitionDetails]="requisitionDetails" (refreshCandList)="refreshCAndidateList()">
+
+              </app-pipeline-card>
+            </div>
+            <div class="col" style="min-height: 300px; width: 20%;">
+                <h6 class="vertical-center kanban-label css-arrow-right p-1 fw-600">
+                  <div class="row">
+                    <div class="col-md-2 pl-3i ml-2i">
+                      <img src="../../../../../wwwroot/assets/img/svg/ic-offered-rejected.svg" width="20" height="20" />
+                    </div>
+                    <div class="col-md-7 pr-0i d-flex align-items-center">
+                      <span>Offered</span>
+                    </div>
+                    <div class="col-md-2 pr-0i pl-1i d-flex align-items-center">
+                      <span>{{hiredCandidates?.length}}</span>
+                    </div>
+                  </div>
+                </h6>
+              <app-pipeline-card *ngFor="let card of hiredCandidates" class="col-12 p-0" [candidate]="card"
+              [requisitionDetails]="requisitionDetails" (refreshCandList)="refreshCAndidateList()">
+
+              </app-pipeline-card>
+            </div>
+            <div class="col" style="min-height: 300px; width: 20%;">
+                <h6 class="vertical-center kanban-label css-arrow-right p-1 fw-600">
+                  <div class="row">
+                    <div class="col-md-2 pl-3i ml-2i">
+                      <img src="../../../../../wwwroot/assets/img/svg/ic-offered-rejected.svg" width="20" height="20" />
+                    </div>
+                    <div class="col-md-7 pr-0i d-flex align-items-center">
+                      <span>Rejected</span>
+                    </div>
+                    <div class="col-md-2 pr-0i pl-1i d-flex align-items-center">
+                      <span>{{rejectedCandidates?.length}}</span>
+                    </div>
+                  </div>
+                </h6>
+              <app-pipeline-card *ngFor="let card of rejectedCandidates" class="col-12 p-0" [candidate]="card"
+              [requisitionDetails]="requisitionDetails" (refreshCandList)="refreshCAndidateList()">
+
+              </app-pipeline-card>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+  
+
+    </div>
+  </div>
+</div>

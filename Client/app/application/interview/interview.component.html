@@ -1,0 +1,109 @@
+<div>
+  <div class="parent-page">
+
+
+    <div>
+      <h5 class="heading">
+        Interview
+      </h5>
+      <button type="button" class="close " aria-label="Close" (click)="backToReqPage('cancelled')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <hr class="hr1" />
+
+    <div [ngBusy]="{busy: busy, message: 'Loading ...', backdrop: true, delay: 200, minDuration: 2000}"></div>
+
+    <div class="main-container mb-3" *ngIf="candidateandReqDetails">
+
+      <div class="req-heading">{{candidateandReqDetails?.requisitionname}}</div>
+
+      <div >
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="card main-card m-2">
+              <div class="card-body client-cody p-0">
+                <div class="client-heading">
+                  Client
+                </div>
+                <img  src="./../../../../wwwroot/assets/img/svg/ic_Line.svg" />
+                <div class="client-details">
+                  <div class="client-value">{{candidateandReqDetails?.clientname}}</div>
+                  <div>{{candidateandReqDetails?.city}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card main-card  m-2">
+              <div class="card-body client-cody p-0">
+                <div class="candidate-heading">
+                  Candidate
+                </div>
+                <img  src="./../../../../wwwroot/assets/img/svg/ic_Line.svg" />
+
+                <div class="client-details">
+                  <div class="cand-value">{{candidateandReqDetails?.candidatename}}</div>
+                  <div>{{candidateandReqDetails?.candidateemailid}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div >
+          <ngb-alert type="danger"
+                     [dismissible]="false"
+                     text-align="center" *ngIf="nextInterviewRound=== 1 && (candidateOtherReqDetails && candidateOtherReqDetails?.interviewlevel ==='L1')">
+                    <div >
+                      This candidate is already scheduled for <span class="font-weight-bold">L1</span> interview  for the requisition :
+                      <span class="font-weight-bold">{{candidateOtherReqDetails?.requisitionname}} </span>.           
+                    
+                    </div>
+         </ngb-alert>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <ul class="nav" role="tablist" #tablist>
+
+          <li *ngIf="!iscanidateRejected" class="nav-item">
+            <a data-toggle="tab" role="tab" href="#siTab" class="buttoncls" [ngStyle]="{ 'border-bottom' : currentTab==='schduleinterview' ? '1.5px solid rgb(50, 135, 239)': 'none'}" (click)="currentTab='schduleinterview'">
+
+              Schedule Interview
+            </a>
+          </li>
+          <li class="nav-item">
+                 <a data-toggle="tab" role="tab" href="#ceTab" class="buttoncls" [ngStyle]="{ 'border-bottom' : currentTab==='interview' ? '1.5px solid rgb(50, 135, 239)': 'none'}" (click)="currentTab='interview'">
+              Interview History
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <hr class="hr2" />
+    <div class="tab-content" [ngSwitch]="currentTab">
+      <div *ngSwitchCase="'schduleinterview'">
+        <div #interview_schdule id="siTab" class="tab-pane fade show active" [ngClass]="(currentTab ==='schduleinterview') ? 'show active' : 'fade'" role="tabpanel">
+          <app-schedule-interview (nextInterviewRoundEmitter)="getInterviewRound($event)"(candidateOtherReqDetailsEmitter)="onCandidateOtherReqDetails($event)" (switchTabEvent)="switchTab($event)"></app-schedule-interview>
+        </div>
+      </div>
+      <div *ngSwitchCase="'interview'">
+        <div id="ceTab" class="tab-pane fade" [ngClass]=" (currentTab ==='interview') ? 'show active' : 'fade'" role="tabpanel">
+          <app-interview-history [pagename]="requisitionid"></app-interview-history>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

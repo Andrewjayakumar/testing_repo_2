@@ -1,0 +1,204 @@
+<div class="parent-tab">
+
+  <div class="d-inline-flex w-100">
+
+    <div class="col-md-4 right-separator">
+      <div class="col-md-1 pl-0 d-inline-flex mt-1 pull-right">
+        <button type="button" class="btn btn-default addDemandPlanButton" aria-label="Left Align"
+                (click)="showDemandPlanPopup()" title="Add new Demand Plan">
+          <span class="fa fa-plus plusIcon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class=" col-md-11 pr-0 input-group searchBox">
+        <input autocomplete="off" class="form-control py-2 border-right-0 border searchInput" type="search" value="search"
+               id="example-search-input" placeholder="Search Demand Plan" [(ngModel)]="searchText" />
+
+        <span class="input-group-append searchIcon">
+          <div class="input-group-text bg-transparent searchBorder">
+            <i class="fa fa-search searchIcon"></i>
+          </div>
+        </span>
+      </div>
+
+      <div *ngIf="showLoader" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div>
+    
+
+      <div *ngIf="!showLoader && demandPlans && demandPlans?.length > 0" class="col-md-12 scrollContent">
+        <div *ngFor="let demandPlan of demandPlans" class="demandPlanCard" [ngClass]="{
+            'current-selection':
+              selectedDemandplan.id && selectedDemandplan.id == demandPlan.demandid
+          }">
+          <div class="ellipsisDemandPlan pb-0">
+            <a class="col-8 demandPlanName" (click)="getActiveCandidates(demandPlan); selectedDemandplan.id = demandPlan.demandid">
+              <span class="name">
+                {{ demandPlan.demandname }} <br>
+
+                <p class="clientName">{{ demandPlan.clientname }}</p>
+              </span>
+            </a>
+            <label class="col-4 demandPlanLabel pull-right">
+              <span class="pull-right numbers">
+                <p class="currentCount mb-0">{{ demandPlan.actualcount }}</p>
+                <p class="slash mb-0">/</p>
+                <p class="totalCount mb-0">{{ demandPlan.maxcount }}</p>
+              </span>
+            </label>
+
+            <label class="col-12 dates">
+              <p class="pull-left dateTitle mb-0">
+                Start Date: <span class="dateValue">
+                  {{ demandPlan.createddate |  dateTz : 'MMM DD YYYY' : 'local' }}
+                </span>
+              </p>
+              <p class="pull-right dateTitle mb-0">
+                End Date: <span class="dateValue">
+                  {{ demandPlan.demandenddate | dateTz : 'MMM DD YYYY' : 'local'}}
+                </span>
+              </p>
+            </label>
+
+            <div class="col-12 edits mb-2">
+              <button [ngClass]="{'freeze-completed':demandPlan.completed}" class="col-4 pull-left btn btn-danger btn-xs mb-0" id="closethedm" title="Close Demand Plan" (click)="deleteOrCloseDemandPlan('completed')">Close</button>
+              <span class="col-8 mb-0 pr-0">
+                <div class="pull-right">
+                  <span title="Edit Demand Plan" [ngClass]="{'freeze-completed':demandPlan.completed}" (click)="editDemandPlan($event,demandPlan.demandid)"><i class="fa fa-pencil-square-o deletedp" aria-hidden="true"></i></span>
+                  <a title="Delete Demand Plan" (click)="deleteOrCloseDemandPlan('deleted')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                </div>
+
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="noRecordsError" *ngIf="!demandPlans || demandPlans.length == 0">
+          <i class="font-weight-light"> No Demand Plans found !!</i>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Show candidates according to the Demand Plan selected-->
+
+    <div class="col-md-8 p-0">
+      <div *ngIf="demandPlanName" class="col-md-4 text-truncate">
+        <label class="selectedfoldername" title="{{ demandPlanName }}">{{ demandPlanName }}</label>
+      </div>
+      <section class="project-tab" id="tabs">
+        <div class="container mt--3" id="candidatessection">
+
+
+          <div class="col-md-12 p-0 ">
+            <nav>
+
+              <div class="nav nav-tabs nav-fill" role="tablist">
+                <a class="nav-item nav-link" id="candidatesTabHeader" data-toggle="tab" href="#candidates-tab" role="tab" aria-controls="candidates-tab" aria-selected="true" [ngClass]="{ 'active' : currentActiveTab ==='candidates' }" (click)="LoadApprovedCandidates();currentActiveTab='candidates'">Candidates</a> 
+                <!--<a class="nav-item nav-link" data-toggle="tab" href="#contribution-tab" role="tab" aria-controls="contribution-tab" aria-selected="false" [ngClass]="{ 'active' : currentActiveTab ==='contribution' }"  (click)="currentActiveTab='contribution'">Contribution</a>-->
+                <a class="nav-item nav-link" id="pendingApprovalTabHeader" data-toggle="tab" href="#pendingapproval-tab" role="tab" aria-controls="pendingapproval-tab" aria-selected="false" [ngClass]="{ 'active' : currentActiveTab ==='pending' }" (click)="LoadPendingCandidates(); currentActiveTab='pending'">Pending Approval <span>({{pendingCandidatesCountfromSelectedDp > 0 ? pendingCandidatesCountfromSelectedDp : 0}})</span></a>
+
+                <button *ngIf="selectedCandidates && selectedCandidates.length > 0" class="btn btn-link dropdown-toggle fa fa-ellipsis-v fa-2x pull-right" type="button" id="actionbuttonsEllipsis" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false"></button>
+
+                <div class="dropdown-menu" aria-labelledby="actionbuttonsEllipsis">
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='pending'" (click)="approveCandidate()">Approve</a>
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='pending'" (click)="rejectCandidate()">Reject</a>
+                  <a class="dropdown-item" (click)="removeCandidatesFromDP()">Remove Profiles</a>
+                </div>
+              </div>
+
+            </nav>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane" id="candidates-tab" role="tabpanel" aria-labelledby="candidates-tab" [ngClass]="(currentActiveTab ==='candidates' ) ? 'show active' : 'fade'">
+                  <div *ngIf="loaderforcandidates" class="text-center p-2">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                  </div>
+                  <div class="noRecordsError" *ngIf="!demandplanActiveCandidates || demandplanActiveCandidates.length == 0">
+                    <i class="font-weight-light"> No Candidates found !!</i>
+                  </div>
+                  <div class="row metal-card-row mt-2">
+                    <div class="col-4 metal-card-col" *ngFor="let candidateObj of demandplanActiveCandidates">
+                      <div class="d-block h-100">
+                        <div class="card mb-0 h-100 custom-action-hover">
+                          <app-candidate-card [candidate]="candidateObj"
+                                              [pagename]="'demandplanning'" [showCheckbox]="true" (actionchecked)="onCandidateSelected($event)">
+                          </app-candidate-card>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class=" d-flex justify-content-center mt-3" *ngIf="totalnumberofrecords > 0">
+                    <ngb-pagination [collectionSize]="totalnumberofrecords" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                                    [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+                  </div>
+
+                </div>
+                <div class="tab-pane fade" id="contribution-tab" role="tabpanel" aria-labelledby="contribution-tab" [ngClass]="(currentActiveTab ==='contribution' ) ? 'show active' : 'fade'">
+
+
+                </div>
+                <div class="tab-pane fade" id="pendingapproval-tab" role="tabpanel" [ngClass]="(currentActiveTab ==='pending' ) ? 'show active' : 'fade'">
+
+
+                  <div *ngIf="loaderforcandidates" class="text-center p-2">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                  </div>
+                  <div class="noRecordsError" *ngIf="!pendingCandidates || (pendingCandidates && pendingCandidates.length) == 0">
+                    <i class="font-weight-light"> No Candidates found !!</i>
+                  </div>
+                  <div class="row metal-card-row mt-2">
+                    <div class="col-md-4  metal-card-col" *ngFor="let candidateObj of pendingCandidates">
+                      <div class="d-block h-100">
+                        <div class="card mb-0 h-100 custom-action-hover">
+                          <app-candidate-card [candidate]="candidateObj"
+                                              [showCheckbox]="true" (actionchecked)="onCandidateSelected($event)">
+                          </app-candidate-card>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-center mt-3" *ngIf="pendingCandidatesCountfromSelectedDp > 0">
+                    <ngb-pagination [collectionSize]="pendingCandidatesCountfromSelectedDp" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                                    [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>

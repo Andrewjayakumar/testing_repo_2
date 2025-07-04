@@ -1,0 +1,15 @@
+
+<div class="container">
+  <!--<div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>-->
+  <ngb-alert class="successMsg" *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+  <div *ngIf="page">
+    <div class="row" *ngIf="page.Layout.Content">
+      <div *ngFor="let cn of page.Layout.Content" class="col-md-{{cn.width}}">
+
+        <app-dynamicform-init [Content]="cn" [AuthService]="auth"></app-dynamicform-init>
+
+      </div>
+    </div>
+  </div>
+</div>
+

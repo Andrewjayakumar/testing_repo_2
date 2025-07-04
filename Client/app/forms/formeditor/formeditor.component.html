@@ -1,0 +1,967 @@
+<div class="form-editor">
+  <div [ngBusy]="{busy: busy, message: 'Please wait ...', backdrop: true, delay: 500, minDuration: 1000}"></div>
+  <div class="form-editor-header">
+    <div class="container-fluid">
+      <div class="row align-items-center">
+        <div class="col">
+          <div class="row">
+            <label for="formName" class="col-auto pr-0 col-form-label">Form Name</label>
+            <div class="col-md-3">
+              <input id="formName" class="form-control" style="max-width:300px" type="text" [(ngModel)]="FormbuilderJson.FormName" />
+            </div>
+            <label for="ModelName" class="col-auto pr-0 col-form-label">Model Name</label>
+            <div class="col-md-3">
+              <input type="text" style="max-width:300px" id="ModelName" class="form-control" [(ngModel)]="FormbuilderJson.ModelName"
+                (ngModelChange)="_controlService.ModelName = FormbuilderJson.ModelName">
+            </div>
+          </div>
+        </div>
+        <div class="col-auto ml-auto">
+          <a class="btn btn-outline-primary btn-round mr-2" (click)="SaveForm()">Publish</a>
+          <a class="btn btn-outline-primary btn-round mr-2" (click)="location.back()"> Back</a>
+          <!--<div class="dropdown d-inline-block">
+            <a class="btn btn-outline-dark pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-cog"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" (click)="_toggleAttributesSidebar()">Attributes</a>
+              <a class="dropdown-item" (click)="_toggleNotificationSidebar()">Notification</a>
+              <a class="dropdown-item" (click)="_toggleAzureSidebar()">Azure</a>
+              <a class="dropdown-item" (click)="_toggleModelSidebar()">Model</a>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid " *ngIf="!isApicalling">
+    <div class="sidbar-outer sidbar75">
+      <ng-sidebar-container>
+        <ng-sidebar [(opened)]="_opened" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+          <div class="d-flex justify-content-between">
+            <h4 class="p-3" *ngIf="FormbuilderJson">{{FormbuilderJson.Formname}}</h4>
+            <a class="p-3" (click)="_toggleSidebar()">
+              <i class="fa fa-close" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="sidbar-body">
+            <div class="container-fluid h-100">
+              <div class="row">
+                <div class="col">
+                  <h5>Layout</h5>
+                  <div class="row m-0">
+                    <div class="col-12 p-1" *ngFor="let item of controls.Container; let i = index">
+                      <button (click)="addcontrol(tree,item,selectednode,content)" class="btn btn-outline-dark btn-block text-left">
+                        <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>{{ item.Name }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <h5>Controls</h5>
+                  <div class="row m-0">
+                    <div class="col-md-6 p-1" *ngFor="let item of controls.General">
+                      <button (click)="addcontrol(tree,item,selectednode,content)" class="btn btn-block btn-outline-dark text-left">
+                        <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>{{ item.Name }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5>Api Controls</h5>
+                  <div class="row m-0">
+                    <div class="col-md-12 p-1" *ngFor="let item of controls.Databinding">
+                      <button (click)="addcontrol(tree,item,selectednode,content)" class="btn btn-block btn-outline-dark text-left">
+                        <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>{{ item.Name }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5>Visualization</h5>
+                  <div class="row m-0">
+                    <div class="col-md-12 p-1" *ngFor="let item of controls.Dataview">
+                      <button (click)="addcontrol(tree,item,selectednode,content)" class="btn btn-block btn-outline-dark text-left">
+                        <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>{{ item.Name }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-sidebar>
+        <ng-sidebar [(opened)]="_openedProperty" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+          <div class="d-flex justify-content-between">
+            <!--<h4 class="p-3" *ngIf="FormbuilderJson">{{FormbuilderJson.Formname}}</h4>-->
+            <a class="p-3" (click)="GenerateDataJson(FormbuilderJson.controls);controlProperty = null;;_togglePropertySidebar(tree)">
+              <i class="fa fa-close" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="sidbar-body">
+            <div class="container-fluid">
+              <ng-container *ngIf="selectedcontrol && controlProperty">
+                <div class="d-flex justify-content-between align-content-center mb-2">
+                  <h4 class="mb-0 text-capitalize">
+                    {{selectedcontrol.type}}
+                    ({{selectedcontrol.label?selectedcontrol.label:selectedcontrol.key}})
+                  </h4>
+                  <!--<i (click)="this.controlProperty = null;this.selectedcontrol = null;" class="fa fa-close p-1 pointer"></i>-->
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <app-dynamicform [AuthService]="AuthService" [controls]="controlProperty" [datamodel]="selectedcontrol"
+                      [access]="'write'" [formdata]="DataJson">
+                    </app-dynamicform>
+                    <button type="button" class="btn btn-default" (click)="SaveProperty(tree);addFilterUI();_togglePropertySidebar(tree);">Confirm</button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-sidebar>
+        <ng-sidebar [(opened)]="_attributesSidbar" [position]="'right'" [mode]="'over'" [autoFocus]="false">
+          <div class="d-flex justify-content-between">
+            <!--<h4 class="p-3" *ngIf="FormbuilderJson">{{FormbuilderJson.Formname}}</h4>-->
+            <a class="p-3" closeSidebar>
+              <i class="fa fa-close" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="sidbar-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="FormName" [class.active]="FormbuilderJson.FormName && FormbuilderJson.FormName.length > 0">
+                      Form
+                      Name
+                    </label>
+                    <input type="text" id="FormName" class="form-control" [(ngModel)]="FormbuilderJson.FormName"
+                      (ngModelChange)="_controlService.FormName = FormbuilderJson.FormName">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="ModelName" [class.active]="FormbuilderJson.ModelName && FormbuilderJson.ModelName.length > 0">
+                      Model
+                      Name
+                    </label>
+                    <input type="text" id="ModelName" class="form-control" [(ngModel)]="FormbuilderJson.ModelName"
+                      (ngModelChange)="_controlService.ModelName = FormbuilderJson.ModelName">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="tab-card">
+                    <h5>API Configuration</h5>
+                    <ng-container *ngTemplateOutlet="innerTabset"></ng-container>
+                  </div>
+                  <button class="btn btn-outline-primary mb-2" (click)="SaveForm()">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-sidebar>
+
+
+        <div ng-sidebar-content>
+          <div class="tab-card mb-0">
+
+            <ul class="nav nav-tabs justify-content-start">
+              <li class="nav-item"><a class="nav-link pointer" [ngClass]="{'active' : curenttab == 0}" (click)="changetab(0);">Form</a></li>
+
+              <li class="nav-item"><a class="nav-link pointer" [ngClass]="{'active' : curenttab == 1}" (click)="changetab(1);">List</a></li>
+              <li class="nav-item"><a class="nav-link pointer" [ngClass]="{'active' : curenttab == 2}" (click)="changetab(2);">API</a></li>
+              <li class="nav-item"><a class="nav-link pointer" [ngClass]="{'active' : curenttab == 3}" (click)="changetab(3);">Notification</a></li>
+              <li class="nav-item"><a class="nav-link pointer" [ngClass]="{'active' : curenttab ==4}" (click)="changetab(4);">Azure</a></li>
+              <li class="nav-item"><a class="nav-link pointer" [ngClass]="{'active' : curenttab == 6}" (click)="changetab(6);">Setting</a></li>
+              <li class="nav-item"><a class="nav-link pointer" [ngClass]="{'active' : curenttab == 5}" (click)="changetab(5);">Model</a></li>
+            </ul>
+            <div class="tab-content px-3">
+              <div class="d-none tab-pane" [ngClass]="{'d-block active' : curenttab == 0}">
+                <div class="row form-editor-row">
+                  <div class="col-3 forms-tree pt-3">
+                    <button *ngIf="FormbuilderJson.controls.length>0" (click)="_toggleSidebar()" class="btn btn-outline-success btn-round mb-3">
+                      <i class="fa fa-plus-circle mr-2" aria-hidden="true"></i>Add New
+                    </button>
+                    <tree-root #tree [nodes]="nodes" [options]="customTemplateStringOptions" [focused]="true" (onEvent)="onEvent($event)">
+                      <ng-template #treeNodeTemplate let-node>
+                        <div class="d-flex justify-content-end align-items-center">
+                          <i class="{{ node.data.icon }} pr-2 small" aria-hidden="true"></i>
+                          <div class="py-2 mr-auto text-dark small">
+                            {{ node.data.label?node.data.label:node.data.key }}
+                          </div>
+                          <div class="px-1">
+                            <a class="text-dark" (click)="_togglePropertySidebar();ShowProperties(node,tree,content)">
+                              <i class="fa fa-pencil small" aria-hidden="true"></i>
+                            </a>
+                          </div>
+                          <div class="px-1">
+                            <a class="text-dark" (click)="Setorder(node,tree,node.index,'down')">
+                              <i class="fa fa-arrow-down small" aria-hidden="true"></i>
+                            </a>
+                          </div>
+                          <div class="px-1" *ngIf="node.index > 0">
+                            <a class="text-dark" (click)="Setorder(node,tree,node.index,'up')">
+                              <i class="fa fa-arrow-up small" aria-hidden="true"></i>
+                            </a>
+                          </div>
+                          <div class="px-1">
+                            <a class="text-dark" (click)="DeleteControl(node,tree)">
+                              <i class="fa fa-trash-o small" aria-hidden="true"></i>
+                            </a>
+                          </div>
+                          <div class="px-1" *ngIf="node.data.haschildren==true && !node.data.children.length>0">
+                            <a (click)="OpenControlPopover(node,true);$event.stopPropagation()" class="text-success">
+                              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </a>
+                          </div>
+                        </div>
+                        <div *ngIf="node.data.haschildren && node.data.children.length>0">
+                          <a (click)="OpenControlPopover(node,true);$event.stopPropagation()" class="pointer small text-dark">
+                            <i class="fa fa-plus-circle mr-2 text-success" aria-hidden="true"></i>Add New
+                          </a>
+                        </div>
+                      </ng-template>
+                      <ng-template #loadingTemplate>Loading, please hold....</ng-template>
+                    </tree-root>
+                    <div class="ph-container mt-3" *ngIf="FormbuilderJson.controls.length==0">
+                      <button (click)="_toggleSidebar()" class="btn btn-outline-success btn-block btn-round mb-3">
+                        <i class="fa fa-plus-circle mr-2" aria-hidden="true"></i>Add New
+                      </button>
+                      <div class="row">
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-2 pr-0">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                        <div class="col-10 pl-1">
+                          <div class="bg-white mb-2" style="height:30px;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-9 overflow-auto" style="height:calc(100vh - 181px)" *ngIf="FormbuilderJson.controls.length>0">
+                    <ng-container *ngIf="filterFormLoaded==true">
+                      <ng-container *ngIf="FilterUIJson && FilterUIJson.controls.length>0">
+                        <div class="card mb-3">
+                          <div class="card-header">
+                            Filter
+                          </div>
+                          <div class="card-body">
+                            <!--<app-dynamicform [AuthService]="AuthService" [controls]="FormbuilderJson.controls"
+                                 [datamodel]="DataJson"  [access]="'filter'" class="col-md-12"  [filterdata]="FilterModelJson"></app-dynamicform>-->
+                            <ng-template *ngFor="let ctrl of FilterUIJson.controls">
+                              <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="DataJson"
+                                [filterdata]="FilterModelJson" [access]="'filter'" [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+                              </app-dynamicformcontrolls>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <div class="card form-view" *ngIf="formUItype!='card'">
+                        <div class="card-header">{{FormbuilderJson.Formname}}</div>
+                        <div class="card-body">
+                          <div class="row" *ngIf="FormbuilderJson && FormbuilderJson.controls.length>0">
+                            <app-dynamicform [AuthService]="AuthService" [controls]="FormbuilderJson.controls"
+                              [datamodel]="DataJson" [formGroup]="form" [access]="'write'" class="col-md-12"></app-dynamicform>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card mx-auto mb-3" *ngIf="formUItype=='card'" style="max-width:300px;">
+                        <div class="card-body">
+                          <div class="row d-flex flex-column text-center" *ngIf="FormbuilderJson && FormbuilderJson.controls.length>0">
+                            <app-dynamicform [AuthService]="AuthService" [controls]="FormbuilderJson.controls"
+                              [datamodel]="DataJson" [formGroup]="form" [access]="'write'" class="col-md-12"></app-dynamicform>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="filterFormLoaded!=true">
+                      <div class="card form-view" *ngIf="formUItype!='card'">
+                        <div class="card-header">{{FormbuilderJson.Formname}}</div>
+                        <div class="card-body form-canvase">
+
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-none tab-pane" [ngClass]="{'d-block active' : curenttab == 1}">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-2" *ngFor="let opt of filtertypeCtr.optionlist">
+                        <div class="c-control c-inline c-checkbox">
+                          <label>
+                            <input class="c-control-input" [(ngModel)]="opt.checked" type="checkbox" [value]="opt[filtertypeCtr.valuefield]"
+                              (ngModelChange)="FilterViewChange(tree,filterChange,'',$event, opt)">
+                            <i class="c-control-indicator fa fa-square-o"></i>
+                            <span class="c-control-description">{{opt[filtertypeCtr.textfield]}}</span>
+                          </label>
+                        </div>
+                        <div class="d-flex align-items-center" *ngIf="filternodes && getfilternode(opt).length > 0">
+                          <i class="{{ getfilternode(opt)[0].icon }} fa-lg " aria-hidden="true"></i>
+                          <div class="px-2">
+                            {{getfilternode(opt)[0].label?getfilternode(opt)[0].label:getfilternode(opt)[0].key}}
+                          </div>
+                          <a (click)="_togglePropertySidebar();ShowProperties(getfilternode(opt)[0],tree,content)">
+                            <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+                <div class="row">
+
+                  <div class="col-md-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="row">
+                          <app-dynamicform [AuthService]="AuthService" [FormUI]="FormbuilderJson" [controls]="FormbuilderJson.controls"
+                            [datamodel]="DataJson" [access]="'filter'" class="col-md-12"></app-dynamicform>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-none tab-pane" [ngClass]="{'d-block active' : curenttab == 2}">
+                <div class="row">
+
+
+                  <div class="col-md-12">
+                    <div class="mb-2" *ngIf="FormbuilderJson">
+                      <ng-container *ngIf="GetEndpointCtr && FormbuilderJson && GetEndpointCtr.controls">
+                        <app-dynamicform *ngIf="GetEndpointCtr" [AuthService]="AuthService" [FormUI]="GetEndpointCtr"
+                          [controls]="GetEndpointCtr.controls" [datamodel]="FormbuilderJson" [access]="'write'">
+                        </app-dynamicform>
+                      </ng-container>
+                      <ng-container *ngIf="FilterEndpointCtr && FilterUIJson && FilterEndpointCtr.controls">
+                        <app-dynamicform *ngIf="FilterEndpointCtr" [AuthService]="AuthService" [FormUI]="FilterEndpointCtr"
+                          [controls]="FilterEndpointCtr.controls" [datamodel]="FilterUIJson" [access]="'write'">
+                        </app-dynamicform>
+                      </ng-container>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-none tab-pane" [ngClass]="{'d-block active' : curenttab == 3}">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h6>Notification Setting</h6>
+                  </div>
+                  <div class="col-md-12" *ngIf="Notificationformjson && FormbuilderJson.Notification && Notificationformjson.controls">
+                    <app-dynamicform [AuthService]="AuthService" [FormUI]="Notificationformjson" [controls]="Notificationformjson.controls"
+                      [datamodel]="FormbuilderJson.Notification" [filterdata]="Notificationformjson.FilterModelJson"
+                      [access]="'write'">
+                    </app-dynamicform>
+                  </div>
+                </div>
+              </div>
+              <div class="d-none tab-pane" [ngClass]="{'d-block active' : curenttab == 4}">
+                <div class="mb-2 custom-wizard">
+                  <wizard [navigationMode]="'strict'" [navBarLayout]="'large-filled-symbols'">
+                    <wizard-step stepTitle="Azure Setting" navigationSymbol="1">
+                      <h4>Azure Setting</h4>
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="Azuresetting && Azuresetting.controls">
+                          <app-dynamicform [AuthService]="AuthService" [FormUI]="Azuresetting" [controls]="Azuresetting.controls"
+                            [datamodel]="factorymodel.setting" [filterdata]="Azuresetting.FilterModelJson" [access]="'write'">
+                          </app-dynamicform>
+                        </div>
+                      </div>
+                      <div class="d-flex">
+                        <button type="button" class="btn btn-outline-primary" *ngIf="factorymodel.setting.selectfactory=='New'"
+                          (click)="CreateFactory()">
+                          Save
+                        </button>
+                        <button type="button" class="btn btn-outline-primary ml-auto" nextStep (click)="onStepSetting($event)">Next</button>
+                      </div>
+                    </wizard-step>
+                    <wizard-step stepTitle="Source Dataset" navigationSymbol="2">
+                      <h4>Source Dataset</h4>
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="SourceDataset && SourceDataset.controls">
+                          <app-dynamicform [AuthService]="AuthService" [FormUI]="SourceDataset" [controls]="SourceDataset.controls"
+                            [datamodel]="factorymodel.source" [filterdata]="SourceDataset.FilterModelJson" [access]="'write'">
+                          </app-dynamicform>
+                        </div>
+                      </div>
+                      <div class="d-flex">
+                        <button type="button" class="btn btn-outline-secondary" previousStep>back</button>
+                        <button type="button" class="btn btn-outline-primary ml-auto" nextStep>Next</button>
+                      </div>
+                    </wizard-step>
+                    <wizard-step stepTitle="Destination Dataset" navigationSymbol="3">
+                      <h4>Destination Dataset</h4>
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="DestinationDataset && DestinationDataset.controls">
+                          <app-dynamicform [AuthService]="AuthService" [FormUI]="DestinationDataset" [controls]="DestinationDataset.controls"
+                            [datamodel]="factorymodel.destination" [filterdata]="DestinationDataset.FilterModelJson"
+                            [access]="'write'">
+                          </app-dynamicform>
+                        </div>
+                      </div>
+                      <div class="d-flex">
+                        <button type="button" class="btn btn-outline-secondary" previousStep>back</button>
+                        <button type="button" class="btn btn-outline-primary ml-auto" nextStep (click)="onDestination($event)">Next</button>
+                      </div>
+                    </wizard-step>
+                    <wizard-step stepTitle="Mapping" navigationSymbol="4">
+                      <h4>Mapping</h4>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="name">Activity Name</label>
+                            <input type="text" id="name" class="form-control" [(ngModel)]="factorymodel.Pipeline.name">
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="row">
+
+                        <div class="col-md-12">
+                          <div class="card mb-2">
+                            <div class="card-header d-flex justify-content-center">
+                              <h5 class="m-0">Map Source Columns with Destination</h5>
+                            </div>
+                            <div class="card-body">
+
+                              <div class="row pb-2">
+                                <div class="col-md-5 d-flex justify-content-start">
+                                  <strong>Source Columns</strong>
+                                </div>
+                                <div class="col-md-5 d-flex justify-content-end">
+                                  <strong>Map Fields</strong>
+                                </div>
+                              </div>
+                              <ng-container *ngIf="factorymodel.Pipeline.mapping">
+                                <div class="row pb-2" *ngFor="let item of factorymodel.Pipeline.mapping">
+                                  <div class="col-md-5 d-flex justify-content-start">
+                                    <input type="text" value={{item.name}} disabled />
+                                  </div>
+                                  <div class="col-md-5 d-flex justify-content-end">
+                                    <select [ngModel]="item.value" (ngModelChange)="item.value = $event" style="width:60%;height:30px">
+                                      <option [value]="0">Select</option>
+                                      <option *ngFor="let field of factorymodel.Pipeline.destination.properties.structure"
+                                        [value]="field.name">
+                                        {{field.name}}
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </div>
+                      <div class="d-flex">
+                        <button type="button" class="btn btn-outline-secondary" previousStep>back</button>
+                        <button type="button" class="btn btn-outline-primary ml-auto" nextStep (click)="onConfiguration($event)">Next</button>
+
+                      </div>
+                    </wizard-step>
+                    <wizard-step stepTitle="Configuration" navigationSymbol="5">
+                      <h4>Configuration</h4>
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="PipelineConfiguration && PipelineConfiguration.controls">
+                          <app-dynamicform [AuthService]="AuthService" [FormUI]="PipelineConfiguration" [controls]="PipelineConfiguration.controls"
+                            [datamodel]="factorymodel.Pipeline" [filterdata]="PipelineConfiguration.FilterModelJson"
+                            [access]="'write'">
+                          </app-dynamicform>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="!visiblebutton">
+                        <div class="col-md-10 offset-2">
+                          <strong>Your Pipline Created successfully.</strong>
+                        </div>
+                      </div>
+                      <div class="d-flex" *ngIf="visiblebutton">
+
+                        <button type="button" class="btn btn-outline-secondary" previousStep>back</button>
+                        <button type="button" class="btn btn-outline-primary ml-auto" (click)="CreateCopyActivity('run')"
+                          *ngIf="factorymodel.Pipeline.trigger=='run'">
+                          Run Now
+                        </button>
+                        <button type="button" class="btn btn-outline-primary ml-auto" (click)="CreateCopyActivity('Schedule')"
+                          *ngIf="factorymodel.Pipeline.trigger=='ScheduleTrigger'">
+                          Schedule
+                        </button>
+
+                      </div>
+                    </wizard-step>
+                  </wizard>
+                </div>
+
+              </div>
+              <div class="d-none tab-pane" [ngClass]="{'d-block active' : curenttab == 5}">
+                <div class="row" *ngIf="FormbuilderJson.controls.length > 0 || FilterModelJson.length > 0">
+                  <div class="col-md-12">
+                    <div class="card mb-3" *ngIf="FilterModelJson.length>0">
+                      <div class="card-header bg-dark text-white">
+                        Filter Model Json
+                      </div>
+                      <div class="card-body">
+                        <pre>{{ FilterModelJson | json }}</pre>
+                      </div>
+                    </div>
+                    <div class="card mb-3">
+                      <div class="card-header bg-dark text-white">
+                        Model Json
+                      </div>
+                      <div class="card-body">
+                        <pre>{{ DataJson | json }}</pre>
+                      </div>
+
+                    </div>
+                    <div class="card mb-3">
+                      <div class="card-header bg-dark text-white">
+                        UI Json
+                      </div>
+                      <div class="card-body">
+                        <pre>{{ FormbuilderJson| json }}</pre>
+                        <div class="col-md-12">
+                          <label [for]="formjson">Enter Control JSON </label>
+                          <textarea type="text" [id]="formjson" class="form-control" [(ngModel)]="modeljson"></textarea>
+                        </div>
+                        <div class="col-md-12 my-2">
+                          <button class="btn btn-sm btn-outline-primary" (click)="setmodeljson()">Submit</button>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-none tab-pane" [ngClass]="{'d-block active' : curenttab == 6}">
+                <div class="row">
+
+
+                  <div class="col-md-12">
+                    <div class="mb-2 custom-wizard" *ngIf="FormbuilderJson">
+                      <wizard [navigationMode]="'strict'" [navBarLayout]="'large-filled-symbols'">
+
+                        <wizard-step stepTitle="Property" navigationSymbol="1">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="saveBtnKeyForEditMode" [class.active]="FormbuilderJson.saveBtnKeyForEditMode && FormbuilderJson.saveBtnKeyForEditMode.length > 0">
+                                  Form
+                                  Save Button Key(optional)
+                                </label>
+                                <input type="text" id="saveBtnKeyForEditMode" class="form-control" [(ngModel)]="FormbuilderJson.saveBtnKeyForEditMode">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="filterAddform" [class.active]="FilterUIJson.filterAddform && FilterUIJson.filterAddform.length > 0">
+                                  Add/Edit
+                                  FormId
+                                </label>
+                                <input type="text" id="filterAddform" class="form-control" [(ngModel)]="FilterUIJson.filterAddform"
+                                  (ngModelChange)="_controlService.filterAddform = FilterUIJson.filterAddform">
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label class="switch">
+                                  <input [id]="filterShowAddform" type="checkbox" [(ngModel)]="FilterUIJson.ShowAddform"
+                                    (ngModelChange)="_controlService.ShowAddform = FilterUIJson.ShowAddform">
+                                  <i data-swchon-text="ON" data-swchoff-text="OFF"></i>Show Add Form Link
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label class="switch">
+                                  <input [id]="filterShowImport" type="checkbox" [(ngModel)]="FilterUIJson.ShowImport"
+                                    (ngModelChange)="_controlService.ShowImport = FilterUIJson.ShowImport;FilterViewChange(tree,filterChange,'import')">
+                                  <i data-swchon-text="ON" data-swchoff-text="OFF"></i>Show Import Link
+                                </label>
+                                <small class="font-italic" *ngIf="FilterUIJson && FilterUIJson.ShowImport">
+                                  Please set import properties
+                                  in FilterType section in VIEW tab.
+                                </small>
+                              </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="exportcolumnscustomfiltersCtr && FilterUIJson && exportcolumnscustomfiltersCtr.controls">
+                              <app-dynamicform *ngIf="exportcolumnscustomfiltersCtr" [AuthService]="AuthService"
+                                [FormUI]="exportcolumnscustomfiltersCtr" [controls]="exportcolumnscustomfiltersCtr.controls"
+                                [datamodel]="FilterUIJson" [access]="'write'">
+                              </app-dynamicform>
+                            </div>
+
+
+                          </div>
+                          <div class="d-flex">
+                            <button type="button" class="btn btn-outline-primary ml-auto" nextStep>Next</button>
+                          </div>
+                        </wizard-step>
+
+                        <wizard-step stepTitle="Styles" navigationSymbol="2">
+                          <div class="card mb-3">
+                            <div class="card-header">
+                              Search Button Design
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Class
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.searchBtnClass" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Icon
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.searchBtnIcon" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card mb-3">
+                            <div class="card-header">
+                              Filert Button Design
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Class
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.filterBtnClass" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Icon
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.filterBtnIcon" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Filter Bubble
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.filterBubble" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card mb-3">
+                            <div class="card-header">
+                              Apply Button Design
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Text
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.applyFilterBtnText" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Class
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.applyFilterBtnClass" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Icon
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.applyFilterBtnIcon" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="card mb-3" *ngIf="FilterUIJson && FilterUIJson.ShowAddform">
+                            <div class="card-header">
+                              Add Form Button Design
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Text
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.addBtnText" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Class
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.addBtnClass" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Icon
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.addBtnIcon" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card mb-3" *ngIf="FilterUIJson && FilterUIJson.ShowImport">
+                            <div class="card-header">
+                              Import Button Design
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Text
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.importBtnText" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Class
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.importBtnClass" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Icon
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.importBtnIcon" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card mb-3" *ngIf="FilterUIJson && FilterUIJson.ShowExport">
+                            <div class="card-header">
+                              Export Button Design
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Text
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.exportBtnText" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Class
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.exportBtnClass" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label>
+                                      Button Icon
+                                    </label>
+                                    <input type="text" [(ngModel)]="FilterUIJson.exportBtnIcon" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="pb-3">
+                            Filter Type [
+                            <div class="badge badge-success" *ngIf="FilterUIJson.filtertype.indexOf(',')<0">
+                              {{FilterUIJson.filtertype}}
+                            </div>
+                            <ng-container *ngIf="FilterUIJson.filtertype.indexOf(',')>-1">
+                              <div class="badge badge-success" *ngFor="let item of FilterUIJson.filtertype.split(',')">
+                                {{item}}
+                              </div>
+                            </ng-container>
+                            ]
+                          </div>
+
+                          <div class="d-flex">
+                            <button type="button" class="btn btn-outline-secondary" previousStep>back</button>
+                            <button type="button" class="btn btn-outline-primary ml-auto" nextStep>Next</button>
+                          </div>
+                        </wizard-step>
+                        <wizard-step stepTitle="Other Controls" navigationSymbol="3">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <label>Action Type</label>
+                              <div class="form-check form-check-inline">
+                                <label class="custom-control custom-radio">
+                                  <input mdbActive class="custom-control-input" name="filterAction" type="radio"
+                                    [(ngModel)]="filterAction" [value]="'add'">
+                                  <i class="custom-control-indicator fa fa-circle-o"></i>
+                                  <span class="custom-control-description">
+                                    Add
+                                  </span>
+                                </label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <label class="custom-control custom-radio">
+                                  <input mdbActive class="custom-control-input" name="filterAction" type="radio"
+                                    [(ngModel)]="filterAction" [value]="'update'">
+                                  <i class="custom-control-indicator fa fa-circle-o"></i>
+                                  <span class="custom-control-description">
+                                    Update
+                                  </span>
+                                </label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <label class="custom-control custom-radio">
+                                  <input mdbActive class="custom-control-input" name="filterAction" type="radio"
+                                    [(ngModel)]="filterAction" [value]="'delete'">
+                                  <i class="custom-control-indicator fa fa-circle-o"></i>
+                                  <span class="custom-control-description">
+                                    Delete
+                                  </span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <label [for]="filterControlJson">Enter Control JSON </label>
+                              <textarea type="text" [id]="filterControlJson" class="form-control" [(ngModel)]="filterControlJson"></textarea>
+                            </div>
+                            <div class="col-md-12 my-2">
+                              <button class="btn btn-sm btn-outline-primary" (click)="addStaticFilterUI(filterControlJson,filterAction)">Submit</button>
+                              <button class="btn btn-sm btn-outline-secondary" (click)="filterControlJson=''">Clear</button>
+                            </div>
+                          </div>
+                          <div class="d-flex">
+                            <button type="button" class="btn btn-outline-secondary" previousStep>back</button>
+                          </div>
+                        </wizard-step>
+                      </wizard>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </ngx-aside> -->
+      </ng-sidebar-container>
+    </div>
+
+
+    <ng-template #content let-c="close" let-d="dismiss" size="lg">
+      <div class="modal-header">
+        <h4 class="modal-title" style="text-transform:capitalize">{{selectedcontrol.type}} Property</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row" *ngIf="controlForm && selectedcontrol">
+          <app-dynamicform [AuthService]="AuthService" [controls]="controlForm" [datamodel]="selectedcontrol"
+            [formdata]="DataJson" [access]="'write'" class="col-md-12"></app-dynamicform>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="addFilterUI();c('Close click')">Save</button>
+      </div>
+    </ng-template>
+    <ng-template #filterChange let-c="close" let-d="dismiss" size="lg">
+      <div class="modal-header">
+        <h4 class="modal-title" style="text-transform:capitalize">Alert!</h4>
+        <button type="button" class="close" aria-label="Close" (click)="filterChangeconfirm='Cancel';d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">Your previous view changes will be lost. Are you sure ?</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default waves-effect waves-light" (click)="filterChangeconfirm='OK';c('Close click')">
+          OK
+          Proceed
+        </button>
+        <button type="button" class="btn btn-default waves-effect waves-light" (click)="filterChangeconfirm='Cancel';c('Close click')">Cancel</button>
+      </div>
+    </ng-template>
+  </div>
+</div>

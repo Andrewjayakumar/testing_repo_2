@@ -1,0 +1,399 @@
+<div class="modal-header navbar p-2i">
+  <h5 class="modal-title text-primary" *ngIf="!candidateMatching">
+    Match Reason and Distribution for {{ candidateFullName }}
+  </h5>
+  <h5 class="modal-title text-primary" *ngIf="candidateMatching">
+    Match Reason and Distribution for {{ reqName }}
+  </h5>
+  <button type="button"
+          class="close"
+          aria-label="Close"
+          (click)="modal.dismiss('user closed')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <!-- <ngx-charts-pie-chart [results]="saleData"
+                           [legend]="true"
+                           [legendTitle]="'Categories'"
+                           [view]="[1000,500]"
+                           [labels]="true">
+     </ngx-charts-pie-chart> -->
+  <div class="row">
+    <div [ngClass]="candidateMatching ? 'col-md-12' : 'col-md-6'">
+      <div>
+        <canvas baseChart
+                class="chart-hw"
+                [data]="pieChartData"
+                [labels]="pieChartLabels"
+                [chartType]="pieChartType"
+                [colors]="pieChartColor"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)">
+        </canvas>
+      </div>
+
+      <div id="accordion">
+        <div class="card">
+          <div class="card-header skill" id="headingOne">
+            <span>
+              <input type="checkbox" hidden #toggleState [checked]="true" />
+            </span>
+            <i>
+              <button class="btn btn-link pull-right fa"
+                      data-toggle="collapse"
+                      data-target="#collapseSkills"
+                      [ngClass]="{
+                  'fa-chevron-up': !toggleState.checked,
+                  'fa-chevron-down': toggleState.checked
+                }"
+                      (click)="toggleState.checked = !toggleState.checked"></button>
+            </i>
+            <h5 class="mb-0">
+              <button class="btn btn-link"
+                      data-toggle="collapse"
+                      data-target="#collapseSkills"
+                      aria-expanded="true"
+                      aria-controls="collapseSkills">
+                Skills : {{ skillsDetails?.message }}
+              </button>
+            </h5>
+          </div>
+
+          <div
+               id="collapseSkills"
+               class="collapse show"
+               aria-labelledby="headingOne"
+               data-parent="#accordion">
+            <div class="card-body">
+              <div *ngFor="let evid of skillsDetails?.evidence">
+                <div *ngIf="evid.type.toLowerCase() == 'positive'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Positive</label>
+                  <span>
+                    <pre>{{ evid.evidencePositiveFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'mixed'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Mixed</label>
+                  <span>
+                    <pre>{{ evid.evidenceMixedFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'negative'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Negative</label>
+                  <span>
+                    <pre>{{ evid.evidenceNegativeFact }}</pre>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header jobtitle" id="headingTwo">
+            <span>
+              <input type="checkbox" hidden #toggleJobtitle [checked]="false" />
+            </span>
+            <i>
+              <button class="btn btn-link pull-right fa"
+                      data-toggle="collapse"
+                      data-target="#collapseJobtitle"
+                      [ngClass]="{
+                  'fa-chevron-up': !toggleJobtitle.checked,
+                  'fa-chevron-down': toggleJobtitle.checked
+                }"
+                      (click)="toggleJobtitle.checked = !toggleJobtitle.checked"></button>
+            </i>
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed"
+                      data-toggle="collapse"
+                      data-target="#collapseJobtitle"
+                      aria-expanded="false"
+                      aria-controls="collapseJobtitle">
+                Job Titles : {{ jobTitleDetails?.message }}
+              </button>
+            </h5>
+          </div>
+          <div id="collapseJobtitle"
+               class="collapse"
+               aria-labelledby="headingTwo"
+               data-parent="#accordion">
+            <div class="card-body">
+              <div *ngFor="let evid of jobTitleDetails?.evidence">
+                <div *ngIf="evid.type.toLowerCase() == 'positive'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Positive</label>
+                  <span>
+                    <pre>{{ evid.evidencePositiveFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'mixed'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Mixed</label>
+                  <span>
+                    <pre>{{ evid.evidenceMixedFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'negative'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Negative</label>
+                  <span>
+                    <pre>{{ evid.evidenceNegativeFact }}</pre>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header education" id="headingThree">
+            <span>
+              <input type="checkbox" hidden #toggleEducation [checked]="false" />
+            </span>
+            <i>
+              <button class="btn btn-link pull-right fa"
+                      data-toggle="collapse"
+                      data-target="#collapseEdu"
+                      [ngClass]="{
+                  'fa-chevron-up': !toggleEducation.checked,
+                  'fa-chevron-down': toggleEducation.checked
+                }"
+                      (click)="toggleEducation.checked = !toggleEducation.checked"></button>
+            </i>
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed"
+                      data-toggle="collapse"
+                      data-target="#collapseEdu"
+                      aria-expanded="false"
+                      aria-controls="collapseEdu">
+                Education : {{ educationDetails?.message }}
+              </button>
+            </h5>
+          </div>
+          <div id="collapseEdu"
+               class="collapse"
+               aria-labelledby="headingThree"
+               data-parent="#accordion">
+            <div class="card-body">
+              <div *ngFor="let evid of educationDetails?.evidence">
+                <div *ngIf="evid.type.toLowerCase() == 'positive'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Positive</label>
+                  <span>
+                    <pre>{{ evid.evidencePositiveFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'mixed'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Mixed</label>
+                  <span>
+                    <pre>{{ evid.evidenceMixedFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'negative'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Negative</label>
+                  <span>
+                    <pre>{{ evid.evidenceNegativeFact }}</pre>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header industry" id="headingFour">
+            <span>
+              <input type="checkbox" hidden #toggleInd [checked]="false" />
+            </span>
+            <i>
+              <button class="btn btn-link pull-right fa"
+                      data-toggle="collapse"
+                      data-target="#collapseIndustry"
+                      [ngClass]="{
+                  'fa-chevron-up': !toggleInd.checked,
+                  'fa-chevron-down': toggleInd.checked
+                }"
+                      (click)="toggleInd.checked = !toggleInd.checked"></button>
+            </i>
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed"
+                      data-toggle="collapse"
+                      data-target="#collapseIndustry"
+                      aria-expanded="false"
+                      aria-controls="collapseIndustry">
+                Industries : {{ industryDetails?.message }}
+              </button>
+            </h5>
+          </div>
+          <div id="collapseIndustry"
+               class="collapse"
+               aria-labelledby="headingFour"
+               data-parent="#accordion">
+            <div class="card-body">
+              <div *ngFor="let evid of industryDetails?.evidence">
+                <div *ngIf="evid.type.toLowerCase() == 'positive'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Positive</label>
+                  <span>
+                    <pre>{{ evid.evidencePositiveFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'mixed'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Mixed</label>
+                  <span>
+                    <pre>{{ evid.evidenceMixedFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'negative'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Negative</label>
+                  <span>
+                    <pre>{{ evid.evidenceNegativeFact }}</pre>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header management" id="headingFive">
+            <span>
+              <input type="checkbox" hidden #toggleMngmt [checked]="false" />
+            </span>
+            <i>
+              <button class="btn btn-link pull-right fa"
+                      data-toggle="collapse"
+                      data-target="#collapseMngmt"
+                      [ngClass]="{
+                  'fa-chevron-up': !toggleMngmt.checked,
+                  'fa-chevron-down': toggleMngmt.checked
+                }"
+                      (click)="toggleMngmt.checked = !toggleMngmt.checked"></button>
+            </i>
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed"
+                      data-toggle="collapse"
+                      data-target="#collapseMngmt"
+                      aria-expanded="false"
+                      aria-controls="collapseMngmt">
+                Management : {{ managementDetails?.message }}
+              </button>
+            </h5>
+          </div>
+          <div id="collapseMngmt"
+               class="collapse"
+               aria-labelledby="headingFive"
+               data-parent="#accordion">
+            <div class="card-body">
+              <div *ngFor="let evid of managementDetails?.evidence">
+                <div *ngIf="evid.type.toLowerCase() == 'positive'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Positive</label>
+                  <span>
+                    <pre>{{ evid.evidencePositiveFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'mixed'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Mixed</label>
+                  <span>
+                    <pre>{{ evid.evidenceMixedFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'negative'"
+                     class="no-scroll">
+                  <label class="text-dark font-weight-bold">Negative</label>
+                  <span>
+                    <pre>{{ evid.evidenceNegativeFact }}</pre>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header languages" id="headingSix">
+            <span>
+              <input type="checkbox" hidden #toggleLang [checked]="false" />
+            </span>
+            <i>
+              <button class="btn btn-link pull-right fa"
+                      data-toggle="collapse"
+                      data-target="#collapseLang"
+                      [ngClass]="{
+                  'fa-chevron-up': !toggleLang.checked,
+                  'fa-chevron-down': toggleLang.checked
+                }"
+                      (click)="toggleLang.checked = !toggleLang.checked"></button>
+            </i>
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed"
+                      data-toggle="collapse"
+                      data-target="#collapseLang"
+                      aria-expanded="false"
+                      aria-controls="collapseLang">
+                Languages : {{ languageDetails?.message }}
+              </button>
+            </h5>
+          </div>
+          <div id="collapseLang"
+               class="collapse"
+               aria-labelledby="headingSix"
+               data-parent="#accordion">
+            <div class="card-body">
+              <div *ngFor="let evid of languageDetails?.evidence">
+                <div *ngIf="evid.type.toLowerCase() == 'positive'">
+                  <label class="text-dark font-weight-bold">Positive</label>
+                  <span>
+                    <pre>{{ evid.evidencePositiveFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'mixed'">
+                  <label class="text-dark font-weight-bold">Mixed</label>
+                  <span>
+                    <pre>{{ evid.evidenceMixedFact }}</pre>
+                  </span>
+                </div>
+                <div *ngIf="evid.type.toLowerCase() == 'negative'">
+                  <label class="text-dark font-weight-bold">Negative</label>
+                  <span>
+                    <pre>{{ evid.evidenceNegativeFact }}</pre>
+                  </span>
+                </div>
+              </div>
+              <div *ngIf="!languageDetails">
+                <p class="font-italic small text-center">Nothing to show!!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6" *ngIf="candidateMatching">
+      <div class="resume-body"
+           *ngIf="candidateresume"
+           id="candidateresume">
+        <div class="container">
+          <div [innerHTML]="candidateresume | highlight: candidateResumeDetails?.skills"
+               class="p-0"></div>
+        </div>
+      </div>
+
+      <div *ngIf="loadingMessage" class="p-1 modal-height">
+        <h6 class="resume-load-mesg">Please Wait...</h6>
+      </div>
+      <div class="text-center p-5 modal-height" *ngIf="resumenotFound">
+        <h5>Candidate resume not found!</h5>
+      </div>
+
+    </div>
+  </div>
+<!--modal body tag ends-->

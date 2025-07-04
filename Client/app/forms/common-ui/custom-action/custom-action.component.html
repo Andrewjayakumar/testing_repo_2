@@ -1,0 +1,272 @@
+<div
+  class="d-flex pt-1 {{customActionAlign || actionview=='flat' ? customActionAlign : 'justify-content-end'}}  {{actionview == 'flat' ? '' : 'align-items-center'}}"
+  *ngIf="actionview != 'popover' && actionview != 'popoverAdvGrid' && actionview != 'popoverGrdClint'">
+  <ng-container *ngFor="let action of customaction">
+    <ng-container *ngIf="actionType(action)=='hide' || actionType(action)=='show' || actionType(action)==''">
+      <ng-container *ngIf="ruleCheck(action)">
+        <a [ngClass]="{'d-flex flex-column justify-content-center':action.webnametype=='nameicon'}"
+           *ngIf="action.ActionType != 'bookmarkinaction' && action.ActionType != 'submitbookamrk' && action.ActionType != 'redirboth' && action.ActionType != 'submitredirboth'"
+           class="{{actionview=='flat' ? '' : 'btn'}}  pointer btn-{{action.buttontype ? action.buttontype : 'link'}}"
+           [ngClass]="{'my-2': action.buttontype != 'link' || action.buttontype != null }"
+           (click)="customAction(action,content)" title="{{value ? value : action.ActionName}}">
+        <!--  <span *ngIf="action.showbadge" class="notification-dot">&nbsp;</span> -->
+          <i class="fa-lg custom-icon-size {{action.WebIcon}}" *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'">
+          </i>
+          <span [ngClass]="{'pt-2':action.webnametype=='nameicon'}"
+                *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{value ? value : action.ActionName}}</span>
+        </a>
+        <a [ngClass]="{'d-flex flex-column justify-content-center':action.webnametype=='nameicon', 'my-2': action.buttontype != 'link' || action.buttontype != null , 'disabled': isAppiCalling && action.ActionType == 'submitbookamrk'}"
+          *ngIf="action.ActionType == 'bookmarkinaction' || action.ActionType == 'submitbookamrk'"
+          class="{{actionview=='flat' ? '' : 'btn'}}  pointer btn-{{action.buttontype ? action.buttontype : 'link'}}"
+          (click)="customAction(action,content)" title="{{value ? value : action.ActionName}}">
+          <i class="fa-lg {{isAppiCalling && action.ActionType == 'submitbookamrk' ? 'fa fa-spinner fa-spin' : !isbookmarked(action) ? action.iconbeforebookmark : action.iconafterbookmark}}"
+            *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'">
+          </i>
+          <span [ngClass]="{'pt-2':action.webnametype=='nameicon'}"
+            *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{value ? value : action.ActionName}}</span>
+        </a>
+        <ng-container *ngIf="action.ActionType == 'redirboth' || action.ActionType == 'submitredirboth'">
+          <a [ngClass]="{'d-flex flex-column justify-content-center':action.webnametype=='nameicon'}"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            class="{{actionview=='flat' ? '' : 'btn'}}  pointer btn-{{action.buttontype ? action.buttontype : 'link'}}"
+            [ngClass]="{'my-2': action.buttontype != 'link' || action.buttontype != null }"
+            title="{{value ? value : action.ActionName}}">
+            <i class="fa-lg {{action.WebIcon}}"
+              *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'">
+            </i>
+            <span [ngClass]="{'pt-2':action.webnametype=='nameicon'}"
+              *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{value ? value : action.ActionName}}</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right custom-menu">
+            <a (click)="redirectActionBoth='sametab';customAction(action,content)" class="dropdown-item pointer">Same
+              Tab</a>
+            <a (click)="redirectActionBoth='newtab';customAction(action,content)" class="dropdown-item pointer">New
+              Tab</a>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="actionType(action)=='disable' || actionType(action)=='enable'">
+      <div style="position: relative;">
+        <div style="position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 1;
+            opacity: 0.3;" [hidden]="ruleCheck(action)"></div>
+        <a *ngIf="action.ActionType != 'bookmarkinaction' && action.ActionType != 'submitbookamrk' && action.ActionType != 'redirboth' && action.ActionType != 'submitredirboth'"
+           class="{{actionview=='flat' ? '' : 'btn'}}  pointer btn-{{action.buttontype ? action.buttontype : 'link'}}"
+           [ngClass]="{'my-2': action.buttontype != 'link' || action.buttontype != null }"
+           (click)="customAction(action,content)">
+          <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'" class="fa-lg {{action.WebIcon}}"
+             [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+          </i>
+          <span *ngIf="action.showbadge" class="badge-danger m-1">B</span>
+          <span *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{value ? value : action.ActionName}}</span>
+        </a>
+        <a *ngIf="action.ActionType == 'bookmarkinaction' || action.ActionType == 'submitbookamrk'"
+          class="{{actionview=='flat' ? '' : 'btn'}}  pointer btn-{{action.buttontype ? action.buttontype : 'link'}}"
+          [ngClass]="{'my-2': action.buttontype != 'link' || action.buttontype != null }"
+          (click)="customAction(action,content)" title="{{value ? value : action.ActionName}}">
+          <i class="fa-lg {{isAppiCalling && action.ActionType == 'submitbookamrk' ? 'fa fa-spinner' : !isbookmarked(action) ? action.iconbeforebookmark : action.iconafterbookmark}}"
+            [ngClass]="{'mr-2': action.webnametype=='nameicon'}"
+            *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'">
+          </i>
+          <span
+            *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{value ? value : action.ActionName}}</span>
+        </a>
+        <div *ngIf="action.ActionType == 'redirboth' || action.ActionType == 'submitredirboth'">
+          <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            class="{{actionview=='flat' ? '' : 'btn'}}  pointer btn-{{action.buttontype ? action.buttontype : 'link'}}"
+            [ngClass]="{'my-2': action.buttontype != 'link' || action.buttontype != null }"
+            title="{{value ? value : action.ActionName}}">
+            <i class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}"
+              *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'">
+            </i>
+            <span
+              *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{value ? value : action.ActionName}}</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right custom-menu">
+            <a (click)="redirectActionBoth='sametab';customAction(action,content)" class="dropdown-item pointer">Same
+              Tab</a>
+            <a (click)="redirectActionBoth='newtab';customAction(action,content)" class="dropdown-item pointer">New
+              Tab</a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+<div class="{{actionview=='popover' ? 'position-absolute' : ''}} more-dd"
+  *ngIf="(actionview == 'popover' || actionview == 'popoverGrdClint') && actionview != 'popoverAdvGrid'">
+  <div class="dropdown">
+    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="pointer">
+      <i class="fa fa-ellipsis-h more-icon"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right custom-menu">
+      <ng-container *ngFor="let action of customaction">
+        <ng-container *ngIf="actionType(action)=='hide' || actionType(action)=='show' || actionType(action)==''">
+          <ng-container *ngIf="ruleCheck(action)">
+            <a *ngIf="action.ActionType != 'bookmarkinaction' && action.ActionType != 'submitbookamrk' && action.ActionType != 'newtab'"
+              class="dropdown-item pointer" (click)="customAction(action,content)">
+              <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+              </i>
+              <span
+                *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+            </a>
+            <a *ngIf="action.ActionType == 'bookmarkinaction' || action.ActionType == 'submitbookamrk'"
+              class="dropdown-item pointer" (click)="customAction(action,content)">
+              <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                class="fa-lg {{isAppiCalling && action.ActionType == 'submitbookamrk' ? 'fa fa-spinner' : !isbookmarked(action) ? action.iconbeforebookmark : action.iconafterbookmark}}"
+                [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+              </i>
+              <span
+                *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+            </a>
+            <a *ngIf="action.ActionType == 'newtab'" class="dropdown-item pointer"
+              (click)="customAction(action,content)">
+              <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+              </i>
+              <span
+                *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+            </a>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="actionType(action)=='disable' || actionType(action)=='enable'">
+          <div style="position: relative;">
+            <div style="position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 1;
+            opacity: 0.3;" [hidden]="ruleCheck(action)"></div>
+            <a *ngIf="action.ActionType != 'newtab'" class="dropdown-item pointer"
+              (click)="customAction(action,content,content)">
+              <i *ngIf="action.ActionType != 'bookmarkinaction' && action.ActionType != 'submitbookamrk' && action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+              </i>
+              <span
+                *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+            </a>
+            <a *ngIf="action.ActionType == 'bookmarkinaction' || action.ActionType == 'submitbookamrk'"
+              class="dropdown-item pointer" (click)="customAction(action,content)">
+              <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                class="fa-lg {{isAppiCalling && action.ActionType == 'submitbookamrk' ? 'fa fa-spinner' : !isbookmarked(action) ? action.iconbeforebookmark : action.iconafterbookmark}}"
+                [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+              </i>
+              <span
+                *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+            </a>
+            <a *ngIf="action.ActionType == 'newtab'" class="dropdown-item pointer"
+              (click)="customAction(action,content)">
+              <i *ngIf="action.webnametype=='icononly' || action.webnametype=='nameicon'"
+                class="fa-lg {{action.WebIcon}}" [ngClass]="{'mr-2': action.webnametype=='nameicon'}">
+              </i>
+              <span
+                *ngIf="action.webnametype=='nameicon' || action.webnametype=='nameonly'">{{action.ActionName}}</span>
+            </a>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div class="d-flex" *ngIf="actionview == 'popoverAdvGrid'">
+  <ng-container *ngFor="let action of customaction">
+    <ng-container *ngIf="actionType(action)=='hide' || actionType(action)=='show' || actionType(action)==''">
+      <ng-container *ngIf="ruleCheck(action)">
+        <a *ngIf="action.ActionType != 'bookmarkinaction' && action.ActionType != 'submitbookamrk' && action.ActionType != 'newtab'"
+          [title]="action.ActionName" class="pointer" (click)="customAction(action,content)">
+          <i class="fa-lg mr-2 {{action.WebIcon}}">
+          </i>
+        </a>
+        <a *ngIf="action.ActionType == 'bookmarkinaction' || action.ActionType == 'submitbookamrk'"
+          [title]="action.ActionName" class="pointer" (click)="customAction(action,content)">
+          <i
+            class="fa-lg mr-2 {{isAppiCalling && action.ActionType == 'submitbookamrk' ? 'fa fa-spinner' : !isbookmarked(action) ? action.iconbeforebookmark : action.iconafterbookmark}}">
+          </i>
+        </a>
+        <a *ngIf="action.ActionType == 'newtab'" class="pointer" [title]="action.ActionName"
+          (click)="customAction(action,content)">
+          <i class="fa-lg mr-2 {{action.WebIcon}}">
+          </i>
+        </a>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="actionType(action)=='disable' || actionType(action)=='enable'">
+      <div style="position: relative;">
+        <div style="position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 1;
+            opacity: 0.3;" [hidden]="ruleCheck(action)"></div>
+        <a *ngIf="action.ActionType != 'bookmarkinaction' && action.ActionType != 'submitbookamrk' && action.ActionType != 'newtab'"
+          [title]="action.ActionName" class="pointer" (click)="customAction(action,content)">
+          <i class="fa-lg mr-2 {{action.WebIcon}}">
+          </i>
+        </a>
+        <a *ngIf="action.ActionType == 'bookmarkinaction' || action.ActionType == 'submitbookamrk'"
+          [title]="action.ActionName" class="pointer" (click)="customAction(action,content)">
+          <i
+            class="fa-lg mr-2 {{isAppiCalling && action.ActionType == 'submitbookamrk' ? 'fa fa-spinner' : !isbookmarked(action) ? action.iconbeforebookmark : action.iconafterbookmark}}">
+          </i>
+        </a>
+        <a *ngIf="action.ActionType == 'newtab'" [title]="action.ActionName" class="pointer"
+          (click)="customAction(action,content)">
+          <i class="fa-lg mr-2 {{action.WebIcon}}">
+          </i>
+        </a>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="lg">
+  <div class="modal-header">
+    <h4 *ngIf="modalpopupformJson" class="modal-title" style="text-transform:capitalize">{{modalpopupformJson.Formname}}
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row" *ngIf="modalpopupformJson && modalpopupModelJson">
+      <ng-container *ngFor="let ctrl of modalpopupformJson.controls">
+        <app-dynamicformcontrolls [control]="ctrl" [formGroup]="form" [data]="modalpopupModelJson" [access]="ActionMode"
+          [AuthService]="AuthService" class="col-md-{{ctrl.width}} {{ctrl.colclass}}">
+        </app-dynamicformcontrolls>
+      </ng-container>
+    </div>
+    <div *ngIf="!modalpopupformJson || !modalpopupModelJson">
+      <b>{{ErrorMsg ? ErrorMsg : 'loading...'}}</b>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button> -->
+  </div>
+</ng-template>
+
+<ng-template #confirmDialog let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-transform:capitalize">
+      {{confirmDialogOptions.title}}
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      {{confirmDialogOptions.message ? confirmDialogOptions.message : 'Error in Loading...'}}
+    </div>
+    <div>
+     
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="c('YES')">Yes</button>
+    <button type="button" class="btn btn-default" (click)="c('NO')">No</button>
+  </div>
+</ng-template>
+
+<div [ngBusy]="{busy: busy, message: '', backdrop: true, delay: 500, minDuration: 1000}">
+</div>

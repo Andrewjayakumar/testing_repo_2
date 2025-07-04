@@ -1,0 +1,83 @@
+.modal-window{
+    height:auto;
+}
+
+
+
+.candidateresume{
+    width:50%;
+    border-right:0.1rem solid #737373;
+    padding-left:10px;
+}
+
+.formatted-resume{
+    width:52%;
+    padding:10px;
+}
+
+
+
+.other-actions {
+    border-bottom:0.1rem solid #737373;
+}
+#formattedresume {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 75vh;
+}
+
+#formattedresume::-webkit-scrollbar {
+  width: 9px;
+}
+
+#formattedresume::-webkit-scrollbar-thumb {
+  background: rgba(136, 135, 135, 0.69);
+  border-radius: 10px;
+}
+
+
+.h_iframe iframe {
+ border:none;
+}
+
+.candidateresume_whole {
+  width: 100%;
+  border-right: 0.1rem solid #737373;
+  padding: 10px;
+}
+
+.formatted-resume_whole {
+  width: 100%;
+  padding: 10px;
+}
+
+.header-bottom {
+    border-bottom:1px solid #737373;
+}
+
+.original-resume{
+    width:647px;
+}
+
+.action_buttons {
+  text-align: end;
+  margin-left: 89px;
+}
+.close-btn-width{
+    width:14%;
+}
+.other-action-buttons{
+    text-align:end;
+    margin-left:80px;
+}
+
+@media only screen and (min-width: 1370px) and (max-width: 1605px) {
+  .h_iframe iframe {
+    border: none;
+    width: 745px;
+    height: 580px;
+  }
+    }
+
+
+

@@ -1,0 +1,22 @@
+.dropdown-outer {
+  position: relative;
+
+  /*.dropdown-option {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    min-width: 280px;
+    max-height: 300px;
+    overflow: auto;
+    background: #fff;
+    z-index: 1000;
+  }*/
+}
+.loading {
+  background-color: #ffffff;
+  background-image: url("http://loadinggif.com/images/image-selection/3.gif");
+  background-size: 25px 25px;
+  background-position: 96% center;
+  background-repeat: no-repeat;
+}

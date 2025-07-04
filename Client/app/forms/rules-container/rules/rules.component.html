@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-12">
+    <label class="">Action</label>
+    <div style="width:100%">
+      <div *ngFor="let opt of dataoptions" class="c-control c-radio c-inline">
+        <label>
+          <input class="c-control-input" type="radio" [name]="uniqueId" [(ngModel)]="action" (ngModelChange)="onActionChange()" [value]="opt.id">
+          <i class="c-control-indicator fa fa-circle-o"></i>
+          <span class="c-control-description">
+            {{opt.name}}
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div style="padding-bottom:5px" class="col-md-12" *ngFor="let data of data[control.key]">
+    <span style="float:right" (click)="removeRule(data)">
+      <i class="fa fa-close" aria-hidden="true"></i>
+    </span>
+    <rules [dropdownlist]="ModalList" [model]="data" [option]="control"></rules>
+  </div>
+  <button class="btn btn-primary" (click)="AddRule()">Add Rule</button>
+</div>

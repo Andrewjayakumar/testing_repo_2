@@ -1,0 +1,58 @@
+<section class="page-content">
+
+  <h6 *ngIf="current_user_role == 3 || current_user_role ==4" class="heading">My Team Requisitions</h6>
+  <h6 *ngIf="current_user_role != 3 && current_user_role !=4" class="heading">My Requisitions</h6>
+  <div [ngBusy]="{busy: busy, message: 'Loading ...', backdrop: true, delay: 200, minDuration: 1000}"></div>
+  <div class="text-center col-md-6 req-assign-suc-err-msg"><ngb-alert *ngIf="successMessageHide" type="success">{{successMessage}}</ngb-alert></div>
+  <div class="text-center col-md-6 req-assign-suc-err-msg"><ngb-alert *ngIf="assignmentErrorMessage" type="danger">{{assignmentErrorMessage}}</ngb-alert></div>
+
+
+  <ul class="nav justify-content-end list-inline sticky-switch mt-2 " #reqtabs>
+
+    <li class="req-filter" *ngIf="current_user_role != 3 && current_user_role !=4 || current_user_role == 3 || current_user_role ==4">
+      <req-filter-search (onFilterApplied)="applyFilter($event)" [unassignedfilter]="unassignedFilterOption" (clearfilter)="resetFilters(1,20)"></req-filter-search>
+
+    </li>
+    <li class="active " [ngClass]="{ 'active-tab' : currentTab==='card' }">
+      <a data-toggle="tab" href="#cardView" class="btn pr-2" (click)="currentTab='card'">
+        <i class="fa fa-th"></i>
+      </a>
+    </li>
+
+    <li [ngClass]="{ 'active-tab' : currentTab==='list'}">
+      <a data-toggle="tab" href="#listView" class="pr-3 btn" (click)="currentTab='list'">
+        <i class="fa fa-align-justify"></i>
+      </a>
+    </li>
+
+  </ul>
+
+  <div class="parent-tab p-0">
+
+    <div class="tab-content">
+      <div #cardcontainer id="cardView" class="tab-pane fade show active">
+        <div class="card-container">
+          <metal-requisition-card *ngFor="let reqObj of myreqsList" [userrole]="current_user_role" [requisition]="reqObj" (actionClicked)="onActionClicked($event)"></metal-requisition-card>
+        </div>
+
+      </div>
+      <div #listcontainer id="listView" class="tab-pane fade">
+        <div class="container-fluid apply-margin">
+
+          <metal-requisition-list [requisition]="myreqsList" [userrole]="current_user_role" (actionClicked)="onActionClicked($event)"></metal-requisition-list>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="noRecordMsg" class="text-center">
+      <label>{{noRecordMsg}}</label>
+    </div>
+  </div>
+
+  <div class="paginator">
+    <ngb-pagination [collectionSize]="totalrecords" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                    (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+  </div>
+
+
+
+</section>

@@ -1,0 +1,58 @@
+<div class="form-group" [formGroup]="formGroup" *ngIf="access == 'write' && !control.corecheckbox">
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <label class="switch">
+    <input [id]="control_id" type="checkbox" [checked]="displayValue"
+           [(ngModel)]="displayValue"
+           (click)="setDisplayValue($event.target.checked)"
+           [formControl]="formGroup.controls[control_id]"
+           [required]="control.require" [disableControl]="disabled">
+    <i class="switch-icon" *ngIf="control.iscustomtext && !control.hideswitchtext" data-swchon-text="Yes" data-swchoff-text="No"></i>
+    <i class="switch-icon" data-swchon-text="On" data-swchoff-text="Off" *ngIf="!control.iscustomtext && !control.hideswitchtext"></i>
+    <i class="switch-icon" data-swchon-text=" " data-swchoff-text=" " *ngIf="control.hideswitchtext"></i>
+    {{control.label}}
+    <sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+    <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+  </label>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div class="c-control c-checkbox mb-0" style="min-height:20px" *ngIf="access == 'write' && control.corecheckbox">
+  <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+  <label>
+    <input class="c-control-input" [id]="control_id" type="checkbox" [checked]="displayValue" [disableControl]="disabled"
+           [(ngModel)]="displayValue"
+           (click)="setDisplayValue($event.target.checked)"
+           [required]="control.require">
+    <i class="c-control-indicator fa fa-square c-control-indicator-2"></i>
+    <span class="c-control-description">{{control.label}}</span>
+    <sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+  </label>
+  <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+  <div class="form-text" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write'" class="form-group">
+  <ng-container *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer" aria-hidden="true" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <ng-container *ngIf="control.customvalue != 'no'">
+      <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+    </ng-container>
+    <ng-container *ngIf="control.customvalue == 'no'">
+      <div class="form-control border-0 p-0" *ngIf="control.iscustomtext && data[control.key]">{{control.truetext}}</div>
+      <div class="form-control border-0 p-0" *ngIf="control.iscustomtext && !data[control.key]">{{control.falsetext}}</div>
+      <div class="form-control border-0 p-0" *ngIf="!control.iscustomtext && data[control.key]">On</div>
+      <div class="form-control border-0 p-0" *ngIf="!control.iscustomtext && !data[control.key]">Off</div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="access!='mandatory'">
+    <label class="editebl-input" [ngClass]="_controlService.getCssforMandatory(control,data[control.key])">{{control.label}}<i class="fa fa-pencil pointer " aria-hidden="true" *ngIf="access == 'edit'" (click)="_controlService._toggleSidebar('id',control.id)"></i></label>
+    <!--<div class="form-control border-0 p-0">{{data[control.key]}}</div>-->
+    <ng-container *ngIf="control.customvalue != 'no'">
+      <div class="form-control border-0 p-0">{{data[control.key]}}</div>
+    </ng-container>
+    <ng-container *ngIf="control.customvalue == 'no'">
+      <div class="form-control border-0 p-0" *ngIf="control.iscustomtext && data[control.key]">{{control.truetext}}</div>
+      <div class="form-control border-0 p-0" *ngIf="control.iscustomtext && !data[control.key]">{{control.falsetext}}</div>
+      <div class="form-control border-0 p-0" *ngIf="!control.iscustomtext && data[control.key]">On</div>
+      <div class="form-control border-0 p-0" *ngIf="!control.iscustomtext && !data[control.key]">Off</div>
+    </ng-container>
+  </ng-container>
+</div>

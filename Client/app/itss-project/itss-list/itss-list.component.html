@@ -1,0 +1,121 @@
+<div class="container-fluid">
+
+  <div [ngBusy]="{busy: busy, message: 'Loading ...', backdrop: true, delay: 200, minDuration: 1000}"></div>
+
+  <div class="card-2 card-3 card-1">
+
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <!-- Accordion -->
+        <div id="accordionExample" class="">
+
+          <!-- Accordion item 1 -->
+          <div class="card card-sub">
+            <div id="headingOne" class="card-header bg-white  border-0">
+              <h2 class="mb-0 accordion-background">
+                <button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-link accordion-header font-weight-bold">Projects</button>
+              </h2>
+            </div>
+            <div aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse show">
+              <div class="card-body">
+                <div class="ng-sidebar__content ng-sidebar__content--animate ml-5 mv-right" style="padding: 0px;">
+                  <div class="" *ngIf="showupaddprojbutton">
+                    <!---->
+                    <button type="button" class="btn ml--3 btn-primary btn-md" [routerLink]="['/projects/addupdate']"><!----><i class="fa fa-plus-circle mr-2"></i>Project</button>
+                    <!---->
+                  </div>
+                </div>
+                <button style="position: relative;z-index: 1" type="button" class="btn  btn-outline-primary btn-md tooltip-w200px mv-right" (click)="exporttoexcelResults()">
+                  Export to Excel
+                </button>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="searchtext">
+
+                      </label>
+
+                      <div class="dropdown-outer">
+                        <input autocomplete="off" class="form-control validate filter-input" type="text" [(ngModel)]="search" id="searchtext" placeholder="Search by Project Name or Client Name ">
+
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <div class="mb-3 col-md-3 pt-3" style="margin-top: 5px;">
+                    <button class="btn btn-primary" (click)="getSearchResults()">Search</button>
+
+                    <button class="btn btn-outline-primary ml-3" (click)="getAlltheItssProjects()" name="Clear" type="reset">Clear</button>
+                  </div>
+                </div>
+                <table *ngIf="totalrecords > 0" class="search-table">
+                  <tr>
+                    <th class="project-name">Project Name</th>
+                    <th>Project Type</th>
+                    <th>No.of Requisitions</th>
+                    <th>Project Status</th>
+                    <th class="client">Client</th>
+                  </tr>
+                  <tr *ngFor="let project of itssprojectDetails | slice: (pageindex-1) * pagesize : (pageindex-1) * pagesize + pagesize">
+                    <td><a [routerLink]="['/projects/summary']" [queryParams]="{projectid: project.projectid}">{{project.projectname}}</a></td>
+                    <td>{{project.projecttype}}</td>
+                    <td>{{project.noofrequisitions}}</td>
+                    <td>{{project.projectstatus}}</td>
+                    <td>{{project.clientname}}</td>
+
+                  </tr>
+
+
+                </table>
+
+                <div class="noresults" *ngIf="errorMessage">{{errorMessage}}</div>
+                <ngb-pagination *ngIf="totalrecords > 0" class="d-flex justify-content-center" [collectionSize]="totalrecords" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                                [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+
+
+</div>
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title"
+      [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">Ok</button>
+  </div>
+</ng-template>
+
+
+
+

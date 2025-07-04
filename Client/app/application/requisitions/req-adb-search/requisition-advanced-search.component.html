@@ -1,0 +1,589 @@
+<div class="container-fluid">
+
+  <div class="card-2 card-3 card-1">
+
+    <div class="row">
+      <div class="col-md-6  search-heading">
+        <h6>
+          Advanced Search<span class="subtitle ml-2 d-inline"> - Requisitions</span>
+        </h6>
+      </div>
+    </div>
+
+    <form [formGroup]="rForm" (ngSubmit)="addPost('apply',0)">
+      <div class="row">
+        <div class="col-md-6  sub-search-heading">
+          <div class="form-group">
+            <label for="pwd" class="col-form-label-sm label-color m-b">Requisition Search</label>
+            <input type="text" class="form-control form-control-sm" formControlName="searchtext" placeholder="keywords..." id="requisitionsearch" name="requisitionsearch">
+          </div>
+        </div>
+
+        <div class="col-md-4 offset-md-1">
+          <legend class="col-form-label col-form-label-sm label-color m-b">Search Type</legend>
+
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="1" name="radiosearchType">Exact
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="2" name="radiosearchType">Any Words
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-lg-11 mx-auto">
+          <!-- Accordion -->
+          <div id="accordionExample" class="">
+
+            <!-- Accordion item 1 -->
+            <div class="card card-sub">
+              <div id="headingOne" class="card-header bg-white  border-0">
+                <h2 class="mb-0 accordion-background">
+                  <button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-link accordion-header font-weight-bold  collapsible-link">Requirement</button>
+                </h2>
+
+              </div>
+              <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse show">
+                <div class="card-body">
+                  <div class="form-row">
+
+                    <div class="form-group col-md-3">
+                      <label for="colFormLabelSm" class="col-form-label-sm label-color m-b">Received From</label>
+                      <div class="input-group">
+                        <input class="form-control" id="submittedfrom" formControlName="receivedfrom" (ngModelChange)="receivedfromdate($event)"
+                               placeholder="yyyy-mm-dd"
+                               name="dp1" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-prepend">
+                          <button class="btn btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="colFormLabelSm" class="col-form-label-sm label-color m-b">Received To</label>
+                      <div class="input-group">
+                        <input class="form-control" (ngModelChange)="receivedTo($event)" formControlName="receivedto" id="submittedto" placeholder="yyyy-mm-dd"
+                               name="dp2" ngbDatepicker #c="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary fa fa-calendar" (click)="c.toggle()" type="button"></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="colFormLabelSm" class="col-form-label-sm label-color m-b">Region</label>
+                      <ng-select [items]="region?.regions"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="true"
+                                 bindLabel="region"
+                                 bindValue="id"
+                                 formControlName="regionid"
+                                 placeholder="Select region" class="form-control">
+                      </ng-select>
+                    </div>
+                    <div class="extra-filters">
+
+                    </div>
+                    <div class="extra-filters-radio">
+                      <div>
+                        <div class="form-check">
+                          <input type="checkbox" formControlName="jump" class="form-check-input" id="exampleCheck1">
+                          <label class="form-check-label" for="exampleCheck1">JUMP</label>
+                        </div>
+                        <!--<div class="form-check">
+                          <input type="checkbox" formControlName="itss" class="form-check-input" id="exampleCheck1">
+                          <label class="form-check-label" for="exampleCheck1">ES</label>
+                        </div>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" formControlName="bulk" id="exampleCheck1">
+                          <label class="form-check-label" for="exampleCheck1">Bulk</label>
+                        </div>-->
+
+                      </div>
+
+
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <label for="requisitionname" class="col-form-label-sm label-color m-b">Requisition Name/ID</label>
+                      <input id="requisitionname" name="requisitionname" formControlName="name" placeholder="Requisition Name" type="text" class="form-control" />
+
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="colFormLabelSm" class="col-form-label-sm label-color m-b">Requisition Type</label>
+
+                      <ng-select [items]="requisitionType?.requisitiontype"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="false"
+                                 bindLabel="type"
+                                 bindValue="id"
+                                 formControlName="requisitiontypeid"
+                                 placeholder="Select Requisition Type" class="form-control">
+                      </ng-select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="colFormLabelSm" class="col-form-label-sm label-color m-b">Requisition Status</label>
+
+                      <ng-select [items]="requisitionStatus?.status"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="false"
+                                 bindLabel="status"
+                                 bindValue="id"
+                                 formControlName="statusid"
+                                 placeholder="Select Status" class="form-control">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <label for="colFormLabelSm" class="col-form-label-sm label-color m-b">Job Title</label>
+                      <ng-select [items]="jobtitledetails"
+                                 [multiple]="false"
+                                 [closeOnSelect]="false"
+                                 [searchable]="true"
+                                 bindLabel="jobtitle"
+                                 bindValue="id"
+                                 [addTag]="true"
+                                 id="jobtitle"
+                                 formControlName="jobtitleid"
+                                 placeholder="Select Job Title" class="form-control">
+                      </ng-select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="colFormLabelSm" class="col-form-label-sm label-color m-b">Skills</label>
+
+                      <!-- <ng-select [items]="skills?.relatedskills"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="true"
+                                 bindLabel="skill"
+                                 bindValue="skillid"
+                                 [addTag]="true"
+                                 id="skills"
+                                 formControlName="skills"
+                                 [virtualScroll]="true"
+                                 placeholder="Select Skills" class="form-control">
+                      </ng-select> -->
+                      <ng-select [items]="MandatorySkillItems$ |async" [multiple]="true" [closeOnSelect]="true" [searchable]="true" [loading]="mandatoryskillsArray==null"
+                                 bindLabel="skill" formControlName="skills"
+                                 bindValue="skillid" class="form-control" placeholder="Type to Search" [clearable]="true" [typeahead]="mandatoryskills$"
+                                 name="pskills">
+                      </ng-select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label class="col-form-label-sm label-color m-b" for="colFormLabelSm">Employment Type</label>
+                      <ng-select [items]="employmentTpeDetails?.projecttypes"
+                                 [multiple]="false"
+                                 [closeOnSelect]="false"
+                                 [searchable]="false"
+                                 bindLabel="projecttype"
+                                 bindValue="id"
+                                 [addTag]="true"
+                                 id="emptype"
+                                 formControlName="employmenttypeid"
+                                 placeholder="Select Employment Type" class="form-control">
+                      </ng-select>
+
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="deliverymanager">Delivery Manager</label>
+
+
+                      <ng-select [items]="DMItems$ | async" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                                 bindLabel="userid" bindValue="userid" placeholder="Type at least 2 digits to search"
+                                 [loading]="DMLoading" [typeahead]="Dminput$" formControlName="deliverymanager" name="Dms"
+                                 class="form-control">
+                      </ng-select>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="assignedto">Recruiter</label>
+
+                      <input type="text" class="form-control"
+                             [ngbTypeahead]="assignedTo"
+                             placeholder="Recruiter Name"
+                             [resultFormatter]="formatsubmitMatches"
+                             (selectItem)="selectAssignedTo($event)"
+                             [(ngModel)]="recruiterNgModelClear"
+                             [ngModelOptions]="{standalone: true}"
+                             [inputFormatter]="formatsubmitMatches" />
+                    </div>
+
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="colFormLabelSm">Sales</label>
+
+                      <input type="text" class="form-control"
+                             [ngbTypeahead]="sales"
+                             placeholder="Sales Name"
+                             [resultFormatter]="formatsubmitMatchesSales"
+                             (selectItem)="selectSales($event)"
+                             [(ngModel)]="salesrepID"
+                             [ngModelOptions]="{standalone: true}"
+                             [inputFormatter]="formatsubmitMatchesSales" />
+
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="colFormLabelSm">VMO</label>
+
+                      <input type="text" class="form-control"
+                             [ngbTypeahead]="vMo"
+                             placeholder="VMO Name"
+                             [resultFormatter]="formatsubmitMatchesvmo"
+                             (selectItem)="selectVmo($event)"
+                             [(ngModel)]="vmoDetails"
+                             [ngModelOptions]="{standalone: true}"
+                             [inputFormatter]="formatsubmitMatchesvmo" />
+
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <!-- <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="jobtitle">Category</label>
+                      <div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" class="custom-control-input"
+                                 name="categoryid" value="1" formControlName="categoryid" id="customRadio3">
+                          <label class="custom-control-label" for="customRadio3">IT</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" value="2" formControlName="categoryid" class="custom-control-input" name="categoryid" id="customRadio4">
+                          <label class="custom-control-label" for="customRadio4">Non-IT</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" value="3" formControlName="categoryid" class="custom-control-input" name="categoryid" id="customRadio5" checked>
+                          <label class="custom-control-label" for="customRadio5">All</label>
+                        </div>
+
+                      </div>
+                    </div> -->
+                    <div class="form-group col-md-4">
+                      <label class="col-form-label-sm label-color m-b" > Requisition Priority</label>
+                      <ng-select [items]="priorityDetails"
+                                 [multiple]="true"
+                                 [closeOnSelect]="true"
+                                 [searchable]="false"
+                                 bindLabel="prioritytype"
+                                 bindValue="priorityid"
+                                 formControlName="requisitionpriorityid"
+                                 placeholder="Select Priority" class="form-control">
+                      </ng-select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label class="col-form-label-sm label-color m-b" >SOW /Project</label>
+                      <input type="text" class="form-control"
+                             [ngbTypeahead]="itss"
+                             placeholder="Search CES Projects"
+                             [(ngModel)]="itssProjNgModelClear"
+                             [ngModelOptions]="{standalone: true}"
+                             [resultFormatter]="formatsubmitMatchesitss"
+                             (selectItem)="selectItssProject($event)"
+                             [inputFormatter]="formatsubmitMatchesitss" />
+
+                    </div>
+                    <div class="col-md-4">
+                      <label class="col-form-label-sm label-color m-b">Delivery Model</label>
+                      <ng-select [items]="deliveryModelList" [multiple]="false" [closeOnSelect]="true"
+                        [searchable]="false" bindLabel="deliverymodelname" bindValue="deliverymodelid"
+                        formControlName="deliverymodelid" placeholder="Select Priority" class="form-control">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="country">Country</label>
+                      <ng-select [items]="countrydetails?.countries"
+                                 [multiple]="false"
+                                 [closeOnSelect]="true"
+                                 [searchable]="false"
+                                 bindLabel="country"
+                                 bindValue="id"
+                                 formControlName="countryid"
+                                 placeholder="Select Country" (change)="getstatecode($event)" class="form-control">
+                      </ng-select>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="State">State</label>
+                      <ng-select [items]="statesdetails?.states"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="true"
+                                 bindLabel="state"
+                                 bindValue="stateid"
+                                 formControlName="states"
+                                 placeholder="Select State" class="form-control">
+                      </ng-select>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="city">City</label>
+                      <input class="form-control" formControlName="city" name="city" id="city" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="zipcode">Zip Code</label>
+                      <input class="form-control" formControlName="zipcode"
+                             name="zipcode" id="zipcode" />
+                    </div>
+
+                  </div>
+                  <div class="form-row">
+                    <!-- <div class="form-group col-md-4">
+                      <label class="col-form-label-sm label-color m-b" for="State">Qualification</label>
+                      <ng-select [items]="qualificationDetails?.qualifications" [multiple]="true"
+                        [closeOnSelect]="false" [searchable]="true" bindLabel="qualification" bindValue="id"
+                        formControlName="qualification" placeholder="Select Qualification" class="form-control">
+                      </ng-select>
+                    </div> -->
+                    <!-- <div class="form-group col-md-3">
+                      <label class="col-form-label-sm label-color m-b" for="Industry">Industry</label>
+                      <ng-select [items]="industries" [multiple]="false" [closeOnSelect]="true" bindLabel="type" bindValue="type"
+                        formControlName="verticalName" placeholder="Select Industry" class="form-control">
+                      </ng-select>
+                    </div> -->
+                    <!-- <div class="form-group col-md-4">
+                      <label class="col-form-label-sm label-color m-b" for="State">Tower</label>
+                      <ng-select [items]="towerDetails?.requisitiontower"
+                                 [multiple]="false"
+                                 [closeOnSelect]="true"
+                                 [searchable]="true"
+                                 bindLabel="tower"
+                                 bindValue="towerid"
+                                 [(ngModel)]="requisitiontowerClear"
+                                 [ngModelOptions]="{standalone: true}"
+                                 placeholder="Select Tower" (change)="getTowerCode($event)" class="form-control">
+                      </ng-select>
+                    </div> -->
+                    <!-- <div class="form-group col-md-4">
+                      <label class="col-form-label-sm label-color m-b" for="State">Sub Tower</label>
+                      <ng-select [items]="subTowerDetails?.requisitionsubtower"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="true"
+                                 bindLabel="subtower"
+                                 bindValue="subtowerid"
+                                 [(ngModel)]="requisitionSubtowerClear"
+                                 formControlName="requisitionsubtower"
+                                 placeholder="Select Sub Tower" class="form-control">
+                      </ng-select>
+                    </div> -->
+
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-3">
+                      <app-metal-switch [(state)]='model.isremote' [uniqueid]="'remote_location'" [labelname]="'Remote'"></app-metal-switch>
+
+                    </div>
+                    <div class="col-md-6 responded-label">
+
+                      <div class="form-check form-check-inline">
+                        <input type="checkbox" formControlName="unresponded" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Unresponded</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input type="checkbox" formControlName="partiallyresponded" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label partially-responded" for="exampleCheck1">Partially Responded</label>
+                      </div>
+
+
+
+                    </div>
+                    <!-- <div class="form-group col-md-3">
+                      <app-metal-switch [(state)]='model.offshore' [uniqueid]="'offshorevalue'" [labelname]="'Offshore'"></app-metal-switch>
+
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End -->
+          <!-- Accordion item 2 -->
+          <div class="card card-sub">
+            <div id="headingTwo" class="card-header bg-white  border-0">
+              <h2 class="mb-0 accordion-background">
+                <button type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="btn btn-link collapsed accordion-header font-weight-bold  collapsible-link">Client</button>
+              </h2>
+            </div>
+            <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label class="col-form-label-sm label-color m-b" for="clientName">Client Name</label>
+                    <ng-select [items]="clientNameDetails?.clients"
+                               [multiple]="true"
+                               [closeOnSelect]="false"
+                               [searchable]="true"
+                               bindLabel="clientname"
+                               bindValue="clientcode"
+                               [virtualScroll]="true"
+                               formControlName="clientid"
+                               placeholder="Select Client Name" class="form-control">
+                    </ng-select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label class="col-form-label-sm label-color m-b" for="lob">Client LOB</label>
+                    <ng-select [items]="lobdetails?.lob"
+                               [closeOnSelect]="false"
+                               [searchable]="true"
+                               bindLabel="lob"
+                               bindValue="id"
+                               formControlName="clientlobid"
+                               placeholder="Select Lob" class="form-control">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="col-form-label-sm label-color m-b" for="hiringmgrName">Hiring Manager Name</label>
+                    <input class="form-control" formControlName="hiringmanagername" placeholder="Hiring Manager Name" id="hiringmgrName" name="hiringmgrName" />
+
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label class="col-form-label-sm label-color m-b" for="Industry">Industry</label>
+                  <ng-select [items]="verticles" [multiple]="false" [closeOnSelect]="true" bindLabel="verticalname" bindValue="verticalname"
+                    formControlName="verticalName" placeholder="Select Industry" class="form-control">
+                  </ng-select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                  </div>
+                  <div class="col-md-4">
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div><!-- End -->
+
+
+
+        </div>
+      </div>
+      <div class="final_search">
+        <button class="btn btn-primary float-right" id="apply" (click)="onApplyClicked()" type="submit">Apply</button>
+
+        <button type="button" (click)="resetForm()" class="btn btn-outline-primary float-right reset-search">Reset</button>
+
+      </div>
+    </form>
+
+    <hr class="section_separate">
+
+    <div class="form-row">
+
+      <div class="">
+        <span class="search_results_count"><span class="results_count_number">{{totalrecords}}</span>  Results Found</span>
+
+        <span class="search_results_count_viewBy">View by</span>
+      </div>
+      <div class="col-md-2 offset-md-1 switch-tab">
+
+        <ul class="nav">
+
+          <li class="nav-item border">
+            <button href="#home" (click)="addPost('requisition',0)"
+              [ngClass]="{ 'active_tab_for_search': rForm.value.type !== undefined &&  rForm.value.RequisitionSearchBasedOn === 0 }"
+              class="btn-sm btn search_label" data-toggle="tab">Requisition</button>
+          </li>
+
+
+          <li class="nav-item border">
+            <button href="#client" type="submit" (click)="addPost('client',0)"
+              [ngClass]="{ 'active_tab_for_search': rForm.value.type !== undefined &&  rForm.value.RequisitionSearchBasedOn === 1 }"
+              class="btn-sm btn" data-toggle="tab">
+              Client
+            </button>
+          </li>
+
+
+        </ul>
+      </div>
+      <div class="col-md-5">
+        <p class="only-show-on-hover m-bottom-0 text-small other-details">
+          <span><label class="">Positions&nbsp;</label><span class="other-details-label">{{totalPositions}}</span></span>
+          <span class="spaceMargin h5">|</span>
+          <span><label>Submitted&nbsp;</label>&nbsp;<span class="other-details-label">{{submitted}}</span></span>
+          <span class="spaceMargin h5">|</span>
+          <span><label>Interviewed&nbsp;</label>&nbsp;<span class="other-details-label">{{totalinterviewed}}</span></span>
+          <span class="spaceMargin h5">|</span>
+          <span><label>Hired&nbsp;</label><span class="other-details-label">{{totalhired}}</span></span>
+        </p>
+      </div>
+
+      <div class="col-md-2 pull-right">
+        <button (click)="exporttoExcel()" *ngIf="isExport == 1" class="btn btn-primary export-excel" type="button">Export to Excel</button>
+      </div>
+
+    </div>
+    <div class="tab-pane fade show  apply-margin" id="home">
+      <div *ngIf="errorMessage" class="errormessage text-center">{{errorMessage}}</div>
+      <div *ngIf="successMessageHide" class="success-message text-center">{{successMessage}}</div>
+      <div *ngIf="assignmentErrorMessage" class="errormessage text-center">{{assignmentErrorMessage}}</div>
+
+
+      <div *ngIf="showLoader" class="text-center p-2">
+        <i class="fa fa-2x fa-spinner fa-spin"></i>
+      </div>
+
+      <metal-requisition-list *ngIf="rForm.value.RequisitionSearchBasedOn == 0" [requisition]="requisitionResults"
+        (actionClicked)="onActionClicked($event)" [userrole]="current_user_role">
+
+      </metal-requisition-list>
+
+    </div>
+    <div class="tab-pane fade apply-margin" id="client">
+      <div *ngIf="errorMessage" class="errormessage text-center">{{errorMessage}}</div>
+      <div *ngIf="successMessageHide" class="success-message text-center">{{successMessage}}</div>
+      <div *ngIf="assignmentErrorMessage" class="errormessage text-center">{{assignmentErrorMessage}}</div>
+
+
+
+      <div *ngIf="showLoader" class="text-center p-2">
+        <i class="fa fa-2x fa-spinner fa-spin"></i>
+      </div>
+
+      <advanced-requisition-client-search [requisition]="requisitionResults" (actionClicked)="onActionClicked($event)" *ngIf="rForm.value.RequisitionSearchBasedOn == 1"></advanced-requisition-client-search>
+
+    </div>
+
+    <ngb-pagination *ngIf="totalrecords > 0" class="d-flex justify-content-center" [collectionSize]="totalrecords" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+                    (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+  </div>
+
+  <ul class="list_style ml-2 mt-1 p-0 d-inline-flex">
+
+    <li class="nav-item">
+      <a class="btn btn-floating btn-lg mr-3 mb-3 btn-primary rounded-circle fixed-button plus-btn-color" (click)="actionDashboardMenu = !actionDashboardMenu;showPopUp()">
+        <i aria-hidden="true" class="fa fa-plus"></i>
+      </a>
+
+      <div class="dropdown_list pop-up-details scrollbar" id="style-1" *ngIf="actionDashboardMenu">
+        <ul>
+          <li>
+            <a (click)="addCandidate()">
+              <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+              &nbsp; Add Candidate
+            </a>
+          </li>
+          <li>
+            <a tabindex="0" title="Add New Requisition" [routerLink]="['../addupdate']">
+              <i class="fa fa-list-ul fa-lg" aria-hidden="true"></i>
+              &nbsp; Add Requisition
+            </a>
+          </li>
+        </ul>
+
+      </div>
+
+    </li>
+
+  </ul>
+</div>

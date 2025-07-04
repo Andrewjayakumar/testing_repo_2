@@ -1,0 +1,717 @@
+
+
+
+<div class="card card-1 col-md-12 m-0i" id="card1">
+
+  <label class="heading_label d-inline-block" for="advanced_search">
+    ADVANCED SEARCH
+    <span class="subtitle ml-2 d-inline"> - Sourced Candidates</span>
+  </label>
+  <form [formGroup]="rForm" (ngSubmit)="addPost('apply')">
+
+
+    <div class="bs-example">
+
+      <div class="accordion" id="accordionExample">
+        <div>
+
+          <input type="text" class="candidateName form-control" formControlName="candidatename" id="candidateSearch" name="csearch" autocomplete="off" placeholder="Search Candidate Name , Email Id">
+        </div>
+
+        <div class="card mb-0">
+          <div class="card-header p-0" id="headingOne">
+            <h2 class="mb-0 text-left" border-bot data-toggle="collapse" data-target="#collapseOne">
+              <button type="button" class="btn btn-link">Recruiter</button>
+              <button type="button" class="btn btn-link float-right"><i class="fa fa-plus"></i></button>
+            </h2>
+          </div>
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="submittedBy">Submitted By</label>
+
+                  <input *ngIf="current_user_obj.activerole==8 && isExport !=1 ; else otherRole" type="text" class="form-control"
+                         disabled
+                         [(ngModel)]="currentuser_id"
+                         formControlName="submittedby" />
+
+                  <ng-template #otherRole>
+                    <input type="text" class="form-control"
+                           [ngbTypeahead]="search"
+                           placeholder="search"
+                           [resultFormatter]="formatMatches"
+                           (selectItem)="selectedItem($event)"
+                           formControlName="submittedby"
+                           [inputFormatter]="formatMatches" />
+                  </ng-template>
+
+
+                </div>
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="candidateSearch">Candidate Status</label>
+
+                  <ng-select [items]="Message?.candidatestatus"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="false"
+                             bindLabel="CandidateStatus"
+                             formControlName="candidatestatusid"
+                             (remove)="removeItemfromArray($event)"
+                             placeholder="Select status" class="form-control">
+                  </ng-select>
+
+
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="submittedfrom">Submitted From</label>
+                  <div class="input-group">
+                    <input class="form-control" id="submittedfrom" formControlName="submittedfrom" (ngModelChange)="Submittedfromdate($event)"
+                           placeholder="yyyy-mm-dd"
+                           name="dp1" ngbDatepicker #d="ngbDatepicker">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="submittedto">Submitted To</label>
+                  <div class="input-group">
+                    <input class="form-control" formControlName="submittedto" (ngModelChange)="submittedTo($event)" id="submittedto" placeholder="yyyy-mm-dd"
+                           name="dp2" ngbDatepicker #c="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary fa fa-calendar" (click)="c.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="interviewfrom">Interview From</label>
+                  <div class="input-group">
+                    <input class="form-control" formControlName="interviewfrom" (ngModelChange)="interviewFrom($event)" id="interviewfrom" placeholder="yyyy-mm-dd"
+                           name="dp3" ngbDatepicker #b="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary fa fa-calendar" (click)="b.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="interviewto">Interview To</label>
+                  <div class="input-group">
+                    <input class="form-control" formControlName="interviewto" (ngModelChange)="interviewTo($event)" id="interviewto" placeholder="yyyy-mm-dd"
+                           name="dp" ngbDatepicker #a="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary fa fa-calendar" (click)="a.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="interviewfrom">Hired From</label>
+                  <div class="input-group">
+                    <input class="form-control" formControlName="hiredfrom" (ngModelChange)="hiredFrom($event)" id="interviewfrom" placeholder="yyyy-mm-dd"
+                           name="dp3" ngbDatepicker #e="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary fa fa-calendar" (click)="e.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="interviewto">Hired To</label>
+                  <div class="input-group">
+                    <input class="form-control" formControlName="hiredto" (ngModelChange)="hiredTo($event)" id="interviewto" placeholder="yyyy-mm-dd"
+                           name="dp" ngbDatepicker #f="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary fa fa-calendar" (click)="f.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="card  mb-0">
+          <div class="card-header p-0" id="headingTwo">
+            <h2 class="mb-0 text-left" data-toggle="collapse" data-target="#collapseTwo">
+              <button type="button" class="btn btn-link collapsed">Requisition</button>
+              <button type="button" class="btn btn-link collapsed float-right"><i class="fa fa-plus"></i></button>
+            </h2>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label class="label_text_candidate" for="clientName">Name</label>
+                  <input class="form-control" placeholder="Requisition Name" formControlName="name" name="reqName" id="reqName" />
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="REQ Status">Status</label>
+                  <ng-select [items]="requisitionStatus?.status"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="false"
+                             bindLabel="status"
+                             formControlName="statusid"
+                             (remove)="reqstatusremove($event)"
+                             placeholder="Select Status" class="form-control">
+                  </ng-select>
+
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="Requisition Status">Type</label>
+                  <ng-select [items]="requisitionType?.requisitiontype"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="false"
+                             bindLabel="type"
+                             formControlName="requisitiontypeid"
+                             (remove)="reqTyperemove($event)"
+                             placeholder="Select Requisition Type" class="form-control">
+                  </ng-select>
+
+
+                </div>
+                <!--  <div class="form-group col-md-4">
+                              <label class="label_text_candidate" for="skills">Skills</label>
+                              <ng-select [items]="skills?.relatedskills"
+                                         [multiple]="true"
+                                         [closeOnSelect]="false"
+                                         [searchable]="false"
+                                         bindLabel="skill"
+                                         [addTag]="true"
+                                         formControlName="skills"
+                                         (remove)="removedupicateskills($event)"
+                                         placeholder="Select Skills" class="form-control">
+                              </ng-select>
+
+                            </div>
+                            <!--    <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="assignedto">Assigned To</label>
+
+                  <input type="text" class="form-control"
+                         [ngbTypeahead]="assignedto"
+                         placeholder="Search"
+                         formControlName="assignedto"
+                         [resultFormatter]="formatsubmitMatches"
+                         (selectItem)="selectAssignedTo($event)"
+                         [inputFormatter]="formatsubmitMatches" />
+                </div> -->
+                <!-- <div class="form-group col-md-4">
+                  <label class="label_text_candidate" for="jobtitle">Job Title</label>
+                  <ng-select [items]="jobtitledetails"
+                             [multiple]="false"
+                             [closeOnSelect]="false"
+                             [searchable]="true"
+                             bindLabel="jobtitle"
+                             [addTag]="true"
+                             formControlName="jobtitleid"
+                             (change)="getthejobtitleId($event)"
+                             placeholder="Select Job Title" class="form-control">
+                  </ng-select>
+                </div>-->
+              </div>
+
+              <div class="form-row">
+
+              </div>
+
+              <div class="form-row">
+
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="assignedto">Priority</label>
+                  <ng-select [items]="priorityDetails"
+                             [multiple]="true"
+                             [closeOnSelect]="true"
+                             [searchable]="false"
+                             bindLabel="prioritytype"
+                             bindValue="priorityid"
+                             formControlName="requisitionpriorityid"
+                             placeholder="Select Priority" class="form-control">
+                  </ng-select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="jobtitle">Category</label>
+                  <div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" class="custom-control-input"
+                             name="categoryid" value="1" formControlName="categoryid" id="customRadio3">
+                      <label class="custom-control-label" for="customRadio3">IT</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" value="2" formControlName="categoryid" class="custom-control-input" name="categoryid" id="customRadio4">
+                      <label class="custom-control-label" for="customRadio4">Non-IT</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" formControlName="categoryid" value="3" class="custom-control-input" name="categoryid" id="customRadio5" checked>
+                      <label class="custom-control-label" for="customRadio5">All</label>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="region">Region</label>
+                  <ng-select [items]="region?.regions"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="true"
+                             bindLabel="region"
+                             formControlName="regionid"
+                             (remove)="reqTyperemove($event)"
+                             placeholder="Select region" class="form-control">
+                  </ng-select>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="tcu">TCU</label>
+                  <ng-select [items]="tcudetails?.tcu"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="true"
+                             bindLabel="tcu"
+                             [addTag]="true"
+                             formControlName="tcuid"
+                             (remove)="removeDuplicateTcuId($event)"
+                             placeholder="Select TCU" class="form-control">
+                  </ng-select>
+                </div>
+
+
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label class="label_text_candidate" for="clientName">Client Name</label>
+                  <ng-select [items]="clientNameDetails?.clients"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="true"
+                             bindLabel="clientname"
+                             bindValue="clientcode"
+                             formControlName="clientid"
+                             [virtualScroll]="true"
+                             placeholder="Select Client Name" class="form-control">
+                  </ng-select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="skills">Employment Type</label>
+                  <ng-select [items]="employmentTpeDetails?.projecttypes"
+                             [multiple]="false"
+                             [closeOnSelect]="false"
+                             [searchable]="false"
+                             bindLabel="projecttype"
+                             bindValue="id"
+                             [addTag]="true"
+                             formControlName="employmenttypeid"
+                             placeholder="Select Employment Type" class="form-control">
+                  </ng-select>
+
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="jobtitle">Job Title</label>
+                  <ng-select [items]="jobtitledetails"
+                             [multiple]="false"
+                             [closeOnSelect]="false"
+                             [searchable]="true"
+                             bindLabel="jobtitle"
+                             [addTag]="true"
+                             formControlName="jobtitleid"
+                             (change)="getthejobtitleId($event)"
+                             placeholder="Select Job Title" class="form-control">
+                  </ng-select>
+                </div>
+
+
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="country">Country</label>
+                  <ng-select [items]="countrydetails?.countries"
+                             [multiple]="false"
+                             [closeOnSelect]="true"
+                             [searchable]="false"
+                             bindLabel="country"
+                             bindValue="id"
+                             placeholder="Select Country" (change)="getstatecode($event)" class="form-control">
+                  </ng-select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="State">State</label>
+                  <ng-select [items]="statesdetails?.states"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="true"
+                             bindLabel="state"
+                             bindValue="stateid"
+                             formControlName="states"
+                             (remove)="statesremove($event)"
+                             placeholder="Select Country" class="form-control">
+                  </ng-select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="city">City</label>
+                  <input class="form-control" formControlName="city" name="reqName" id="city" />
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="label_text_candidate" for="zipcode">Zip Code</label>
+                  <input class="form-control" formControlName="zipcode"
+                         name="reqName" id="zipcode" />
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- <div class="card mb-0">
+           <div class="card-header p-0" id="headingThree">
+             <h2 class="mb-0 text-left" data-toggle="collapse" data-target="#collapseThree">
+               <button type="button" class="btn btn-link collapsed">Client</button>
+               <button type="button" class="btn btn-link collapsed float-right"><i class="fa fa-plus"></i></button>
+             </h2>
+           </div>
+           <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+             <div class="card-body">
+               <div class="form-row">
+                 <div class="form-group col-md-4">
+                   <label class="label_text_candidate" for="clientName">Name</label>
+                   <ng-select [items]="clientNameDetails?.clients"
+                              [multiple]="true"
+                              [closeOnSelect]="false"
+                              [searchable]="true"
+                              bindLabel="clientname"
+                              bindValue="clientcode"
+                              formControlName="clientid"
+                              [virtualScroll]="true"
+
+                              placeholder="Select Client Name" class="form-control">
+                   </ng-select>
+                 </div>
+                 <div class="form-group col-md-4">
+                   <label class="label_text_candidate" for="region">Region</label>
+                   <ng-select [items]="region?.regions"
+                              [multiple]="true"
+                              [closeOnSelect]="false"
+                              [searchable]="true"
+                              bindLabel="region"
+                              formControlName="regionid"
+                              (remove)="reqTyperemove($event)"
+
+                              placeholder="Select region" class="form-control">
+                   </ng-select>
+                 </div>
+               </div>
+               <div class="form-row">
+                 <div class="form-group col-md-4">
+                   <label class="label_text_candidate" for="lob">Client LOB</label>
+                   <ng-select [items]="lobdetails?.lob"
+                              [closeOnSelect]="false"
+                              [searchable]="true"
+                              bindLabel="lob"
+                              formControlName="clientlobid"
+                              (change)="gettheclientlobId($event)"
+                              placeholder="Select lob" class="form-control">
+                   </ng-select>
+                 </div>
+                 <div class="col-md-4">
+                   <label class="label_text_candidate" for="hiringmgrName">Hiring Manager Name</label>
+                   <input class="form-control" formControlName="hiringmanagername" id="hiringmgrName" name="hiringmgrName" />
+
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div> -->
+      </div>
+    </div>
+
+    <div class="final_search">
+      <button class="btn btn-primary float-right" id="apply" type="submit" (click)="onApplyClicked()">Apply</button>
+
+      <button type="button" (click)="resetForm()" class="btn btn-outline-primary float-right reset-search">Reset</button>
+
+    </div>
+  </form>
+
+
+  <hr class="section_separate">
+
+  <div class="form-row">
+
+    <div class="col-md-4">
+      <span class="search_results_count"><span class="results_count_number">{{finalresultcount ? finalresultcount : '0'}}</span>  Results Found</span>
+
+      <span class="search_results_count_viewBy">View by</span>
+    </div>
+    <div class="col-md-6">
+
+      <ul class="nav">
+
+        <li class="nav-item border">
+          <button href="#home" [disabled]="finalresultData?.length > 0" (click)="addPost('candidate')" [ngClass]="{ 'active_tab_for_search': rForm.value.searchtype !== undefined &&  rForm.value.searchtype === 0 }" class="btn-sm btn search_label" data-toggle="tab">Candidate</button>
+        </li>
+        <!--
+        <li class="nav-item border">
+           <a href="#profile" class=" btn-sm btn" data-toggle="tab">Requisition</a>
+         </li>
+         <li class="nav-item border">
+           <a href="#messages" class=" btn-sm btn" data-toggle="tab">Recruiter</a>
+         </li> -->
+
+        <li class="nav-item border">
+          <button href="#client" type="submit" [disabled]="finalresultDataClientValues?.length > 0" (click)="addPost('client')" class="btn-sm btn" [ngClass]="{ 'active_tab_for_search': rForm.value.searchtype !== undefined &&  rForm.value.searchtype === 2 }" data-toggle="tab">
+            Client
+          </button>
+        </li>
+
+
+      </ul>
+    </div>
+
+    <span class="col-md-2 pull-right">
+      <button *ngIf=" isExport == 1" (click)="addPost('excel')" class="btn btn-primary export-excel" type="submit">Export to Excel</button>
+    </span>
+
+  </div>
+
+
+  <hr class="section_separate_search">
+
+  <div class="tab_content_search_results tab-content">
+    <div *ngIf="showLoader" class="text-center p-2">
+      <i class="fa fa-2x fa-spinner fa-spin"></i>
+    </div>
+    <div class="tab-pane fade show active" id="home">
+      <table>
+        <tr>
+          <th>CANDIDATE NAME</th>
+          <th>EMAIL ID</th>
+          <th>PHONE</th>
+          <th>REQUISITION NAME</th>
+          <th>CANDIDATE STATUS</th>
+        </tr>
+        <ng-container *ngFor="let data of finalresultData">
+          <tr class="parent">
+            <td>{{data.candidatename}}</td>
+            <td>{{data.emailid}}</td>
+            <td>{{data.mobilephone}}</td>
+            <td class="textoverflow_requisitionname" (click)="onActionClicked(data.requisitionid)"><a>{{data.requisitionname}}</a></td>
+            <td class="search_table_list">{{data.candidatestatus}}<span><i id="{{candidateid}}" [ngClass]="(candidateid === data.requisitionid+data.candidateid)? 'expand_candidate_results' : 'fa-angle-up'" (click)="expandResults(data.requisitionid,data.candidateid,$event)" class="fa fa-angle-up"></i></span></td>
+          </tr>
+          <tr class="p-0i m-0">
+            <td colspan="3" class="expandresults p-0i">
+
+              <div class="common_arrow" *ngIf="candidateid === data.requisitionid+data.candidateid" [@inOutAnimation]>
+                <div class="reqdetails_inside_row req_details_collapse_candidate">Candidate Journal</div>
+
+                <table class="inside_candidate_row">
+                  <tr>
+                    <th class="expandresults"><div class="reqdetails_inside_row req_details_collapse ">Requisition Details</div></th>
+
+                  </tr>
+
+
+                  <tr id="row1">
+                    <th class="expandresults">Type</th>
+
+                    <td class="expandresults rowresults"> {{data.requisitiontype}} </td>
+                    <th class="caption expandresults">Positions</th>
+                    <td class="rowresults expandresults"><div>{{data.positions}}</div></td>
+                    <th class="caption expandresults">Client Name</th>
+                    <td class="rowresults expandresults"><div>{{data.clientname ? data.clientname: '--' }}</div></td>
+                    <th class="caption expandresults hide_right">Left Voice Mail</th>
+                    <td class="rowresults expandresults hide_right"><div>{{data.leftvoicemail}}</div></td>
+                  </tr>
+                  <tr id="row2">
+                    <th class="expandresults">Category</th>
+
+                    <td class="expandresults rowresults">{{data.category}}</td>
+                    <th class="caption expandresults">Submissions</th>
+                    <td class="rowresults expandresults">{{data.submissions}}</td>
+                    <th class="caption expandresults">Sales Representative</th>
+                    <td class="rowresults expandresults">{{data.salerep ? data.salerep: '--'}}</td>
+                    <th class="caption expandresults hide_right">Talked Over Phone</th>
+                    <td class="rowresults expandresults hide_right"><div>{{data.talkedoverphone}}</div></td>
+                  </tr>
+                  <tr>
+                    <th class="expandresults">Priority</th>
+                    <td class="expandresults rowresults">{{data.prioritytype}}</td>
+                    <th class="caption expandresults">Interviews</th>
+                    <td class="rowresults expandresults">{{data.interviews}}</td>
+                    <th class="caption expandresults">VMO Name</th>
+                    <td class="rowresults expandresults">{{data.vmo ? data.vmo:'--'}}</td>
+                    <th class="caption expandresults hide_right">DNC Active</th>
+                    <td class="rowresults expandresults hide_right">{{data.dncactivate ? data.dncactivate:'--'}}</td>
+                  </tr>
+                  <tr id="row3">
+                    <th class="expandresults">Qualification</th>
+
+                    <td class="expandresults rowresults">{{data.qualification}}</td>
+                    <th class="caption expandresults">Hires</th>
+                    <td class="rowresults expandresults">{{data.hires}}</td>
+                    <th class="caption expandresults">Submitted By</th>
+                    <td class="rowresults expandresults">{{data.submittedby ? data.submittedby:'--'}}</td>
+                    <th class="caption expandresults hide_right">Candidate Outline</th>
+                    <td class="rowresults expandresults hide_right">{{data.candidateoutline}}</td>
+                  </tr>
+                  <tr id="row4">
+                    <th class="expandresults">Received Date</th>
+
+                    <td class="rowresults expandresults">{{data.receiveddate}}</td>
+                    <th class="caption expandresults">Bad Delivery</th>
+                    <td class="rowresults expandresults">{{data.baddelivery}}</td>
+                    <th class="caption expandresults">Submitted On</th>
+                    <td class="rowresults expandresults">{{data.submittedon ? data.submittedon : '-'}}</td>
+                  </tr>
+                  <tr id="row5">
+                    <th class="expandresults">Region</th>
+
+
+                    <td class="rowresults expandresults">{{data.region}}</td>
+                    <th class="expandresults"></th>
+                    <td class="rowresults expandresults"></td>
+                    <th class="caption expandresults">Interviewed On</th>
+                    <td class="rowresults expandresults">{{data.intreviewedon? data.intreviewedon :'-'}}</td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </table>
+      <div class="noresults">
+        <span *ngIf="errorMessage">No Results Found.</span>
+
+      </div>
+      <div class="noresults">
+        <span style="color:red;" *ngIf="errorMessagefromServer">{{errorMessagefromServer}}</span>
+
+      </div>
+
+      <div class="btn-center" *ngIf="finalresultData.length > 0 && loadmore">
+
+        <div *ngIf="showLoaderforloadmore" class="text-center p-2">
+          <i class="fa fa-2x fa-spinner fa-spin"></i>
+        </div>
+        <button class="btn btn-primary btn-center" (click)="loadMoreItems('loadmore','candidate')">Load More</button>
+
+      </div>
+
+    </div>
+    <!--  <div class="tab-pane fade" id="profile">
+         <table>
+           <tr>
+             <th>FIRST NAME</th>
+             <th>LAST NAME</th>
+             <th>EMAIL ID</th>
+             <th>PHONE</th>
+             <th>REQUISITION NAME</th>
+             <th>CANDIDATE STATUS</th>
+           </tr>
+         </table>
+       </div>
+       <div class="tab-pane fade" id="messages">
+         <table>
+           <tr>
+             <th>FIRST NAME</th>
+             <th>LAST NAME</th>
+             <th>EMAIL ID</th>
+             <th>PHONE</th>
+             <th>REQUISITION NAME</th>
+             <th>CANDIDATE STATUS</th>
+           </tr>
+         </table>
+       </div> -->
+    <div class="tab-pane fade" id="client">
+      <table>
+        <tr>
+          <th>CLIENT NAME</th>
+          <th>REQUISITION COUNT</th>
+          <th>POSITIONS</th>
+          <th>SUBMISSIONS</th>
+          <th>BAD DELIVERY</th>
+          <th>INTERVIEWS</th>
+          <th>HIRES</th>
+          <th>&nbsp;</th>
+        </tr>
+        <ng-container *ngFor="let data of finalresultDataClientValues">
+          <tr class="parent" id="row123">
+            <td>{{data.clientname}}</td>
+            <td>{{data.reqcount}}</td>
+            <td>{{data.positions}}</td>
+            <td>{{data.submissions}}</td>
+            <td>-</td>
+            <td>{{data.interviews}}</td>
+            <td class="search_table_list" colspan="2">
+              {{data.hires}}
+              <span><i id="{{clientId}}" [ngClass]="(clientId === data.clientid)? 'expand_candidate_results' : 'fa-angle-up'" (click)="expandresultsClient(data.clientid,$event)" class="fa fa-angle-up"></i></span>
+            </td>
+
+
+          </tr>
+          <tr class="p-1">
+            <td colspan="100%" class="p-0">
+              <div *ngIf="clientId === data.clientid" class="nestedgrid-boxshadow p-0 m-2">
+                <table>
+                  <tr class="expandresultsclient">
+                    <th class="expandresultsclient">CANDIDATE NAME</th>
+                    <th class="expandresultsclient">EMAIL ID</th>
+                    <th class="expandresultsclient">INTERVIEW ON</th>
+                    <th class="expandresultsclient">SUBMITTED ON</th>
+                    <th class="expandresultsclient">RECEIVED DATE</th>
+                    <th class="expandresultsclient">REQUISITION NAME</th>
+                    <th class="expandresultsclient">REQUISITION REGION</th>
+                    <th class="expandresultsclient">SUBMITTED BY</th>
+
+                  </tr>
+                  <tr *ngFor="let client of data.clientresult">
+                    <td>{{client.candidatename}}</td>
+                    <td>{{client.emailid}}</td>
+                    <td>{{client.interviewedon? client.interviewedon : '-'}}</td>
+                    <td>{{client.submittedon ? client.submittedon : '-'}}</td>
+                    <td>{{client.receiveddate ? client.receiveddate : '-'}}</td>
+                    <td class="textoverflow_requisitionname" (click)="onActionClicked(client.requisitionid)"><a>{{client.requisitionname}}</a></td>
+                    <td>{{client.region ? client.region : '-'}}</td>
+                    <td>{{client.submittedby ? client.submittedby:'-'}}</td>
+
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+
+
+        </ng-container>
+
+      </table>
+      <div class="noresults">
+        <span *ngIf="errorMessage">No results for client search.</span>
+
+      </div>
+      <div class="noresults">
+        <span style="color:red;" *ngIf="errorMessagefromServer">{{errorMessagefromServer}}</span>
+
+      </div>
+      <div class="btn-center" *ngIf="finalresultobjectClient?.length > 0 && loadmore">
+
+        <div *ngIf="showLoaderforloadmore" class="text-center p-2">
+          <i class="fa fa-2x fa-spinner fa-spin"></i>
+        </div>
+        <button class="btn btn-primary btn-center" (click)="loadMoreItems('loadmore','client')">Load More</button>
+
+      </div>
+    </div>
+  </div>
+
+  
+
+</div>
+
+
+
+

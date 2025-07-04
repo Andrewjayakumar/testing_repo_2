@@ -1,0 +1,219 @@
+<form #recRightForm="ngForm" class=" form-group">
+  <div *ngIf="mode == 'add'" class="row m-2">
+
+    <button class="ml-2 mr-2 col-md-6 btn btn-outline-primary"
+            [disabled]="!(isClientFormValid && recRightForm.valid)"
+            (click)="createRequisition()" name="btnCreateRec">
+      Create Requisition
+    </button>
+
+    <button class="ml-2 col-md-5 btn btn-outline-primary" (click)="clearRecFormDetails( recRightForm, 'recdetail')" name="btnReset">Reset</button>
+
+
+
+  </div>
+
+
+  <div class="row m-2 p-2">
+    <button *ngIf="activePageName=='reqverification'" class="col-md-12 btn btn-outline-primary text-center mb-2" (click)="onAdvancedSearchClicked()">Back to Requisition Verification</button>
+    <button class="col-md-12 btn btn-outline-primary text-center" (click)="onCancelClicked()">Cancel</button>
+
+  </div>
+  <div class="row mb-2 bottom-separator"></div>
+
+  <!-- Controls from Here-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="ui-control-block">
+        <label>
+          Employment Type
+        </label>
+        <sup class="text-danger font-weight-bold">*</sup>
+      </div>
+      <div class="col-12 mt--1 p-0">
+        <span *ngFor="let option of projectTypeList">
+          <input class="m-2" type="radio" name="projecttype" #projecttype="ngModel" required [value]="option.id"
+                 [attr.id]="'emptype'+option.id" [(ngModel)]="datamodel.projecttypeid" (change)="onEmpTypeChanged($event, option)">
+          <label [attr.for]="'emptype'+option.id">{{option.projecttype}}</label>
+        </span>
+        <div class="ml-2 mt--1">
+          <small *ngIf="!datamodel.projecttypeid && nextClicked"
+                 class="fa fa-exclamation text-danger font-size-small">This field is required</small>
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="showSkipBillrate" class="col-md-5 pr-0">
+      <div class="ui-control-block">
+        <label>
+          Skip Bill Rate
+        </label>
+      </div>
+      <div class="col-12 d-inline-flex mt--1 ml-2 p-0">
+        <input class="mt--1" type="radio" name="skipbillrate" #skipbillrate="ngModel" [(ngModel)]="datamodel.isbillrateskip" [value]="true" />
+        <label class="ml-2">Yes</label>
+        <input class="ml-4 mt--1" type="radio" name="skipbillrate" #skipbillrate="ngModel" [(ngModel)]="datamodel.isbillrateskip" [value]="false" />
+        <label class="ml-2">No</label>
+      </div>
+    </div>
+  
+  </div>
+
+
+  <div *ngIf="!datamodel.isbillrateskip">
+    <div class="row">
+      <div class="col-md-10 ui-control-block">
+        <label>
+          Bill Rate Type
+        </label>
+      </div>
+      <div class="mt--1  col-md-10">
+        <input class="m-2 radio" type="radio" name="billratetype" [value]="'hourly'"
+               id="brhourly" [(ngModel)]="datamodel.billratetype">
+        <label for="brhourly">Hourly</label>
+        <div class="d-inline-flex align-bottom" *ngIf="datamodel.projecttypeid==1">
+          <input class="m-2 radio" type="radio" name="billratetype" [value]="'monthly'"
+                 id="brmonthly" [(ngModel)]="datamodel.billratetype">
+          <label for="brmonthly" class="mt-1">Monthly</label>
+          <input class="m-2 radio" type="radio" name="billratetype" [value]="'yearly'"
+                 id="bryearly" [(ngModel)]="datamodel.billratetype">
+          <label for="bryearly" class="mt-1">Yearly</label>
+        </div>
+      </div>
+      </div>
+    <div class="mb-2">
+      <div class=" row col-9">
+        <div class="ui-control-block ">
+          <label>
+            Bill Rate<sup *ngIf="mode=='update'" class="text-danger font-weight-bold">*</sup>
+          </label>
+        </div>
+        <div class="col-md-12 ui-control-block pl-0 mt--1 ">
+          <input *ngIf="datamodel.projecttypeid==1" type="number" min="0.01" step="0.01" name="rate" [(ngModel)]="datamodel.billrate" #rate="ngModel" [required]="mode==='update'">
+          <input *ngIf="datamodel.projecttypeid==2 || datamodel.projecttypeid==3" type="number" min="0.01" step="0.01" (blur)="validateBillRateDecimal()" name="rate" [(ngModel)]="datamodel.billrate" #rate="ngModel" [required]="mode==='update'">
+          <small *ngIf="((mode == 'update') && (!datamodel.billrate && nextClicked))"
+                 class="font-size-small text-danger fa fa-exclamation ml-2"> This field is required.</small>
+          <small *ngIf="(datamodel.projecttypeid==2 || datamodel.projecttypeid==3) && datamodel.billrate && billrateInvalidMsg"
+                 class="font-size-small text-danger"> {{billrateInvalidMsg}}</small>
+        </div>
+      </div>
+      <div class="row col-11">
+        <div class="ui-control-block">
+          <label class="rec-label">Currency</label>
+          </div>
+        <div class="col-md-12 d-inline-block pl-0 mt--1">
+
+          <input class="m-2 radio" type="radio" name="currencyid" [value]="1" id="dollarUS" [(ngModel)]="datamodel.currencyid">
+          <label for="dollarUS">USD</label>
+          <input class="m-2 radio" type="radio" name="currencyid" [value]="2" id="dollarCanada" [(ngModel)]="datamodel.currencyid">
+          <label for="dollarCanada">CAD</label>
+          <input class="m-2 radio" type="radio" name="currencyid" [value]="3" id="peso" [(ngModel)]="datamodel.currencyid">
+          <label for="dollarCanada">PESO</label>
+          <input class="m-2 radio" type="radio" name="currencyid" [value]="4" id="inr" [(ngModel)]="datamodel.currencyid">
+          <label for="dollarCanada">INR</label>
+        </div>
+        </div>
+
+      </div>
+  
+   </div>
+
+
+  <div class="row mt-2">
+    <div class="col-md-12">
+      <label class="start-date">
+        Start Date
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <label *ngIf="datamodel.projecttypeid===2 || datamodel.projecttypeid===3" class="end-date">
+        End Date
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+   
+
+    </div>
+    <div class="input-group col-md-5 pr-0" *ngIf="mode == 'add'">
+      <input class="form-control" id="startdateField" [(ngModel)]="startDate" (ngModelChange)="StartDateChanged()"
+             [startDate]="currentDate" placeholder="yyyy-mm-dd" [required]="true" [disabled]="mode == 'update'" (focus)="sd.toggle()"
+             name="startdate" ngbDatepicker #sd="ngbDatepicker">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary fa fa-calendar" (click)="sd.toggle()" type="button"></button>
+      </div>
+      <small *ngIf="(startDate && !startDate.day) && (sd.dirty || sd.touched) || (startDate && !startDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1">This field is required</small>
+
+    </div>
+    <div class="input-group col-md-5 pr-0" *ngIf="mode == 'update'">
+      <input class="form-control" id="startdateField" [(ngModel)]="startDate" (ngModelChange)="StartDateChanged()"
+             [startDate]="currentDate" placeholder="yyyy-mm-dd" [required]="true" [disabled]="mode == 'update'" (focus)="sd.toggle()"
+             name="startdate" ngbDatepicker #sd="ngbDatepicker">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary fa fa-calendar" type="button"></button>
+      </div>
+      <small *ngIf="(startDate && !startDate.day) && (sd.dirty || sd.touched) || (startDate && !startDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1">This field is required</small>
+
+    </div>
+
+    <div *ngIf="(datamodel.projecttypeid===2 || datamodel.projecttypeid===3) && mode == 'add'" class="col-md-5 pr-0">
+
+      <div class="input-group">
+        <input class="form-control" id="enddatefeild" [(ngModel)]="endDate" [disabled]="mode == 'update'" (ngModelChange)="EndDateChanged()"
+               [minDate]="startDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="ed.toggle()"
+               name="endDate" ngbDatepicker #ed="ngbDatepicker" readonly>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary fa fa-calendar" (click)="ed.toggle()" type="button"></button>
+        </div>
+        <small *ngIf="(endDate && !endDate.day) && (ed.dirty || ed.touched) || (endDate && !endDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1" [hidden]="ed.valid">This field is required</small>
+
+      </div>
+    </div>
+
+    <div *ngIf="(datamodel.projecttypeid===2 || datamodel.projecttypeid===3) && mode == 'update'" class="col-md-5 pr-0">
+
+      <div class="input-group">
+        <input class="form-control" id="enddatefeild" [(ngModel)]="endDate" [disabled]="mode == 'update'" (ngModelChange)="EndDateChanged()"
+               [minDate]="startDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="ed.toggle()"
+               name="endDate" ngbDatepicker #ed="ngbDatepicker" readonly>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary fa fa-calendar" type="button"></button>
+        </div>
+        <small *ngIf="(endDate && !endDate.day) && (ed.dirty || ed.touched) || (endDate && !endDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1" [hidden]="ed.valid">This field is required</small>
+
+      </div>
+    </div>
+    <div *ngIf="mode == 'update'" class="col-md-7 pr-0">
+      <label  class="revend-date">
+        Revised start Date
+        <sup class="text-danger font-weight-bold">*</sup>
+      </label>
+      <div class="input-group">
+        <input class="form-control" id="revstartfeild" [(ngModel)]="revisedStartDate" [disabled]="mode == 'update'" (ngModelChange)="EndDateChanged()"
+               [minDate]="startDate" placeholder="yyyy-mm-dd" [required]="true" (focus)="rsd.toggle()"
+               name="revstartfeild" ngbDatepicker #rsd="ngbDatepicker" readonly>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary fa fa-calendar" type="button"></button>
+        </div>
+        <small *ngIf="(startDate && !startDate.day) && (rsd.dirty || rsd.touched) || (startDate && !startDate.day && nextClicked)" class="fa fa-exclamation text-danger figure-caption p-1" [hidden]="ed.valid">This field is required</small>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div *ngIf="(datamodel.projecttypeid == 2 || datamodel.projecttypeid == 3) && durationDiffWeeks" class="row m-2 mt-4">
+    <div class="col-md-6 pl-0">
+      <label class="rec-label pl-1">Duration</label>
+      <div class="col-md-10 pl-1">
+        <label>{{durationDiffWeeks}}&nbsp;weeks&nbsp;and&nbsp;{{durationDiffDays}}&nbsp;days</label>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <button class="btn btn-primary font-size-small" (click)="acaBtnClicked()">Benefit Summaries</button>
+    </div>
+
+  </div>
+
+
+
+</form>

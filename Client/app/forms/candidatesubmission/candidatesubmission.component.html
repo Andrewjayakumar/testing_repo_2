@@ -1,0 +1,98 @@
+<div class="box-shadow">
+  <div class="modal-header w-100 p-1 pl-2i ">
+    <h5 class="text-primary">
+      SUBMIT CANDIDATE
+    </h5>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.dismiss('user click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+ 
+
+  <form [formGroup]="parentForm">
+    <div class="modal-body p-0 pb-1 overflow-auto" style="max-height: 445px;">
+
+      <div class="d-inline-flex w-100">
+        <div class="col-md-4 cosection">
+          <label class="text-primary text-uppercase"> Candidate Outline</label>
+          <app-candidateoutline #coref [candidateid]="candidateid" [requisitionid]="requisitionid" [countryid]="countryid" (COfillChange)="updatePercentage($event)" [isShadow]=shadowValue [isOfficeEmployee]=officeEmpValue></app-candidateoutline>  <!---->
+        </div>
+        <div class="col-md-8">
+          <app-checklist #checklistref [candidateid]="candidateid" [requisitionid]="requisitionid" (country)="UpdateCountry($event)" [pageerrors]="ErrorMessage" (change)="shadowValueChange($event)" (officeEmpVal)="officeEmpValChange($event)" ></app-checklist>
+        </div>
+      </div>
+  
+
+    </div>
+    <div class="modal-footer " style="padding:0.5rem;">
+     
+      <div *ngIf="!officeEmpValue" >
+        <!-- <small *ngIf="currentCOFilledPercentage<80"> At least 80% of CO needs to be filled to submit</small> -->
+        <input type="submit" role="button" class="btn btn-primary pull-right"  (click)="OnSubmitClicked(event)" value="Submit"/>
+      </div>
+
+      <div *ngIf="officeEmpValue" >
+        <input type="submit" role="button" class="btn btn-primary pull-right" (click)="OnSubmitClicked(event)" value="Submit"/>
+      </div>
+
+    </div>
+
+  </form>
+  
+  <!-- Submit to Client Popup template  starts-->
+  <!-- <ng-container *ngTemplateOutlet="popupTemplate"></ng-container>
+  <ng-template  #popupTemplate>
+  <div class="popup-container" *ngIf="showSubmitToClientPopup">
+   
+    <div class="popup-content" >
+      <button class="close-button" 
+              (click)="closePopup()" 
+              id="submitToClientCloseButton">&times;</button>
+
+      <h4 class="submit-heading" >Submit to Client</h4>
+
+      <p class="submit-message">Do you want to mark the candidate as submitted to client?</p>
+      
+      <div  class="button-content" *ngIf="showButtons">
+
+        <button class="btn btn-primary button-yes" 
+                id="submitToClientYesButton">Yes</button>
+
+        <button class="btn btn-outline-primary button-no" 
+                (click)="closePopup()" 
+                id="submitToClientNoButton">No</button>
+      
+      </div>
+      <div class="submitted-line" [ngClass]="{'show-line': !showButtons}">
+        {{message}}
+      </div>
+      </div>
+  </div>
+
+  </ng-template>-->
+ <!-- Submit to Client Popup template  ends-->
+
+
+<!--  
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-primary" (click)="d('ok')">OK</button>
+  </div>
+</ng-template>  -->

@@ -1,0 +1,50 @@
+<div class="row" *ngIf="actionType==''">
+  <ng-container *ngFor="let ch of control.children">
+    <app-dynamicformcontrolls [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access" class="col-md-{{ch.width}} {{ch.colclass}}"></app-dynamicformcontrolls>
+  </ng-container>
+</div>
+
+<div class="row" *ngIf="actionType=='hide'">
+  <ng-container *ngFor="let ch of control.children">
+    <ng-container *ngIf="!isHidden(ch)">
+      <app-dynamicformcontrolls [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access" class="col-md-{{ch.width}} {{ch.colclass}}"></app-dynamicformcontrolls>
+    </ng-container>
+  </ng-container>
+</div>
+
+<div class="row" *ngIf="actionType=='show'">
+  <ng-container *ngFor="let ch of control.children">
+      <app-dynamicformcontrolls [AuthService]="AuthService" *ngIf="isVisible(ch)" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access" class="col-md-{{ch.width}} {{ch.colclass}}"></app-dynamicformcontrolls>
+  </ng-container>
+</div>
+
+<div class="row" *ngIf="actionType=='disable'">
+  <ng-container *ngFor="let ch of control.children">
+    <div style="position: relative;" class="col-md-{{ch.width}}">
+      <div style="position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    opacity: 0.3;
+    cursor: not-allowed" [hidden]="!isDisabled(ch)"></div>
+      <div class="row">
+        <app-dynamicformcontrolls [disabled]="isDisabled(ch)" [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access" class="col-md-12"></app-dynamicformcontrolls>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="row" *ngIf="actionType=='enable'">
+  <ng-container *ngFor="let ch of control.children">
+    <div class="col-md-{{ch.width}}" style="position: relative;">
+      <div style="position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    opacity: 0.3;" [hidden]="isEnable(ch)"></div>
+      <div class="row">
+        <app-dynamicformcontrolls [disabled]="!isEnable(ch)" [AuthService]="AuthService" [control]="ch" [formGroup]="formGroup" [data]="data" [access]="access" class="col-md-12"></app-dynamicformcontrolls>
+      </div>
+    </div>
+  </ng-container>
+</div>

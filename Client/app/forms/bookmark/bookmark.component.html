@@ -1,0 +1,4 @@
+<button type="button" placement="{{control.tooltipplacement}}" ngbTooltip="{{control.tooltip}}"
+  class="btn {{isbookmarked() ? control.coutomClassafterbookmark : control.coutomClassbeforebookamrk}} btn-{{control.buttontype}} btn-{{control.size}}" 
+(click)="!isbookmarked() ? addaction() : removebookmark()"><i *ngIf="control.WebIcon" 
+class="{{isbookmarked() ? control.iconafterbookmark : control.iconbeforebookmark}} {{control.label ? 'mr-2' : ''}}"></i>{{control.label}}</button>

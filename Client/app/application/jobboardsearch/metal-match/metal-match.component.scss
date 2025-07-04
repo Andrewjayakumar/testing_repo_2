@@ -1,0 +1,32 @@
+$primary: #1976d2;
+
+label {
+  color: $primary !important;
+  font-size: small !important;
+  margin-bottom: 0rem !important;
+  margin-top: 0.5rem;
+}
+
+.filterButton {
+    margin : 1% 0;
+    width : 4rem;
+    border-radius : 4px;
+    float : right;
+}
+
+.notifyBadge {
+    line-height : normal !important;
+    text-align : right !important;
+    font-size : 14px !important;
+}
+
+.filtersicon {
+  font-size: 15px;
+  font-weight: 500;
+  margin-left: 16px;
+  margin-top: 7px;
+}
+
+.filters {
+  margin-top: -7px;
+}

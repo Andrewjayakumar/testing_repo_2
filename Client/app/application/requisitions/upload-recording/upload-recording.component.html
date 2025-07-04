@@ -1,0 +1,144 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Upload Tech Recording</h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="container mb-5">
+    <form #form="ngForm">
+      <div class="form-row">
+        <!-- Switch to Upload Video -->
+        <div
+          class="col-md-3 mb-3 alignSwitchButton"
+          [ngClass]="{
+            'justify-content-between': position == 'justify',
+            'mr-5': position == 'justify'
+          }"
+        >
+          <label
+            [attr.for]="'uploadVideo'"
+            class="checkbox-label mt-1 mr-1 mb-1"
+            innerHTML="Upload Video"
+            >Upload Video</label
+          >
+          <div class="custom-switch">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              [attr.id]="'uploadVideo'"
+              [(ngModel)]="isUploadVideo"
+              (click)="onStateChanged($event)"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <label
+              [attr.for]="'uploadVideo'"
+              class="custom-control-label"
+            ></label>
+          </div>
+        </div>
+
+        <div *ngIf="isUploadVideo" class="col-md-12 mb-3">
+          <input
+            type="file"
+            accept="video/mp4"
+            id="file"
+            class="file-input"
+            (change)="handleFileInput($event.target.files)"
+            #fileUpload
+          />
+ 
+
+          <div class="file-upload">
+
+            <button
+              color="primary"
+              class="upload-btn col-md-12 selectFileBtn"
+              (click)="fileUpload.click()"
+            >
+            {{ fileName || "Select file" }}</button>
+          </div>
+        </div>
+
+        <div *ngIf="!isUploadVideo" class="col-md-12 mb-3">
+          <label class="label mandatory title" for="URLlink"
+            >Provide link of the Video</label
+          >
+          <input
+            class="form-control"
+            type="text"
+            name="URLlink"
+            #uploadLink="ngModel"
+            [(ngModel)]="link"
+            placeholder="URL of the video"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <label class="label mandatory title" for="URLNotes">Notes</label>
+          <input
+            class="form-control"
+            type="text"
+            name="URLNotes"
+            #uploadNotes="ngModel"
+            [(ngModel)]="notes"
+            placeholder="Notes"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      <div *ngIf="(displayMessage || errorMessage || warningMessage)"  class="col-md-12 mb-3">
+        <div *ngIf="displayMessage"  class="alert alert-success">
+          <strong>{{displayMessage}}</strong>
+        </div>
+
+        <div *ngIf="errorMessage"  class="alert alert-danger">
+          <strong>{{errorMessage}}</strong>
+        </div>
+
+        <div *ngIf="warningMessage" class="alert alert-warning">
+          <strong>{{warningMessage}}</strong>
+        </div>
+      </div>
+
+      <div *ngIf="!(isUploading || displayMessage || errorMessage || warningMessage)">
+        <button
+          class="btn btn-primary pull-left mr-2"
+          type="submit"
+          (click)="uploadFile()"
+          [disabled]="!((fileToUpload && notes) || (link && notes))"
+        >
+          Attach
+        </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          (click)="closePopup()"
+        >
+          Cancel
+        </button>
+      </div>
+
+      <div *ngIf="isUploading">
+        <button class="btn btn-primary loader" type="button" disabled="">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+
+<!-- 
+            [(ngModel)]="videoFile"
+            [ngModelOptions]="{ standalone: true }"
+ -->

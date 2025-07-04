@@ -1,0 +1,354 @@
+<div class="parent-heading">
+  <h5 class="pageheading"></h5>
+</div>
+
+<div class="parent-tab">
+
+  <div *ngIf="showRecruitersList" class="d-inline-flex w-100">
+
+    <div class="col-md-4 right-separator">
+      <div class=" col-md-12 pr-0 input-group searchBox">
+        <input autocomplete="off" class="form-control py-2 border-right-0 border searchInput" type="search" value="search"
+               id="example-search-input" placeholder="Search Recruiter" [(ngModel)]="searchText" />
+        <i *ngIf="searchText && searchText.length > 0" class="fa fa-times clearIcon" (click)="clearText()"></i>
+        <span class="input-group-append searchIcon">
+          <div class="input-group-text bg-transparent searchBorder" (click)="FindRecruiters()" >
+            <i class="fa fa-search searchIcon"></i>
+          </div>
+        </span>
+      </div>
+
+      <div *ngIf="showLoader" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div>
+
+    
+
+      <div *ngIf="!showLoader && recruiters && recruiters?.length > 0" class="col-md-12 scrollContent">
+        <div *ngFor="let recruiter of recruiters" class="recruiterCard" [ngClass]="{
+            'current-selection':
+            selectedRecruiter.id && selectedRecruiter.id == recruiter.recruiterid
+          }">
+          <div class="ellipsisRecruiter pb-0">
+            <a class="col-8 recruiterName" (click)="getAssignedCandidates(recruiter); selectedRecruiter.id = recruiter.recruiterid">
+              <span class="name">
+                {{ recruiter.recruitername }} <br>
+
+                <p class="recruiterEmail">{{ recruiter.recruitername }}</p>
+              </span>
+            </a>
+            <label class="col-4 recruiterLabel pull-right">
+              <span class="pull-right numbers">
+                <p class="currentCount mb-0">{{ recruiter.assigncount }}</p>
+              </span>
+            </label>
+
+
+            <div class="col-12 deleteBtn">
+              <button [ngClass]="{'freeze-completed':recruiter.completed}" class="col-4 pull-left btn btn-danger btn-xs mb-0" id="closethedm" title="Delete Recruiter"
+              (click)="deleteRecruiter(recruiter); selectedRecruiter.id = recruiter.recruiterid">Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="noRecordsError" *ngIf="!recruiters || recruiters.length == 0">
+          <i class="font-weight-light"> No recruiters found !!</i>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Show assign according to the Demand Plan selected-->
+
+    <div class="col-md-8 p-0">
+      <div *ngIf="recruitername" class="col-md-4 text-truncate">
+        <label class="selectedfoldername" title="{{ selectedRecruiter.id }}">{{ selectedRecruiter.id }}</label>
+      </div>
+      <section class="project-tab" id="tabs">
+        <div class="container mt--3" id="candidatessection">
+
+
+          <div class="col-md-12 p-0 ">
+            <nav>
+
+              <div class="nav nav-tabs nav-fill" role="tablist">
+                <a class="nav-item nav-link" id="candidatesTabHeader" data-toggle="tab" href="#assign-tab" role="tab" aria-controls="assign-tab" aria-selected="true" [ngClass]="{ 'active' : currentActiveTab ==='assign' }" (click)="LoadApprovedCandidates();currentActiveTab='assign'">Assigned Candidates</a> 
+                <!--<a class="nav-item nav-link" data-toggle="tab" href="#contribution-tab" role="tab" aria-controls="contribution-tab" aria-selected="false" [ngClass]="{ 'active' : currentActiveTab ==='contribution' }"  (click)="currentActiveTab='contribution'">Contribution</a>-->
+                <a class="nav-item nav-link" id="pendingApprovalTabHeader" data-toggle="tab" href="#pendingapproval-tab" role="tab" aria-controls="pendingapproval-tab" aria-selected="false" [ngClass]="{ 'active' : currentActiveTab ==='pending' }" (click)="LoadPendingCandidates(); currentActiveTab='pending'">Pending Assignment </a>
+
+                <button *ngIf="selectedCandidates && selectedCandidates.length > 0" class="btn btn-link dropdown-toggle fa fa-ellipsis-v fa-2x pull-right" type="button" id="actionbuttonsEllipsis" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false"></button>
+
+                <div class="dropdown-menu" aria-labelledby="actionbuttonsEllipsis">
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='pending'" (click)="assignCandidate()">Assign Candidate</a>
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='assign'" (click)="reassignCandidates()">Reassign Candidate</a>
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='assign'" (click)="removeCandidates()">Remove Candidate</a>
+                </div>
+              </div>
+
+            </nav>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane" id="assign-tab" role="tabpanel" aria-labelledby="assign-tab" [ngClass]="(currentActiveTab ==='assign' ) ? 'show active' : 'fade'">
+                  <div *ngIf="loaderforcandidates" class="text-center p-2">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                  </div>
+                  <div class="noRecordsError" *ngIf="!assignedCandidates || assignedCandidates.length == 0">
+                    <i class="font-weight-light"> No Candidates found !!</i>
+                  </div>
+                  <div class="row metal-card-row mt-2">
+                    <div class="col-4 metal-card-col" *ngFor="let candidateObj of assignedCandidates">
+                      <div class="d-block h-100">
+                        <div class="card mb-0 h-100 custom-action-hover">
+                          <app-candidate-card [candidate]="candidateObj"
+                                              [pagename]="'campaign'" [showCheckbox]="true" (actionchecked)="onCandidateSelected($event)">
+                          </app-candidate-card>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class=" d-flex justify-content-center mt-3" *ngIf="totalnumberofrecords > 0">
+                    <ngb-pagination [collectionSize]="totalnumberofrecords" [pageSize]="pagesize" [(page)]="activePageindex" [maxSize]="4"
+                                    [ellipses]="false" [boundaryLinks]="true" (pageChange)="onActiveCandidatesPageChanged($event)" size="sm"></ngb-pagination>
+                  </div>
+
+                </div>
+
+                <div class="tab-pane fade" id="pendingapproval-tab" role="tabpanel" [ngClass]="(currentActiveTab ==='pending' ) ? 'show active' : 'fade'">
+
+
+                  <div *ngIf="loaderforcandidates" class="text-center p-2">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                  </div>
+                  <div class="noRecordsError" *ngIf="!pendingCandidates || (pendingCandidates && pendingCandidates.length) == 0">
+                    <i class="font-weight-light"> No Candidates found !!</i>
+                  </div>
+                  <div class="row metal-card-row mt-2">
+                    <div class="col-md-4  metal-card-col" *ngFor="let candidateObj of pendingCandidates">
+                      <div class="d-block h-100">
+                        <div class="card mb-0 h-100 custom-action-hover">
+                          <app-candidate-card [candidate]="candidateObj"
+                                              [showCheckbox]="true" (actionchecked)="onCandidateSelected($event)">
+                          </app-candidate-card>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-center mt-3" *ngIf="pendingCandidatesCountfromSelectedDp > 0">
+                    <ngb-pagination [collectionSize]="pendingCandidatesCountfromSelectedDp" [pageSize]="pagesize" [(page)]="pendingPageindex" [maxSize]="4"
+                                    [ellipses]="false" [boundaryLinks]="true" (pageChange)="onPendingApprovalPageChanged($event)" size="sm"></ngb-pagination>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div *ngIf="!showRecruitersList" class="d-inline-flex w-100">
+
+    <!-- Show assign according to the Demand Plan selected-->
+
+    <div class="col-md-12 p-0">
+      <div *ngIf="recruitername" class="col-md-4 text-truncate">
+        <label class="selectedfoldername" title="{{ selectedRecruiter.id }}">{{ selectedRecruiter.id }}</label>
+      </div>
+      <section class="project-tab" id="tabs">
+        <div class="container mt--3" id="candidatessection">
+
+
+          <div class="col-md-12 p-0 ">
+            <nav>
+
+              <div class="nav nav-tabs nav-fill" role="tablist">
+                <a class="nav-item nav-link" id="candidatesTabHeader" data-toggle="tab" href="#assign-tab" role="tab" aria-controls="assign-tab" aria-selected="true" [ngClass]="{ 'active' : currentActiveTab ==='assign' }" (click)="LoadApprovedCandidates();currentActiveTab='assign'">Assigned Candidates</a> 
+                <!--<a class="nav-item nav-link" data-toggle="tab" href="#contribution-tab" role="tab" aria-controls="contribution-tab" aria-selected="false" [ngClass]="{ 'active' : currentActiveTab ==='contribution' }"  (click)="currentActiveTab='contribution'">Contribution</a>-->
+                <a class="nav-item nav-link" id="pendingApprovalTabHeader" data-toggle="tab" href="#pendingapproval-tab" role="tab" aria-controls="pendingapproval-tab" aria-selected="false" [ngClass]="{ 'active' : currentActiveTab ==='pending' }" (click)="LoadPendingCandidates(); currentActiveTab='pending'">Pending Assignment </a>
+
+                <button *ngIf="selectedCandidates && selectedCandidates.length > 0" class="btn btn-link dropdown-toggle fa fa-ellipsis-v fa-2x pull-right" type="button" id="actionbuttonsEllipsis" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false"></button>
+
+                <div class="dropdown-menu" aria-labelledby="actionbuttonsEllipsis">
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='pending'" (click)="assignCandidate()">Assign Candidate</a>
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='assign'" (click)="reassignCandidates()">Reassign Candidate</a>
+                  <a class="dropdown-item" *ngIf="currentActiveTab ==='assign'" (click)="removeCandidates()">Remove Candidate</a>
+                </div>
+              </div>
+
+            </nav>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane" id="assign-tab" role="tabpanel" aria-labelledby="assign-tab" [ngClass]="(currentActiveTab ==='assign' ) ? 'show active' : 'fade'">
+                  <div *ngIf="loaderforcandidates" class="text-center p-2">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                  </div>
+                  <div class="noRecordsError" *ngIf="!assignedCandidates || assignedCandidates.length == 0">
+                    <i class="font-weight-light"> No Candidates found !!</i>
+                  </div>
+                  <div class="row metal-card-row mt-2">
+                    <div class="col-3 metal-card-col" *ngFor="let candidateObj of assignedCandidates">
+                      <div class="d-block h-100">
+                        <div class="card mb-0 h-100 custom-action-hover">
+                          <app-candidate-card [candidate]="candidateObj"
+                                              [pagename]="'campaign'" [showCheckbox]="true" (actionchecked)="onCandidateSelected($event)">
+                          </app-candidate-card>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class=" d-flex justify-content-center mt-3" *ngIf="totalnumberofrecords > 0">
+                    <ngb-pagination [collectionSize]="totalnumberofrecords" [pageSize]="pagesize" [(page)]="activePageindex" [maxSize]="4"
+                                    [ellipses]="false" [boundaryLinks]="true" (pageChange)="onActiveCandidatesPageChanged($event)" size="sm"></ngb-pagination>
+                  </div>
+
+                </div>
+
+                <div class="tab-pane fade" id="pendingapproval-tab" role="tabpanel" [ngClass]="(currentActiveTab ==='pending' ) ? 'show active' : 'fade'">
+
+
+                  <div *ngIf="loaderforcandidates" class="text-center p-2">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                  </div>
+                  <div class="noRecordsError" *ngIf="!pendingCandidates || (pendingCandidates && pendingCandidates.length) == 0">
+                    <i class="font-weight-light"> No Candidates found !!</i>
+                  </div>
+                  <div class="row metal-card-row mt-2">
+                    <div class="col-md-3  metal-card-col" *ngFor="let candidateObj of pendingCandidates">
+                      <div class="d-block h-100">
+                        <div class="card mb-0 h-100 custom-action-hover">
+                          <app-candidate-card [candidate]="candidateObj"
+                                              [showCheckbox]="true" (actionchecked)="onCandidateSelected($event)">
+                          </app-candidate-card>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-center mt-3" *ngIf="pendingCandidatesCountfromSelectedDp > 0">
+                    <ngb-pagination [collectionSize]="pendingCandidatesCountfromSelectedDp" [pageSize]="pagesize" [(page)]="pendingPageindex" [maxSize]="4"
+                                    [ellipses]="false" [boundaryLinks]="true" (pageChange)="onPendingApprovalPageChanged($event)" size="sm"></ngb-pagination>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12">
+      <ng-select
+        [items]="recruiterdetails | async"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="true"
+        bindLabel="recruiter"
+        bindValue="recruiter"
+        [virtualScroll]="true"
+        placeholder="Search Name Here"
+        class="form-control"
+        [(ngModel)]="recruiterClear"
+        [ngModelOptions]="{ standalone: true }"
+        [typeahead]="recruiterinput$"
+        [loading]="isRecruiterLoading"
+      >
+      </ng-select>
+
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>
+
+
+<ng-template #content2 let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12">
+      <ng-select
+        [items]="recruiterdetails | async"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="true"
+        bindLabel="recruiter"
+        bindValue="recruiter"
+        [virtualScroll]="true"
+        placeholder="Search Name Here"
+        class="form-control"
+        [(ngModel)]="reassignRecruiter"
+        [ngModelOptions]="{ standalone: true }"
+        [typeahead]="recruiterinput$"
+        [loading]="isRecruiterLoading"
+      >
+      </ng-select>
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>
+
+<ng-template #content3 let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok')">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>

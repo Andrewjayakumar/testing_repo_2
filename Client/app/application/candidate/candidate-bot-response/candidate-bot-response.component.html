@@ -1,0 +1,153 @@
+
+<div class="modal-header">
+  <h6 class="modal-title summary-heading">BOT Dashboard</h6>
+  <i class="fa fa-close pointer" (click)="modal.close(true)" style="font-size:20px;"></i>
+</div>
+<div class="modal-body">
+  <section id="tabs" class="project-tab">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Create BOT Invite</a>
+              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" (click)="TabClicked($event)" aria-selected="false">BOT Invites</a>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+              <form (ngSubmit)="botResponseSubmit()">
+
+                <div class="col-md-4 p-0 mb-2 mt-2">
+                  <legend class="col-form-label col-form-label-sm label-color m-b">
+                    Is this Bot Associated with a REQ?
+                  </legend>
+
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" value="1" name="bothasreq" [(ngModel)]="model.bothasreq" [checked]="true">Yes
+                    </label>
+                  </div>
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" [(ngModel)]="model.bothasreq" class="form-check-input" value="2" name="radiosearchType">No
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="clientname">
+                      Search REQ
+                      <sup class="text-danger font-weight-bold">*</sup>
+                    </label>
+                    <ng-select [items]="reqsearchdata$ | async"
+                               [multiple]="false"
+                               [closeonselect]="true"
+                               [searchable]="true"
+                               bindLabel="requisitionName"
+                               bindValue="requisitionName"
+                               [typeahead]="reqsearchdatainput$"
+                               name="requisitionName"
+                               [loading]="isReqSearchLoading"
+                               placeholder="type atleast 2 characters"
+                               (change)="onreqnameChanged($event)"
+                               required class="form-control"
+                               [(ngModel)]="model.requisitionName">
+                    </ng-select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="clientname">
+                      Job Title
+                      <sup class="text-danger font-weight-bold">*</sup>
+                    </label>
+                    <input name="jobtitle"
+                           [(ngModel)]="model.jobtitle" class="form-control" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="clientname">
+                      Skills
+                      <sup class="text-danger font-weight-bold">*</sup>
+                    </label>
+                    <ng-select [items]="skilldata$ | async"
+                               [multiple]="true"
+                               [closeOnSelect]="true"
+                               [searchable]="true"
+                               bindLabel="skill"
+                               bindValue="skill"
+                               [typeahead]="skillsdatainput$"
+                               name="client"
+                               [loading]="isskillLoading"
+                               [(ngModel)]="model.skills"
+                               placeholder="Type atleast 2 characters"
+                               required class="form-control">
+                    </ng-select>
+                  </div>
+                </div>
+                <button style="position: relative;z-index: 1" type="submit" class="btn  btn-primary btn-md tooltip-w200px mt-2" [disabled]="checkValidation()">
+                  <i class="fa fa-envelope-o mr-2"></i>
+                  Send Invite
+
+                </button>
+              </form>
+              <div *ngIf="showLoader" class="text-center p-2">
+                <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+              </div>
+
+              <div class="text-center pt-3">
+                <ngb-alert *ngIf="botresponsesuccess && !showLoader"
+                           type="success">
+                  {{botresponsesuccess}}
+                </ngb-alert>
+                <ngb-alert *ngIf="botresponseErrorMesg"
+                           type="danger">
+                  {{botresponseErrorMesg}}
+                </ngb-alert>
+
+              </div>
+
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <div *ngIf="botresponse?.botInvitaions?.length == 0" class="d-flex justify-content-center text-center align-items-center align-content-center flex-column" style="min-height: 400px; background-color: rgb(250, 250, 250);">
+                <div class="mb-3">
+                  <img class="img-fluid" src="../../../../../wwwroot/assets/img/Bot.png" style="width: 200px;">
+                </div>
+                <h3 class="text-dark">Hey there.. </h3>
+                <p class="m-0">There are no interactions available with LUCY.</p>
+              </div>
+              <table class="table" cellspacing="0" cellpadding="0" *ngIf="botresponse?.botInvitaions?.length > 0">
+                <thead>
+                  <tr class="bot-resp-column">
+                    <th>Invite Date </th>
+                    <th>Requisition Name </th>
+                    <th>Invited By </th>
+                    <th>Responded</th>
+                    <th>Response Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of botresponse?.botInvitaions" class="bot-resp-row">
+                    <td><a>{{data?.inviteddate | dateTz}}</a></td>
+                    <td>{{data?.requisitionname}}</td>
+                    <td>{{data?.invitedby}}</td>
+                    <td>{{data?.responded}}</td>
+                    <td>{{data?.respondeddate}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="paginator" *ngIf="botresponse?.botInvitaions?.length > 0">
+                <ngb-pagination [collectionSize]="botresponse?.botInvitaions?.length" [pageSize]="pagesize" [(page)]="pageindex" (pageChange)="onPageChanged($event)"
+                                [ellipses]="false" [boundaryLinks]="true" size="sm"></ngb-pagination>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+

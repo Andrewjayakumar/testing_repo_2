@@ -1,0 +1,332 @@
+<div class="container">
+  <form #diceserchForm="ngForm" novalidate (ngSubmit)="onSubmit()">
+    <div class="row">
+      <!--<div class="form-group col-md-12">
+    <label for="keywordsearch">Keyword Search  <sup class="text-danger font-weight-bold">*</sup></label>
+    <input id="keywordsearch" name="keywordsearch" placeholder="keywords like skill,job title" [(ngModel)]="model.query" #keywordsearch="ngModel" class="form-control" />
+  </div>-->
+      <div class="col-md-12 p-0">
+        <label for="query">
+          Keyword Search
+          <sup class="text-danger">*</sup>
+          <sup>
+            <span *ngIf="showEditButton" class="edit-icon" (click)="onEditClick()">
+              <i class="fa fa-edit"></i>
+            </span>
+          </sup>
+
+
+        </label>
+        <span tabindex="0" data-toggle="tooltip" [title]="model.query" class="custom-tooltip">
+          <textarea class="form-control" placeholder="Search for Keywords/ Email/ Phone number"
+            [(ngModel)]="model.query" name="query" required [disabled]="searchInputDisabled"
+            (blur)="onKeywordSearchTyped()"></textarea>
+
+
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label class="searchtype" for="searchtype">Search Type</label>
+        <ng-select [items]="searchType" [multiple]="false" [closeOnSelect]="true" bindLabel="name" bindValue="value"
+          placeholder="-Select search type-" name="searchtype" id="searchtype" class="form-control"
+          [(ngModel)]="model.searchtype" #searchtype="ngModel">
+        </ng-select>
+      </div>
+      <div class="form-group col-md-3">
+        <label class="daysback" for="daysback">Days Back</label>
+        <ng-select [items]="daysBack" [multiple]="false" [closeOnSelect]="true" bindLabel="name" bindValue="value"
+          placeholder="-Select-" name="daysback" id="daysback" class="form-control" [(ngModel)]="model.lastactive"
+          #daysback="ngModel">
+        </ng-select>
+      </div>
+      <div class="form-group col-md-3">
+        <label class="sortby" for="sortby">Sort By</label>
+        <ng-select [items]="sortBy" [multiple]="false" [closeOnSelect]="true" bindLabel="name" bindValue="value"
+          placeholder="-Select search type-" name="sortby" id="sortby" class="form-control" [(ngModel)]="model.sortby"
+          #sortby="ngModel">
+        </ng-select>
+      </div>
+      <div class="form-group col-md-3">
+        <label class="sortby" for="sortby">Do you want to Exclude Third Party?</label>
+        <app-metal-switch [(state)]='model.excludethirdparty' [uniqueid]="'third_party'"
+          [labelname]="''"></app-metal-switch>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3 border-0">
+          <div class="px-0 pb-0">
+            <div class="row" id="panel">
+              <div class="col-md-12">
+                <div class="card-header d-flex align-items-center pointer bg-light text-primary">
+                  <div class="pr-2 mb-0">
+                    <span class="d-flex align-items-center pl-3">
+                      <span>Education and Employment Details</span>
+                    </span>
+                  </div>
+
+                </div>
+                <div class="card-body">
+                  <div class="row" id="employment">
+                    <div class="col-md-12">
+                      <label class="education" for="education">Education Degree</label>
+                      <ng-select [items]="educationDegree" [multiple]="true" [closeOnSelect]="true" bindLabel="name"
+                        bindValue="value" placeholder="-Select Education Degree-" name="education" id="education"
+                        class="form-control" [(ngModel)]="model.educationdegree" #education="ngModel">
+                      </ng-select>
+                    </div>
+                    <div class="col-md-12">
+                      <label class="jobtitle" for="dice_jobtitle">Job Title</label>
+                      <input id="dice_jobtitle" name="jobtitle" placeholder="Example Developer,Senior Developer "
+                        class="form-control" [(ngModel)]="model.jobtitle" #jobtitle="ngModel" />
+
+                    </div>
+                    <div class="col-md-12">
+                      <label class="emptype" for="emptype">Employment Type</label>
+                      <ng-select [items]="employmentType" [multiple]="true" [closeOnSelect]="true" bindLabel="name"
+                        bindValue="value" placeholder="-Select Employment type-" name="emptype" id="emptype"
+                        class="form-control" [(ngModel)]="model.employmenttype" #emptype="ngModel">
+                      </ng-select>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="dice-minsalary">Min. Annual Salary</label>
+                          <input type="number" min="0" id="dice-minsalary" name="minsalary"
+                            [(ngModel)]="model.annualsalarymin" #minsalary="ngModel" class="form-control"
+                            [readonly]="ishourly" [value]="ishourly ? null : model.annualsalarymin"
+                            placeholder="Enter Min Salary" />
+                        </div>
+
+                        <div class="col-md-6">
+                          <label for="dice-maxsalary">Max. Annual Salary</label>
+                          <input type="number" min="0" id="dice-maxsalary" name="maxsalary"
+                            [(ngModel)]="model.annualsalarymax" #maxsalary="ngModel" class="form-control"
+                            [readonly]="ishourly" [value]="ishourly ? null : model.annualsalarymax"
+                            placeholder="Enter Max Salary" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <app-metal-switch [(state)]='ishourly' (click)="onPayRateChange($event)" [uniqueid]="'diceishourly'"
+                        [labelname]="'Enter Hourly Rate'"></app-metal-switch>
+                    </div>
+
+
+                    <div class="col-md-6" *ngIf="ishourly">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="minhourrate">Min. Hourly Rate</label>
+                          <input type="number" id="minhourrate" name="minhourrate" min="0" maxlength="3" [step]="0.01"
+                            min="0" max="999" [(ngModel)]="model.hourlyratemin" #minhourrate="ngModel" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                          <label for="maxrate">Max. Hourly Rate</label>
+                          <input type="number" id="maxrate" name="maxrate" maxlength="3" min="0" [step]="0.01" min="0"
+                            max="999" [(ngModel)]="model.hourlyratemax"
+                            #maxrate="ngModel" class="form-control" />
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label>Min. Experience in yrs</label>
+
+                          <ng-select [items]="yrsOfExperience" [multiple]="false" [closeOnSelect]="true"
+                            placeholder="-Select -" [searchable]="true" name="minexp" id="minexp" class="form-control"
+                            [(ngModel)]="model.minexperience" #minexp="ngModel">
+                          </ng-select>
+                        </div>
+
+                        <div class="col-md-6">
+                          <label>Max. Experience in yrs</label>
+
+                          <ng-select [items]="yrsOfExperience" [multiple]="false" [closeOnSelect]="true"
+                            placeholder="-Select -" [searchable]="true" name="maxexp" id="maxexp" class="form-control"
+                            [(ngModel)]="model.maxexperience" #maxexp="ngModel">
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <label for="recentemp">Recent Employer</label>
+                      <input id="recentemp" name="recentemp" placeholder="Current Company"
+                        [(ngModel)]="model.currentcompany" #recentemp="ngModel" class="form-control" />
+                    </div>
+                    <div class="col-md-12">
+                      <label class="workauth" for="workauth">Work Authorization</label>
+                      <ng-select [items]="workAuthorization" [multiple]="true" [closeOnSelect]="true" bindLabel="name"
+                        bindValue="value" placeholder="-Select Work Authorization-" name="workauth" id="workauth"
+                        class="form-control" [(ngModel)]="model.workauthorization" #workauth="ngModel">
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3 border-0">
+          <div class="px-0 pb-0">
+            <div class="row" id="panel">
+              <div class="col-md-12">
+                <div class="card-header d-flex align-items-center pointer bg-light text-primary">
+                  <div class="pr-2 mb-0">
+                    <span class="d-flex align-items-center pl-3">
+                      <span>Location Details</span>
+                    </span>
+                  </div>
+
+                </div>
+                <div class="card-body">
+                  <div class="row" id="employment">
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="zipcode">Zipcode</label>
+                          <input id="zipcode" name="zipcode" [(ngModel)]="model.zipcode" #zipcode="ngModel"
+                            class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                          <label for="milesradius">Within</label>
+                          <ng-select [items]="withInData" [multiple]="false" [closeOnSelect]="true" bindLabel="name"
+                            bindValue="value" placeholder="-Select Within" name="milesradius" id="milesradius"
+                            class="form-control" [(ngModel)]="model.zipradius" #milesradius="ngModel">
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="country">Country</label>
+                          <ng-select [items]="countryDetails" [multiple]="false" [closeOnSelect]="true" bindLabel="name"
+                            bindValue="value" placeholder="-Select Country-" name="country" id="countryid"
+                            class="form-control" [(ngModel)]="model.country" (change)="getStateDetails($event)"
+                            #country="ngModel">
+                          </ng-select>
+                        </div>
+                        <div class="col-md-6">
+                          <label for="city">City</label>
+                          <input id="city" name="city" [(ngModel)]="model.city" #city="ngModel" class="form-control" />
+                        </div>
+
+
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <label for="country">State or Province</label>
+                      <ng-select [items]="stateDetails" [multiple]="true" [closeOnSelect]="true" bindLabel="state"
+                        bindValue="state" placeholder="-Select State-" name="statelist" id="statelist"
+                        class="form-control" [(ngModel)]="model.stateorprovincelist" #statelist="ngModel">
+                      </ng-select>
+
+
+                    </div>
+                    <div class="col-md-12">
+                      <app-metal-switch [(state)]='model.willingtorelocate' [uniqueid]="'relocte'"
+                        [labelname]="'Candidate is Willing to Relocate'"></app-metal-switch>
+
+                    </div>
+                    <div class="col-md-12">
+                      <label for="travelpref">Travel Preferences</label>
+                      <ng-select [items]="TravelPreference" [multiple]="false" [closeOnSelect]="true" bindLabel="name"
+                        bindValue="value" placeholder="-Select Travel Pref-" name="travelpref" id="travelpref"
+                        class="form-control" [(ngModel)]="model.travelpreference" #travelpref="ngModel">
+                      </ng-select>
+
+
+                    </div>
+
+
+                  </div>
+                </div>
+
+                <div class="card-header d-flex align-items-center pointer bg-light text-primary">
+                  <div class="pr-2 mb-0">
+                    <span class="d-flex align-items-center pl-3">
+                      <span>Additional Info</span>
+                    </span>
+                  </div>
+
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <app-metal-switch [(state)]='model.securityclearance' [uniqueid]="'security'"
+                        [labelname]="'Security Clearance'"></app-metal-switch>
+
+                    </div>
+                  </div>
+                  <div class="com-md-12">
+                    <label for="language">Languages Known</label>
+                    <input id="language" name="language" placeholder="e.g Spanish,English,Italian"
+                      [(ngModel)]="model.language" #language="ngModel" class="form-control" />
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row float-right">
+      <div class="mr-3">
+        <button type="submit" id="sub" name="sub" class="btn btn-primary" [disabled]="!model.query">Search</button>
+
+      </div>
+      <div>
+        <button id="clear" name="clear" type="button" (click)="resetModel()"
+          class="btn btn-outline-primary">Clear</button>
+
+      </div>
+
+    </div>
+  </form>
+</div>
+
+
+<div *ngIf="showloader" class="text-center p-2">
+  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+</div>
+
+<div *ngIf="message" class="text-center p-2 text-center">
+  <h5 class="text-danger">{{message}}</h5>
+</div>
+<div *ngIf="!showloader" class="col-md-12 ml-4 mt-5">
+
+  <div>
+    <label>No. of Resumes : {{totalprofilesfound}}</label>
+  </div>
+
+  <div class="container" id="candidatecard">
+    <!-- cards -->
+    <div class="row metal-card-row mt-2">
+      <div class="col-3 metal-card-col p-1" *ngFor="let candidateObj of dicesearchResults">
+        <div class="d-block h-100">
+          <div class="card mb-0 h-100 custom-action-hover">
+            <app-candidate-card [candidate]="candidateObj" [pagename]="'dice'" [priorPinAction]="diceDownloadDetails"
+              [requisitionid]="requisitionid" [highlightskillsarray]="highlightskillsarray" [aigenerated]="aigenerated">
+            </app-candidate-card>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="dicesearchResults?.length > 0" class="d-flex justify-content-center mt-3">
+      <ngb-pagination [collectionSize]="totalprofilesfound" [pageSize]="pagesize" [(page)]="pageindex" [maxSize]="4"
+        (pageChange)="onPageChanged($event)" [ellipses]="false" [boundaryLinks]="true" size="sm">
+      </ngb-pagination>
+    </div>
+  </div>
+</div>

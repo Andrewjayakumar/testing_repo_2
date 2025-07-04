@@ -1,0 +1,149 @@
+<ng-container *ngIf="access == 'write'">
+  <div class="" [ngClass]="{'card mb-3':control.showheader==true}" [formGroup]="formGroup">
+    <div *ngIf="control.direction=='displayImage'">
+      <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+        <div *ngIf="control.Panelheader">
+          <span class="d-flex align-items-center">
+            <i *ngIf="data[control.key] && data[control.key].length > 0" class="text-primary fa fa-check-circle-o fa-lg pr-2"></i>
+            <span class="" [innerHTML]="safehtml(control.Panelheader)"></span>
+          </span>
+        </div>
+        <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+        <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+      </div>
+      <div [ngClass]="{'card-body':control.showheader==true, 'mb-3':control.showheader!=true }" [ngbCollapse]="!hide">
+        <label class="d-block pb-3" [class.active]="data[control.key] && data[control.key].length > 0" *ngIf="control.label.length > 0">
+          <span [innerHTML]="safehtml(control.label)"></span><sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+          <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+        </label>
+        <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+        <div class="row check-img-outer {{control.justifycontent}} {{control.alignitems}}">
+          <div *ngFor="let opt of dataoptions" class="{{control.imgboxwidth ? 'col-' + control.imgboxwidth : 'col'}}">
+            <div class="check-img">
+              <label class="check-img-control" [ngClass]="{'border-0' : control.noimgborder == true}">
+                <!--<input class="check-img-input" formControlName={{control_id}} (focusout)="focusout()" type="radio" [name]="control_id" [(ngModel)]="data[control.key]" [value]="opt[control.valuefield]" (ngModelChange)="RefreshBindingControls();setOtherValue(opt);_controlService.getCssforMandatory(control,data[control.key]);">-->
+                <input  [disableControl]="disabled" autocomplete="off" [checked]="opt[control.valuefield] === data[control.key]" class="check-img-input" formControlName={{control.id}} type="radio" [name]="control.id" [(ngModel)]="data[control.key]" [value]="opt[control.valuefield]" (ngModelChange)="RefreshBindingControls();setOtherValue(opt);_controlService.getCssforMandatory(control,data[control.key]);" />
+                <span [ngStyle]="{ 'background-image': 'url(' + opt.imageUrl + ')', 'padding-top': control.imgheight, 'width': control.imgwidth}" class="check-img-img"></span>
+                <span class="check-img-description {{control.fontsize}} mb-0">{{opt[control.textfield]}}</span>
+                <span class="tic-mark" *ngIf="!control.hideticmark"><i class="fa fa-2x fa-check"></i></span>
+                <span class="checkd-line" *ngIf="control.hideticmark"></span>
+              </label>
+            </div>
+          </div>
+          <div *ngFor="let opt of dataoptions" class="col col-12" [ngClass]="{'d-none':opt[control.textfield]!='Other'}">
+            <div *ngIf="opt[control.textfield]=='Other' && control.allowother" [hidden]="!IsOtherSelected">
+              <input  [disableControl]="disabled" type="text" class="form-control" formControlName={{control_id}} (focusout)="focusout()" [(ngModel)]="data[control.key]" (ngModelChange)="RefreshBindingControls();opt[control.valuefield]=data[control.key];" placeholder="Enter Other value">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="control.direction!='displayImage'">
+      <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+        <div class="m-0" *ngIf="control.Panelheader">
+          <span class="d-flex align-items-center">
+            <i *ngIf="data[control.key] && data[control.key].length > 0" class="text-primary fa fa-check-circle-o fa-lg pr-2"></i>
+            <span class="" [innerHTML]="safehtml(control.Panelheader)"></span>
+          </span>
+        </div>
+        <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+        <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+      </div>
+      <div [ngClass]="{'card-body pb-1':control.showheader==true}" [ngbCollapse]="!hide">
+        <label class="d-block" [class.active]="data[control.key] && data[control.key].length > 0" *ngIf="control.label.length > 0">
+          <span [innerHTML]="safehtml(control.label)"></span><sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+          <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+        </label>
+        <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+        <div *ngFor="let opt of dataoptions" class="c-control c-radio" [ngClass]="{'c-inline':control.direction=='horizontal'}">
+          <label>
+            <input  [disableControl]="disabled" autocomplete="off" [checked]="opt[control.valuefield] === data[control.key]"  class="c-control-input" type="radio" formControlName={{control_id}} [name]="control_id" [(ngModel)]="data[control.key]" [value]="opt[control.valuefield]" (ngModelChange)="RefreshBindingControls();setOtherValue(opt);_controlService.getCssforMandatory(control,data[control.key]);" />
+            <i class="c-control-indicator fa fa-circle-o"></i>
+            <span class="c-control-description">
+              {{opt[control.textfield]}}
+            </span>
+          </label>
+        </div>
+        <div *ngFor="let opt of dataoptions" class="c-control c-radio" [ngClass]="{'d-none':opt[control.textfield]!='Other'}">
+          <div *ngIf="opt[control.textfield]=='Other' && control.allowother" [hidden]="!IsOtherSelected">
+            <input  [disableControl]="disabled" type="text" class="form-control" formControlName={{control_id}} [(ngModel)]="data[control.key]" (ngModelChange)="RefreshBindingControls();opt[control.valuefield]=data[control.key];" placeholder="Enter Other value">
+          </div>
+        </div>
+        <!--<small class="form-text text-danger" *ngIf="control.require && formGroup.controls[control_id]?.touched && data[control.key]==''">
+          {{control.errormsg ? control.errormsg : 'You must select a ' + control.label + '.'}}
+        </small>-->
+      </div>
+    </div>
+  </div>
+  <small *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false"
+         class="form-text text-danger pb-2">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+  <div class="form-text mb-3" *ngIf="control.description">{{control.description}}</div>
+</ng-container>
+<div *ngIf="access != 'write' && access != 'filter'" class="">
+  <div class="mb-3" [ngClass]="{'card pb-1':control.showheader==true}" *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <div  *ngIf="control.showheader==true"  class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+      <div *ngIf="control.Panelheader">
+        <span class="d-flex align-items-center">
+          <i *ngIf="data[control.key] && data[control.key].length > 0" class="text-primary fa fa-check-circle-o fa-lg pr-2"></i>
+          <span><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.Panelheader)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body':control.showheader==true}" [ngbCollapse]="!hide">
+      <div *ngIf="control.label.length > 0"><span class="editebl-input text-primary"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.label)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></span></div>
+      <div>
+        <span [innerHTML]="safehtml(data[control.key])"></span>
+      </div>
+    </div>
+  </div>
+  <div class="mb-3" *ngIf="access!='mandatory'" [ngClass]="{'card':control.showheader==true}" >
+    <div *ngIf="control.showheader==true"  class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+      <div *ngIf="control.Panelheader">
+        <span class="d-flex align-items-center">
+          <i *ngIf="data[control.key] && data[control.key].length > 0" class="text-primary fa fa-check-circle-o fa-lg pr-2"></i>
+          <span class="editebl-input"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.Panelheader)"></span><i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body':control.showheader==true}" [ngbCollapse]="!hide">
+      <span class="editebl-input text-primary" *ngIf="control.label.length > 0">
+        <span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.label)"></span>
+        <i *ngIf="access == 'edit'" class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i>
+      </span>
+      <div [innerHTML]="safehtml(data[control.key])"></div>
+    </div>
+  </div>
+</div>
+<div *ngIf="access == 'filter'" class="mb-3" [ngClass]="{'card':control.showheader==true}">
+  <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+    <div *ngIf="control.Panelheader">
+      <span class="d-flex align-items-center">
+        <i *ngIf="data[control.key] && data[control.key].length > 0" class="text-primary fa fa-check-circle-o fa-lg pr-2"></i>
+        <span>{{control.filterheader}}</span>
+      </span>
+    </div>
+    <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+    <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+  </div>
+  <div [ngClass]="{'card-body':control.showheader==true}" [ngbCollapse]="!hide">
+    <div class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.label)" *ngIf="control.label.length > 0"></div>
+    <div *ngFor="let opt of dataoptions" class="c-control" [ngClass]="(control.direction=='horizontal')?'c-radio':'c-inline'">
+      <label class="">
+        <input class="c-control-input" type="radio" [name]="control_id" [(ngModel)]="data[control.key]" [value]="opt[control.valuefield]" (ngModelChange)="setOtherValue(opt);_controlService.setFilterValue(control.key,data[control.key],filterdata)">
+        <i class="c-control-indicator fa fa-circle-o"></i>
+        <span class="c-control-description">
+          {{opt[control.textfield]}}
+        </span>
+      </label>
+      <label *ngIf="opt[control.textfield]=='Other' && control.allowother" [hidden]="!IsOtherSelected">
+        <input type="text" [(ngModel)]="data[control.key]" (ngModelChange)="opt[control.valuefield]=data[control.key];_controlService.setFilterValue(control.key,data[control.key],filterdata)" placeholder="Enter Other value">
+      </label>
+    </div>
+  </div>
+</div>

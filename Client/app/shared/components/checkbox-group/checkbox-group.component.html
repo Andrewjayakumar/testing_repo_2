@@ -1,0 +1,10 @@
+
+  <ng-container>
+    <div *ngFor="let checkbox of checkboxlist" class="pl-2 pt-1 checkbox-row">
+      <input type="checkbox" value="checkbox.journaltypeid" [(ngModel)]="checkbox.checked" #journaltype/>
+
+      <label class="smaller" title="checkbox.journaltype" (click)="checkbox.checked=!checkbox.checked; $event.stopPropagation()">{{checkbox.journaltype}}</label>
+
+    </div>
+    <!-- (change)="recordCheck($event, checkbox.journaltypeid)"/ -->
+  </ng-container>

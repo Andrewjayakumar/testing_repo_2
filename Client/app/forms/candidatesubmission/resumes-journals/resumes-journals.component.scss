@@ -1,0 +1,53 @@
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  color: #000;
+  background-color: #fff !important; 
+  border-bottom: 5px solid #3b81d3 !important;
+  font-weight: 100;
+}
+
+.nav-link {
+color: grey;
+font-weight: 100;
+}
+
+.tabbable .nav-pills {
+margin-left: 0px;
+}
+
+.journalTab, .reqTab {
+display: none;
+}
+
+.resume-load-mesg{
+font-weight:bold;
+}
+
+.resetButton {
+background-color: none;
+border: 1px solid #1976d2;
+margin-top: 12px;
+}
+
+.applyButton {
+background-color: #1976d2;
+border: 1px solid #1976d2;
+color: white;
+margin-top: 12px;
+}
+
+.label {
+font-weight: 100;
+}
+
+.card {
+border: none !important;
+}
+
+.card-header {
+border-bottom: none;
+}
+
+.resume-body {
+  height: 65vh !important;
+  overflow: scroll !important;
+}

@@ -1,0 +1,181 @@
+<div class="parent-tab">
+  <div class="d-inline-flex w-100">
+    <!--Candidate list section-->
+    <div class="col-md-3 right-separator mt-3 ml-3">
+      <div class="d-inline-flex mt-2">
+        <label class="col-md-12 pageheading">CANDIDATE LIST</label>
+      </div>
+
+      <div class="input-group searchBox">
+        <!-- cohert dropdown comes here -->
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <ng-select
+              [items]="cohertdetails"
+              [multiple]="false"
+              [closeOnSelect]="true"
+              [searchable]="true"
+              bindLabel="displayvalue"
+              bindValue="passvalue"
+              id="cohert"
+              placeholder="Choose a Cohort"
+              class="form-control"
+              [(ngModel)]="selectedCohert"
+              [ngModelOptions]="{ standalone: true }"
+              (change)="getCohortBasedOnSearch($event)"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showSpinner" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div>
+
+      <div *ngIf="!showSpinner" class="scrollContent">
+        <div
+          *ngFor="let candidate of candidates"
+          class="candidateCard"
+          [ngClass]="{
+            'current-selection':
+              selectedCandidate?.id && selectedCandidate?.id == candidate?.candidateid
+          }"
+        >
+          <div class="ellipsisCandidate">
+            <a
+              class="col-9 candidateName"
+              (click)="getrecommendedRecs(candidate)"
+            >
+              {{ candidate.fullname }}
+            </a>
+          </div>
+        </div>
+
+        <div class="noCandidate" *ngIf="!candidates || candidates?.length == 0">
+          <i class="font-weight-light"> No Candidate available</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Show reqs according to the candidate selected-->
+
+    <div class="col-md-8 p-0 mt-4 ml-4">
+      <div class="d-inline-flex pl-3">
+        <label class="pageheading">JOB RECOMMENDATIONS</label>
+      </div>
+
+      <div class="text-center p-2">
+        <ngb-alert *ngIf="errMsgforReqs" type="danger">
+          {{ errMsgforReqs }}
+        </ngb-alert>
+        <ngb-alert *ngIf="recommendedreqs?.length == 0" type="success">
+          No Requisitions Found.
+        </ngb-alert>
+      </div>
+      <div class="row m-0">
+        <div class="form-group col-md-4">
+          <ng-select
+            [items]="scoreValues"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="scoreKey"
+            bindValue="scoreValue"
+            placeholder="Minimum Score"
+            class="form-control"
+            [(ngModel)]="minScore"
+            [ngModelOptions]="{ standalone: true }"
+          >
+          </ng-select>
+        </div>
+
+        <div class="form-group col-md-4">
+          <ng-select
+            [items]="reqAgeValues"
+            [multiple]="false"
+            [closeOnSelect]="true"
+            [searchable]="true"
+            bindLabel="reqAgeValue"
+            bindValue="reqAgeKey"
+            placeholder="Requisition Age"
+            class="form-control"
+            [(ngModel)]="reqAge"
+            [ngModelOptions]="{ standalone: true }"
+          >
+          </ng-select>
+        </div>
+
+        <div class="form-group col-md-1 mr-1">
+          <button
+            type="button"
+            class="btn btn-primary resetButton"
+            aria-label="Left Align"
+            (click)="applyFilter()"
+            title="Apply"
+          >
+            Apply
+          </button>
+        </div>
+        <div class="form-group col-md-1">
+          <button
+            type="button"
+            class="btn btn-default resetButton"
+            aria-label="Left Align"
+            (click)="resetFilter()"
+            title="Reset"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Vishnu's code goes here -->
+      <div *ngIf="showLoader" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+      </div>
+
+      <div class="col-md-12">
+        <div class="requisition-row mb-2" *ngFor="let data of recommendedreqs; let i=index">
+          <div class="firstDiv" *ngIf="i <= 4">
+            <div class="secDiv">
+              <div class="req-info-details text-primary text-truncate">
+                <a class="rec-name-heading" title="{{ data.requisitionname }}" (click)="redirectToRecPage(data?.requisitionid,true)">{{ data.requisitionname }}</a>
+                <p class="m-bottom-0 text-small text-small-align">
+                  <span
+                    class="track-clevertap js-no-action text-capitalize text-semibold track-search-click line-height-18"
+                    >&nbsp;<span class="map-fa-icon mr-1"
+                      ><i class="fa fa-clock-o"></i></span
+                    >{{ data.daysremaining }} Days</span
+                  >
+                  <span class="spaceMargin h5"></span>
+                  <span
+                    class="m-bottom-0 text-small text-small-align track-clevertap js-no-action text-capitalize text-semibold track-search-click line-height-18"
+                    >&nbsp;
+                    <span class="map-fa-icon mr-1"
+                      ><i class="fa fa-map-marker"></i></span
+                    >{{ data.region }}</span
+                  >
+                </p>
+              </div>
+              <div class="hire greenColorText float-right">
+                <div class="countvaluered" *ngIf="data?.sovrenrelevance <= 40">
+                  {{ data.sovrenrelevance }}
+                </div>
+                <div
+                  class="countvalueyellow"
+                  *ngIf="data?.sovrenrelevance > 40 && data?.sovrenrelevance < 70">
+                  {{ data.sovrenrelevance }}
+                </div>
+                <div class="countvaluegreen" *ngIf="data?.sovrenrelevance > 70">
+                  {{ data.sovrenrelevance }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="seemorereqs" *ngIf="recommendedreqs?.length > 0" (click)="seeMore()">See More</a>
+    </div>
+  </div>
+</div>

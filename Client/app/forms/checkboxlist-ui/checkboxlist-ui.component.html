@@ -1,0 +1,149 @@
+<div [ngClass]="{'card mb-3':control.showheader==true}"  *ngIf="access == 'write'">
+  <div *ngIf="control.direction=='displayImage'">
+    <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+      <div *ngIf="control.Panelheader">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+          <span class="" [innerHTML]="safehtml(control.Panelheader)"></span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body pb-1':control.showheader==true}" [ngbCollapse]="!hide">
+      <div class="form-group">
+        <label class="d-block pb-3" [class.active]="data[control.key] && data[control.key].length > 0" *ngIf="control.label.length > 0">
+          <span [innerHTML]="safehtml(control.label)"></span><sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+          <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+        </label>
+        <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+        <div class="row check-img-outer">
+          <div *ngFor="let opt of dataoptions" class="col-6 col-md-3">
+            <div class="check-img">
+              <label class="check-img-control">
+                <input class="check-img-input" [(ngModel)]="opt.checked" type="checkbox" [value]="opt[control.valuefield]" (change)="SelectValue();_controlService.setFilterValue(control.key,data[control.key],filterdata)">
+                <span [ngStyle]="{ 'background-image': 'url(' + opt.imageUrl + ')'}" class="check-img-img"></span>
+                <span class="check-img-description" [innerHTML]="safehtml(opt[control.textfield])"></span>
+                <span class="tic-mark"><i class="fa fa-2x fa-check"></i></span>
+              </label>
+            </div>
+          </div>
+          <div *ngFor="let opt of dataoptions" class="col col-12" [ngClass]="{'d-none':opt[control.textfield]!='Other'}" [hidden]="!IsOtherSelected">
+            <div *ngIf="opt[control.textfield]=='Other' && control.allowother">
+              <input type="text"  class="form-control" [(ngModel)]="opt[control.valuefield]" (ngModelChange)="SelectValue();_controlService.setFilterValue(control.key,data[control.key],filterdata)" placeholder="Enter Other value">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="control.direction!='displayImage'">
+    <div *ngIf="control.showheader==true" class="card-header d-flex align-items-center pointer" (click)="hide = !hide">
+      <div *ngIf="control.Panelheader">
+        <span class="d-flex align-items-center">
+          <i class="text-primary fa fa-check-square-o fa-lg pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+          <span class="" [innerHTML]="safehtml(control.Panelheader)"></span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body pb-1':control.showheader==true}" [ngbCollapse]="!hide">
+      <label class="d-block" [class.active]="data[control.key] && data[control.key].length > 0" *ngIf="control.label.length > 0">
+        <span [innerHTML]="safehtml(control.label)"></span><sup class="text-danger font-weight-bold" *ngIf="control.require">*</sup>
+        <i *ngIf="control.help" class="fa fa-question-circle ml-2 help-text" placement="{{control.helpdirection}}" ngbTooltip="{{control.help}}"></i>
+      </label>
+      <img *ngIf="control.imageurl" [src]="control.imageurl" class="mb-2 img-fluid" />
+      <div *ngFor="let opt of dataoptions" class="c-control c-checkbox" [ngClass]="{'c-inline':control.direction=='horizontal'}">
+        <label>
+          <input class="c-control-input"   [(ngModel)]="opt.checked" type="checkbox" [value]="opt[control.valuefield]" (change)="SelectValue();_controlService.setFilterValue(control.key,data[control.key],filterdata)">
+          <i class="c-control-indicator fa fa-square-o"></i>
+          <span class="c-control-description" [innerHTML]="safehtml(opt[control.textfield])"></span>
+        </label>
+      </div>
+      <div *ngFor="let opt of dataoptions" class="c-control c-radio" [ngClass]="{'d-none':opt[control.textfield]!='Other'}" [hidden]="!IsOtherSelected">
+        <div *ngIf="opt[control.textfield]=='Other' && control.allowother">
+          <input type="text"  class="form-control" [(ngModel)]="opt[control.valuefield]" (ngModelChange)="SelectValue();_controlService.setFilterValue(control.key,data[control.key],filterdata)" placeholder="Enter Other value">
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <small class="form-text text-danger" *ngIf="formGroup.controls[control_id] ? formGroup.controls[control_id].hasError('required') && formGroup.controls[control_id].touched : false">
+    {{control.errormsg ? control.errormsg : 'You must enter a ' + control.label + '.'}}
+  </small>
+  <div class="form-text mb-3" *ngIf="control.description">{{control.description}}</div>
+</div>
+<div *ngIf="access != 'write' && access != 'filter'" class="form-group">
+  <div [ngClass]="{'card mb-3':control.showheader==true}"  *ngIf="control.require==true && _controlService.getCssforMandatory(control,data[control.key])!='' && access=='mandatory'">
+    <div *ngIf="control.showheader==true" class="card-header d-flex pointer" (click)="hide = !hide">
+      <div>
+        <span class="d-flex">
+          <i class="text-primary fa fa-check-square-o pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+          <span class="editebl-input">
+            <span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.Panelheader)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i>
+          </span>
+        </span>
+      </div>
+      <span class="ml-auto" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body pb-1':control.showheader==true}"  [ngbCollapse]="!hide">
+      <h6 class="font-weight-normal" *ngIf="control.label.length > 0"><span class="editebl-input"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.label)"></span><i class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></span></h6>
+      <div class="my-1" *ngFor="let item of data[control.key]">
+        <span [innerHTML]="safehtml(item)">
+        </span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="access!='mandatory'" [ngClass]="{'card mb-3':control.showheader==true}" >
+    <div *ngIf="control.showheader==true" class="card-header d-flex pointer" (click)="hide = !hide">
+      <h4 class="m-0">
+        <span class="d-flex">
+          <i class="secondary-text fa fa-check-square-o pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+          <span class="editebl-input">
+            <span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" [innerHTML]="safehtml(control.Panelheader)"></span><i class="fa fa-pencil pointer" aria-hidden="true" *ngIf="access == 'edit'" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i>
+          </span>
+        </span>
+      </h4>
+      <span class="ml-auto align-self-center" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+      <span class="ml-auto align-self-center" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+    </div>
+    <div [ngClass]="{'card-body':control.showheader==true}"  [ngbCollapse]="!hide">
+      <h6 class="font-weight-normal" *ngIf="control.label.length > 0"><span class="editebl-input"><span [ngClass]="_controlService.getCssforMandatory(control,data[control.key])" class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.label)"></span><i *ngIf="access == 'edit'"  class="fa fa-pencil pointer" aria-hidden="true" (click)="$event.stopPropagation();_controlService._toggleSidebar('id',control.id)"></i></span></h6>
+      <div class="my-1" *ngFor="let item of data[control.key]">
+        <span [innerHTML]="safehtml(item)">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div [ngClass]="{'card mb-3':control.showheader==true}"  *ngIf="access == 'filter'">
+  <div  *ngIf="control.showheader==true"  class="card-header d-flex pointer" (click)="hide = !hide">
+    <h4 class="m-0">
+      <span class="d-flex">
+        <i class="secondary-text fa fa-check-square-o pr-2" *ngIf="data[control.key] && data[control.key].length > 0"></i>
+        <span class="" [innerHTML]="safehtml(control.Panelheader)"></span>
+      </span>
+    </h4>
+    <span class="ml-auto align-self-center" *ngIf="!hide"><i class="fa fa-angle-down pl-2" aria-hidden="true"></i></span>
+    <span class="ml-auto align-self-center" *ngIf="hide"><i class="fa fa-angle-up pl-2" aria-hidden="true"></i></span>
+  </div>
+  <div  [ngClass]="{'card-body':control.showheader==true}" [ngbCollapse]="!hide">
+    <div class="form-group">
+      <div class="mb-2" [class.active]="data[control.key] && data[control.key].length > 0" [innerHTML]="safehtml(control.filterheader)" *ngIf="control.filterheader.length > 0"></div>
+      <div *ngFor="let opt of dataoptions">
+        <div class="form-check">
+          <label class="c-control c-checkbox">
+            <input class="c-control-input" [(ngModel)]="opt.checked" type="checkbox" [value]="opt[control.valuefield]" (change)="SelectValue();_controlService.setFilterValue(control.key,data[control.key],filterdata)">
+            <i class="c-control-indicator fa fa-square-o"></i>
+            <span class="c-control-description" [innerHTML]="safehtml(opt[control.textfield])"></span>
+          </label>
+        </div>
+        <div class="form-check" *ngIf="opt[control.textfield]=='Other' && control.allowother" [hidden]="IsOtherSelected==false">
+          <input type="text" [(ngModel)]="opt[control.valuefield]" (ngModelChange)="SelectValue();_controlService.setFilterValue(control.key,data[control.key],filterdata)" placeholder="Enter Other value">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

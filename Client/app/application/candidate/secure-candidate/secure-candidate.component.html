@@ -1,0 +1,122 @@
+
+  <div >
+
+    <div class="modal-header w-100 p-2">
+
+      <h5 class="text-primary">
+        Request Candidate Information
+      </h5>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modal.close(true)">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body p-0 pb-1 p-4 stsmodal">
+      <div *ngIf="showLoader" class="text-center p-2">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+      </div>
+
+      <div class="text-center">
+        <ngb-alert *ngIf="alertMessage && !showLoader"
+                   type="success">
+          {{alertMessage}}
+        </ngb-alert>
+        <ngb-alert *ngIf="errorMessage && !showLoader"
+                   type="danger">
+          {{errorMessage}}
+        </ngb-alert>
+      
+      </div>
+      
+      <form #stsForm="ngForm" (ngSubmit)="OnSubmitClicked(stsForm)">
+
+        <h6 class="mt-1">Details of {{candidatefullname}}</h6>
+        <div class="row mt-2 ">
+
+          <div class="col-4">
+            <label>First Name </label>
+            <sup class="text-danger font-weight-bold">*</sup>
+            <input name="fname" [(ngModel)]="datamodel.firstname" #fname="ngModel" placeholder="First Name" type="text" class="form-control" required />
+            <small *ngIf="!datamodel.firstname && (fname.dirty || fname.touched) "
+                   class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+          </div>
+          <div class="col-4 ">
+            <label>Last Name </label>
+            <sup class="text-danger font-weight-bold">*</sup>
+            <input id="lname" name="lname" [(ngModel)]="datamodel.lastname" #lname="ngModel" placeholder="Last Name" type="text" class="form-control" required />
+            <small *ngIf="!datamodel.lastname && (lname.dirty || lname.touched) "
+                   class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+          </div>
+          <div class="col-4">
+            <label>Middle Name </label>
+            <input name="mname" [(ngModel)]="datamodel.middlename" #mname="ngModel" placeholder="Middle Name" type="text" class="form-control" />
+          </div>
+
+
+        </div>
+        <div class="row mt-2">
+          <div class="col-4">
+            <label for="emailaddress">
+              Email Address
+              <sup class="text-danger font-weight-bold">*</sup>
+
+            </label>
+            <input id="emailaddress" autocomplete="off" name="emailaddress" [(ngModel)]="datamodel.emailaddress" #emailaddress="ngModel"  placeholder="Email Address" type="email" class="form-control" required />
+            <small *ngIf="!datamodel.emailaddress && (emailaddress.dirty || emailaddress.touched) "
+                   class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+          </div>
+
+          <div class="col-4">
+            <label for="mobilenumber">Mobile Number</label>
+            <sup class="text-danger font-weight-bold">*</sup>
+            <input id="mobilenumber" name="mobilenumber" #mobilenumber="ngModel" [(ngModel)]="datamodel.mobilenumber" placeholder="Ex. 123-456-7890" type="tel" class="form-control" [textMask]="{mask: mask}" required />
+            <small *ngIf="!datamodel.mobilenumber && (mobilenumber.dirty || mobilenumber.touched) "
+                   class="font-size-small text-danger fa fa-exclamation"> This field is required</small>
+            <!-- <small *ngIf="mobilenumber.invalid && (mobilenumber.dirty || mobilenumber.touched) || (mobilenumber.invalid && submitclicked)"
+          class="font-size-small text-danger fa fa-exclamation"> Please enter correct format</small> -->
+          </div>
+        </div>
+
+        <div class="row mb-3 mt-2">
+          <div class=" col-4">
+            <label for="homephone" class="">Home Phone Number</label>
+            <input id="homephone" name="homenumber" #homenumber="ngModel" [(ngModel)]="datamodel.homenumber" placeholder="Home phonenumber" type="text" [textMask]="{mask: mask}" class="form-control" />
+           <!-- <small *ngIf="homenumber.invalid && (homenumber.dirty || homenumber.touched) || (homenumber.invalid && submitclicked) "
+                   class="font-size-small text-danger fa fa-exclamation"> Please enter correct format</small> -->
+          </div>
+
+
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer ">
+      <input type="submit" role="button" [disabled]="!stsForm.valid || isSendRequestDisable" class="btn btn-primary pull-right" value="Send Request" (click)="submitclicked=true;OnSubmitClicked(stsForm) " />
+
+    </div>
+
+   
+
+  </div>
+<!--
+<ng-template #content let-c="close" let-d="dismiss" size="sm">
+  <div class="modal-header" style="background-color:#ebebeb">
+    <b class="modal-title" [ngClass]="{'text-danger' : popupConfig.type == 'error', 'text-green1': popupConfig.type == 'success'}">
+      {{popupConfig.title}}
+    </b>
+    <button type="button" class="close" aria-label="Close" (click)="d('cross')">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2">
+      {{popupConfig.message}}
+
+    </div>
+
+  </div>
+  <div class="modal-footer" *ngIf="popupConfig.isConfirm">
+    <button type="button" class="btn btn-outline-primary" (click)="d('cancel')">{{popupConfig.negativebtnText}}</button>
+    <button type="button" class="btn btn-primary" (click)="d('ok');clearResume()">{{popupConfig.positivebtnText}}</button>
+  </div>
+</ng-template>
+-->
